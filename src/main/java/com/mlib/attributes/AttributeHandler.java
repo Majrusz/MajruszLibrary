@@ -29,6 +29,11 @@ public class AttributeHandler {
 		return this;
 	}
 
+	/** Returns current attribute value. */
+	public double getValue() {
+		return this.value;
+	}
+
 	/**
 	 Applying current attribute to the target.
 
