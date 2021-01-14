@@ -9,10 +9,10 @@ import java.util.UUID;
 
 /** Handling attributes in easier and shorter way. */
 public class AttributeHandler {
-	private final UUID uuid;
-	private final String name;
-	private final Attribute attribute;
-	private final AttributeModifier.Operation operation;
+	protected final UUID uuid;
+	protected final String name;
+	protected final Attribute attribute;
+	protected final AttributeModifier.Operation operation;
 	private double value = 1.0;
 
 	public AttributeHandler( String uuid, String name, Attribute attribute, AttributeModifier.Operation operation ) {
