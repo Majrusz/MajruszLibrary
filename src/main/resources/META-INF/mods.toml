@@ -1,0 +1,43 @@
+modLoader="javafml"
+
+loaderVersion="[35,)"
+
+license="MIT License"
+
+issueTrackerURL="https://google.com"
+
+[[mods]]
+
+modId="majrusz_library"
+
+version="1.0.0"
+
+displayName="Majrusz"
+
+updateJSONURL="https://google.com"
+
+displayURL="https://google.com"
+
+logoFile="logo.jpg"
+
+credits="Thanks for all your support!"
+
+authors="Majrusz"
+
+description='''
+Library with common code for some of Majrusz's modifications.
+'''
+
+[[dependencies.examplemod]]
+    modId="forge"
+    mandatory=true
+    versionRange="[35,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.examplemod]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.4,1.17)"
+    ordering="NONE"
+    side="BOTH"
