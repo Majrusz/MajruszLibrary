@@ -1,0 +1,102 @@
+package com.mlib.items;
+
+import com.mlib.MajruszLibrary;
+import com.mlib.Random;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.item.ItemStack;
+
+/**
+ *
+ */
+public class ItemHelper {
+	private static final double MINECRAFT_WEAPON_ENCHANT_CHANCE = 0.25;
+	private static final double MINECRAFT_ARMOR_PIECE_ENCHANT_CHANCE = 0.5;
+
+	/** Returns enchantment level based on clamped regional difficulty. */
+	public static int getEnchantmentLevel( double clampedRegionalDifficulty ) {
+		return ( int )( 5 + 18 * clampedRegionalDifficulty );
+	}
+
+	/**
+	 Returns damaged item.
+
+	 @param itemStack Item stack to damage.
+	 @param factor    Factor from range [0.0;1.0] how much item should be damaged at most.
+
+	 @return Returns the same item stack but damaged. (not copy)
+	 */
+	public static ItemStack damageItem( ItemStack itemStack, double factor ) {
+		itemStack.setDamage( MajruszLibrary.RANDOM.nextInt( ( int )( itemStack.getMaxDamage() * factor ) ) );
+
+		return itemStack;
+	}
+
+	/**
+	 Enchants item stack with random enchantments.
+
+	 @param itemStack                 Item stack to enchant.
+	 @param clampedRegionalDifficulty Factor at which enchantment level depends.
+	 @param isTreasureAllowed         Flag responsible for enabling enchantment like Frost Walker.
+
+	 @return Returns the same item stack but enchanted. (not copy)
+	 */
+	public static ItemStack enchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed ) {
+		int enchantmentLevel = getEnchantmentLevel( clampedRegionalDifficulty );
+
+		return EnchantmentHelper.addRandomEnchantment( MajruszLibrary.RANDOM, itemStack, enchantmentLevel, isTreasureAllowed );
+	}
+
+	/**
+	 Have a given chance to enchant an item stack.
+
+	 @param itemStack                 Item stack to enchant.
+	 @param clampedRegionalDifficulty Factor at which enchantment level depends.
+	 @param isTreasureAllowed         Flag responsible for enabling enchantment like Frost Walker.
+	 @param chance                    Chance for enchanting item stack.
+
+	 @return Returns the same item stack but enchanted if drawing chance succeeded or just item stack otherwise. (not copy)
+	 */
+	public static ItemStack tryEnchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed, double chance ) {
+		return Random.tryChance( chance ) ? enchantItem( itemStack, clampedRegionalDifficulty, isTreasureAllowed ) : itemStack;
+	}
+
+	/**
+	 Have a fixed chance to enchant a weapon item stack.
+
+	 @param weaponItemStack           Weapon item stack to enchant.
+	 @param clampedRegionalDifficulty Factor at which enchantment level depends.
+	 @param isTreasureAllowed         Flag responsible for enabling enchantment like Frost Walker.
+
+	 @return Returns the same item stack but enchanted if drawing chance succeeded or just item stack otherwise. (not copy)
+	 */
+	public static ItemStack tryEnchantWeapon( ItemStack weaponItemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed ) {
+		return tryEnchantItem( weaponItemStack, clampedRegionalDifficulty, isTreasureAllowed, MINECRAFT_WEAPON_ENCHANT_CHANCE );
+	}
+
+	/**
+	 Have a fixed chance to enchant an armor item stack.
+
+	 @param armorItemStack            Armor item stack to enchant.
+	 @param clampedRegionalDifficulty Factor at which enchantment level depends.
+	 @param isTreasureAllowed         Flag responsible for enabling enchantment like Frost Walker.
+
+	 @return Returns the same item stack but enchanted if drawing chance succeeded or just item stack otherwise. (not copy)
+	 */
+	public static ItemStack tryEnchantArmor( ItemStack armorItemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed ) {
+		return tryEnchantItem( armorItemStack, clampedRegionalDifficulty, isTreasureAllowed, MINECRAFT_ARMOR_PIECE_ENCHANT_CHANCE );
+	}
+
+	/**
+	 Enchanting and damaging given item stack.
+
+	 @param itemStack                 Item stack to enchant and damage.
+	 @param clampedRegionalDifficulty Factor at which enchantment level depends.
+	 @param isTreasureAllowed         Flag responsible for enabling enchantment like Frost Walker.
+	 @param damageFactor              Factor from range [0.0;1.0] how much item should be damaged at most.
+	 */
+	public static ItemStack damageAndEnchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed,
+		double damageFactor
+	) {
+		return damageItem( enchantItem( itemStack, clampedRegionalDifficulty, isTreasureAllowed ), damageFactor );
+	}
+}
