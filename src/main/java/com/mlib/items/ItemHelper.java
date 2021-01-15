@@ -3,6 +3,8 @@ package com.mlib.items;
 import com.mlib.MajruszLibrary;
 import com.mlib.Random;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -98,5 +100,21 @@ public class ItemHelper {
 		double damageFactor
 	) {
 		return damageItem( enchantItem( itemStack, clampedRegionalDifficulty, isTreasureAllowed ), damageFactor );
+	}
+
+	/**
+	 Adds enchantment type to item group. (every new created enchantment of this type will automatically be added to item group)
+	 It is only required to call when you are adding new enchantment type!
+	 */
+	public static void addEnchantmentTypeToItemGroup( EnchantmentType type, ItemGroup itemGroup ) {
+		EnchantmentType[] group = itemGroup.getRelevantEnchantmentTypes();
+		if( group.length == 0 ) {
+			itemGroup.setRelevantEnchantmentTypes( type );
+			return;
+		}
+		EnchantmentType[] temporary = new EnchantmentType[ group.length + 1 ];
+		System.arraycopy( group, 0, temporary, 0, group.length );
+		temporary[ group.length - 1 ] = type;
+		itemGroup.setRelevantEnchantmentTypes( temporary );
 	}
 }
