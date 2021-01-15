@@ -43,7 +43,7 @@ public abstract class WonderfulEnchantment extends Enchantment {
 	 then player can receive this enchantment only when enchanting with level between 10 and 30.
 	 */
 	protected void setDifferenceBetweenMinimumAndMaximum( int differenceInLevels ) {
-		this.differenceBetweenMinimumAndMaximum = differenceInLevels;
+		this.differenceBetweenMinimumAndMaximum = Math.max( 1, differenceInLevels );
 	}
 
 	/**
@@ -57,7 +57,7 @@ public abstract class WonderfulEnchantment extends Enchantment {
 
 	/** Setting up maximum enchantment level this enchantment can have. */
 	protected void setMaximumEnchantmentLevel( int enchantmentLevel ) {
-		this.maximumEnchantmentLevel = enchantmentLevel;
+		this.maximumEnchantmentLevel = Math.max( 1, enchantmentLevel );
 	}
 
 	@FunctionalInterface
