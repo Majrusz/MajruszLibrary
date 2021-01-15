@@ -12,7 +12,7 @@ modId="majrusz_library"
 
 version="1.0.0"
 
-displayName="Majrusz"
+displayName="Majrusz Library"
 
 updateJSONURL="https://google.com"
 
@@ -24,9 +24,7 @@ credits="Thanks for all your support!"
 
 authors="Majrusz"
 
-description='''
-Library with common code for some of Majrusz's modifications.
-'''
+description='''Library with common code for some of Majrusz's modifications.'''
 
 [[dependencies.examplemod]]
     modId="forge"
