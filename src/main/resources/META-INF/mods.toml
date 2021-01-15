@@ -1,13 +1,13 @@
 modLoader="javafml"
 loaderVersion="[35,)"
 license="MIT License"
-issueTrackerURL="https://google.com"
+issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
 
 [[mods]]
     modId="majrusz_library"
     version="1.0.0"
     displayName="Majrusz Library"
-    updateJSONURL="https://google.com"
+    updateJSONURL="https://raw.githubusercontent.com/Majrusz/WonderfulEnchantmentsMod/main/update.json"
     displayURL="https://google.com"
     logoFile="logo.jpg"
     credits="Thanks for all your support!"
