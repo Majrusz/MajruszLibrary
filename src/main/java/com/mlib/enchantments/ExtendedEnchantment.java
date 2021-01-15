@@ -5,17 +5,17 @@ import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 
 /** Class removing redundancy and repetition from enchantments. */
-public abstract class WonderfulEnchantment extends Enchantment {
+public abstract class ExtendedEnchantment extends Enchantment {
 	private static final int DISABLE_ENCHANTMENT_VALUE = 9001;
 	private int differenceBetweenMinimumAndMaximum = 10;
 	private int maximumEnchantmentLevel = 1;
 	private MinimumEnchantabilityCalculator minimumEnchantabilityCalculator = level->level;
 
-	protected WonderfulEnchantment( Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType[] equipmentSlotTypes ) {
+	protected ExtendedEnchantment( Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType[] equipmentSlotTypes ) {
 		super( rarity, enchantmentType, equipmentSlotTypes );
 	}
 
-	protected WonderfulEnchantment( Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType equipmentSlotType ) {
+	protected ExtendedEnchantment( Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType equipmentSlotType ) {
 		this( rarity, enchantmentType, new EquipmentSlotType[]{ equipmentSlotType } );
 	}
 

@@ -5,12 +5,12 @@ import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
 
 /** Class removing redundancy and repetition from curses. */
-public abstract class WonderfulCurse extends WonderfulEnchantment {
-	protected WonderfulCurse( Enchantment.Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType[] equipmentSlotTypes ) {
+public abstract class ExtendedCurse extends ExtendedEnchantment {
+	protected ExtendedCurse( Enchantment.Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType[] equipmentSlotTypes ) {
 		super( rarity, enchantmentType, equipmentSlotTypes );
 	}
 
-	protected WonderfulCurse( Enchantment.Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType equipmentSlotType ) {
+	protected ExtendedCurse( Enchantment.Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType equipmentSlotType ) {
 		this( rarity, enchantmentType, new EquipmentSlotType[]{ equipmentSlotType } );
 	}
 
