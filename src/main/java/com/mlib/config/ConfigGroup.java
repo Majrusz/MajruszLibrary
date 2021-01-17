@@ -3,6 +3,7 @@ package com.mlib.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /** Class representing group of base config values. */
@@ -35,10 +36,20 @@ public class ConfigGroup implements IConfig {
 		return group;
 	}
 
+	/** Adds new groups to the list. */
+	public void addGroups( ConfigGroup ...groups ) {
+		this.configTypeList.addAll( Arrays.asList( groups ) );
+	}
+
 	/** Adds new config to the list. */
 	public < ConfigType extends BaseConfig > ConfigType addConfig( ConfigType config ) {
 		this.configTypeList.add( config );
 
 		return config;
+	}
+
+	/** Adds new configs to the list. */
+	public void addConfigs( BaseConfig ...configs ) {
+		this.configTypeList.addAll( Arrays.asList( configs ) );
 	}
 }
