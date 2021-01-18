@@ -7,21 +7,21 @@ issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
     modId="majrusz_library"
     version="1.0.0"
     displayName="Majrusz Library"
-    updateJSONURL="https://raw.githubusercontent.com/Majrusz/WonderfulEnchantmentsMod/main/update.json"
-    displayURL="https://google.com"
+    updateJSONURL="https://raw.githubusercontent.com/Majrusz/MajruszLibrary/1.16.4/update.json"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/majrusz-library"
     logoFile="logo.jpg"
     credits="Thanks for all your support!"
     authors="Majrusz"
     description='''Library with common code for some of Majrusz's modifications.'''
 
-[[dependencies.examplemod]]
+[[dependencies.majrusz_library]]
     modId="forge"
     mandatory=true
     versionRange="[35,)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.examplemod]]
+[[dependencies.majrusz_library]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.16.4,1.17)"
