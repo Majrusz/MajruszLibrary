@@ -2,6 +2,7 @@ package com.mlib;
 
 import net.minecraft.inventory.EquipmentSlotType;
 
+/** Equipment slot types grouped together. */
 public class EquipmentSlotTypes {
 	public static EquipmentSlotType[] ARMOR = new EquipmentSlotType[]{ EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS,
 		EquipmentSlotType.FEET

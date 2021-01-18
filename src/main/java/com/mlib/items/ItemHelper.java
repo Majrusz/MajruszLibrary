@@ -7,9 +7,7 @@ import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 
-/**
- *
- */
+/** Some useful methods for items. */
 public class ItemHelper {
 	private static final double MINECRAFT_WEAPON_ENCHANT_CHANCE = 0.25;
 	private static final double MINECRAFT_ARMOR_PIECE_ENCHANT_CHANCE = 0.5;
