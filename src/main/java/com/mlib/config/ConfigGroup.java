@@ -42,14 +42,14 @@ public class ConfigGroup implements IConfig {
 	}
 
 	/** Adds new config to the list. */
-	public < ConfigType extends BaseConfig > ConfigType addConfig( ConfigType config ) {
+	public < ConfigType extends IConfig > ConfigType addConfig( ConfigType config ) {
 		this.configTypeList.add( config );
 
 		return config;
 	}
 
 	/** Adds new configs to the list. */
-	public void addConfigs( BaseConfig ...configs ) {
+	public void addConfigs( IConfig ...configs ) {
 		this.configTypeList.addAll( Arrays.asList( configs ) );
 	}
 }
