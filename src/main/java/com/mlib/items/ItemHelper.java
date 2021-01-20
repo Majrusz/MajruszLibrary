@@ -4,8 +4,11 @@ import com.mlib.MajruszLibrary;
 import com.mlib.Random;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentType;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.server.ServerWorld;
 
 /** Some useful methods for items. */
 public class ItemHelper {
@@ -114,5 +117,19 @@ public class ItemHelper {
 		System.arraycopy( group, 0, temporary, 0, group.length );
 		temporary[ group.length - 1 ] = type;
 		itemGroup.setRelevantEnchantmentTypes( temporary );
+	}
+
+	/**
+	 Gives item stack to player. If possible gives to inventory otherwise spawns in the world near the player.
+
+	 @param itemStack Item stack to give.
+	 @param player    Player to receive item stack.
+	 @param world     World where item should spawn if it is not possible to give item directly.
+	 */
+	public static void giveItemStackToPlayer( ItemStack itemStack, PlayerEntity player, ServerWorld world ) {
+		if( !player.inventory.addItemStackToInventory( itemStack ) ) {
+			double x = player.getPosX(), y = player.getPosY() + 1.0, z = player.getPosZ();
+			world.addEntity( new ItemEntity( world, x, y, z, itemStack ) );
+		}
 	}
 }
