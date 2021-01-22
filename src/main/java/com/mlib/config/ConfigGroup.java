@@ -42,6 +42,14 @@ public class ConfigGroup implements IConfig {
 	}
 
 	/** Adds new config to the list. */
+	@Deprecated
+	public < ConfigType extends BaseConfig > ConfigType addConfig( ConfigType config ) {
+		this.configTypeList.add( config );
+
+		return config;
+	}
+
+	/** Adds new config to the list. */
 	public < ConfigType extends IConfig > ConfigType addConfig( ConfigType config ) {
 		this.configTypeList.add( config );
 
