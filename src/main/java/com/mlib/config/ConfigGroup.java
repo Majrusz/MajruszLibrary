@@ -49,6 +49,12 @@ public class ConfigGroup implements IConfig {
 	}
 
 	/** Adds new configs to the list. */
+	@Deprecated
+	public void addConfigs( BaseConfig ...configs ) {
+		this.configTypeList.addAll( Arrays.asList( configs ) );
+	}
+
+	/** Adds new configs to the list. */
 	public void addConfigs( IConfig ...configs ) {
 		this.configTypeList.addAll( Arrays.asList( configs ) );
 	}
