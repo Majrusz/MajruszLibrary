@@ -6,6 +6,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.server.ServerWorld;
+
+import javax.annotation.Nullable;
 
 /** Simple class for more explicit way to handling world functions. */
 public class WorldHelper {
@@ -95,5 +98,17 @@ public class WorldHelper {
 	 */
 	public static boolean isEntityOutsideDuringTheNight( Entity entity ) {
 		return isEntityOutside( entity ) && entity.world.isNightTime();
+	}
+
+	/**
+	 Returns ServerWorld from given entity.
+	 Returns null if casting was impossible.
+	 */
+	@Nullable
+	public static ServerWorld getServerWorldFromEntity( Entity entity ) {
+		if( !( entity.world instanceof ServerWorld ) )
+			return null;
+
+		return ( ServerWorld )entity.world;
 	}
 }
