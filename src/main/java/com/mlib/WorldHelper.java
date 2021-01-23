@@ -1,13 +1,11 @@
 package com.mlib;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.server.ServerWorld;
 
 /** Simple class for more explicit way to handling world functions. */
 public class WorldHelper {
@@ -48,15 +46,54 @@ public class WorldHelper {
 	}
 
 	/**
+	 Checks whether entity is outside.
+
+	 @param entity Entity to check.
+	 */
+	public static boolean isEntityOutside( Entity entity ) {
+		World world = entity.world;
+		BlockPos entityPosition = new BlockPos( entity.getPositionVec() );
+
+		return world.canSeeSky( entityPosition );
+	}
+
+	/**
+	 Checks whether is raining at entity current biome.
+
+	 @param entity Entity to check.
+	 */
+	public static boolean isRainingAtEntityBiome( Entity entity ) {
+		World world = entity.world;
+		BlockPos entityPosition = new BlockPos( entity.getPositionVec() );
+		Biome biome = world.getBiome( entityPosition );
+
+		return world.isRaining() && biome.getPrecipitation() == Biome.RainType.RAIN;
+	}
+
+	/**
 	 Checks whether entity is outside when it is raining.
 
 	 @param entity Entity to check.
 	 */
 	public static boolean isEntityOutsideWhenItIsRaining( Entity entity ) {
-		World world = entity.world;
-		BlockPos entityPosition = new BlockPos( entity.getPositionVec() );
-		Biome biome = world.getBiome( entityPosition );
+		return isEntityOutside( entity ) && isRainingAtEntityBiome( entity );
+	}
 
-		return world.canSeeSky( entityPosition ) && world.isRaining() && biome.getPrecipitation() == Biome.RainType.RAIN;
+	/**
+	 Checks whether entity is outside during the day.
+
+	 @param entity Entity to check.
+	 */
+	public static boolean isEntityOutsideDuringTheDay( Entity entity ) {
+		return isEntityOutside( entity ) && entity.world.isDaytime();
+	}
+
+	/**
+	 Checks whether entity is outside during the night.
+
+	 @param entity Entity to check.
+	 */
+	public static boolean isEntityOutsideDuringTheNight( Entity entity ) {
+		return isEntityOutside( entity ) && entity.world.isNightTime();
 	}
 }
