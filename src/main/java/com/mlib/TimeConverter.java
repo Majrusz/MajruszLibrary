@@ -2,8 +2,8 @@ package com.mlib;
 
 /** Converter for more explicit time conversion in minecraft. */
 public class TimeConverter {
-	private static final int TICKS_IN_SECOND = 20;
-	private static final int TICKS_IN_MINUTE = TICKS_IN_SECOND * 60;
+	public static final int TICKS_IN_SECOND = 20;
+	public static final int TICKS_IN_MINUTE = TICKS_IN_SECOND * 60;
 
 	/** Converts seconds to ticks. */
 	public static int secondsToTicks( double seconds ) {
