@@ -37,7 +37,7 @@ public class AttributeHandler {
 	/**
 	 Applying current attribute to the target.
 
-	 @param target Entity to apply effects.
+	 @param target Entity to apply attribute.
 	 */
 	public AttributeHandler apply( LivingEntity target ) {
 		ModifiableAttributeInstance attributeInstance = target.getAttribute( this.attribute );
@@ -49,5 +49,17 @@ public class AttributeHandler {
 		}
 
 		return this;
+	}
+
+	/**
+	 Changing current attribute value and applying it to the entity.
+
+	 @param target Entity to apply attribute.
+	 @param value New attribute value.
+	 */
+	public AttributeHandler setValueAndApply( LivingEntity target, double value ) {
+		setValue( value );
+
+		return apply( target );
 	}
 }
