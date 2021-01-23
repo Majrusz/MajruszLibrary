@@ -106,9 +106,6 @@ public class WorldHelper {
 	 */
 	@Nullable
 	public static ServerWorld getServerWorldFromEntity( Entity entity ) {
-		if( !( entity.world instanceof ServerWorld ) )
-			return null;
-
-		return ( ServerWorld )entity.world;
+		return entity.world instanceof ServerWorld ? ( ServerWorld )entity.world : null;
 	}
 }
