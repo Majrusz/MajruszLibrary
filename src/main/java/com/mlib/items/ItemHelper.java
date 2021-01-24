@@ -120,6 +120,26 @@ public class ItemHelper {
 	}
 
 	/**
+	 Adds enchantment types to item group. (every new created enchantment of this type will automatically be added to item group)
+	 It is only required to call when you are adding new enchantment type!
+	 */
+	public static void addEnchantmentTypesToItemGroup( ItemGroup itemGroup, EnchantmentType ...types ) {
+		EnchantmentType[] group = itemGroup.getRelevantEnchantmentTypes();
+		if( group.length == 0 ) {
+			itemGroup.setRelevantEnchantmentTypes( types );
+		} else {
+			EnchantmentType[] temporary = new EnchantmentType[ group.length + types.length ];
+			System.arraycopy( group, 0, temporary, 0, group.length );
+			int i = 1;
+			for( EnchantmentType enchantmentType : types ) {
+				temporary[ group.length - i ] = enchantmentType;
+				i++;
+			}
+			itemGroup.setRelevantEnchantmentTypes( temporary );
+		}
+	}
+
+	/**
 	 Gives item stack to player. If possible gives to inventory otherwise spawns in the world near the player.
 
 	 @param itemStack Item stack to give.
