@@ -14,7 +14,8 @@ public class Random {
 		return MajruszLibrary.RANDOM.nextDouble() <= chance;
 	}
 
-	/** Randomizes experience.
+	/**
+	 Randomizes experience.
 	 For example if experience to randomize is equal 21.37 then:
 	 There is 37% (0.37) for 22 experience.
 	 And there is 63% (1.0-0.37) for 21 experience.
