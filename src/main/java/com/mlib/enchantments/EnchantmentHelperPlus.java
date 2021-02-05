@@ -39,9 +39,10 @@ public class EnchantmentHelperPlus {
 	) {
 		List< ItemStack > itemStackList = new ArrayList<>();
 
-		for( ItemStack itemStack : itemStacks )
-			if( type.isInstance( itemStack.getItem() ) )
-				itemStackList.add( itemStack );
+		if( itemStacks != null )
+			for( ItemStack itemStack : itemStacks )
+				if( type.isInstance( itemStack.getItem() ) )
+					itemStackList.add( itemStack );
 
 		return calculateEnchantmentSum( enchantment, itemStackList );
 	}
@@ -66,8 +67,9 @@ public class EnchantmentHelperPlus {
 	public static int calculateEnchantmentSum( Enchantment enchantment, Iterable< ItemStack > itemStacks ) {
 		int sum = 0;
 
-		for( ItemStack itemStack : itemStacks )
-			sum += EnchantmentHelper.getEnchantmentLevel( enchantment, itemStack );
+		if( itemStacks != null )
+			for( ItemStack itemStack : itemStacks )
+				sum += EnchantmentHelper.getEnchantmentLevel( enchantment, itemStack );
 
 		return sum;
 	}
