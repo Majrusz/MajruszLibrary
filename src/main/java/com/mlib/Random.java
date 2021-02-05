@@ -14,6 +14,19 @@ public class Random {
 		return MajruszLibrary.RANDOM.nextDouble() <= chance;
 	}
 
+	/** Randomizes experience.
+	 For example if experience to randomize is equal 21.37 then:
+	 There is 37% (0.37) for 22 experience.
+	 And there is 63% (1.0-0.37) for 21 experience.
+	 */
+	public static int randomizeExperience( double experience ) {
+		int outputExperience = ( int )experience;
+		if( tryChance( experience - outputExperience ) )
+			outputExperience++;
+
+		return outputExperience;
+	}
+
 	/** Returns random vector 3d. */
 	public static Vector3d getRandomVector3d( double minX, double maxX, double minY, double maxY, double minZ, double maxZ ) {
 		double x = ( maxX - minX ) * MajruszLibrary.RANDOM.nextDouble() + minX;
