@@ -3,21 +3,37 @@ package com.mlib.enchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.registries.DeferredRegister;
 
 /** Class removing redundancy and repetition from enchantments. */
 public abstract class ExtendedEnchantment extends Enchantment {
 	private static final int DISABLE_ENCHANTMENT_VALUE = 9001;
+	protected final String registerName;
 	private int differenceBetweenMinimumAndMaximum = 10;
 	private int maximumEnchantmentLevel = 1;
 	private MinimumEnchantabilityCalculator minimumEnchantabilityCalculator = level->level;
 
-	protected ExtendedEnchantment( Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType[] equipmentSlotTypes ) {
+	protected ExtendedEnchantment( String registerName, Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType[] equipmentSlotTypes ) {
 		super( rarity, enchantmentType, equipmentSlotTypes );
+
+		this.registerName = registerName;
 	}
 
-	protected ExtendedEnchantment( Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType equipmentSlotType ) {
-		this( rarity, enchantmentType, new EquipmentSlotType[]{ equipmentSlotType } );
+	protected ExtendedEnchantment( String registerName, Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType equipmentSlotType ) {
+		this( registerName, rarity, enchantmentType, new EquipmentSlotType[]{ equipmentSlotType } );
 	}
+
+	@Deprecated
+	protected ExtendedEnchantment( Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType equipmentSlotType ) {
+		this( "missing_name", rarity, enchantmentType, new EquipmentSlotType[]{ equipmentSlotType } );
+	}
+
+	@Deprecated
+	protected ExtendedEnchantment( Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType[] equipmentSlotTypes ) {
+		this( "missing_name", rarity, enchantmentType, equipmentSlotTypes );
+	}
+
 
 	@Override
 	public int getMaxLevel() {
@@ -32,6 +48,21 @@ public abstract class ExtendedEnchantment extends Enchantment {
 	@Override
 	public int getMaxEnchantability( int level ) {
 		return this.getMinEnchantability( level ) + this.differenceBetweenMinimumAndMaximum;
+	}
+
+	@Override
+	public boolean canApply( ItemStack stack ) {
+		return !isDisabled() && super.canApply( stack );
+	}
+
+	@Override
+	public boolean canApplyAtEnchantingTable( ItemStack stack ) {
+		return !isDisabled() && super.canApplyAtEnchantingTable( stack );
+	}
+
+	/** Registers given enchantment only if player has not disabled it. */
+	public void register( DeferredRegister< Enchantment > enchantments ) {
+		enchantments.register( this.registerName, ()->this );
 	}
 
 	/** Checks whether the enchantment is disabled. */
