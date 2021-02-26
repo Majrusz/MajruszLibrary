@@ -15,12 +15,12 @@ public abstract class ExtendedCurse extends ExtendedEnchantment {
 
 	@Deprecated
 	protected ExtendedCurse( Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType[] equipmentSlotTypes ) {
-		super( "missing_name", rarity, enchantmentType, equipmentSlotTypes );
+		super( rarity, enchantmentType, equipmentSlotTypes );
 	}
 
 	@Deprecated
 	protected ExtendedCurse( Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType equipmentSlotType ) {
-		this( "missing_name", rarity, enchantmentType, new EquipmentSlotType[]{ equipmentSlotType } );
+		this( rarity, enchantmentType, new EquipmentSlotType[]{ equipmentSlotType } );
 	}
 
 	@Override

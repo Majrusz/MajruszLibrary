@@ -26,7 +26,7 @@ public abstract class ExtendedEnchantment extends Enchantment {
 
 	@Deprecated
 	protected ExtendedEnchantment( Rarity rarity, EnchantmentType enchantmentType, EquipmentSlotType equipmentSlotType ) {
-		this( "missing_name", rarity, enchantmentType, new EquipmentSlotType[]{ equipmentSlotType } );
+		this( rarity, enchantmentType, new EquipmentSlotType[]{ equipmentSlotType } );
 	}
 
 	@Deprecated
