@@ -33,7 +33,7 @@ public class StringListConfig extends BaseConfig {
 	}
 
 	/** Checks if a list contains given value. */
-	public boolean hasValue( String value ) {
+	public boolean contains( String value ) {
 		List< ? extends String > values = this.listValues.get();
 
 		return values.contains( value );
