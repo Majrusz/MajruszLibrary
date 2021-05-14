@@ -1,5 +1,7 @@
 package com.mlib;
 
+import com.mlib.events.HarvestCropEvent;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
@@ -22,5 +24,10 @@ public class MajruszLibrary {
 
 	public MajruszLibrary() {
 		MinecraftForge.EVENT_BUS.register( this );
+	}
+
+	/** Returns resource location for register in current modification files. */
+	public static ResourceLocation getLocation( String register ) {
+		return new ResourceLocation( MOD_ID, register );
 	}
 }
