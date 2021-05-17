@@ -36,7 +36,7 @@ public class ExplosionSizeEvent extends Event implements IModBusEvent {
 		ExplosionSizeEvent event = new ExplosionSizeEvent( world, explosion );
 		MinecraftForge.EVENT_BUS.post( event );
 
-		if( ( event.size / explosion.size ) > 1.5 && world instanceof ServerWorld )
+		if( ( event.size / explosion.size ) > 1.25 && world instanceof ServerWorld )
 			sendToPlayers( ( ServerWorld )world, explosion, explosion.getPosition(), event.size );
 
 		explosion.size = event.size;
