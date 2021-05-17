@@ -1,5 +1,6 @@
 package com.mlib;
 
+import com.mlib.loot_modifiers.AnyModification;
 import com.mlib.loot_modifiers.HarvestCrop;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
@@ -15,6 +16,7 @@ public class LootModifiers {
 		IForgeRegistry< GlobalLootModifierSerializer< ? > > registry = event.getRegistry();
 
 		registerSingleModifier( registry, new HarvestCrop.Serializer(), "harvest_crop" );
+		registerSingleModifier( registry, new AnyModification.Serializer(), "any_situation" );
 	}
 
 	/** Adding to registry single loot modifier. */
