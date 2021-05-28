@@ -56,8 +56,8 @@ public abstract class ExtendedEnchantment extends Enchantment {
 	}
 
 	@Override
-	public boolean canApplyAtEnchantingTable( ItemStack stack ) {
-		return !isDisabled() && super.canApplyAtEnchantingTable( stack );
+	public boolean canVillagerTrade() {
+		return !isDisabled() && super.canVillagerTrade();
 	}
 
 	@Override
@@ -66,13 +66,13 @@ public abstract class ExtendedEnchantment extends Enchantment {
 	}
 
 	@Override
-	public boolean isAllowedOnBooks() {
-		return !isDisabled() && super.isAllowedOnBooks();
+	public boolean canApplyAtEnchantingTable( ItemStack stack ) {
+		return !isDisabled() && super.canApplyAtEnchantingTable( stack );
 	}
 
 	@Override
-	public boolean canVillagerTrade() {
-		return !isDisabled() && super.canVillagerTrade();
+	public boolean isAllowedOnBooks() {
+		return !isDisabled() && super.isAllowedOnBooks();
 	}
 
 	/** Registers given enchantment only if player has not disabled it. */
