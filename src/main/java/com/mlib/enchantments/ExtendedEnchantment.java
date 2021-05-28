@@ -60,6 +60,21 @@ public abstract class ExtendedEnchantment extends Enchantment {
 		return !isDisabled() && super.canApplyAtEnchantingTable( stack );
 	}
 
+	@Override
+	public boolean canGenerateInLoot() {
+		return !isDisabled() && super.canGenerateInLoot();
+	}
+
+	@Override
+	public boolean isAllowedOnBooks() {
+		return !isDisabled() && super.isAllowedOnBooks();
+	}
+
+	@Override
+	public boolean canVillagerTrade() {
+		return !isDisabled() && super.canVillagerTrade();
+	}
+
 	/** Registers given enchantment only if player has not disabled it. */
 	public void register( DeferredRegister< Enchantment > enchantments ) {
 		enchantments.register( this.registerName, ()->this );
