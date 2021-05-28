@@ -6,7 +6,7 @@
 - [Planet Minecraft](https://www.planetminecraft.com/mod/majrusz-library/)
 
 ## Current Library Releases (Source Code)
-- [v1.5.0 for Minecraft 1.16.4](https://github.com/Majrusz/MajruszLibrary/tree/1.16.4)
+- [v1.6.1 for Minecraft 1.16.4](https://github.com/Majrusz/MajruszLibrary/tree/1.16.4)
 
 ## Technologies
 - Java 8
