@@ -3,6 +3,7 @@ package com.mlib.attributes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 
 import java.util.UUID;
@@ -14,6 +15,13 @@ public class AttributeHandler {
 	protected final Attribute attribute;
 	protected final AttributeModifier.Operation operation;
 	private double value = 1.0;
+
+	/** Checks whether entity has a given attribute. */
+	public static boolean hasAttribute( LivingEntity entity, Attribute attribute ) {
+		AttributeModifierManager attributeModifierManager = entity.getAttributeManager();
+
+		return attributeModifierManager.hasAttributeInstance( attribute );
+	}
 
 	public AttributeHandler( String uuid, String name, Attribute attribute, AttributeModifier.Operation operation ) {
 		this.uuid = UUID.fromString( uuid );
