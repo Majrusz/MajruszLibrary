@@ -2,6 +2,7 @@ package com.mlib.nbt;
 
 import net.minecraft.nbt.CompoundNBT;
 
+/** Class representing Boolean with easier writing and reading data. */
 public class BooleanStorage extends BaseStorage< Boolean > {
 	public BooleanStorage( String key, Boolean defaultValue ) {
 		super( key, defaultValue );

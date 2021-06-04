@@ -2,9 +2,7 @@ package com.mlib.nbt;
 
 import net.minecraft.nbt.CompoundNBT;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /** Basic class storing primitive type with easier handling of writing and reading data. */
 public abstract class BaseStorage< Type > {

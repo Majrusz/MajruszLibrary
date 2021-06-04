@@ -3,6 +3,7 @@ package com.mlib.nbt;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 
+/** Class representing BlockPos with easier writing and reading data. */
 public class BlockPosStorage extends BaseStorage< BlockPos > {
 	public BlockPosStorage( String key, BlockPos defaultValue ) {
 		super( key, defaultValue );
