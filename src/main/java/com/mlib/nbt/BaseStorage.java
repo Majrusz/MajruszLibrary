@@ -27,10 +27,10 @@ public abstract class BaseStorage< Type > {
 	}
 
 	/** Saves information to CompoundNBT. */
-	public abstract void saveTo( CompoundNBT nbt );
+	public abstract CompoundNBT saveTo( CompoundNBT nbt );
 
 	/** Loads information from CompoundNBT. */
-	public abstract void loadFrom( CompoundNBT nbt );
+	public abstract CompoundNBT loadFrom( CompoundNBT nbt );
 
 	/** Sets value. */
 	public Type set( Type value ) {
@@ -45,5 +45,15 @@ public abstract class BaseStorage< Type > {
 	/** Returns value depending on type. */
 	public Type get() {
 		return this.value;
+	}
+
+	/** Returns the key under which the value will be saved. */
+	public String getKey() {
+		return this.key;
+	}
+
+	/** Returns whether both of the objects are equal. */
+	public boolean is( Type value ) {
+		return value.equals( get() );
 	}
 }
