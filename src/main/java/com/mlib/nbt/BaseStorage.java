@@ -15,22 +15,26 @@ public abstract class BaseStorage< Type > {
 	}
 
 	/** Saves information to CompoundNBT from given storages. */
-	public static void saveTo( CompoundNBT nbt, BaseStorage< ? >... storages ) {
+	public static CompoundNBT saveTo( CompoundNBT nbt, BaseStorage< ? >... storages ) {
 		for( BaseStorage< ? > storage : storages )
 			storage.saveTo( nbt );
+
+		return nbt;
 	}
 
 	/** Loads information from CompoundNBT to given storages. */
-	public static void loadFrom( CompoundNBT nbt, BaseStorage< ? >... storages ) {
+	public static CompoundNBT loadFrom( CompoundNBT nbt, BaseStorage< ? >... storages ) {
 		for( BaseStorage< ? > storage : storages )
 			storage.loadFrom( nbt );
+
+		return nbt;
 	}
 
 	/** Saves information to CompoundNBT. */
-	public abstract CompoundNBT saveTo( CompoundNBT nbt );
+	public abstract void saveTo( CompoundNBT nbt );
 
 	/** Loads information from CompoundNBT. */
-	public abstract CompoundNBT loadFrom( CompoundNBT nbt );
+	public abstract void loadFrom( CompoundNBT nbt );
 
 	/** Sets value. */
 	public Type set( Type value ) {

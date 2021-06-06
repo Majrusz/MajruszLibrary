@@ -14,19 +14,15 @@ public class BlockPosStorage extends BaseStorage< BlockPos > {
 	}
 
 	@Override
-	public CompoundNBT saveTo( CompoundNBT nbt ) {
+	public void saveTo( CompoundNBT nbt ) {
 		nbt.putInt( this.key + "X", this.value.getX() );
 		nbt.putInt( this.key + "Y", this.value.getY() );
 		nbt.putInt( this.key + "Z", this.value.getZ() );
-
-		return nbt;
 	}
 
 	@Override
-	public CompoundNBT loadFrom( CompoundNBT nbt ) {
+	public void loadFrom( CompoundNBT nbt ) {
 		set( new BlockPos( nbt.getInt( this.key + "X" ), nbt.getInt( this.key + "Y" ), nbt.getInt( this.key + "Z" ) ) );
-
-		return nbt;
 	}
 
 	/** Returns x coordinate directly. */

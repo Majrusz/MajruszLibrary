@@ -9,16 +9,12 @@ public class StringStorage extends BaseStorage< String > {
 	}
 
 	@Override
-	public CompoundNBT saveTo( CompoundNBT nbt ) {
+	public void saveTo( CompoundNBT nbt ) {
 		nbt.putString( this.key, this.value );
-
-		return nbt;
 	}
 
 	@Override
-	public CompoundNBT loadFrom( CompoundNBT nbt ) {
+	public void loadFrom( CompoundNBT nbt ) {
 		set( nbt.getString( this.key ) );
-
-		return nbt;
 	}
 }

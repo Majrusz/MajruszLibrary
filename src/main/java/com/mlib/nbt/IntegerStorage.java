@@ -9,17 +9,13 @@ public class IntegerStorage extends BaseStorage< Integer > {
 	}
 
 	@Override
-	public CompoundNBT saveTo( CompoundNBT nbt ) {
+	public void saveTo( CompoundNBT nbt ) {
 		nbt.putInt( this.key, this.value );
-
-		return nbt;
 	}
 
 	@Override
-	public CompoundNBT loadFrom( CompoundNBT nbt ) {
+	public void loadFrom( CompoundNBT nbt ) {
 		set( nbt.getInt( this.key ) );
-
-		return nbt;
 	}
 
 	/** Increments stored value by 1. */
