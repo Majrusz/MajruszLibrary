@@ -9,12 +9,16 @@ public class BooleanStorage extends BaseStorage< Boolean > {
 	}
 
 	@Override
-	public void saveTo( CompoundNBT nbt ) {
+	public CompoundNBT saveTo( CompoundNBT nbt ) {
 		nbt.putBoolean( this.key, this.value );
+
+		return nbt;
 	}
 
 	@Override
-	public void loadFrom( CompoundNBT nbt ) {
-		this.value = nbt.getBoolean( this.key );
+	public CompoundNBT loadFrom( CompoundNBT nbt ) {
+		set( nbt.getBoolean( this.key ) );
+
+		return nbt;
 	}
 }
