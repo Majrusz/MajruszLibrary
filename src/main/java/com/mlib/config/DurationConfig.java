@@ -8,8 +8,13 @@ public class DurationConfig extends DoubleConfig {
 		super( name, comment, requiresWorldRestart, defaultValue, minimum, maximum );
 	}
 
-	/** Checks if a value from the file is true. */
+	/** Converts stored seconds to minecraft ticks. */
 	public int getDuration() {
+		return getTicks();
+	}
+
+	/** Converts stored seconds to minecraft ticks. */
+	public int getTicks() {
 		return TimeConverter.secondsToTicks( super.get() );
 	}
 }

@@ -3,7 +3,7 @@ package com.mlib.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 /** Class representing single config value. */
-public abstract class BaseConfig implements IConfig {
+public abstract class BaseConfig< Type > implements IConfigType< Type > {
 	protected final String name;
 	protected final String comment;
 	protected final boolean requiresWorldRestart;

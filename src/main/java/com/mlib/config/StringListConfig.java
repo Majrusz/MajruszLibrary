@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /** Class representing list of strings config. */
-public class StringListConfig extends BaseConfig {
+public class StringListConfig extends BaseConfig< List< ? extends String > > {
 	private final List< ? extends String > defaultValues;
 	public ForgeConfigSpec.ConfigValue< List< ? extends String > > listValues;
 
@@ -37,5 +37,11 @@ public class StringListConfig extends BaseConfig {
 		List< ? extends String > values = this.listValues.get();
 
 		return values.contains( value );
+	}
+
+	/** Returns value directly stored in a config. */
+	@Override
+	public List< ? extends String > get() {
+		return this.listValues.get();
 	}
 }

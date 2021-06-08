@@ -3,7 +3,7 @@ package com.mlib.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 /** Class representing single double config value. */
-public class DoubleConfig extends BaseConfig {
+public class DoubleConfig extends BaseConfig< Double > {
 	public ForgeConfigSpec.DoubleValue doubleValue;
 	protected final double defaultValue;
 	protected final double minimum;
@@ -16,8 +16,8 @@ public class DoubleConfig extends BaseConfig {
 		this.maximum = maximum;
 	}
 
-	/** Returns currently stored integer. */
-	public double get() {
+	/** Returns value directly stored in a config. */
+	public Double get() {
 		return this.doubleValue.get();
 	}
 

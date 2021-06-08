@@ -3,7 +3,7 @@ package com.mlib.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 /** Class representing single integer config value. */
-public class IntegerConfig extends BaseConfig {
+public class IntegerConfig extends BaseConfig< Integer > {
 	public ForgeConfigSpec.IntValue intValue;
 	protected final int defaultValue;
 	protected final int minimum;
@@ -16,8 +16,8 @@ public class IntegerConfig extends BaseConfig {
 		this.maximum = maximum;
 	}
 
-	/** Returns currently stored integer. */
-	public int get() {
+	/** Returns value directly stored in a config. */
+	public Integer get() {
 		return this.intValue.get();
 	}
 
