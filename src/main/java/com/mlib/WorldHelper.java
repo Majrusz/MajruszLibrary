@@ -1,14 +1,17 @@
 package com.mlib;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.server.ServerWorld;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /** Simple class for more explicit way to handling world functions. */
 public class WorldHelper {
@@ -107,5 +110,20 @@ public class WorldHelper {
 	@Nullable
 	public static ServerWorld getServerWorldFromEntity( Entity entity ) {
 		return entity.world instanceof ServerWorld ? ( ServerWorld )entity.world : null;
+	}
+
+	/** Returns player spawn position. (bed position, nether anchor or world spawn point) */
+	public static BlockPos getSpawnPosition( ServerPlayerEntity player, ServerWorld world ) {
+		BlockPos position = player.func_241140_K_();
+		Optional< BlockPos > spawnPosition = Optional.empty();
+		if( position != null ) {
+			Optional< Vector3d > temporaryPosition = ServerPlayerEntity.func_242374_a( world, position, player.func_242109_L(),
+				player.func_241142_M_(), true
+			);
+			if( temporaryPosition.isPresent() )
+				spawnPosition = Optional.of( new BlockPos( temporaryPosition.get() ) );
+		}
+
+		return spawnPosition.orElseGet( world::getSpawnPoint );
 	}
 }
