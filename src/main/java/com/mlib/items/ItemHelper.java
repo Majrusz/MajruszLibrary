@@ -29,7 +29,7 @@ public class ItemHelper {
 	 @return Returns the same item stack but damaged. (not copy)
 	 */
 	public static ItemStack damageItem( ItemStack itemStack, double factor ) {
-		if( itemStack.getMaxDamage() <= 0 )
+		if( itemStack.getMaxDamage() * factor < 1.0 )
 			return ItemStack.EMPTY;
 
 		itemStack.setDamage( MajruszLibrary.RANDOM.nextInt( ( int )( itemStack.getMaxDamage() * factor ) ) );
