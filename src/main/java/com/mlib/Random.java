@@ -1,8 +1,8 @@
 package com.mlib;
 
 import com.mlib.math.VectorHelper;
-import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;
+import net.minecraft.world.phys.Vec3;
 
 public class Random {
 	/**
@@ -40,17 +40,17 @@ public class Random {
 	}
 
 	/** Returns random double vector. */
-	public static Vector3d getRandomVector3d( double minX, double maxX, double minY, double maxY, double minZ, double maxZ ) {
+	public static Vec3 getRandomVector3d( double minX, double maxX, double minY, double maxY, double minZ, double maxZ ) {
 		double x = ( maxX - minX ) * MajruszLibrary.RANDOM.nextDouble() + minX;
 		double y = ( maxY - minY ) * MajruszLibrary.RANDOM.nextDouble() + minY;
 		double z = ( maxZ - minZ ) * MajruszLibrary.RANDOM.nextDouble() + minZ;
 
-		return new Vector3d( x, y, z );
+		return new Vec3( x, y, z );
 	}
 
 	/** Returns random normalized vector. (with distance equal 1) */
-	public static Vector3d getRandomNormalizedVector() {
-		Vector3d vector = getRandomVector3d( -1.0, 1.0, -1.0, 1.0, -1.0, 1.0 );
+	public static Vec3 getRandomNormalizedVector() {
+		Vec3 vector = getRandomVector3d( -1.0, 1.0, -1.0, 1.0, -1.0, 1.0 );
 
 		if( VectorHelper.length( vector ) < 1e-5 ) // to avoid dividing by zero (or very small number) and throwing exception
 			return getRandomNormalizedVector();

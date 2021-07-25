@@ -3,6 +3,7 @@ package com.mlib.math;
 import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;
 import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 /**
  Class with few functions for common vector operations.
@@ -19,6 +20,11 @@ public class VectorHelper {
 		return new Vector3d( vector1.x + vector2.x, vector1.y + vector2.y, vector1.z + vector2.z );
 	}
 
+	/** Returns sum of two double vectors. */
+	public static Vec3 add( Vec3 vector1, Vec3 vector2 ) {
+		return new Vec3( vector1.x + vector2.x, vector1.y + vector2.y, vector1.z + vector2.z );
+	}
+
 	/** Returns negation of float vector. */
 	public static Vector3f negate( Vector3f vector ) {
 		return new Vector3f( -vector.x(), -vector.y(), -vector.z() );
@@ -29,6 +35,11 @@ public class VectorHelper {
 		return new Vector3d( -vector.x, -vector.y, -vector.z );
 	}
 
+	/** Returns negation of double vector. */
+	public static Vec3 negate( Vec3 vector ) {
+		return new Vec3( -vector.x, -vector.y, -vector.z );
+	}
+
 	/** Returns subtraction of two float vectors. */
 	public static Vector3f subtract( Vector3f vector1, Vector3f vector2 ) {
 		return add( vector1, negate( vector2 ) );
@@ -36,6 +47,11 @@ public class VectorHelper {
 
 	/** Returns subtraction of two double vectors. */
 	public static Vector3d subtract( Vector3d vector1, Vector3d vector2 ) {
+		return add( vector1, negate( vector2 ) );
+	}
+
+	/** Returns subtraction of two double vectors. */
+	public static Vec3 subtract( Vec3 vector1, Vec3 vector2 ) {
 		return add( vector1, negate( vector2 ) );
 	}
 
@@ -49,6 +65,11 @@ public class VectorHelper {
 		return new Vector3d( vector1.x * vector2.x, vector1.y * vector2.y, vector1.z * vector2.z );
 	}
 
+	/** Returns product of two double vectors. */
+	public static Vec3 multiply( Vec3 vector1, Vec3 vector2 ) {
+		return new Vec3( vector1.x * vector2.x, vector1.y * vector2.y, vector1.z * vector2.z );
+	}
+
 	/** Returns quotient of two float vectors. */
 	public static Vector3f divide( Vector3f vector1, Vector3f vector2 ) {
 		return new Vector3f( vector1.x() / vector2.x(), vector1.y() / vector2.y(), vector1.z() / vector2.z() );
@@ -57,6 +78,11 @@ public class VectorHelper {
 	/** Returns quotient of two double vectors. */
 	public static Vector3d divide( Vector3d vector1, Vector3d vector2 ) {
 		return new Vector3d( vector1.x / vector2.x, vector1.y / vector2.y, vector1.z / vector2.z );
+	}
+
+	/** Returns quotient of two double vectors. */
+	public static Vec3 divide( Vec3 vector1, Vec3 vector2 ) {
+		return new Vec3( vector1.x / vector2.x, vector1.y / vector2.y, vector1.z / vector2.z );
 	}
 
 	/** Returns scalar product between two float vectors. */
@@ -76,6 +102,16 @@ public class VectorHelper {
 
 	/** Returns scalar product between the same double vector. */
 	public static double dot( Vector3d vector ) {
+		return dot( vector, vector );
+	}
+
+	/** Returns scalar product between two double vectors. */
+	public static double dot( Vec3 vector1, Vec3 vector2 ) {
+		return vector1.dot( vector2 );
+	}
+
+	/** Returns scalar product between the same double vector. */
+	public static double dot( Vec3 vector ) {
 		return dot( vector, vector );
 	}
 
@@ -99,6 +135,17 @@ public class VectorHelper {
 		return distance( vector, new Vector3d( 0.0,  0.0, 0.0 ) );
 	}
 
+	/** Returns distance between two double vectors. */
+	public static double distance( Vec3 vector1, Vec3 vector2 ) {
+		return Math.sqrt( dot( subtract( vector1, vector2 ) ) );
+	}
+
+	/** Returns length of given double vector. */
+	public static double length( Vec3 vector ) {
+		return distance( vector, new Vec3( 0.0,  0.0, 0.0 ) );
+	}
+
+
 	/** Returns new normalized float vector. (with distance equal 1) */
 	public static Vector3f normalize( Vector3f vector ) {
 		float scalarProduct = dot( vector, vector );
@@ -117,5 +164,15 @@ public class VectorHelper {
 
 		double denominator = Mth.fastInvSqrt( dot( vector, vector ) );
 		return divide( vector, new Vector3d( denominator, denominator, denominator ) );
+	}
+
+	/** Returns new normalized double vector. (with distance equal 1) */
+	public static Vec3 normalize( Vec3 vector ) {
+		double scalarProduct = dot( vector, vector );
+		if( scalarProduct < 1e-5 )
+			return vector;
+
+		double denominator = Mth.fastInvSqrt( dot( vector, vector ) );
+		return divide( vector, new Vec3( denominator, denominator, denominator ) );
 	}
 }
