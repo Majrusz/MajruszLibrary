@@ -138,7 +138,7 @@ public class LevelHelper {
 			return;
 
 		BlockState iceBlockState = Blocks.FROSTED_ICE.defaultBlockState();
-		BlockPos entityPosition = entity.getOnPos();
+		BlockPos entityPosition = entity.blockPosition();
 		BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
 		Iterable< BlockPos > blocksInRange = BlockPos.betweenClosed( entityPosition.offset( -radius, -1.0, -radius ),
 			entityPosition.offset( radius, -1.0, radius )
