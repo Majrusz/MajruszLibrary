@@ -28,14 +28,14 @@ public class HarvestCrop extends LootModifier {
 	@Nonnull
 	@Override
 	public List< ItemStack > doApply( List< ItemStack > generatedLoot, LootContext context ) {
-		BlockState blockState = context.getParam( LootContextParams.BLOCK_STATE );
+		BlockState blockState = LootHelper.getParameter( context, LootContextParams.BLOCK_STATE );
 		if( blockState == null || !( blockState.getBlock() instanceof CropBlock ) )
 			return generatedLoot;
 
 		CropBlock crops = ( CropBlock )blockState.getBlock();
-		Entity entity = context.getParam( LootContextParams.THIS_ENTITY );
-		ItemStack tool = context.getParam( LootContextParams.TOOL );
-		Vec3 origin = context.getParam( LootContextParams.ORIGIN );
+		Entity entity = LootHelper.getParameter( context, LootContextParams.THIS_ENTITY );
+		ItemStack tool = LootHelper.getParameter( context, LootContextParams.TOOL );
+		Vec3 origin = LootHelper.getParameter( context, LootContextParams.ORIGIN );
 		if( origin == null || !( entity instanceof Player ) )
 			return generatedLoot;
 

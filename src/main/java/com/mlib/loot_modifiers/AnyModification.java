@@ -27,12 +27,12 @@ public class AnyModification extends LootModifier {
 	@Nonnull
 	@Override
 	public List< ItemStack > doApply( List< ItemStack > generatedLoot, LootContext context ) {
-		BlockState blockState = context.getParam( LootContextParams.BLOCK_STATE );
-		DamageSource damageSource = context.getParam( LootContextParams.DAMAGE_SOURCE );
-		Entity killer = context.getParam( LootContextParams.KILLER_ENTITY );
-		Entity entity = context.getParam( LootContextParams.THIS_ENTITY );
-		ItemStack tool = context.getParam( LootContextParams.TOOL );
-		Vec3 origin = context.getParam( LootContextParams.ORIGIN );
+		BlockState blockState = LootHelper.getParameter( context, LootContextParams.BLOCK_STATE );
+		DamageSource damageSource = LootHelper.getParameter( context, LootContextParams.DAMAGE_SOURCE );
+		Entity killer = LootHelper.getParameter( context, LootContextParams.KILLER_ENTITY );
+		Entity entity = LootHelper.getParameter( context, LootContextParams.THIS_ENTITY );
+		ItemStack tool = LootHelper.getParameter( context, LootContextParams.TOOL );
+		Vec3 origin = LootHelper.getParameter( context, LootContextParams.ORIGIN );
 
 		MinecraftForge.EVENT_BUS.post( new AnyLootModificationEvent( generatedLoot, blockState, damageSource, killer, entity, tool, origin ) );
 		return generatedLoot;
