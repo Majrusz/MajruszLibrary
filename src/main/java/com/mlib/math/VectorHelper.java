@@ -25,6 +25,11 @@ public class VectorHelper {
 		return new Vec3( vector1.x + vector2.x, vector1.y + vector2.y, vector1.z + vector2.z );
 	}
 
+	/** Returns vector increased by given value. */
+	public static < Type extends Number > Vec3 add( Vec3 vector, Type value ) {
+		return new Vec3( vector.x + ( double )value, vector.y + ( double )value, vector.z + ( double )value );
+	}
+
 	/** Returns negation of float vector. */
 	public static Vector3f negate( Vector3f vector ) {
 		return new Vector3f( -vector.x(), -vector.y(), -vector.z() );
@@ -55,6 +60,11 @@ public class VectorHelper {
 		return add( vector1, negate( vector2 ) );
 	}
 
+	/** Returns vector decreased by given value. */
+	public static < Type extends Number > Vec3 subtract( Vec3 vector, Type value ) {
+		return add( vector, -( double )value );
+	}
+
 	/** Returns product of two float vectors. */
 	public static Vector3f multiply( Vector3f vector1, Vector3f vector2 ) {
 		return new Vector3f( vector1.x() * vector2.x(), vector1.y() * vector2.y(), vector1.z() * vector2.z() );
@@ -70,6 +80,11 @@ public class VectorHelper {
 		return new Vec3( vector1.x * vector2.x, vector1.y * vector2.y, vector1.z * vector2.z );
 	}
 
+	/** Returns vector multiplied by given value. */
+	public static < Type extends Number > Vec3 multiply( Vec3 vector, Type value ) {
+		return new Vec3( vector.x * ( double )value, vector.y * ( double )value, vector.z * ( double )value );
+	}
+
 	/** Returns quotient of two float vectors. */
 	public static Vector3f divide( Vector3f vector1, Vector3f vector2 ) {
 		return new Vector3f( vector1.x() / vector2.x(), vector1.y() / vector2.y(), vector1.z() / vector2.z() );
@@ -83,6 +98,11 @@ public class VectorHelper {
 	/** Returns quotient of two double vectors. */
 	public static Vec3 divide( Vec3 vector1, Vec3 vector2 ) {
 		return new Vec3( vector1.x / vector2.x, vector1.y / vector2.y, vector1.z / vector2.z );
+	}
+
+	/** Returns vector divided by given value. */
+	public static < Type extends Number > Vec3 divide( Vec3 vector, Type value ) {
+		return new Vec3( vector.x / ( double )value, vector.y / ( double )value, vector.z / ( double )value );
 	}
 
 	/** Returns scalar product between two float vectors. */
