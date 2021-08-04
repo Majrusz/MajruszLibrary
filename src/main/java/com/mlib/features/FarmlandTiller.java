@@ -39,7 +39,7 @@ public class FarmlandTiller {
 		ItemStack itemStack = event.getItemStack();
 		InteractionHand hand = event.getHand();
 		Direction direction = event.getFace();
-		if( level == null || event.getFace() == null )
+		if( level == null || event.getFace() == null || player.isShiftKeyDown() )
 			return;
 
 		Data targetData = getData( level, player, blockPosition, hand, direction, 0, 0 );
