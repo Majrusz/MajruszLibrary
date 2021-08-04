@@ -27,10 +27,6 @@ import java.util.function.Predicate;
 public class FarmlandTiller {
 	public static final List< Register > registerList = new ArrayList<>();
 
-	static {
-		registerList.add( ( level, player, itemStack )->true );
-	}
-
 	@SubscribeEvent
 	public static void onHoeUse( PlayerInteractEvent.RightClickBlock event ) {
 		Player player = event.getPlayer();
@@ -43,7 +39,7 @@ public class FarmlandTiller {
 			return;
 
 		Data targetData = getData( level, player, blockPosition, hand, direction, 0, 0 );
-		if( targetData.predicate == null || !targetData.predicate.test( targetData.context ) )
+		if( targetData == null || !targetData.predicate.test( targetData.context ) )
 			return;
 
 		int area = getArea( level, player, itemStack );
@@ -51,7 +47,7 @@ public class FarmlandTiller {
 			for( int z = -area; z <= area; ++z ) {
 				Data offsetData = getData( level, player, blockPosition, hand, direction, x, z );
 
-				if( offsetData.predicate != null && offsetData.consumer != null && offsetData.predicate.test( offsetData.context ) ) {
+				if( offsetData != null && offsetData.predicate.test( offsetData.context ) ) {
 					offsetData.consumer.accept( offsetData.context );
 					itemStack.hurtAndBreak( 1, player, entity->entity.broadcastBreakEvent( hand ) );
 				}
@@ -74,6 +70,7 @@ public class FarmlandTiller {
 	}
 
 	/** Returns all required information about given block. */
+	@Nullable
 	protected static Data getData( ServerLevel level, Player player, BlockPos blockPosition, InteractionHand hand, Direction direction, int x, int z
 	) {
 		BlockPos offsetPosition = blockPosition.offset( x, 0, z );
@@ -83,13 +80,11 @@ public class FarmlandTiller {
 		BlockHitResult hitResult = new BlockHitResult( player.position(), direction, offsetPosition, true );
 		UseOnContext context = new UseOnContext( player, hand, hitResult );
 
-		return pair != null ? new Data( pair.getFirst(), pair.getSecond(), context ) : new Data( null, null, context );
+		return pair != null ? new Data( pair.getFirst(), pair.getSecond(), context ) : null;
 	}
 
 	private static class Data {
-		@Nullable
 		public Predicate< UseOnContext > predicate;
-		@Nullable
 		public Consumer< UseOnContext > consumer;
 		public UseOnContext context;
 
