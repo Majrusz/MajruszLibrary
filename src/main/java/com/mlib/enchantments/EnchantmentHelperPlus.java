@@ -1,5 +1,8 @@
 package com.mlib.enchantments;
 
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -72,5 +75,31 @@ public class EnchantmentHelperPlus {
 				sum += EnchantmentHelper.getItemEnchantmentLevel( enchantment, itemStack );
 
 		return sum;
+	}
+
+	/** Increases enchantment level by 1 if possible or adds enchantment if there is not any. */
+	public static boolean increaseEnchantmentLevel( ItemStack itemStack, Enchantment enchantment, String registryName ) {
+		int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel( enchantment, itemStack );
+		if( enchantmentLevel >= enchantment.getMaxLevel() )
+			return false;
+
+		if( enchantmentLevel == 0 ) {
+			itemStack.enchant( enchantment, 1 );
+		} else {
+			ListTag nbt = itemStack.getEnchantmentTags();
+
+			for( int i = 0; i < nbt.size(); ++i ) {
+				CompoundTag enchantmentData = nbt.getCompound( i );
+				String enchantmentID = enchantmentData.getString( "id" );
+
+				if( enchantmentID.contains( registryName ) ) {
+					enchantmentData.putInt( "lvl", enchantmentLevel + 1 );
+					break;
+				}
+			}
+
+			itemStack.addTagElement( "Enchantments", nbt );
+		}
+		return true;
 	}
 }
