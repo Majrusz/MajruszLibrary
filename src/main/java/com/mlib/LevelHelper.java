@@ -1,5 +1,6 @@
 package com.mlib;
 
+import com.mlib.math.VectorHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -8,6 +9,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -166,5 +169,16 @@ public class LevelHelper {
 				}
 			}
 		}
+	}
+
+	/** Spawns ItemEntity that flies towards given direction. */
+	public static void spawnItemEntityFlyingTowardsDirection( ItemStack itemStack, Level level, Vec3 from, Vec3 to ) {
+		Vec3 spawnPosition = VectorHelper.add( from, Random.getRandomVector3d( -0.25, 0.25, 0.125, 0.5, -0.25, 0.25 ) );
+		Vec3 motion = VectorHelper.multiply( VectorHelper.subtract( to, spawnPosition ), 0.1 );
+
+		ItemEntity itemEntity = new ItemEntity( level, spawnPosition.x, spawnPosition.y, spawnPosition.z, itemStack );
+		itemEntity.setDeltaMovement( VectorHelper.add( motion, new Vec3( 0.0, Math.pow( VectorHelper.length( motion ), 0.5 ) * 0.25, 0.0 ) ) );
+
+		level.addFreshEntity( itemEntity );
 	}
 }
