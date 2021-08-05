@@ -116,8 +116,8 @@ public class LevelHelper {
 	 Returns null if casting was impossible.
 	 */
 	@Nullable
-	public static ServerLevel getServerLevelFromEntity( Entity entity ) {
-		return entity.level instanceof ServerLevel ? ( ServerLevel )entity.level : null;
+	public static ServerLevel getServerLevelFromEntity( @Nullable Entity entity ) {
+		return ( entity != null && entity.level instanceof ServerLevel ) ? ( ServerLevel )entity.level : null;
 	}
 
 	/** Returns player spawn position. (bed position, nether anchor or world spawn point) */
