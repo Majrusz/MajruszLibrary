@@ -52,7 +52,7 @@ public class AttributeHandler {
 
 		if( attributeInstance != null ) {
 			attributeInstance.removeModifier( this.uuid );
-			AttributeModifier modifier = new AttributeModifier( this.uuid, this.name, this.value, this.operation );
+			AttributeModifier modifier = createAttribute();
 			attributeInstance.addPermanentModifier( modifier );
 		}
 
@@ -69,5 +69,15 @@ public class AttributeHandler {
 		setValue( value );
 
 		return apply( target );
+	}
+
+	/** Returns attribute modifier with given parameters. */
+	public AttributeModifier createAttribute() {
+		return new AttributeModifier( this.uuid, this.name, this.value, this.operation );
+	}
+
+	/** Returns uuid. */
+	public UUID getUUID() {
+		return this.uuid;
 	}
 }
