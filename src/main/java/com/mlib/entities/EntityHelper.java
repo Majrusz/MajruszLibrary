@@ -32,4 +32,9 @@ public class EntityHelper {
 	public static Player getPlayerFromEntity( @Nullable Entity entity ) {
 		return entity instanceof Player ? ( Player )entity : null;
 	}
+
+	/** Checks whether given player has Creative Mode enabled. */
+	public static boolean isOnCreativeMode( Player player ) {
+		return player.getAbilities().instabuild;
+	}
 }
