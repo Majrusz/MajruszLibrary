@@ -2,6 +2,7 @@
 	"replace": false,
 	"entries": [
 		"majrusz_library:harvest_crop",
-		"majrusz_library:any_situation"
+		"majrusz_library:any_situation",
+		"majrusz_library:smelting_items"
 	]
 }

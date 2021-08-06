@@ -2,6 +2,7 @@ package com.mlib;
 
 import com.mlib.loot_modifiers.AnyModification;
 import com.mlib.loot_modifiers.HarvestCrop;
+import com.mlib.loot_modifiers.SmeltingItems;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,6 +18,7 @@ public class LootModifiers {
 
 		registerSingleModifier( registry, new HarvestCrop.Serializer(), "harvest_crop" );
 		registerSingleModifier( registry, new AnyModification.Serializer(), "any_situation" );
+		registerSingleModifier( registry, new SmeltingItems.Serializer(), "smelting_items" );
 	}
 
 	/** Adding to registry single loot modifier. */
