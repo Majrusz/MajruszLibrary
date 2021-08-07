@@ -5,11 +5,9 @@ import com.mlib.LevelHelper;
 import com.mlib.MajruszLibrary;
 import com.mlib.Random;
 import com.mlib.entities.EntityHelper;
-import net.minecraft.core.particles.ParticleTypes;
+import com.mlib.particles.ParticleHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
@@ -109,13 +107,8 @@ public class SmeltingItems extends LootModifier {
 			amountOfSmeltedItems = amountOfSmeltedItems + itemStack.getCount();
 		}
 
-		if( amountOfSmeltedItems > 0 ) {
-			int fireParticles = 3 + amountOfSmeltedItems + MajruszLibrary.RANDOM.nextInt( 4 );
-			level.sendParticles( ParticleTypes.FLAME, position.x, position.y, position.z, fireParticles, 0.125, 0.125, 0.125,
-				0.03125
-			);
-			level.playSound( null, position.x, position.y, position.z, SoundEvents.FIRECHARGE_USE, SoundSource.AMBIENT, 0.05f, 0.9f );
-		}
+		if( amountOfSmeltedItems > 0 )
+			ParticleHelper.spawnSmeltParticles( level, position, 3 + amountOfSmeltedItems + MajruszLibrary.RANDOM.nextInt( 4 ) );
 
 		return smeltedLoot;
 	}
