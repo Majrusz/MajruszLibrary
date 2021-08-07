@@ -43,6 +43,9 @@ public class FarmlandTiller {
 			return;
 
 		int area = getArea( level, player, itemStack );
+		if( area == 0 )
+			return;
+		
 		for( int x = -area; x <= area; ++x )
 			for( int z = -area; z <= area; ++z ) {
 				Data offsetData = getData( level, player, blockPosition, hand, direction, x, z );
