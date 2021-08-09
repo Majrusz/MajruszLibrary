@@ -11,12 +11,12 @@ public class ParticleHelper {
 	/** Spawns flame particles and plays fire charge sound. */
 	public static void spawnSmeltParticles( ServerLevel level, Vec3 position, int amountOfParticles ) {
 		level.sendParticles( ParticleTypes.FLAME, position.x, position.y, position.z, amountOfParticles, 0.125, 0.125, 0.125, 0.03125 );
-		level.playSound( null, position.x, position.y, position.z, SoundEvents.FIRECHARGE_USE, SoundSource.AMBIENT, 0.05f, 0.9f );
+		level.playSound( null, position.x, position.y, position.z, SoundEvents.FIRECHARGE_USE, SoundSource.AMBIENT, 0.05f, 0.8f );
 	}
 
 	/** Spawns flame particles and plays fire charge sound. */
 	public static void spawnAwardParticles( ServerLevel level, Vec3 position, int amountOfParticles, double offset ) {
 		level.sendParticles( ParticleTypes.HAPPY_VILLAGER, position.x, position.y, position.z, amountOfParticles, offset, offset, offset, 0.1 );
-		level.playSound( null, position.x, position.y, position.z, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.AMBIENT, 0.05f, 0.9f );
+		level.playSound( null, position.x, position.y, position.z, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.AMBIENT, 0.05f, 0.8f );
 	}
 }
