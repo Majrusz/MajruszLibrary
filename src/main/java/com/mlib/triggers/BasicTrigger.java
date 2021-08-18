@@ -27,8 +27,8 @@ public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance 
 	}
 
 	/** Triggers an advancement for given player. */
-	public void trigger( ServerPlayer player, String triggerType ) {
-		this.trigger( player, instance->instance.test( triggerType ) );
+	public void trigger( ServerPlayer player, String modID, String triggerType ) {
+		this.trigger( player, instance->instance.test( modID, triggerType ) );
 	}
 
 	protected static class Instance extends AbstractCriterionTriggerInstance {
