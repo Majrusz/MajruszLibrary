@@ -11,7 +11,16 @@ import net.minecraft.server.level.ServerPlayer;
 /** Trigger that is called without any parameters, only with its id. */
 public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance > {
 	private static final ResourceLocation ID = MajruszLibrary.getLocation( "basic_trigger" );
-	public static final BasicTrigger INSTANCE = CriteriaTriggers.register( new BasicTrigger() );
+	private final String modID;
+
+	public BasicTrigger( String modID ) {
+		this.modID = modID;
+	}
+
+	/** Creates and registers instance of BasicTrigger with given mod id. */
+	public static BasicTrigger createRegisteredInstance( String modID ) {
+		return CriteriaTriggers.register( new BasicTrigger( modID ) );
+	}
 
 	@Override
 	public ResourceLocation getId() {
@@ -27,8 +36,8 @@ public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance 
 	}
 
 	/** Triggers an advancement for given player. */
-	public void trigger( ServerPlayer player, String modID, String triggerType ) {
-		this.trigger( player, instance->instance.test( modID, triggerType ) );
+	public void trigger( ServerPlayer player, String triggerType ) {
+		this.trigger( player, instance->instance.test( this.modID, triggerType ) );
 	}
 
 	protected static class Instance extends AbstractCriterionTriggerInstance {
