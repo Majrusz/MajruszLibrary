@@ -20,9 +20,10 @@ public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance 
 
 	@Override
 	public BasicTrigger.Instance createInstance( JsonObject json, EntityPredicate.Composite predicate, DeserializationContext conditions ) {
+		JsonElement modID = json.get( "mod_id" );
 		JsonElement triggerType = json.get( "type" );
 
-		return new BasicTrigger.Instance( predicate, triggerType.getAsString() );
+		return new BasicTrigger.Instance( predicate, modID.getAsString(), triggerType.getAsString() );
 	}
 
 	/** Triggers an advancement for given player. */
@@ -31,24 +32,27 @@ public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance 
 	}
 
 	protected static class Instance extends AbstractCriterionTriggerInstance {
-		private final String triggerType;
+		private final String modID, triggerType;
 
-		public Instance( EntityPredicate.Composite predicate, String triggerType ) {
+		public Instance( EntityPredicate.Composite predicate, String modID, String triggerType ) {
 			super( BasicTrigger.ID, predicate );
 
+			this.modID = modID;
 			this.triggerType = triggerType;
 		}
 
 		@Override
 		public JsonObject serializeToJson( SerializationContext conditions ) {
 			JsonObject jsonObject = super.serializeToJson( conditions );
+			jsonObject.addProperty( "mod_id", this.modID );
 			jsonObject.addProperty( "type", this.triggerType );
 
 			return jsonObject;
 		}
 
-		public boolean test( String effectType ) {
-			return this.triggerType.equals( effectType );
+		/** Checks whether conditions were met. */
+		public boolean test( String modID, String triggerType ) {
+			return this.modID.equals( modID ) && this.triggerType.equals( triggerType );
 		}
 	}
 }
