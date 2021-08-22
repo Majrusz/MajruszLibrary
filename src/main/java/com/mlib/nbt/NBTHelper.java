@@ -2,6 +2,7 @@ package com.mlib.nbt;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.LivingEntity;
 
 /** Certain useful functions for handling CompoundNBT. */
 public class NBTHelper {
@@ -15,5 +16,31 @@ public class NBTHelper {
 	/** Loads BlockPos from given nbt data. */
 	public static BlockPos loadBlockPos( CompoundTag tag, String key ) {
 		return new BlockPos( tag.getInt( key + "X" ), tag.getInt( key + "Y" ), tag.getInt( key + "Z" ) );
+	}
+
+	/** Sets integer value at given key and saves it automatically. */
+	public static void setNBTInteger( LivingEntity entity, String key, int value ) {
+		CompoundTag nbt = entity.getPersistentData();
+		nbt.putInt( key, value );
+		entity.save( nbt );
+	}
+
+	/** Sets integer value at given key and saves it automatically. */
+	public static void setNBTInteger( LivingEntity entity, String key, IValueFormula< Integer > formula ) {
+		CompoundTag nbt = entity.getPersistentData();
+		nbt.putInt( key, formula.apply( nbt.getInt( key ) ) );
+		entity.save( nbt );
+	}
+
+	/** Returns integer value at given key. */
+	public static int getNBTInteger( LivingEntity entity, String key ) {
+		CompoundTag nbt = entity.getPersistentData();
+
+		return nbt.getInt( key );
+	}
+
+	@FunctionalInterface
+	protected interface IValueFormula< Type > {
+		Type apply( Type value );
 	}
 }
