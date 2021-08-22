@@ -40,7 +40,7 @@ public class NBTHelper {
 	}
 
 	@FunctionalInterface
-	protected interface IValueFormula< Type > {
+	public interface IValueFormula< Type > {
 		Type apply( Type value );
 	}
 }
