@@ -102,7 +102,7 @@ public abstract class ExtendedEnchantment extends Enchantment {
 	 @return Returns whether level was increased.
 	 */
 	public boolean increaseEnchantmentLevel( ItemStack itemStack ) {
-		int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel( this, itemStack );
+		int enchantmentLevel = getEnchantmentLevel( itemStack );
 		if( enchantmentLevel >= getMaxLevel() )
 			return false;
 
