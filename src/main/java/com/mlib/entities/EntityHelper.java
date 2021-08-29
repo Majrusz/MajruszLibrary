@@ -4,6 +4,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -36,5 +37,15 @@ public class EntityHelper {
 	/** Checks whether given player has Creative Mode enabled. */
 	public static boolean isOnCreativeMode( Player player ) {
 		return player.getAbilities().instabuild;
+	}
+
+	/** Returns given entity's health ratio. */
+	public static double getHealthRatio( LivingEntity entity ) {
+		return Mth.clamp( entity.getHealth()/entity.getMaxHealth(), 0.0f, 1.0f );
+	}
+
+	/** Returns given entity's missing health ratio. */
+	public static double getMissingHealthRatio( LivingEntity entity ) {
+		return 1.0f - getHealthRatio( entity );
 	}
 }
