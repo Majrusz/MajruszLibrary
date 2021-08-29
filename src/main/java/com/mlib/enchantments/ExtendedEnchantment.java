@@ -86,6 +86,11 @@ public abstract class ExtendedEnchantment extends Enchantment {
 		return EnchantmentHelper.getEnchantmentLevel( this, entity );
 	}
 
+	/** Checks whether given item stack has this enchantment. */
+	public boolean hasEnchantment( ItemStack itemStack ) {
+		return getEnchantmentLevel( itemStack ) > 0;
+	}
+
 	/** Checks whether given entity has this enchantment. */
 	public boolean hasEnchantment( LivingEntity entity ) {
 		return getEnchantmentLevel( entity ) > 0;
