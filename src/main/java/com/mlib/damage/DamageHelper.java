@@ -1,5 +1,6 @@
 package com.mlib.damage;
 
+import com.mlib.CommonHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,7 +13,7 @@ public class DamageHelper {
 	/** Returns given entity class from damage source or null if casting was impossible. */
 	@Nullable
 	public static < EntityClass extends Entity > EntityClass getEntityFromDamageSource( Class< EntityClass > entityClass, DamageSource source ) {
-		return entityClass.isInstance( source.getEntity() ) ? entityClass.cast( source.getEntity() ) : null;
+		return CommonHelper.castIfPossible( entityClass, source.getEntity() );
 	}
 
 	/**
@@ -21,7 +22,7 @@ public class DamageHelper {
 	 */
 	@Nullable
 	public static Player getPlayerFromDamageSource( DamageSource damageSource ) {
-		return damageSource.getEntity() instanceof Player ? ( Player )damageSource.getEntity() : null;
+		return CommonHelper.castIfPossible( Player.class, damageSource.getEntity() );
 	}
 
 	/**

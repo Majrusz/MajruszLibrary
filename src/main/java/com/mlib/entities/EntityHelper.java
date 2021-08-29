@@ -1,5 +1,6 @@
 package com.mlib.entities;
 
+import com.mlib.CommonHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -31,7 +32,7 @@ public class EntityHelper {
 	 */
 	@Nullable
 	public static Player getPlayerFromEntity( @Nullable Entity entity ) {
-		return entity instanceof Player ? ( Player )entity : null;
+		return CommonHelper.castIfPossible( Player.class, entity );
 	}
 
 	/** Checks whether given player has Creative Mode enabled. */
