@@ -10,6 +10,9 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.registries.DeferredRegister;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /** Class removing redundancy and repetition from enchantments. */
 public abstract class ExtendedEnchantment extends Enchantment {
 	private static final int DISABLE_ENCHANTMENT_VALUE = 9001;
@@ -73,6 +76,11 @@ public abstract class ExtendedEnchantment extends Enchantment {
 		enchantments.register( this.registerName, ()->this );
 	}
 
+	/** Returns item stack's enchantment level. */
+	public int getEnchantmentLevel( ItemStack itemStack ) {
+		return EnchantmentHelper.getItemEnchantmentLevel( this, itemStack );
+	}
+
 	/** Returns entity's enchantment level. */
 	public int getEnchantmentLevel( LivingEntity entity ) {
 		return EnchantmentHelper.getEnchantmentLevel( this, entity );
@@ -111,6 +119,25 @@ public abstract class ExtendedEnchantment extends Enchantment {
 			itemStack.addTagElement( "Enchantments", nbt );
 		}
 		return true;
+	}
+
+	/** Counts the sum of all enchantment levels in the given list. */
+	public int getEnchantmentSum( Iterable< ItemStack > itemStacks ) {
+		int sum = 0;
+		if( itemStacks != null )
+			for( ItemStack itemStack : itemStacks )
+				sum += EnchantmentHelper.getItemEnchantmentLevel( this, itemStack );
+
+		return sum;
+	}
+
+	/** Counts the sum of all enchantment levels in the given equipment slots. */
+	public int getEnchantmentSum( LivingEntity livingEntity, EquipmentSlot[] slots ) {
+		List< ItemStack > itemStackList = new ArrayList<>();
+		for( EquipmentSlot slotType : slots )
+			itemStackList.add( livingEntity.getItemBySlot( slotType ) );
+
+		return getEnchantmentSum( itemStackList );
 	}
 
 	/** Checks whether the enchantment is disabled. */
