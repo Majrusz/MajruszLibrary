@@ -78,6 +78,7 @@ public class EnchantmentHelperPlus {
 	}
 
 	/** Increases enchantment level by 1 if possible or adds enchantment if there is not any. */
+	@Deprecated
 	public static boolean increaseEnchantmentLevel( ItemStack itemStack, Enchantment enchantment, String registryName ) {
 		int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel( enchantment, itemStack );
 		if( enchantmentLevel >= enchantment.getMaxLevel() )

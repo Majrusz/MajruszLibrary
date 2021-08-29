@@ -1,5 +1,7 @@
 package com.mlib.enchantments;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -79,6 +81,36 @@ public abstract class ExtendedEnchantment extends Enchantment {
 	/** Checks whether given entity has this enchantment. */
 	public boolean hasEnchantment( LivingEntity entity ) {
 		return getEnchantmentLevel( entity ) > 0;
+	}
+
+	/**
+	 Increases enchantment level by 1 if possible or adds enchantment if there is not any.
+
+	 @return Returns whether level was increased.
+	 */
+	public boolean increaseEnchantmentLevel( ItemStack itemStack ) {
+		int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel( this, itemStack );
+		if( enchantmentLevel >= getMaxLevel() )
+			return false;
+
+		if( enchantmentLevel == 0 ) {
+			itemStack.enchant( this, 1 );
+		} else {
+			ListTag nbt = itemStack.getEnchantmentTags();
+
+			for( int i = 0; i < nbt.size(); ++i ) {
+				CompoundTag enchantmentData = nbt.getCompound( i );
+				String enchantmentID = enchantmentData.getString( "id" );
+
+				if( enchantmentID.contains( this.registerName ) ) {
+					enchantmentData.putInt( "lvl", enchantmentLevel + 1 );
+					break;
+				}
+			}
+
+			itemStack.addTagElement( "Enchantments", nbt );
+		}
+		return true;
 	}
 
 	/** Checks whether the enchantment is disabled. */
