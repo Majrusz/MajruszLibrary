@@ -1,9 +1,11 @@
 package com.mlib.enchantments;
 
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.registries.DeferredRegister;
 
 /** Class removing redundancy and repetition from enchantments. */
@@ -67,6 +69,16 @@ public abstract class ExtendedEnchantment extends Enchantment {
 	/** Registers given enchantment only if player has not disabled it. */
 	public void register( DeferredRegister< Enchantment > enchantments ) {
 		enchantments.register( this.registerName, ()->this );
+	}
+
+	/** Returns entity's enchantment level. */
+	public int getEnchantmentLevel( LivingEntity entity ) {
+		return EnchantmentHelper.getEnchantmentLevel( this, entity );
+	}
+
+	/** Checks whether given entity has this enchantment. */
+	public boolean hasEnchantment( LivingEntity entity ) {
+		return getEnchantmentLevel( entity ) > 0;
 	}
 
 	/** Checks whether the enchantment is disabled. */
