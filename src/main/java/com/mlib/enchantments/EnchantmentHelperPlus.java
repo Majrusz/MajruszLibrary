@@ -57,6 +57,7 @@ public class EnchantmentHelperPlus {
 	 @param livingEntity Entity to check for item stacks.
 	 @param slotTypes    Desired equipment slot types to check.
 	 */
+	@Deprecated
 	public static int calculateEnchantmentSum( Enchantment enchantment, LivingEntity livingEntity, EquipmentSlot[] slotTypes ) {
 		List< ItemStack > itemStackList = new ArrayList<>();
 
@@ -67,6 +68,7 @@ public class EnchantmentHelperPlus {
 	}
 
 	/** Counts the sum of all enchantment levels in the specified range. */
+	@Deprecated
 	public static int calculateEnchantmentSum( Enchantment enchantment, Iterable< ItemStack > itemStacks ) {
 		int sum = 0;
 
