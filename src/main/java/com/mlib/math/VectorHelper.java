@@ -180,7 +180,6 @@ public class VectorHelper {
 		return distance( vector, new Vec3( 0.0,  0.0, 0.0 ) );
 	}
 
-
 	/** Returns new normalized float vector. (with distance equal 1) */
 	public static Vector3f normalize( Vector3f vector ) {
 		float scalarProduct = dot( vector, vector );
