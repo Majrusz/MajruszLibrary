@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Few useful methods to work with enchantments. It is called 'EnchantmentPlusHelper' to not confuse with 'EnchantmentHelper' minecraft class. */
+@Deprecated
 public class EnchantmentHelperPlus {
 	/**
 	 Counts the sum of all enchantment levels of the entity if given item stack is instance of the type.
@@ -22,6 +23,7 @@ public class EnchantmentHelperPlus {
 	 @param slotTypes    Desired equipment slot types to check.
 	 @param type         Required type. (for example ShieldItem.class to only calculate levels of shields)
 	 */
+	@Deprecated
 	public static < InstanceType > int calculateEnchantmentSumIfIsInstanceOf( Enchantment enchantment, LivingEntity livingEntity,
 		EquipmentSlot[] slotTypes, Class< InstanceType > type
 	) {
@@ -37,6 +39,7 @@ public class EnchantmentHelperPlus {
 	}
 
 	/** Counts the sum of all enchantment levels in the specified range if given item stack is instance of the type. */
+	@Deprecated
 	public static < InstanceType > int calculateEnchantmentSumIfIsInstanceOf( Enchantment enchantment, Iterable< ItemStack > itemStacks,
 		Class< InstanceType > type
 	) {
