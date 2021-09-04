@@ -135,9 +135,14 @@ public class VectorHelper {
 		return dot( vector, vector );
 	}
 
+	/** Returns squared distance between two float vectors. */
+	public static float distanceSquared( Vector3f vector1, Vector3f vector2 ) {
+		return dot( subtract( vector1, vector2 ) );
+	}
+
 	/** Returns distance between two float vectors. */
 	public static float distance( Vector3f vector1, Vector3f vector2 ) {
-		return ( float )Math.sqrt( dot( subtract( vector1, vector2 ) ) );
+		return ( float )Math.sqrt( distanceSquared( vector1, vector2 ) );
 	}
 
 	/** Returns length of given float vector. */
@@ -145,9 +150,14 @@ public class VectorHelper {
 		return distance( vector, Vector3f.ZERO );
 	}
 
+	/** Returns squared distance between two double vectors. */
+	public static double distanceSquared( Vector3d vector1, Vector3d vector2 ) {
+		return dot( subtract( vector1, vector2 ) );
+	}
+
 	/** Returns distance between two double vectors. */
 	public static double distance( Vector3d vector1, Vector3d vector2 ) {
-		return Math.sqrt( dot( subtract( vector1, vector2 ) ) );
+		return Math.sqrt( distanceSquared( vector1, vector2 ) );
 	}
 
 	/** Returns length of given double vector. */
@@ -155,9 +165,14 @@ public class VectorHelper {
 		return distance( vector, new Vector3d( 0.0,  0.0, 0.0 ) );
 	}
 
+	/** Returns squared distance between two double vectors. */
+	public static double distanceSquared( Vec3 vector1, Vec3 vector2 ) {
+		return dot( subtract( vector1, vector2 ) );
+	}
+
 	/** Returns distance between two double vectors. */
 	public static double distance( Vec3 vector1, Vec3 vector2 ) {
-		return Math.sqrt( dot( subtract( vector1, vector2 ) ) );
+		return Math.sqrt( distanceSquared( vector1, vector2 ) );
 	}
 
 	/** Returns length of given double vector. */
