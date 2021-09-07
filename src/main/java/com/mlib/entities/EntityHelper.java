@@ -8,6 +8,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
@@ -40,9 +44,14 @@ public class EntityHelper {
 		return player.getAbilities().instabuild;
 	}
 
+	/** Returns whether given entity is humanoid. */
+	public static boolean isHuman( Entity entity ) {
+		return ( entity instanceof Villager || entity instanceof WanderingTrader || entity instanceof Player || entity instanceof Witch || entity instanceof Pillager );
+	}
+
 	/** Returns given entity's health ratio. */
 	public static double getHealthRatio( LivingEntity entity ) {
-		return Mth.clamp( entity.getHealth()/entity.getMaxHealth(), 0.0f, 1.0f );
+		return Mth.clamp( entity.getHealth() / entity.getMaxHealth(), 0.0f, 1.0f );
 	}
 
 	/** Returns given entity's missing health ratio. */
