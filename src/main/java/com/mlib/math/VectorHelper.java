@@ -2,6 +2,7 @@ package com.mlib.math;
 
 import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
@@ -208,5 +209,10 @@ public class VectorHelper {
 
 		double denominator = Mth.fastInvSqrt( dot( vector, vector ) );
 		return divide( vector, new Vec3( denominator, denominator, denominator ) );
+	}
+
+	/** Converts block position to a vector. */
+	public static Vec3 convertToVec3( BlockPos blockPosition ) {
+		return new Vec3( blockPosition.getX() + 0.5, blockPosition.getY() + 0.5, blockPosition.getZ() + 0.5 );
 	}
 }
