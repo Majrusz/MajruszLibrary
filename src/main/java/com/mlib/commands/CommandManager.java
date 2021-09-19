@@ -26,27 +26,71 @@ public class CommandManager {
 	}
 
 	/** Registers new command with two arguments. */
-	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2, ArgumentBuilder< CommandSourceStack, ? > argument3, IExecutable executable ) {
+	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
+		ArgumentBuilder< CommandSourceStack, ? > argument3, IExecutable executable
+	) {
 		register( argument1.then( argument2.then( argument3.executes( getCommand( executable ) ) ) ) );
 	}
 
 	/** Registers new command with two arguments and requirements. */
-	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2, ArgumentBuilder< CommandSourceStack, ? > argument3, Predicate< CommandSourceStack > requirement, IExecutable executable ) {
+	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
+		ArgumentBuilder< CommandSourceStack, ? > argument3, Predicate< CommandSourceStack > requirement, IExecutable executable
+	) {
 		register( argument1.requires( requirement ).then( argument2.then( argument3.executes( getCommand( executable ) ) ) ) );
 	}
 
+	/** Registers new command with one argument and one any location argument. */
+	public void registerLocationCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
+		IExecutable executable
+	) {
+		register( argument1.then( argument2.then( CommandBase.location().executes( getCommand( executable ) ) ) ) );
+		register( argument1.then( argument2.then( CommandBase.entity().executes( getCommand( executable ) ) ) ) );
+		register( argument1.then( argument2.then( CommandBase.entities().executes( getCommand( executable ) ) ) ) );
+	}
+
+	/** Registers new command with one argument, one any location argument and requirements. */
+	public void registerLocationCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
+		Predicate< CommandSourceStack > requirement, IExecutable executable
+	) {
+		register( argument1.requires( requirement ).then( argument2.then( CommandBase.location().executes( getCommand( executable ) ) ) ) );
+		register( argument1.requires( requirement ).then( argument2.then( CommandBase.entity().executes( getCommand( executable ) ) ) ) );
+		register( argument1.requires( requirement ).then( argument2.then( CommandBase.entities().executes( getCommand( executable ) ) ) ) );
+	}
+
 	/** Registers new command with one argument. */
-	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2, IExecutable executable ) {
+	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
+		IExecutable executable
+	) {
 		register( argument1.then( argument2.executes( getCommand( executable ) ) ) );
 	}
 
 	/** Registers new command with one argument and requirements. */
-	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2, Predicate< CommandSourceStack > requirement, IExecutable executable ) {
+	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
+		Predicate< CommandSourceStack > requirement, IExecutable executable
+	) {
 		register( argument1.requires( requirement ).then( argument2.executes( getCommand( executable ) ) ) );
 	}
 
+	/** Registers new command with one any location argument. */
+	public void registerLocationCommand( LiteralArgumentBuilder< CommandSourceStack > argument, IExecutable executable ) {
+		register( argument.then( CommandBase.location().executes( getCommand( executable ) ) ) );
+		register( argument.then( CommandBase.entity().executes( getCommand( executable ) ) ) );
+		register( argument.then( CommandBase.entities().executes( getCommand( executable ) ) ) );
+	}
+
+	/** Registers new command with one any location argument and requirements. */
+	public void registerLocationCommand( LiteralArgumentBuilder< CommandSourceStack > argument, Predicate< CommandSourceStack > requirement,
+		IExecutable executable
+	) {
+		register( argument.requires( requirement ).then( CommandBase.location().executes( getCommand( executable ) ) ) );
+		register( argument.requires( requirement ).then( CommandBase.entity().executes( getCommand( executable ) ) ) );
+		register( argument.requires( requirement ).then( CommandBase.entities().executes( getCommand( executable ) ) ) );
+	}
+
 	/** Registers new command with requirements. */
-	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument, Predicate< CommandSourceStack > requirement, IExecutable executable ) {
+	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument, Predicate< CommandSourceStack > requirement,
+		IExecutable executable
+	) {
 		register( argument.requires( requirement ).executes( getCommand( executable ) ) );
 	}
 

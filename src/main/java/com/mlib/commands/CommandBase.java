@@ -118,5 +118,5 @@ public abstract class CommandBase {
 	}
 
 	/** Registers this command. */
-	public abstract void register( CommandDispatcher< CommandSourceStack > dispatcher );
+	protected abstract void register( CommandDispatcher< CommandSourceStack > dispatcher );
 }
