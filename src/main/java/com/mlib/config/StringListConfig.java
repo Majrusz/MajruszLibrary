@@ -20,7 +20,7 @@ public class StringListConfig extends BaseConfig< List< ? extends String > > {
 		super( name, comment, requiresWorldRestart );
 		List< String > defaultList = new ArrayList<>();
 		Collections.addAll( defaultList, defaultElements );
-		
+
 		this.defaultValues = defaultList;
 	}
 

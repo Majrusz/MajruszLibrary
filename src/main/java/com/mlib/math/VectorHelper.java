@@ -163,7 +163,7 @@ public class VectorHelper {
 
 	/** Returns length of given double vector. */
 	public static double length( Vector3d vector ) {
-		return distance( vector, new Vector3d( 0.0,  0.0, 0.0 ) );
+		return distance( vector, new Vector3d( 0.0, 0.0, 0.0 ) );
 	}
 
 	/** Returns squared distance between two double vectors. */
@@ -178,7 +178,7 @@ public class VectorHelper {
 
 	/** Returns length of given double vector. */
 	public static double length( Vec3 vector ) {
-		return distance( vector, new Vec3( 0.0,  0.0, 0.0 ) );
+		return distance( vector, new Vec3( 0.0, 0.0, 0.0 ) );
 	}
 
 	/** Returns new normalized float vector. (with distance equal 1) */

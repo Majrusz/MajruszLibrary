@@ -9,9 +9,9 @@ import javax.annotation.Nullable;
  Common functions used with LootContext.
  */
 public class LootHelper {
-    /** Returns parameter from context if it exists or null otherwise. */
-    @Nullable
+	/** Returns parameter from context if it exists or null otherwise. */
+	@Nullable
 	public static < Type > Type getParameter( LootContext context, LootContextParam< Type > parameter ) {
-        return context.hasParam( parameter ) ? context.getParam( parameter ) : null;
+		return context.hasParam( parameter ) ? context.getParam( parameter ) : null;
 	}
 }

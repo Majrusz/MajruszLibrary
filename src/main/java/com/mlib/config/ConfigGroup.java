@@ -37,7 +37,7 @@ public class ConfigGroup implements IConfig {
 	}
 
 	/** Adds new groups to the list. */
-	public void addGroups( ConfigGroup ...groups ) {
+	public void addGroups( ConfigGroup... groups ) {
 		this.configTypeList.addAll( Arrays.asList( groups ) );
 	}
 
@@ -49,7 +49,7 @@ public class ConfigGroup implements IConfig {
 	}
 
 	/** Adds new configs to the list. */
-	public void addConfigs( IConfig ...configs ) {
+	public void addConfigs( IConfig... configs ) {
 		this.configTypeList.addAll( Arrays.asList( configs ) );
 	}
 }

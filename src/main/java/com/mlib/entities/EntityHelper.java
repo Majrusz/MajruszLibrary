@@ -67,36 +67,48 @@ public class EntityHelper {
 	}
 
 	/** Returns entities of a given class in a box with given side length. */
-	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass, ServerLevel level, Vec3 position, double sideLength, Predicate< EntityType > extraPredicate ) {
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass, ServerLevel level,
+		Vec3 position, double sideLength, Predicate< EntityType > extraPredicate
+	) {
 		AABB axisAligned = AABBHelper.createInflatedAABB( position, sideLength / 2.0 );
 
 		return level.getEntitiesOfClass( entityClass, axisAligned, extraPredicate );
 	}
 
 	/** Returns entities of a given class in a box with given side length. */
-	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass, ServerLevel level, BlockPos blockPosition, double sideLength, Predicate< EntityType > extraPredicate ) {
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass, ServerLevel level,
+		BlockPos blockPosition, double sideLength, Predicate< EntityType > extraPredicate
+	) {
 		return getEntitiesInBox( entityClass, level, VectorHelper.convertToVec3( blockPosition ), sideLength, extraPredicate );
 	}
 
 	/** Returns entities of a given class in a box with given side length. */
-	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass, ServerLevel level, Entity entity, double sideLength, Predicate< EntityType > extraPredicate ) {
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass, ServerLevel level,
+		Entity entity, double sideLength, Predicate< EntityType > extraPredicate
+	) {
 		return getEntitiesInBox( entityClass, level, entity.position(), sideLength, extraPredicate );
 	}
 
 	/** Returns entities of a given class in a sphere with given radius. */
-	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass, ServerLevel level, Vec3 position, double radius, Predicate< EntityType > extraPredicate ) {
-		Predicate< EntityType > distancePredicate = entity -> VectorHelper.distance( position, entity.position() ) <= radius;
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass, ServerLevel level,
+		Vec3 position, double radius, Predicate< EntityType > extraPredicate
+	) {
+		Predicate< EntityType > distancePredicate = entity->VectorHelper.distance( position, entity.position() ) <= radius;
 
 		return getEntitiesInBox( entityClass, level, position, radius * 2.0, distancePredicate.and( extraPredicate ) );
 	}
 
 	/** Returns entities of a given class in a sphere with given radius. */
-	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass, ServerLevel level, BlockPos blockPosition, double radius, Predicate< EntityType > extraPredicate ) {
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass, ServerLevel level,
+		BlockPos blockPosition, double radius, Predicate< EntityType > extraPredicate
+	) {
 		return getEntitiesInSphere( entityClass, level, VectorHelper.convertToVec3( blockPosition ), radius, extraPredicate );
 	}
 
 	/** Returns entities of a given class in a sphere with given radius. */
-	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass, ServerLevel level, Entity entity, double radius, Predicate< EntityType > extraPredicate ) {
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass, ServerLevel level,
+		Entity entity, double radius, Predicate< EntityType > extraPredicate
+	) {
 		return getEntitiesInSphere( entityClass, level, entity.position(), radius, extraPredicate );
 	}
 }
