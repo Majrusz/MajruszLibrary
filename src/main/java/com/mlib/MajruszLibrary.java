@@ -1,7 +1,9 @@
 package com.mlib;
 
+import com.mlib.commands.CommandBase;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +24,9 @@ public class MajruszLibrary {
 
 	public MajruszLibrary() {
 		MinecraftForge.EVENT_BUS.register( this );
+
+		IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+		forgeEventBus.addListener( CommandBase::registerAll );
 	}
 
 	/** Returns resource location for register in current modification files. */
