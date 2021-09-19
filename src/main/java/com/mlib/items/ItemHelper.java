@@ -149,8 +149,7 @@ public class ItemHelper {
 	 @param level     Level where item should spawn if it is not possible to give item directly.
 	 */
 	public static void giveItemStackToPlayer( ItemStack itemStack, Player player, ServerLevel level ) {
-		if( !player.getInventory()
-			.add( itemStack ) ) {
+		if( !player.getInventory().add( itemStack ) ) {
 			double x = player.getX(), y = player.getY() + 1.0, z = player.getZ();
 			level.addFreshEntity( new ItemEntity( level, x, y, z, itemStack ) );
 		}
