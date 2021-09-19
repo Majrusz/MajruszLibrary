@@ -1,6 +1,9 @@
 package com.mlib.entities;
 
 import com.mlib.CommonHelper;
+import com.mlib.math.AABBHelper;
+import com.mlib.math.VectorHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -13,8 +16,12 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.function.Predicate;
 
 /** Class with common code for entities. */
 public class EntityHelper {
@@ -51,11 +58,45 @@ public class EntityHelper {
 
 	/** Returns given entity's health ratio. */
 	public static double getHealthRatio( LivingEntity entity ) {
-		return Mth.clamp( entity.getHealth() / entity.getMaxHealth(), 0.0f, 1.0f );
+		return Mth.clamp( entity.getHealth() / entity.getMaxHealth(), 0.0, 1.0 );
 	}
 
 	/** Returns given entity's missing health ratio. */
 	public static double getMissingHealthRatio( LivingEntity entity ) {
-		return 1.0f - getHealthRatio( entity );
+		return 1.0 - getHealthRatio( entity );
+	}
+
+	/** Returns entities of a given class in a box with given side length. */
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass, ServerLevel level, Vec3 position, double sideLength, Predicate< EntityType > extraPredicate ) {
+		AABB axisAligned = AABBHelper.createInflatedAABB( position, sideLength / 2.0 );
+
+		return level.getEntitiesOfClass( entityClass, axisAligned, extraPredicate );
+	}
+
+	/** Returns entities of a given class in a box with given side length. */
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass, ServerLevel level, BlockPos blockPosition, double sideLength, Predicate< EntityType > extraPredicate ) {
+		return getEntitiesInBox( entityClass, level, VectorHelper.convertToVec3( blockPosition ), sideLength, extraPredicate );
+	}
+
+	/** Returns entities of a given class in a box with given side length. */
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass, ServerLevel level, Entity entity, double sideLength, Predicate< EntityType > extraPredicate ) {
+		return getEntitiesInBox( entityClass, level, entity.position(), sideLength, extraPredicate );
+	}
+
+	/** Returns entities of a given class in a sphere with given radius. */
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass, ServerLevel level, Vec3 position, double radius, Predicate< EntityType > extraPredicate ) {
+		Predicate< EntityType > distancePredicate = entity -> VectorHelper.distance( position, entity.position() ) <= radius;
+
+		return getEntitiesInBox( entityClass, level, position, radius * 2.0, distancePredicate.and( extraPredicate ) );
+	}
+
+	/** Returns entities of a given class in a sphere with given radius. */
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass, ServerLevel level, BlockPos blockPosition, double radius, Predicate< EntityType > extraPredicate ) {
+		return getEntitiesInSphere( entityClass, level, VectorHelper.convertToVec3( blockPosition ), radius, extraPredicate );
+	}
+
+	/** Returns entities of a given class in a sphere with given radius. */
+	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass, ServerLevel level, Entity entity, double radius, Predicate< EntityType > extraPredicate ) {
+		return getEntitiesInSphere( entityClass, level, entity.position(), radius, extraPredicate );
 	}
 }
