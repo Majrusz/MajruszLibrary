@@ -30,53 +30,44 @@ public class LevelHelper {
 		return entity.level.dimension() == worldRegistryKey;
 	}
 
-	/**
-	 Returns difficulty instance of position where entity is currently at.
-
-	 @param entity Entity to get difficulty instance.
-	 */
+	/** Returns difficulty instance of position where entity is currently at. */
 	public static DifficultyInstance getDifficultyInstance( Entity entity ) {
-		return entity.level.getCurrentDifficultyAt( new BlockPos( entity.position() ) );
+		return getDifficultyInstance( entity.level, entity.position() );
 	}
 
-	/**
-	 Returns current regional difficulty of the entity.
+	/** Returns difficulty instance at given position. */
+	public static DifficultyInstance getDifficultyInstance( Level level, Vec3 position ) {
+		return level.getCurrentDifficultyAt( new BlockPos( position ) );
+	}
 
-	 @param entity Entity where difficulty should be calculated.
-	 */
+	/** Returns current regional difficulty of the entity. */
 	public static double getRegionalDifficulty( Entity entity ) {
-		DifficultyInstance difficultyInstance = getDifficultyInstance( entity );
-
-		return difficultyInstance.getEffectiveDifficulty();
+		return getRegionalDifficulty( entity.level, entity.position() );
 	}
 
-	/**
-	 Returns current clamped regional difficulty of the entity. (range [0.0;1.0])
+	/** Returns current regional difficulty at given position. */
+	public static double getRegionalDifficulty( Level level, Vec3 position ) {
+		return getDifficultyInstance( level, position ).getEffectiveDifficulty();
+	}
 
-	 @param entity Entity where difficulty should be calculated.
-	 */
+	/** Returns current clamped regional difficulty of the entity. (range [0.0;1.0]) */
 	public static double getClampedRegionalDifficulty( Entity entity ) {
-		DifficultyInstance difficultyInstance = getDifficultyInstance( entity );
-
-		return difficultyInstance.getSpecialMultiplier();
+		return getClampedRegionalDifficulty( entity.level, entity.position() );
 	}
 
-	/**
-	 Checks whether entity is outside.
+	/** Returns current clamped regional difficulty at given position. (range [0.0;1.0]) */
+	public static double getClampedRegionalDifficulty( Level level, Vec3 position ) {
+		return getDifficultyInstance( level, position ).getSpecialMultiplier();
+	}
 
-	 @param entity Entity to check.
-	 */
+	/** Checks whether entity is outside. */
 	public static boolean isEntityOutside( Entity entity ) {
 		Level level = entity.level;
 
 		return level.canSeeSky( new BlockPos( entity.position() ) );
 	}
 
-	/**
-	 Checks whether is raining at entity current biome.
-
-	 @param entity Entity to check.
-	 */
+	/** Checks whether is raining at entity current biome. */
 	public static boolean isRainingAtEntityBiome( Entity entity ) {
 		Level level = entity.level;
 		Biome biome = level.getBiome( new BlockPos( entity.position() ) );
@@ -84,29 +75,17 @@ public class LevelHelper {
 		return level.isRaining() && biome.getPrecipitation() == Biome.Precipitation.RAIN;
 	}
 
-	/**
-	 Checks whether entity is outside when it is raining.
-
-	 @param entity Entity to check.
-	 */
+	/** Checks whether entity is outside when it is raining. */
 	public static boolean isEntityOutsideWhenItIsRaining( Entity entity ) {
 		return isEntityOutside( entity ) && isRainingAtEntityBiome( entity );
 	}
 
-	/**
-	 Checks whether entity is outside during the day.
-
-	 @param entity Entity to check.
-	 */
+	/** Checks whether entity is outside during the day. */
 	public static boolean isEntityOutsideDuringTheDay( Entity entity ) {
 		return isEntityOutside( entity ) && entity.level.isDay();
 	}
 
-	/**
-	 Checks whether entity is outside during the night.
-
-	 @param entity Entity to check.
-	 */
+	/** Checks whether entity is outside during the night. */
 	public static boolean isEntityOutsideDuringTheNight( Entity entity ) {
 		return isEntityOutside( entity ) && entity.level.isNight();
 	}
