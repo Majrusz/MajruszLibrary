@@ -46,40 +46,40 @@ public class CommandManager {
 	}
 
 	/** Registers new command with two arguments. */
-	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
+	public void register( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
 		ArgumentBuilder< CommandSourceStack, ? > argument3, IExecutable executable
 	) {
 		register( new BaseCommand.Data( argument1, argument2, argument3 ), executable );
 	}
 
 	/** Registers new command with two arguments and requirements. */
-	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
+	public void register( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
 		ArgumentBuilder< CommandSourceStack, ? > argument3, Predicate< CommandSourceStack > requirement, IExecutable executable
 	) {
 		register( new BaseCommand.Data( requirement, argument1, argument2, argument3 ), executable );
 	}
 
 	/** Registers new command with one argument. */
-	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
+	public void register( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
 		IExecutable executable
 	) {
 		register( new BaseCommand.Data( argument1, argument2 ), executable );
 	}
 
 	/** Registers new command with one argument and requirements. */
-	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
+	public void register( LiteralArgumentBuilder< CommandSourceStack > argument1, ArgumentBuilder< CommandSourceStack, ? > argument2,
 		Predicate< CommandSourceStack > requirement, IExecutable executable
 	) {
 		register( new BaseCommand.Data( requirement, argument1, argument2 ), executable );
 	}
 
 	/** Registers new command. */
-	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument, IExecutable executable ) {
+	public void register( LiteralArgumentBuilder< CommandSourceStack > argument, IExecutable executable ) {
 		register( new BaseCommand.Data( argument ), executable );
 	}
 
 	/** Registers new command with requirements. */
-	public void registerCommand( LiteralArgumentBuilder< CommandSourceStack > argument, Predicate< CommandSourceStack > requirement,
+	public void register( LiteralArgumentBuilder< CommandSourceStack > argument, Predicate< CommandSourceStack > requirement,
 		IExecutable executable
 	) {
 		register( new BaseCommand.Data( requirement, argument ), executable );

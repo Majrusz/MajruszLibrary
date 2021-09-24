@@ -17,15 +17,12 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.server.command.EnumArgument;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 
 /** Base class for easier creating simple commands. */
 public class BaseCommand {
-	private static final String DEFAULT_LOCATION_ARGUMENT = "location";
+	private static final String DEFAULT_POSITION_ARGUMENT = "position";
 	private static final String DEFAULT_ENTITY_ARGUMENT = "entity";
 	private static final String DEFAULT_ENTITIES_ARGUMENT = "entities";
 
@@ -54,13 +51,28 @@ public class BaseCommand {
 	}
 
 	/** Adds enum argument. */
-	public static < EnumType extends Enum< EnumType > > RequiredArgumentBuilder< CommandSourceStack, EnumType > enumArgument( String name, Class< EnumType > enumClass ) {
+	public static < EnumType extends Enum< EnumType > > RequiredArgumentBuilder< CommandSourceStack, EnumType > enumArgument( String name,
+		Class< EnumType > enumClass
+	) {
 		return Commands.argument( name, EnumArgument.enumArgument( enumClass ) );
 	}
 
 	/** Returns enum argument. */
-	public static < EnumType extends Enum< EnumType > > EnumType getEnum( CommandContext< CommandSourceStack > context, String name, Class< EnumType > enumClass ) {
+	public static < EnumType extends Enum< EnumType > > EnumType getEnum( CommandContext< CommandSourceStack > context, String name,
+		Class< EnumType > enumClass
+	) {
 		return context.getArgument( name, enumClass );
+	}
+
+	/** Returns enum argument if it was given. */
+	public static < EnumType extends Enum< EnumType > > Optional< EnumType > getOptionalEnum( CommandContext< CommandSourceStack > context,
+		String name, Class< EnumType > enumClass
+	) {
+		try {
+			return Optional.of( context.getArgument( name, enumClass ) );
+		} catch( IllegalArgumentException exception ) {
+			return Optional.empty();
+		}
 	}
 
 	/** Adds text argument. */
@@ -68,24 +80,42 @@ public class BaseCommand {
 		return Commands.literal( name );
 	}
 
-	/** Adds location argument. */
-	public static RequiredArgumentBuilder< CommandSourceStack, Coordinates > location( String name ) {
+	/** Adds position argument. */
+	public static RequiredArgumentBuilder< CommandSourceStack, Coordinates > position( String name ) {
 		return Commands.argument( name, Vec3Argument.vec3() );
 	}
 
-	/** Returns location argument. */
-	public static Vec3 getLocation( CommandContext< CommandSourceStack > context, String name ) {
+	/** Returns position argument. */
+	public static Vec3 getPosition( CommandContext< CommandSourceStack > context, String name ) {
 		return Vec3Argument.getVec3( context, name );
 	}
 
-	/** Adds location argument. */
-	public static RequiredArgumentBuilder< CommandSourceStack, Coordinates > location() {
-		return location( DEFAULT_LOCATION_ARGUMENT );
+	/** Returns position argument if it was given. */
+	public static Optional< Vec3 > getOptionalPosition( CommandContext< CommandSourceStack > context, String name ) {
+		try {
+			return Optional.of( getPosition( context, name ) );
+		} catch( IllegalArgumentException exception ) {
+			return Optional.empty();
+		}
 	}
 
-	/** Returns location argument. */
-	public static Vec3 getLocation( CommandContext< CommandSourceStack > context ) {
-		return getLocation( context, DEFAULT_LOCATION_ARGUMENT );
+	/** Adds position argument. */
+	public static RequiredArgumentBuilder< CommandSourceStack, Coordinates > position() {
+		return position( DEFAULT_POSITION_ARGUMENT );
+	}
+
+	/** Returns position argument. */
+	public static Vec3 getPosition( CommandContext< CommandSourceStack > context ) {
+		return getPosition( context, DEFAULT_POSITION_ARGUMENT );
+	}
+
+	/** Returns position argument if it was given. */
+	public static Optional< Vec3 > getOptionalPosition( CommandContext< CommandSourceStack > context ) {
+		try {
+			return Optional.of( getPosition( context ) );
+		} catch( IllegalArgumentException exception ) {
+			return Optional.empty();
+		}
 	}
 
 	/** Adds entity argument. */
