@@ -3,7 +3,7 @@ package com.mlib.network.message;
 import net.minecraft.network.FriendlyByteBuf;
 
 /** Class for easier sending single boolean from client to the server. */
-public abstract class BooleanMessage extends BaseMessage {
+public class BooleanMessage extends BaseMessage {
 	protected boolean value;
 
 	public BooleanMessage( boolean value ) {
