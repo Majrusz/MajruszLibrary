@@ -28,4 +28,13 @@ public class EffectHelper {
 	public static void applyEffectIfPossible( LivingEntity entity, MobEffect effect, int effectDuration, int amplifier ) {
 		applyEffectIfPossible( entity, new MobEffectInstance( effect, effectDuration, amplifier ) );
 	}
+
+	/** Returns effect amplifier or -1 if entity does not have this effect active. */
+	public static int getEffectAmplifier( LivingEntity entity, MobEffect effect ) {
+		MobEffectInstance effectInstance = entity.getEffect( effect );
+		if( effectInstance != null )
+			return effectInstance.getAmplifier();
+
+		return -1;
+	}
 }
