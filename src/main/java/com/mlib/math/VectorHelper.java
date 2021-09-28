@@ -183,32 +183,23 @@ public class VectorHelper {
 
 	/** Returns new normalized float vector. (with distance equal 1) */
 	public static Vector3f normalize( Vector3f vector ) {
-		float scalarProduct = dot( vector, vector );
-		if( scalarProduct < 1e-5 )
-			return vector;
+		float length = length( vector );
 
-		float denominator = Mth.fastInvSqrt( dot( vector, vector ) );
-		return divide( vector, new Vector3f( denominator, denominator, denominator ) );
+		return length < 1e-4 ? vector : divide( vector, new Vector3f( length, length, length ) );
 	}
 
 	/** Returns new normalized double vector. (with distance equal 1) */
 	public static Vector3d normalize( Vector3d vector ) {
-		double scalarProduct = dot( vector, vector );
-		if( scalarProduct < 1e-5 )
-			return vector;
+		double length = length( vector );
 
-		double denominator = Mth.fastInvSqrt( dot( vector, vector ) );
-		return divide( vector, new Vector3d( denominator, denominator, denominator ) );
+		return length < 1e-4 ? vector : divide( vector, new Vector3d( length, length, length ) );
 	}
 
 	/** Returns new normalized double vector. (with distance equal 1) */
 	public static Vec3 normalize( Vec3 vector ) {
-		double scalarProduct = dot( vector, vector );
-		if( scalarProduct < 1e-5 )
-			return vector;
+		double length = length( vector );
 
-		double denominator = Mth.fastInvSqrt( dot( vector, vector ) );
-		return divide( vector, new Vec3( denominator, denominator, denominator ) );
+		return length < 1e-4 ? vector : divide( vector, new Vec3( length, length, length ) );
 	}
 
 	/** Converts block position to a vector. */
