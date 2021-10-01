@@ -4,13 +4,12 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 
 /** Class for easier sending single float and entity. */
-public class EntityFloatMessage extends BaseMessage {
+public class EntityFloatMessage extends EntityMessage {
 	public final float value;
-	public final int id;
 
 	public EntityFloatMessage( float value, int id ) {
+		super( id );
 		this.value = value;
-		this.id = id;
 	}
 
 	public EntityFloatMessage( Entity entity, float value ) {
@@ -22,7 +21,7 @@ public class EntityFloatMessage extends BaseMessage {
 	}
 
 	public void encode( FriendlyByteBuf buffer ) {
+		super.encode( buffer );
 		buffer.writeFloat( this.value );
-		buffer.writeVarInt( this.id );
 	}
 }
