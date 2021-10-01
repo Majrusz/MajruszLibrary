@@ -116,7 +116,12 @@ public class LevelHelper {
 
 	/** Freeze water under given entity. */
 	public static void freezeWater( LivingEntity entity, double radius, int minimumIceDuration, int maximumIceDuration ) {
-		if( !entity.isOnGround() )
+		freezeWater( entity, radius, minimumIceDuration, maximumIceDuration, true );
+	}
+
+	/** Freeze water under given entity. */
+	public static void freezeWater( LivingEntity entity, double radius, int minimumIceDuration, int maximumIceDuration, boolean requireOnGround ) {
+		if( requireOnGround && !entity.isOnGround() )
 			return;
 
 		BlockState iceBlockState = Blocks.FROSTED_ICE.defaultBlockState();
