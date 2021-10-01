@@ -11,6 +11,7 @@ public abstract class EntityCommand extends BaseCommand {
 		CommandManager commandManager = new CommandManager( commandDispatcher );
 		commandManager.register( data.extendCopy( entity() ), this::handleEntityArgument );
 		commandManager.register( data.extendCopy( entities() ), this::handleEntitiesArgument );
+		commandManager.register( data, this::handleNoArgument );
 	}
 
 	protected int handleEntityArgument( CommandContext< CommandSourceStack > context, CommandSourceStack source ) {
@@ -23,6 +24,10 @@ public abstract class EntityCommand extends BaseCommand {
 			result = Math.max( result, handleCommand( context, source, entity ) );
 
 		return result;
+	}
+
+	protected int handleNoArgument( CommandContext< CommandSourceStack > context, CommandSourceStack source ) {
+		return handleCommand( context, source, source.getEntity() );
 	}
 
 	protected abstract int handleCommand( CommandContext< CommandSourceStack > context, CommandSourceStack source, Entity entity );
