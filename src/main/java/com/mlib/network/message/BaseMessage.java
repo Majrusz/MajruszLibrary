@@ -2,6 +2,7 @@ package com.mlib.network.message;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
@@ -16,7 +17,7 @@ public class BaseMessage {
 			if( sender != null ) {
 				receiveMessage( sender, context );
 			} else {
-				context.enqueueWork( ()->DistExecutor.unsafeRunWhenOn( Dist.CLIENT, ()->()->receiveMessage( context ) ) );
+				DistExecutor.unsafeRunWhenOn( Dist.CLIENT, ()->()->receiveMessage( context ) );
 			}
 		} );
 		context.setPacketHandled( true );
@@ -24,5 +25,6 @@ public class BaseMessage {
 
 	public void receiveMessage( ServerPlayer sender, NetworkEvent.Context context ) {}
 
+	@OnlyIn( Dist.CLIENT )
 	public void receiveMessage( NetworkEvent.Context context ) {}
 }
