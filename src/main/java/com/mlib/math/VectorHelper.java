@@ -28,7 +28,7 @@ public class VectorHelper {
 
 	/** Returns vector increased by given value. */
 	public static < Type extends Number > Vec3 add( Vec3 vector, Type value ) {
-		return new Vec3( vector.x + ( double )value, vector.y + ( double )value, vector.z + ( double )value );
+		return new Vec3( vector.x + value.doubleValue(), vector.y + value.doubleValue(), vector.z + value.doubleValue() );
 	}
 
 	/** Returns negation of float vector. */
@@ -63,7 +63,7 @@ public class VectorHelper {
 
 	/** Returns vector decreased by given value. */
 	public static < Type extends Number > Vec3 subtract( Vec3 vector, Type value ) {
-		return add( vector, -( double )value );
+		return add( vector, -value.doubleValue() );
 	}
 
 	/** Returns product of two float vectors. */
@@ -83,7 +83,7 @@ public class VectorHelper {
 
 	/** Returns vector multiplied by given value. */
 	public static < Type extends Number > Vec3 multiply( Vec3 vector, Type value ) {
-		return new Vec3( vector.x * ( double )value, vector.y * ( double )value, vector.z * ( double )value );
+		return new Vec3( vector.x * value.doubleValue(), vector.y * value.doubleValue(), vector.z * value.doubleValue() );
 	}
 
 	/** Returns quotient of two float vectors. */
@@ -103,7 +103,7 @@ public class VectorHelper {
 
 	/** Returns vector divided by given value. */
 	public static < Type extends Number > Vec3 divide( Vec3 vector, Type value ) {
-		return new Vec3( vector.x / ( double )value, vector.y / ( double )value, vector.z / ( double )value );
+		return new Vec3( vector.x / value.doubleValue(), vector.y / value.doubleValue(), vector.z / value.doubleValue() );
 	}
 
 	/** Returns scalar product between two float vectors. */
