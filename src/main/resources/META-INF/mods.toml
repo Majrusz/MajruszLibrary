@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[37,)"
+loaderVersion="[39,)"
 license="MIT License"
 issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
 
@@ -17,13 +17,13 @@ issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
 [[dependencies.majrusz_library]]
     modId="forge"
     mandatory=true
-    versionRange="[37,)"
+    versionRange="[39,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.majrusz_library]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.17.1,1.18)"
+    versionRange="[1.18.1,1.19)"
     ordering="NONE"
     side="BOTH"

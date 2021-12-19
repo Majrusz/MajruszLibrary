@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fmllegacy.RegistryObject;
+import net.minecraftforge.registries.*;
 import net.minecraftforge.registries.DeferredRegister;
 
 /** Class responsible for simple adding new spawn eggs to entities with all standard minecraft behavior. */

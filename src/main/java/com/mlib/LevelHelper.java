@@ -147,8 +147,7 @@ public class LevelHelper {
 						net.minecraft.core.Direction.UP
 					) ) {
 						entity.level.setBlockAndUpdate( blockPos, iceBlockState );
-						entity.level.getBlockTicks()
-							.scheduleTick( blockPos, Blocks.FROSTED_ICE, Mth.nextInt( entity.getRandom(), minimumIceDuration, maximumIceDuration ) );
+						//entity.level.getBlockTicks().scheduleTick( blockPos, Blocks.FROSTED_ICE, Mth.nextInt( entity.getRandom(), minimumIceDuration, maximumIceDuration ) );
 					}
 				}
 			}

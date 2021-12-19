@@ -13,13 +13,13 @@ apply plugin: 'maven-publish'
 
 version = '2.6.0'
 group = 'com.mlib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'majrusz-library-1.17.1'
+archivesBaseName = 'majrusz-library-1.18.1'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version: '1.17.1'
+    mappings channel: 'official', version: '1.18.1'
 
     accessTransformer = file( 'src/main/resources/META-INF/accesstransformer.cfg' ) // Currently, this location cannot be changed from the default.
 
@@ -69,7 +69,7 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.69'
+    minecraft 'net.minecraftforge:forge:1.18.1-39.0.5'
 }
 
 jar {
