@@ -6,6 +6,7 @@ import com.mlib.MajruszLibrary;
 import com.mlib.Random;
 import com.mlib.entities.EntityHelper;
 import com.mlib.particles.ParticleHelper;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;
@@ -40,7 +41,7 @@ public class SmeltingItems extends LootModifier {
 
 	@Nonnull
 	@Override
-	protected List< ItemStack > doApply( List< ItemStack > generatedLoot, LootContext context ) {
+	protected ObjectArrayList< ItemStack > doApply( ObjectArrayList< ItemStack > generatedLoot, LootContext context ) {
 		ItemStack tool = LootHelper.getParameter( context, LootContextParams.TOOL );
 		Player player = EntityHelper.getPlayerFromEntity( LootHelper.getParameter( context, LootContextParams.THIS_ENTITY ) );
 		BlockState blockState = LootHelper.getParameter( context, LootContextParams.BLOCK_STATE );
@@ -89,11 +90,11 @@ public class SmeltingItems extends LootModifier {
 	}
 
 	/** Returns smelted generated loot. */
-	protected List< ItemStack > getSmeltedLoot( List< ItemStack > generatedLoot, ServerLevel level, Vec3 position ) {
+	protected ObjectArrayList< ItemStack > getSmeltedLoot( ObjectArrayList< ItemStack > generatedLoot, ServerLevel level, Vec3 position ) {
 		RecipeManager recipeManager = level.getRecipeManager();
 
 		int amountOfSmeltedItems = 0;
-		ArrayList< ItemStack > smeltedLoot = new ArrayList<>();
+		ObjectArrayList< ItemStack > smeltedLoot = new ObjectArrayList<>();
 		for( ItemStack itemStack : generatedLoot ) {
 			smeltedLoot.add( getSmeltedItemStack( itemStack, level ) );
 			Optional< SmeltingRecipe > recipe = recipeManager.getRecipeFor( RecipeType.SMELTING, new SimpleContainer( itemStack ), level );
@@ -121,7 +122,7 @@ public class SmeltingItems extends LootModifier {
 
 		@Override
 		public JsonObject write( SmeltingItems instance ) {
-			return null;
+			return makeConditions( instance.conditions );
 		}
 	}
 
