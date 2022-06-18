@@ -16,8 +16,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn( Dist.CLIENT )
 public class SimpleParticle extends TextureSheetParticle {
 	protected final double yOffset;
-	protected IFormula< Double > xDeltaFormula = null, yDeltaFormula = null, zDeltaFormula = null;
-	protected IFormula< Double > xOnGroundFormula = null, yOnGroundFormula = null, zOnGroundFormula = null;
+	protected IFormula< Double > xDeltaFormula = xd -> xd * 0.95;
+	protected IFormula< Double > yDeltaFormula = yd -> yd - 0.0375;
+	protected IFormula< Double > zDeltaFormula = zd -> zd * 0.95;
+	protected IFormula< Double > xOnGroundFormula = xd -> xd * 0.5;
+	protected IFormula< Double > yOnGroundFormula = yd -> yd;
+	protected IFormula< Double > zOnGroundFormula = zd -> zd * 0.5;
 
 	public SimpleParticle( ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet, double yOffset ) {
 		super( level, x, y, z, xSpeed, ySpeed, zSpeed );
@@ -34,13 +38,13 @@ public class SimpleParticle extends TextureSheetParticle {
 			remove();
 		} else {
 			this.move( this.xd, this.yd, this.zd );
-			this.xd = this.xDeltaFormula != null ? this.xDeltaFormula.apply( this.xd ) : this.xd * 0.95;
-			this.yd = this.yDeltaFormula != null ? this.yDeltaFormula.apply( this.yd ) : this.yd - 0.0375;
-			this.zd = this.zDeltaFormula != null ? this.zDeltaFormula.apply( this.zd ) : this.zd * 0.95;
+			this.xd = this.xDeltaFormula.apply( this.xd );
+			this.yd = this.yDeltaFormula.apply( this.yd );
+			this.zd = this.zDeltaFormula.apply( this.zd );
 			if( this.onGround ) {
-				this.xd = this.xOnGroundFormula != null ? this.xOnGroundFormula.apply( this.xd ) : this.xd * 0.5;
-				this.yd = this.yOnGroundFormula != null ? this.yOnGroundFormula.apply( this.yd ) : this.yd;
-				this.zd = this.zOnGroundFormula != null ? this.zOnGroundFormula.apply( this.zd ) : this.zd * 0.5;
+				this.xd = this.xOnGroundFormula.apply( this.xd );
+				this.yd = this.yOnGroundFormula.apply( this.yd );
+				this.zd = this.zOnGroundFormula.apply( this.zd );
 			}
 		}
 	}

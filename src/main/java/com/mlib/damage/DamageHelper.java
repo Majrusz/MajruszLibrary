@@ -1,6 +1,6 @@
 package com.mlib.damage;
 
-import com.mlib.CommonHelper;
+import com.mlib.Utility;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,13 +13,13 @@ public class DamageHelper {
 	/** Tries to cast the damage source entity to given class type or returns null otherwise. */
 	@Nullable
 	public static < NewType > NewType castEntityIfPossible( Class< NewType > newClass, DamageSource damageSource ) {
-		return CommonHelper.castIfPossible( newClass, damageSource.getEntity() );
+		return Utility.castIfPossible( newClass, damageSource.getEntity() );
 	}
 
 	/** Tries to cast the damage source direct entity to given class type or returns null otherwise. */
 	@Nullable
 	public static < NewType > NewType castDirectEntityIfPossible( Class< NewType > newClass, DamageSource damageSource ) {
-		return CommonHelper.castIfPossible( newClass, damageSource.getDirectEntity() );
+		return Utility.castIfPossible( newClass, damageSource.getDirectEntity() );
 	}
 
 	/** Checks whether entity and direct entity from given damage sources are instances of given classes. */
@@ -33,7 +33,7 @@ public class DamageHelper {
 	@Nullable
 	@Deprecated
 	public static < EntityClass extends Entity > EntityClass getEntityFromDamageSource( Class< EntityClass > entityClass, DamageSource source ) {
-		return CommonHelper.castIfPossible( entityClass, source.getEntity() );
+		return Utility.castIfPossible( entityClass, source.getEntity() );
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class DamageHelper {
 	@Nullable
 	@Deprecated
 	public static Player getPlayerFromDamageSource( DamageSource damageSource ) {
-		return CommonHelper.castIfPossible( Player.class, damageSource.getEntity() );
+		return Utility.castIfPossible( Player.class, damageSource.getEntity() );
 	}
 
 	/**

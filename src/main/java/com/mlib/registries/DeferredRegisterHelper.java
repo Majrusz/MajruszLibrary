@@ -18,14 +18,12 @@ public class DeferredRegisterHelper {
 		this.modId = modId;
 	}
 
-	public < Type > DeferredRegister< Type > create( ResourceKey< Registry< Type > > key, Consumer< DeferredRegister< Type > > objectsToRegister ) {
+	public < Type > void create( ResourceKey< Registry< Type > > key, Consumer< DeferredRegister< Type > > objectsToRegister ) {
 		DeferredRegister< Type > register = DeferredRegister.create( key, this.modId );
 		this.consumers.add( modEventBus -> {
 			objectsToRegister.accept( register );
 			register.register( modEventBus );
 		} );
-
-		return register;
 	}
 
 	public void registerAll() {

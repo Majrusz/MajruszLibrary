@@ -1,6 +1,6 @@
 package com.mlib.time;
 
-import com.mlib.TimeConverter;
+import com.mlib.Utility;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,7 +25,6 @@ public class TimeHelper {
 			++serverCounter;
 	}
 
-	/** Returns whether given event's phase is 'END'. */
 	public static boolean isEndPhase( TickEvent event ) {
 		return event.phase == TickEvent.Phase.END;
 	}
@@ -37,7 +36,7 @@ public class TimeHelper {
 
 	/** Returns whether client counter can be divided by given value. (in seconds) */
 	public static boolean hasClientSecondsPassed( @Nonnegative double secondDelay ) {
-		return hasClientTicksPassed( TimeConverter.secondsToTicks( secondDelay ) );
+		return hasClientTicksPassed( Utility.secondsToTicks( secondDelay ) );
 	}
 
 	/** Returns whether client counter can be divided by given value. */
@@ -47,6 +46,6 @@ public class TimeHelper {
 
 	/** Returns whether client counter can be divided by given value. (in seconds) */
 	public static boolean hasServerSecondsPassed( @Nonnegative double secondDelay ) {
-		return hasServerTicksPassed( TimeConverter.secondsToTicks( secondDelay ) );
+		return hasServerTicksPassed( Utility.secondsToTicks( secondDelay ) );
 	}
 }

@@ -1,6 +1,6 @@
 package com.mlib.time;
 
-import com.mlib.TimeConverter;
+import com.mlib.Utility;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -20,10 +20,10 @@ public class Delay {
 	}
 
 	public Delay( double seconds, ICallable callable ) {
-		this( TimeConverter.secondsToTicks( seconds ), callable );
+		this( Utility.secondsToTicks( seconds ), callable );
 	}
 
-	/** Returns whether delay has expired. (should be called) */
+	/** Returns whether a delay has expired. (should be called) */
 	public boolean hasExpired() {
 		return this.ticksLeft <= 0;
 	}
@@ -31,11 +31,11 @@ public class Delay {
 	@SubscribeEvent
 	public static void onServerTick() {
 		for( Delay delay : DELAYS ) {
-			if( delay.ticksLeft > 0 )
+			if( delay.ticksLeft > 0 ) {
 				delay.ticksLeft = delay.ticksLeft - 1;
-
-			if( delay.hasExpired() )
+			} else {
 				delay.callable.call();
+			}
 		}
 
 		DELAYS.removeIf( Delay::hasExpired );

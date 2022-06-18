@@ -77,7 +77,7 @@ public class SmeltingItems extends LootModifier {
 	 Then this gives player 2 XP points and has 40% (0.4) chance for another 1 XP point. (0.4 XP * 6 items = 2.4 XP)
 	 */
 	protected int calculateRandomExperienceForRecipe( SmeltingRecipe recipe, int smeltedItems ) {
-		return Random.randomizeExperience( recipe.getExperience() * smeltedItems );
+		return Random.roundRandomly( recipe.getExperience() * smeltedItems );
 	}
 
 	/** Returns smelted item stack. */

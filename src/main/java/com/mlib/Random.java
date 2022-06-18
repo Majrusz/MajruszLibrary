@@ -5,6 +5,22 @@ import com.mojang.math.Vector3f;
 import net.minecraft.world.phys.Vec3;
 
 public class Random {
+	public static float nextFloat() {
+		return MajruszLibrary.RANDOM.nextFloat();
+	}
+
+	public static float nextFloat( float min, float max ) {
+		return ( max - min ) * MajruszLibrary.RANDOM.nextFloat() + min;
+	}
+
+	public static double nextDouble() {
+		return MajruszLibrary.RANDOM.nextDouble();
+	}
+
+	public static double nextDouble( double min, double max ) {
+		return ( max - min ) * MajruszLibrary.RANDOM.nextDouble() + min;
+	}
+
 	/**
 	 The method responsible for the random event.
 
@@ -13,48 +29,34 @@ public class Random {
 	 @return Returns true if drawn number was from range [0.0;chance], and false otherwise.
 	 */
 	public static boolean tryChance( double chance ) {
-		return MajruszLibrary.RANDOM.nextDouble() <= chance;
+		return nextDouble() <= chance;
 	}
 
 	/**
-	 Randomizes experience.
-	 For example if experience to randomize is equal 21.37 then:
-	 There is 37% (0.37) for 22 experience.
-	 And there is 63% (1.0-0.37) for 21 experience.
+	 Rounds the value randomly depending on the decimal value.
+	 For instance if the value is equal to 21.37 then:
+	 There is a 37% (0.37) chance to return 22,
+	 and there is a 63% (1.0-0.37) chance to return 21.
 	 */
-	public static int randomizeExperience( double experience ) {
+	public static int roundRandomly( double experience ) {
 		int outputExperience = ( int )experience;
-		if( tryChance( experience - outputExperience ) )
-			outputExperience++;
 
-		return outputExperience;
+		return outputExperience + ( tryChance( experience - outputExperience ) ? 1 : 0 );
 	}
 
-	/** Returns random float vector. */
 	public static Vector3f getRandomVector3f( float minX, float maxX, float minY, float maxY, float minZ, float maxZ ) {
-		float x = ( maxX - minX ) * MajruszLibrary.RANDOM.nextFloat() + minX;
-		float y = ( maxY - minY ) * MajruszLibrary.RANDOM.nextFloat() + minY;
-		float z = ( maxZ - minZ ) * MajruszLibrary.RANDOM.nextFloat() + minZ;
-
-		return new Vector3f( x, y, z );
+		return new Vector3f( nextFloat( minX, maxX ), nextFloat( minY, maxY ), nextFloat( minZ, maxZ ) );
 	}
 
-	/** Returns random double vector. */
 	public static Vec3 getRandomVector3d( double minX, double maxX, double minY, double maxY, double minZ, double maxZ ) {
-		double x = ( maxX - minX ) * MajruszLibrary.RANDOM.nextDouble() + minX;
-		double y = ( maxY - minY ) * MajruszLibrary.RANDOM.nextDouble() + minY;
-		double z = ( maxZ - minZ ) * MajruszLibrary.RANDOM.nextDouble() + minZ;
-
-		return new Vec3( x, y, z );
+		return new Vec3( nextDouble( minX, maxX ), nextDouble( minY, maxY ), nextDouble( minZ, maxZ ) );
 	}
 
-	/** Returns random normalized vector. (with distance equal 1) */
 	public static Vec3 getRandomNormalizedVector() {
 		Vec3 vector = getRandomVector3d( -1.0, 1.0, -1.0, 1.0, -1.0, 1.0 );
-
 		if( VectorHelper.length( vector ) < 1e-5 ) // to avoid dividing by zero (or very small number) and throwing exception
 			return getRandomNormalizedVector();
-		else
-			return VectorHelper.normalize( vector );
+
+		return VectorHelper.normalize( vector );
 	}
 }

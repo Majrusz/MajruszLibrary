@@ -1,6 +1,6 @@
 package com.mlib.entities;
 
-import com.mlib.CommonHelper;
+import com.mlib.Utility;
 import com.mlib.math.AABBHelper;
 import com.mlib.math.VectorHelper;
 import net.minecraft.core.BlockPos;
@@ -43,7 +43,7 @@ public class EntityHelper {
 	 */
 	@Nullable
 	public static Player getPlayerFromEntity( @Nullable Entity entity ) {
-		return CommonHelper.castIfPossible( Player.class, entity );
+		return Utility.castIfPossible( Player.class, entity );
 	}
 
 	/** Checks whether given player has Creative Mode enabled. */

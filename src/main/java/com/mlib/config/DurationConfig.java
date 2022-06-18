@@ -1,6 +1,6 @@
 package com.mlib.config;
 
-import com.mlib.TimeConverter;
+import com.mlib.Utility;
 
 /** Class representing single double config value with method to time conversion. (stored in seconds) */
 public class DurationConfig extends DoubleConfig {
@@ -15,6 +15,6 @@ public class DurationConfig extends DoubleConfig {
 
 	/** Converts stored seconds to minecraft ticks. */
 	public int getTicks() {
-		return TimeConverter.secondsToTicks( super.get() );
+		return Utility.secondsToTicks( super.get() );
 	}
 }
