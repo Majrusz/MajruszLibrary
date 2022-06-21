@@ -31,10 +31,10 @@ public class CommandManager {
 			commandBuilder.requires( requirement );
 
 		if( !data.arguments.isEmpty() ) {
-			ArgumentBuilder< CommandSourceStack, ? > argumentBuilder = data.arguments.get( data.arguments.size()-1 );
+			ArgumentBuilder< CommandSourceStack, ? > argumentBuilder = data.arguments.get( data.arguments.size() - 1 );
 			argumentBuilder = argumentBuilder.executes( getCommand( executable ) );
 
-			for( int i = data.arguments.size()-2; i >= 0; --i ) {
+			for( int i = data.arguments.size() - 2; i >= 0; --i ) {
 				ArgumentBuilder< CommandSourceStack, ? > nextArgumentBuilder = data.arguments.get( i );
 				argumentBuilder = nextArgumentBuilder.then( argumentBuilder );
 			}
@@ -79,8 +79,7 @@ public class CommandManager {
 	}
 
 	/** Registers new command with requirements. */
-	public void register( LiteralArgumentBuilder< CommandSourceStack > argument, Predicate< CommandSourceStack > requirement,
-		IExecutable executable
+	public void register( LiteralArgumentBuilder< CommandSourceStack > argument, Predicate< CommandSourceStack > requirement, IExecutable executable
 	) {
 		register( new BaseCommand.Data( requirement, argument ), executable );
 	}

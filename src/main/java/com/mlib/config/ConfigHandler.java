@@ -1,6 +1,5 @@
 package com.mlib.config;
 
-import com.mlib.events.AnyLootModificationEvent;
 import com.mlib.events.ConfigsLoadedEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;

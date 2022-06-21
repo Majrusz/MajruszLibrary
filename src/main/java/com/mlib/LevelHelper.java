@@ -144,9 +144,7 @@ public class LevelHelper {
 		BlockState iceBlockState = Blocks.FROSTED_ICE.defaultBlockState();
 		BlockPos entityPosition = entity.blockPosition();
 		BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-		Iterable< BlockPos > blocksInRange = BlockPos.betweenClosed( entityPosition.offset( -radius, -1.0, -radius ),
-			entityPosition.offset( radius, -1.0, radius )
-		);
+		Iterable< BlockPos > blocksInRange = BlockPos.betweenClosed( entityPosition.offset( -radius, -1.0, -radius ), entityPosition.offset( radius, -1.0, radius ) );
 
 		for( BlockPos blockPos : blocksInRange ) {
 			if( blockPos.closerThan( entityPosition, radius ) ) {
@@ -159,10 +157,7 @@ public class LevelHelper {
 					boolean canSurvive = iceBlockState.canSurvive( entity.level, blockPos );
 					boolean isUnobstructed = entity.level.isUnobstructed( iceBlockState, blockPos, CollisionContext.empty() );
 
-					if( isWater && isFull && canSurvive && isUnobstructed && !net.minecraftforge.event.ForgeEventFactory.onBlockPlace( entity,
-						net.minecraftforge.common.util.BlockSnapshot.create( entity.level.dimension(), entity.level, blockPos ),
-						net.minecraft.core.Direction.UP
-					) ) {
+					if( isWater && isFull && canSurvive && isUnobstructed && !net.minecraftforge.event.ForgeEventFactory.onBlockPlace( entity, net.minecraftforge.common.util.BlockSnapshot.create( entity.level.dimension(), entity.level, blockPos ), net.minecraft.core.Direction.UP ) ) {
 						entity.level.setBlockAndUpdate( blockPos, iceBlockState );
 						entity.level.scheduleTick( blockPos, Blocks.FROSTED_ICE, Mth.nextInt( entity.getRandom(), 60, 120 ) );
 					}

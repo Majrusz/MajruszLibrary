@@ -28,7 +28,7 @@ public class DeferredRegisterHelper {
 	public void registerAll() {
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-		this.registers.forEach( register -> register.register( modEventBus ) );
+		this.registers.forEach( register->register.register( modEventBus ) );
 	}
 
 	public ResourceLocation getLocation( String register ) {

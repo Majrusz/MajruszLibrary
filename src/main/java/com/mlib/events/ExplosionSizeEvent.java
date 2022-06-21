@@ -48,7 +48,6 @@ public class ExplosionSizeEvent extends Event implements IModBusEvent {
 		double x = position.x, y = position.y, z = position.z;
 		for( ServerPlayer player : level.players() )
 			if( player.distanceToSqr( x, y, z ) < 4096.0 )
-				player.connection.send(
-					new ClientboundExplodePacket( x, y, z, size, explosion.getToBlow(), explosion.getHitPlayers().get( player ) ) );
+				player.connection.send( new ClientboundExplodePacket( x, y, z, size, explosion.getToBlow(), explosion.getHitPlayers().get( player ) ) );
 	}
 }

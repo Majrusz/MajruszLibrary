@@ -65,8 +65,8 @@ public class BaseCommand {
 	}
 
 	/** Returns enum argument if it was given. */
-	public static < EnumType extends Enum< EnumType > > Optional< EnumType > getOptionalEnum( CommandContext< CommandSourceStack > context,
-		String name, Class< EnumType > enumClass
+	public static < EnumType extends Enum< EnumType > > Optional< EnumType > getOptionalEnum( CommandContext< CommandSourceStack > context, String name,
+		Class< EnumType > enumClass
 	) {
 		try {
 			return Optional.of( context.getArgument( name, enumClass ) );

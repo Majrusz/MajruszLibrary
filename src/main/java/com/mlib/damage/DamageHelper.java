@@ -23,8 +23,7 @@ public class DamageHelper {
 	}
 
 	/** Checks whether entity and direct entity from given damage sources are instances of given classes. */
-	public static < Type1, Type2 > boolean areEntitiesInstancesOf( DamageSource damageSource, Class< Type1 > entityClass,
-		Class< Type2 > directEntityClass
+	public static < Type1, Type2 > boolean areEntitiesInstancesOf( DamageSource damageSource, Class< Type1 > entityClass, Class< Type2 > directEntityClass
 	) {
 		return entityClass.isInstance( damageSource.getEntity() ) && directEntityClass.isInstance( damageSource.getDirectEntity() );
 	}

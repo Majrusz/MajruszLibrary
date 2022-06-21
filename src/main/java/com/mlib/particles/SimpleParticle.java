@@ -16,14 +16,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn( Dist.CLIENT )
 public class SimpleParticle extends TextureSheetParticle {
 	protected final double yOffset;
-	protected IFormula< Double > xDeltaFormula = xd -> xd * 0.95;
-	protected IFormula< Double > yDeltaFormula = yd -> yd - 0.0375;
-	protected IFormula< Double > zDeltaFormula = zd -> zd * 0.95;
-	protected IFormula< Double > xOnGroundFormula = xd -> xd * 0.5;
-	protected IFormula< Double > yOnGroundFormula = yd -> yd;
-	protected IFormula< Double > zOnGroundFormula = zd -> zd * 0.5;
+	protected IFormula< Double > xDeltaFormula = xd->xd * 0.95;
+	protected IFormula< Double > yDeltaFormula = yd->yd - 0.0375;
+	protected IFormula< Double > zDeltaFormula = zd->zd * 0.95;
+	protected IFormula< Double > xOnGroundFormula = xd->xd * 0.5;
+	protected IFormula< Double > yOnGroundFormula = yd->yd;
+	protected IFormula< Double > zOnGroundFormula = zd->zd * 0.5;
 
-	public SimpleParticle( ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet, double yOffset ) {
+	public SimpleParticle( ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet,
+		double yOffset
+	) {
 		super( level, x, y, z, xSpeed, ySpeed, zSpeed );
 		this.yOffset = yOffset;
 	}
@@ -72,8 +74,10 @@ public class SimpleParticle extends TextureSheetParticle {
 
 		Vector3f vector3f1 = new Vector3f( -1.0F, -1.0F, 0.0F );
 		vector3f1.transform( quaternion );
-		Vector3f[] avector3f = new Vector3f[]{ new Vector3f( -1.0F, -1.0F, 0.0F ), new Vector3f( -1.0F, 1.0F, 0.0F ),
-			new Vector3f( 1.0F, 1.0F, 0.0F ), new Vector3f( 1.0F, -1.0F, 0.0F )
+		Vector3f[] avector3f = new Vector3f[]{ new Vector3f( -1.0F, -1.0F, 0.0F ),
+			new Vector3f( -1.0F, 1.0F, 0.0F ),
+			new Vector3f( 1.0F, 1.0F, 0.0F ),
+			new Vector3f( 1.0F, -1.0F, 0.0F )
 		};
 		float f4 = this.getQuadSize( scaleFactor );
 
@@ -136,7 +140,9 @@ public class SimpleParticle extends TextureSheetParticle {
 
 		@FunctionalInterface
 		public interface IInstanceFactory {
-			SimpleParticle createInstance( ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet );
+			SimpleParticle createInstance( ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed,
+				SpriteSet spriteSet
+			);
 		}
 	}
 

@@ -101,8 +101,7 @@ public class ItemHelper {
 	 @param isTreasureAllowed         Flag responsible for enabling enchantment like Frost Walker.
 	 @param damageFactor              Factor from range [0.0;1.0] how much item should be damaged at most.
 	 */
-	public static ItemStack damageAndEnchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed,
-		double damageFactor
+	public static ItemStack damageAndEnchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed, double damageFactor
 	) {
 		return damageItem( enchantItem( itemStack, clampedRegionalDifficulty, isTreasureAllowed ), damageFactor );
 	}

@@ -2,13 +2,7 @@ package com.mlib;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.monster.Pillager;
-import net.minecraft.world.entity.monster.Witch;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 
 import javax.annotation.Nullable;
