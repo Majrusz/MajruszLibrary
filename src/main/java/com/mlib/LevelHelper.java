@@ -1,6 +1,7 @@
 package com.mlib;
 
 import com.mlib.math.VectorHelper;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -10,6 +11,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -99,19 +101,34 @@ public class LevelHelper {
 		return ( entity != null && entity.level instanceof ServerLevel ) ? ( ServerLevel )entity.level : null;
 	}
 
-	/** Returns player spawn position. (bed position, nether anchor or world spawn point) */
-	public static BlockPos getSpawnPosition( ServerPlayer player, ServerLevel level ) {
-		BlockPos position = player.getRespawnPosition();
-		Optional< BlockPos > spawnPosition = Optional.empty();
-		if( position != null ) {
-			Optional< Vec3 > temporaryPosition = ServerPlayer.findRespawnPositionAndUseSpawnBlock( level, position, player.getRespawnAngle(),
-				player.isRespawnForced(), true
-			);
-			if( temporaryPosition.isPresent() )
-				spawnPosition = Optional.of( new BlockPos( temporaryPosition.get() ) );
+	public static Pair< Vec3, ServerLevel > getSpawnData( ServerPlayer player ) {
+		BlockPos respawnPosition = player.getRespawnPosition();
+		ServerLevel serverLevel = player.server.getLevel( player.getRespawnDimension() );
+		Vec3 exactSpawnPosition = null;
+		if( serverLevel == null )
+			return new Pair<>( Vec3.ZERO, null );
+
+		if( respawnPosition != null ) {
+			float angle = player.getRespawnAngle();
+			Optional< Vec3 > spawnPosition = Player.findRespawnPositionAndUseSpawnBlock( serverLevel, respawnPosition, angle, true, true );
+			if( spawnPosition.isPresent() )
+				exactSpawnPosition = spawnPosition.get();
+		}
+		if( exactSpawnPosition == null ) {
+			serverLevel = player.server.getLevel( Level.OVERWORLD );
+			assert serverLevel != null;
+			exactSpawnPosition = VectorHelper.convertToVec3( serverLevel.getSharedSpawnPos() );
 		}
 
-		return spawnPosition.orElseGet( level::getSharedSpawnPos );
+		return new Pair<>( exactSpawnPosition, serverLevel );
+	}
+
+	public static void teleportToSpawnPosition( ServerPlayer player ) {
+		Pair< Vec3, ServerLevel > spawnData = getSpawnData( player );
+		Vec3 spawnPosition = spawnData.getFirst();
+		ServerLevel serverLevel = spawnData.getSecond();
+
+		player.teleportTo( serverLevel, spawnPosition.x, spawnPosition.y, spawnPosition.z, player.getYRot(), player.getXRot() );
 	}
 
 	/** Freeze water under given entity. */
@@ -147,7 +164,7 @@ public class LevelHelper {
 						net.minecraft.core.Direction.UP
 					) ) {
 						entity.level.setBlockAndUpdate( blockPos, iceBlockState );
-						//entity.level.getBlockTicks().scheduleTick( blockPos, Blocks.FROSTED_ICE, Mth.nextInt( entity.getRandom(), minimumIceDuration, maximumIceDuration ) );
+						entity.level.scheduleTick( blockPos, Blocks.FROSTED_ICE, Mth.nextInt( entity.getRandom(), 60, 120 ) );
 					}
 				}
 			}
