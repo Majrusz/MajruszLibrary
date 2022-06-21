@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.npc.Villager;
@@ -51,7 +52,10 @@ public class EntityHelper {
 		return player.getAbilities().instabuild;
 	}
 
-	/** Returns whether given entity is humanoid. */
+	public static boolean isAnimal( @Nullable Entity entity ) {
+		return entity instanceof Animal;
+	}
+
 	public static boolean isHuman( Entity entity ) {
 		return ( entity instanceof Villager || entity instanceof WanderingTrader || entity instanceof Player || entity instanceof Witch || entity instanceof Pillager );
 	}

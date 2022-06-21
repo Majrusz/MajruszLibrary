@@ -17,6 +17,11 @@ public class ConfigGroup implements IConfig {
 		this.comment = comment;
 	}
 
+	public ConfigGroup( String groupName, String comment, IConfig... configs ) {
+		this( groupName, comment );
+		this.addConfigs( configs );
+	}
+
 	/** Builds all configs from the list. */
 	@Override
 	public void build( ForgeConfigSpec.Builder builder ) {
@@ -30,7 +35,7 @@ public class ConfigGroup implements IConfig {
 	}
 
 	/** Adds new group to the list. */
-	public < GroupType extends IConfig > GroupType addGroup( GroupType group ) {
+	public ConfigGroup addGroup( ConfigGroup group ) {
 		this.configTypeList.add( group );
 
 		return group;

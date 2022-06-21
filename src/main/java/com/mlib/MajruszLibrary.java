@@ -20,12 +20,7 @@ public class MajruszLibrary {
 	public static final RandomSource RANDOM = RandomSource.create();
 
 	public MajruszLibrary() {
-		RegistryHandler.registerAll();
+		Registries.initialize();
 		MinecraftForge.EVENT_BUS.register( this );
-	}
-
-	/** Returns resource location for register in current modification files. */
-	public static ResourceLocation getLocation( String register ) {
-		return new ResourceLocation( MOD_ID, register );
 	}
 }

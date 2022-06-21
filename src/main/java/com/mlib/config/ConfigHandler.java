@@ -1,6 +1,9 @@
 package com.mlib.config;
 
+import com.mlib.events.AnyLootModificationEvent;
+import com.mlib.events.ConfigsLoadedEvent;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -28,6 +31,7 @@ public class ConfigHandler {
 		this.configSpec = this.builder.build();
 
 		modLoadingContext.registerConfig( this.type, this.configSpec, this.filename );
+		MinecraftForge.EVENT_BUS.post( new ConfigsLoadedEvent( this ) );
 	}
 
 	/** Adds a new config group to handle. */
@@ -35,5 +39,13 @@ public class ConfigHandler {
 		this.configGroupList.add( configGroup );
 
 		return configGroup;
+	}
+
+	public ModConfig.Type GetType() {
+		return this.type;
+	}
+
+	public String GetFilename() {
+		return this.filename;
 	}
 }
