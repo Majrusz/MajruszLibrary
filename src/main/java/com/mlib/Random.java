@@ -21,6 +21,22 @@ public class Random {
 		return ( max - min ) * MajruszLibrary.RANDOM.nextDouble() + min;
 	}
 
+	public static int nextInt() {
+		return MajruszLibrary.RANDOM.nextInt();
+	}
+
+	public static int nextInt( int max ) {
+		return MajruszLibrary.RANDOM.nextInt( max );
+	}
+
+	public static int nextInt( int min, int max ) {
+		return min + nextInt( max - min );
+	}
+
+	public static boolean nextBoolean() {
+		return MajruszLibrary.RANDOM.nextBoolean();
+	}
+
 	/**
 	 The method responsible for the random event.
 
