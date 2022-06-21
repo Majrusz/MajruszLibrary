@@ -47,7 +47,7 @@ public class TooltipManager {
 		}
 
 		int j2 = preEvent.getX() + 12;
-		int k2 = preEvent.getY() - 12 - 100;
+		int k2 = preEvent.getY() - 12;
 		if( j2 + i > preEvent.getScreenWidth() ) {
 			j2 -= 28 + i;
 		}
