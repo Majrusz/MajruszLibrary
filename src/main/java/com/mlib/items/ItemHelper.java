@@ -2,7 +2,9 @@ package com.mlib.items;
 
 import com.mlib.MajruszLibrary;
 import com.mlib.Random;
+import com.mlib.entities.EntityHelper;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
@@ -141,17 +143,18 @@ public class ItemHelper {
 		}
 	}
 
-	/**
-	 Gives item stack to player. If possible gives to inventory otherwise spawns in the level near the player.
-
-	 @param itemStack Item stack to give.
-	 @param player    Player to receive item stack.
-	 @param level     Level where item should spawn if it is not possible to give item directly.
-	 */
+	/** Gives item stack to player. If possible gives to inventory otherwise spawns in the level near the player. */
 	public static void giveItemStackToPlayer( ItemStack itemStack, Player player, ServerLevel level ) {
 		if( !player.getInventory().add( itemStack ) ) {
 			double x = player.getX(), y = player.getY() + 1.0, z = player.getZ();
 			level.addFreshEntity( new ItemEntity( level, x, y, z, itemStack ) );
+		}
+	}
+
+	public static void consumeItemOnUse( ItemStack itemStack, Player player ) {
+		player.awardStat( Stats.ITEM_USED.get( itemStack.getItem() ) );
+		if( !EntityHelper.isOnCreativeMode( player ) ) {
+			itemStack.shrink( 1 );
 		}
 	}
 }
