@@ -166,11 +166,11 @@ public class ItemHelper {
 		Item item = entity != null ? entity.getItemBySlot( equipmentSlot ).getItem() : null;
 
 		for( Class< ? extends Item > itemClass : itemClasses ) {
-			if( !itemClass.isInstance( item ) ) {
-				return false;
+			if( itemClass.isInstance( item ) ) {
+				return true;
 			}
 		}
-		return item != null;
+		return false;
 	}
 
 	@SafeVarargs
