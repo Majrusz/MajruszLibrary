@@ -1,7 +1,7 @@
 package com.mlib.loot_modifiers;
 
 import com.google.gson.JsonObject;
-import com.mlib.LevelHelper;
+import com.mlib.levels.LevelHelper;
 import com.mlib.MajruszLibrary;
 import com.mlib.Random;
 import com.mlib.entities.EntityHelper;

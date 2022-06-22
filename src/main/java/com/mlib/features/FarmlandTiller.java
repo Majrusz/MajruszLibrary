@@ -1,6 +1,6 @@
 package com.mlib.features;
 
-import com.mlib.LevelHelper;
+import com.mlib.levels.LevelHelper;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

@@ -9,10 +9,10 @@ import net.minecraftforge.fml.config.ModConfig;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Class removing redundancy and repetitive fragments of code. */
+/** Handler that makes creating new configs much easier. */
 public class ConfigHandler {
 	public ForgeConfigSpec configSpec;
-	protected List< ConfigGroup > configGroupList = new ArrayList<>();
+	protected List< ConfigGroup > configGroups = new ArrayList<>();
 	private final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 	private final ModConfig.Type type;
 	private final String filename;
@@ -22,20 +22,29 @@ public class ConfigHandler {
 		this.filename = filename;
 	}
 
-	/** Final register. After this command every config values should have appropriate value. */
+	public ConfigHandler( ModConfig.Type type, String filename, String modId ) {
+		this( type, modId + "-" + filename );
+	}
+
+	/** Registers all configs (all config values are valid after this call). */
 	public void register( final ModLoadingContext modLoadingContext ) {
-		for( ConfigGroup configGroup : this.configGroupList )
+		for( ConfigGroup configGroup : this.configGroups )
 			configGroup.build( this.builder );
 
 		this.configSpec = this.builder.build();
-
 		modLoadingContext.registerConfig( this.type, this.configSpec, this.filename );
 		MinecraftForge.EVENT_BUS.post( new ConfigsLoadedEvent( this ) );
 	}
 
-	/** Adds a new config group to handle. */
-	public < ConfigGroupType extends ConfigGroup > ConfigGroupType addConfigGroup( ConfigGroupType configGroup ) {
-		this.configGroupList.add( configGroup );
+	public < ConfigGroupType extends ConfigGroup > ConfigGroupType addGroup( ConfigGroupType configGroup ) {
+		this.configGroups.add( configGroup );
+
+		return configGroup;
+	}
+
+	public ConfigGroup addNewGroup( String groupName, String comment, UserConfig... configs ) {
+		ConfigGroup configGroup = new ConfigGroup( groupName, comment, configs );
+		this.configGroups.add( configGroup );
 
 		return configGroup;
 	}

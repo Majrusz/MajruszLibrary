@@ -6,55 +6,45 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/** Class representing group of base config values. */
-public class ConfigGroup implements IConfig {
-	protected List< IConfig > configTypeList = new ArrayList<>();
-	private final String groupName;
-	private final String comment;
+/** Represents a group that contains many configs (and other groups). */
+public class ConfigGroup extends UserConfig {
+	protected List< UserConfig > configs = new ArrayList<>();
 
-	public ConfigGroup( String groupName, String comment ) {
-		this.groupName = groupName;
-		this.comment = comment;
-	}
-
-	public ConfigGroup( String groupName, String comment, IConfig... configs ) {
-		this( groupName, comment );
+	public ConfigGroup( String groupName, String comment, UserConfig... configs ) {
+		super( groupName, comment );
 		this.addConfigs( configs );
 	}
 
-	/** Builds all configs from the list. */
 	@Override
 	public void build( ForgeConfigSpec.Builder builder ) {
 		if( !this.comment.equals( "" ) )
 			builder.comment( this.comment );
 
-		builder.push( this.groupName );
-		for( IConfig config : this.configTypeList )
+		builder.push( this.name );
+		for( UserConfig config : this.configs )
 			config.build( builder );
 		builder.pop();
 	}
 
-	/** Adds new group to the list. */
 	public ConfigGroup addGroup( ConfigGroup group ) {
-		this.configTypeList.add( group );
-
-		return group;
+		return addConfig( group );
 	}
 
-	/** Adds new groups to the list. */
-	public void addGroups( ConfigGroup... groups ) {
-		this.configTypeList.addAll( Arrays.asList( groups ) );
+	public void addGroups( UserConfig... groups ) {
+		addConfigs( groups );
 	}
 
-	/** Adds new config to the list. */
-	public < ConfigType extends IConfig > ConfigType addConfig( ConfigType config ) {
-		this.configTypeList.add( config );
+	public ConfigGroup addNewGroup( String groupName, String comment, UserConfig... configs ) {
+		return addGroup( new ConfigGroup( groupName, comment, configs ) );
+	}
+
+	public < ConfigType extends UserConfig > ConfigType addConfig( ConfigType config ) {
+		this.configs.add( config );
 
 		return config;
 	}
 
-	/** Adds new configs to the list. */
-	public void addConfigs( IConfig... configs ) {
-		this.configTypeList.addAll( Arrays.asList( configs ) );
+	public void addConfigs( UserConfig... configs ) {
+		this.configs.addAll( Arrays.asList( configs ) );
 	}
 }

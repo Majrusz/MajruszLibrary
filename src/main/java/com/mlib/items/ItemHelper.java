@@ -5,12 +5,16 @@ import com.mlib.Random;
 import com.mlib.entities.EntityHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import org.jetbrains.annotations.Nullable;
 
 /** Some useful methods for items. */
 public class ItemHelper {
@@ -155,5 +159,22 @@ public class ItemHelper {
 		if( !EntityHelper.isOnCreativeMode( player ) ) {
 			itemStack.shrink( 1 );
 		}
+	}
+
+	@SafeVarargs
+	public static boolean has( @Nullable LivingEntity entity, EquipmentSlot equipmentSlot, Class< ? extends Item >... itemClasses ) {
+		Item item = entity != null ? entity.getItemBySlot( equipmentSlot ).getItem() : null;
+
+		for( Class< ? extends Item > itemClass : itemClasses ) {
+			if( !itemClass.isInstance( item ) ) {
+				return false;
+			}
+		}
+		return item != null;
+	}
+
+	@SafeVarargs
+	public static boolean hasInMainHand( @Nullable LivingEntity entity, Class< ? extends Item >... itemClasses ) {
+		return has( entity, EquipmentSlot.MAINHAND, itemClasses );
 	}
 }
