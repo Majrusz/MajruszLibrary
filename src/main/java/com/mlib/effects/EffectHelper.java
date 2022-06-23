@@ -6,27 +6,30 @@ import net.minecraft.world.entity.LivingEntity;
 
 /** Methods for easier handling effects. */
 public class EffectHelper {
-	/**
-	 Adds potion effect to entity only when effect is applicable.
-
-	 @param entity         Entity to add potion effect.
-	 @param effectInstance Instance of desired effect.
-	 */
-	public static void applyEffectIfPossible( LivingEntity entity, MobEffectInstance effectInstance ) {
-		if( entity.canBeAffected( effectInstance ) )
+	public static boolean applyEffectIfPossible( LivingEntity entity, MobEffectInstance effectInstance ) {
+		if( entity.canBeAffected( effectInstance ) ) {
 			entity.addEffect( effectInstance );
+			return true;
+		}
+
+		return false;
 	}
 
-	/**
-	 Adds potion effect to entity only when effect is applicable.
+	public static boolean applyEffectIfPossible( LivingEntity entity, MobEffect effect, int ticks, int amplifier ) {
+		return applyEffectIfPossible( entity, new MobEffectInstance( effect, ticks, amplifier ) );
+	}
 
-	 @param entity         Entity to add potion effect.
-	 @param effect         Desired effect.
-	 @param effectDuration Effect duration in ticks.
-	 @param amplifier      Effect amplifier/level.
-	 */
-	public static void applyEffectIfPossible( LivingEntity entity, MobEffect effect, int effectDuration, int amplifier ) {
-		applyEffectIfPossible( entity, new MobEffectInstance( effect, effectDuration, amplifier ) );
+	public static boolean stackEffectIfPossible( LivingEntity entity, MobEffect effect, int ticks, int amplifier, int maxTicks ) {
+		MobEffectInstance previousEffectInstance = entity.getEffect( effect );
+		if( previousEffectInstance == null || previousEffectInstance.getAmplifier() > amplifier )
+			return applyEffectIfPossible( entity, effect, ticks, amplifier );
+
+		ticks = Math.min( ticks + previousEffectInstance.getDuration(), maxTicks );
+		return applyEffectIfPossible( entity, effect, ticks, amplifier );
+	}
+
+	public static boolean stackEffectIfPossible( LivingEntity entity, MobEffectInstance effectInstance, int maxTicks ) {
+		return stackEffectIfPossible( entity, effectInstance.getEffect(), effectInstance.getDuration(), effectInstance.getAmplifier(), maxTicks );
 	}
 
 	/** Returns effect amplifier or -1 if entity does not have this effect active. */
