@@ -37,6 +37,10 @@ public class Random {
 		return MajruszLibrary.RANDOM.nextBoolean();
 	}
 
+	public static < Type > Type nextRandom( Type[] elements ) {
+		return elements[ nextInt( elements.length ) ];
+	}
+
 	/**
 	 The method responsible for the random event.
 
