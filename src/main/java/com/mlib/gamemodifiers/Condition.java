@@ -17,7 +17,7 @@ import java.util.function.Predicate;
 public abstract class Condition {
 	public static final Comparator< Condition > COMPARATOR = ( left, right ) -> Mth.sign( left.priority.ordinal() - right.priority.ordinal() );
 	public enum Priority {
-		LOWEST, LOW, NORMAL, HIGH, HIGHEST
+		HIGHEST, HIGH, NORMAL, LOW, LOWEST
 	}
 
 	final Priority priority;
