@@ -1,6 +1,7 @@
 package com.mlib.config;
 
 import com.mlib.events.ConfigsLoadedEvent;
+import com.mlib.gamemodifiers.GameModifier;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -17,13 +18,9 @@ public class ConfigHandler {
 	private final ModConfig.Type type;
 	private final String filename;
 
-	public ConfigHandler( ModConfig.Type type, String filename ) {
-		this.type = type;
-		this.filename = filename;
-	}
-
 	public ConfigHandler( ModConfig.Type type, String filename, String modId ) {
-		this( type, modId + "-" + filename );
+		this.type = type;
+		this.filename = modId + "-" + filename;
 	}
 
 	/** Registers all configs (all config values are valid after this call). */
@@ -44,6 +41,20 @@ public class ConfigHandler {
 
 	public ConfigGroup addNewGroup( String groupName, String comment, UserConfig... configs ) {
 		ConfigGroup configGroup = new ConfigGroup( groupName, comment, configs );
+		this.configGroups.add( configGroup );
+
+		return configGroup;
+	}
+
+	public ConfigGroup addNewGameModifierGroup( String configKey ) {
+		ConfigGroup configGroup = GameModifier.addNewGroup( configKey );
+		this.configGroups.add( configGroup );
+
+		return configGroup;
+	}
+
+	public ConfigGroup addNewGameModifierGroup( String configKey, String groupName, String comment ) {
+		ConfigGroup configGroup = GameModifier.addNewGroup( configKey, groupName, comment );
 		this.configGroups.add( configGroup );
 
 		return configGroup;
