@@ -2,13 +2,11 @@ package com.mlib;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 
 import javax.annotation.Nullable;
 import java.util.TreeMap;
-import java.util.function.Consumer;
 
 public class Utility {
 	public static final int TICKS_IN_SECOND = 20;
@@ -56,6 +54,14 @@ public class Utility {
 		int nearestKey = ROMAN_LETTERS.floorKey( number );
 
 		return number == nearestKey ? ROMAN_LETTERS.get( number ) : ROMAN_LETTERS.get( nearestKey ) + toRoman( number - nearestKey );
+	}
+
+	public static String minPrecision( double number ) {
+		if( number == ( long )number ) {
+			return String.format( "%.0f", number );
+		} else {
+			return Double.toString( number );
+		}
 	}
 
 	private static final TreeMap< Integer, String > ROMAN_LETTERS = new TreeMap<>();
