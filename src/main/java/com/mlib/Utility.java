@@ -2,11 +2,13 @@ package com.mlib;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 
 import javax.annotation.Nullable;
 import java.util.TreeMap;
+import java.util.function.Consumer;
 
 public class Utility {
 	public static final int TICKS_IN_SECOND = 20;

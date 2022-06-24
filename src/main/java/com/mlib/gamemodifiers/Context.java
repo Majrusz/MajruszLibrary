@@ -37,9 +37,21 @@ public abstract class Context {
 		this.conditions.sort( Condition.COMPARATOR );
 	}
 
+	public void addConditions( Condition... conditions ) {
+		for( Condition condition : conditions ) {
+			addCondition( condition );
+		}
+	}
+
 	public void addConfig( Config config ) {
 		assert this.gameModifier == null : "context was already set up";
 		this.configs.add( config );
+	}
+
+	public void addConfigs( Config... configs ) {
+		for( Config config : configs ) {
+			addConfig( config );
+		}
 	}
 
 	public boolean check( Data data ) {
