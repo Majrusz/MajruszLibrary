@@ -6,6 +6,7 @@ import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
+import com.mlib.gamemodifiers.contexts.OnSpawnedContext;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -72,25 +73,6 @@ public abstract class Condition {
 		}
 	}
 
-	public static class Context< DataType extends com.mlib.gamemodifiers.Context.Data > extends Condition {
-		final Class< DataType > dataClass;
-		final Predicate< DataType > predicate;
-
-		public Context( Class< DataType > dataClass, Predicate< DataType > predicate ) {
-			super( Priority.LOW );
-			this.dataClass = dataClass;
-			this.predicate = predicate;
-		}
-
-		@Override
-		public boolean check( GameModifier gameModifier, com.mlib.gamemodifiers.Context.Data data ) {
-			DataType contextData = Utility.castIfPossible( this.dataClass, data );
-			assert contextData != null;
-
-			return this.predicate.test( contextData );
-		}
-	}
-
 	public static class IsLivingBeing extends Condition {
 		@Override
 		public boolean check( GameModifier feature, com.mlib.gamemodifiers.Context.Data data ) {
@@ -120,6 +102,44 @@ public abstract class Condition {
 				case 3 -> 0.34;
 				case 4 -> 0.24;
 			};
+		}
+	}
+
+
+	public static class Context< DataType extends com.mlib.gamemodifiers.Context.Data > extends Condition {
+		final Class< DataType > dataClass;
+		final Predicate< DataType > predicate;
+
+		public Context( Class< DataType > dataClass, Predicate< DataType > predicate ) {
+			super( Priority.LOW );
+			this.dataClass = dataClass;
+			this.predicate = predicate;
+		}
+
+		@Override
+		public boolean check( GameModifier gameModifier, com.mlib.gamemodifiers.Context.Data data ) {
+			DataType contextData = Utility.castIfPossible( this.dataClass, data );
+			assert contextData != null;
+
+			return this.predicate.test( contextData );
+		}
+	}
+
+	public static class OnDamagedContext extends Context< com.mlib.gamemodifiers.contexts.OnDamagedContext.Data > {
+		public OnDamagedContext( Predicate< com.mlib.gamemodifiers.contexts.OnDamagedContext.Data > predicate ) {
+			super( com.mlib.gamemodifiers.contexts.OnDamagedContext.Data.class, predicate );
+		}
+	}
+
+	public static class OnDeathContext extends Context< com.mlib.gamemodifiers.contexts.OnDeathContext.Data > {
+		public OnDeathContext( Predicate< com.mlib.gamemodifiers.contexts.OnDeathContext.Data > predicate ) {
+			super( com.mlib.gamemodifiers.contexts.OnDeathContext.Data.class, predicate );
+		}
+	}
+
+	public static class OnSpawnedContext extends Context< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > {
+		public OnSpawnedContext( Predicate< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > predicate ) {
+			super( com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data.class, predicate );
 		}
 	}
 }
