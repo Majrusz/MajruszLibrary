@@ -6,10 +6,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Mod.EventBusSubscriber
 public class Delay {
+	static final List< Delay > PENDING_DELAYS = new ArrayList<>();
 	static final List< Delay > DELAYS = new ArrayList<>();
 
 	public static void onNextTick( ICallable callable ) {
@@ -23,7 +25,7 @@ public class Delay {
 		this.ticksLeft = ticks;
 		this.callable = callable;
 
-		DELAYS.add( this );
+		PENDING_DELAYS.add( this );
 	}
 
 	public Delay( double seconds, ICallable callable ) {
@@ -36,19 +38,21 @@ public class Delay {
 
 	@SubscribeEvent
 	public static void onServerTick( TickEvent.ServerTickEvent event ) {
-		if( event.phase == TickEvent.Phase.START ) {
+		if( event.phase != TickEvent.Phase.START ) {
 			return;
 		}
 
-		for( Delay delay : DELAYS ) {
+		DELAYS.addAll( PENDING_DELAYS );
+		PENDING_DELAYS.clear();
+		for( Iterator< Delay > iterator = DELAYS.iterator(); iterator.hasNext(); ) {
+			Delay delay = iterator.next();
 			if( delay.isAboutToGetCalled() ) {
 				delay.callable.call();
+				iterator.remove();
 			} else {
 				delay.ticksLeft = delay.ticksLeft - 1;
 			}
 		}
-
-		DELAYS.removeIf( Delay::isAboutToGetCalled );
 	}
 
 	public interface ICallable {
