@@ -6,7 +6,6 @@ import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
-import com.mlib.gamemodifiers.contexts.OnSpawnedContext;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -125,20 +124,20 @@ public abstract class Condition {
 		}
 	}
 
-	public static class OnDamagedContext extends Context< com.mlib.gamemodifiers.contexts.OnDamagedContext.Data > {
-		public OnDamagedContext( Predicate< com.mlib.gamemodifiers.contexts.OnDamagedContext.Data > predicate ) {
+	public static class ContextOnDamaged extends Context< com.mlib.gamemodifiers.contexts.OnDamagedContext.Data > {
+		public ContextOnDamaged( Predicate< com.mlib.gamemodifiers.contexts.OnDamagedContext.Data > predicate ) {
 			super( com.mlib.gamemodifiers.contexts.OnDamagedContext.Data.class, predicate );
 		}
 	}
 
-	public static class OnDeathContext extends Context< com.mlib.gamemodifiers.contexts.OnDeathContext.Data > {
-		public OnDeathContext( Predicate< com.mlib.gamemodifiers.contexts.OnDeathContext.Data > predicate ) {
+	public static class ContextOnDeath extends Context< com.mlib.gamemodifiers.contexts.OnDeathContext.Data > {
+		public ContextOnDeath( Predicate< com.mlib.gamemodifiers.contexts.OnDeathContext.Data > predicate ) {
 			super( com.mlib.gamemodifiers.contexts.OnDeathContext.Data.class, predicate );
 		}
 	}
 
-	public static class OnSpawnedContext extends Context< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > {
-		public OnSpawnedContext( Predicate< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > predicate ) {
+	public static class ContextOnSpawned extends Context< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > {
+		public ContextOnSpawned( Predicate< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > predicate ) {
 			super( com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data.class, predicate );
 		}
 	}
