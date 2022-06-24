@@ -1,16 +1,23 @@
 package com.mlib.time;
 
 import com.mlib.Utility;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** Simple class for delaying certain functions. */
+@Mod.EventBusSubscriber
 public class Delay {
-	private int ticksLeft;
-	private final ICallable callable;
-	private static final List< Delay > DELAYS = new ArrayList<>();
+	static final List< Delay > DELAYS = new ArrayList<>();
+
+	public static void onNextTick( ICallable callable ) {
+		new Delay( 0, callable );
+	}
+
+	int ticksLeft;
+	final ICallable callable;
 
 	public Delay( int ticks, ICallable callable ) {
 		this.ticksLeft = ticks;
@@ -23,22 +30,25 @@ public class Delay {
 		this( Utility.secondsToTicks( seconds ), callable );
 	}
 
-	/** Returns whether a delay has expired. (should be called) */
-	public boolean hasExpired() {
+	public boolean isAboutToGetCalled() {
 		return this.ticksLeft <= 0;
 	}
 
 	@SubscribeEvent
-	public static void onServerTick() {
+	public static void onServerTick( TickEvent.ServerTickEvent event ) {
+		if( event.phase == TickEvent.Phase.START ) {
+			return;
+		}
+
 		for( Delay delay : DELAYS ) {
-			if( delay.ticksLeft > 0 ) {
-				delay.ticksLeft = delay.ticksLeft - 1;
-			} else {
+			if( delay.isAboutToGetCalled() ) {
 				delay.callable.call();
+			} else {
+				delay.ticksLeft = delay.ticksLeft - 1;
 			}
 		}
 
-		DELAYS.removeIf( Delay::hasExpired );
+		DELAYS.removeIf( Delay::isAboutToGetCalled );
 	}
 
 	public interface ICallable {
