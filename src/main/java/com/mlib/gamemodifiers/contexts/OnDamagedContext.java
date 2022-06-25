@@ -29,11 +29,10 @@ public class OnDamagedContext extends Context {
 
 	@SubscribeEvent
 	public static void onDamaged( LivingHurtEvent event ) {
-		DamageSource source = event.getSource();
-		LivingEntity attacker = source.getEntity() instanceof LivingEntity ? ( LivingEntity )source.getEntity() : null;
-		LivingEntity target = event.getEntityLiving();
-		Data data = new Data( event, attacker, target, source );
+		handleContexts( new Data( event ) );
+	}
 
+	public static void handleContexts( Data data ) {
 		for( OnDamagedContext context : CONTEXTS ) {
 			if( context.check( data ) ) {
 				context.gameModifier.execute( data );
@@ -43,20 +42,20 @@ public class OnDamagedContext extends Context {
 
 	public static class Data extends Context.Data {
 		public final LivingHurtEvent event;
+		public final DamageSource source;
 		@Nullable
 		public final LivingEntity attacker;
 		public final LivingEntity target;
 		@Nullable
 		public final ServerLevel level;
-		public final DamageSource source;
 
-		public Data( LivingHurtEvent event, @Nullable LivingEntity attacker, LivingEntity target, DamageSource source ) {
-			super( target );
+		public Data( LivingHurtEvent event ) {
+			super( event.getEntityLiving() );
 			this.event = event;
-			this.attacker = attacker;
-			this.target = target;
+			this.source = event.getSource();
+			this.attacker = Utility.castIfPossible( LivingEntity.class, source.getEntity() );
+			this.target = event.getEntityLiving();
 			this.level = Utility.castIfPossible( ServerLevel.class, this.target.level );
-			this.source = source;
 		}
 	}
 

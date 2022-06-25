@@ -37,13 +37,15 @@ public class OnSpawnedContext extends Context {
 
 		// it does not contain an event, and it is delayed on purpose because otherwise it could cause deadlocks on chunks with any incorrect access see EntityJoinWorldEvent for more info
 		Data data = new Data( entity );
-		Delay.onNextTick( () -> {
-			for( OnSpawnedContext context : CONTEXTS ) {
-				if( context.check( data ) ) {
-					context.gameModifier.execute( data );
-				}
+		Delay.onNextTick( () -> handleContexts( data ) );
+	}
+
+	public static void handleContexts( Data data ) {
+		for( OnSpawnedContext context : CONTEXTS ) {
+			if( context.check( data ) ) {
+				context.gameModifier.execute( data );
 			}
-		} );
+		}
 	}
 
 	public static class Data extends Context.Data {
