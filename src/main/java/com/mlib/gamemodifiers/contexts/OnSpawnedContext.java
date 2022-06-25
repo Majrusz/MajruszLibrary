@@ -35,6 +35,7 @@ public class OnSpawnedContext extends Context {
 		if( !( event.getEntity() instanceof LivingEntity entity ) || !( event.getWorld() instanceof ServerLevel ) )
 			return;
 
+		// it does not contain an event, and it is delayed on purpose because otherwise it could cause deadlocks on chunks with any incorrect access see EntityJoinWorldEvent for more info
 		Data data = new Data( entity );
 		Delay.onNextTick( () -> {
 			for( OnSpawnedContext context : CONTEXTS ) {
@@ -50,7 +51,7 @@ public class OnSpawnedContext extends Context {
 		@Nullable
 		public final ServerLevel level;
 
-		public Data(  LivingEntity target ) {
+		public Data( LivingEntity target ) {
 			super( target );
 			this.target = target;
 			this.level = Utility.castIfPossible( ServerLevel.class, this.target.level );

@@ -141,4 +141,10 @@ public abstract class Condition {
 			super( com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data.class, predicate );
 		}
 	}
+
+	public static class ContextOnExplosion extends Context< com.mlib.gamemodifiers.contexts.OnExplosionContext.Data > {
+		public ContextOnExplosion( Predicate< com.mlib.gamemodifiers.contexts.OnExplosionContext.Data > predicate ) {
+			super( com.mlib.gamemodifiers.contexts.OnExplosionContext.Data.class, predicate );
+		}
+	}
 }

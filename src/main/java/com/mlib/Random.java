@@ -2,6 +2,7 @@ package com.mlib;
 
 import com.mlib.math.VectorHelper;
 import com.mojang.math.Vector3f;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.phys.Vec3;
 
 public class Random {
@@ -70,6 +71,10 @@ public class Random {
 
 	public static Vec3 getRandomVector3d( double minX, double maxX, double minY, double maxY, double minZ, double maxZ ) {
 		return new Vec3( nextDouble( minX, maxX ), nextDouble( minY, maxY ), nextDouble( minZ, maxZ ) );
+	}
+
+	public static Vec3i getRandomVector3i( int minX, int maxX, int minY, int maxY, int minZ, int maxZ ) {
+		return new Vec3i( nextInt( minX, maxX + 1 ), nextInt( minY, maxY + 1 ), nextInt( minZ, maxZ + 1 ) );
 	}
 
 	public static Vec3 getRandomNormalizedVector() {
