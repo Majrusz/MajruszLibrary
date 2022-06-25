@@ -1,8 +1,8 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.Context;
-import com.mlib.gamemodifiers.Condition;
 import com.mlib.Utility;
+import com.mlib.gamemodifiers.Condition;
+import com.mlib.gamemodifiers.Context;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,15 +29,7 @@ public class OnDamagedContext extends Context {
 
 	@SubscribeEvent
 	public static void onDamaged( LivingHurtEvent event ) {
-		handleContexts( new Data( event ) );
-	}
-
-	public static void handleContexts( Data data ) {
-		for( OnDamagedContext context : CONTEXTS ) {
-			if( context.check( data ) ) {
-				context.gameModifier.execute( data );
-			}
-		}
+		handleContexts( new Data( event ), CONTEXTS );
 	}
 
 	public static class Data extends Context.Data {

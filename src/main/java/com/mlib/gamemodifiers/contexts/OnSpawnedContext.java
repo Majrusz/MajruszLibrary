@@ -1,15 +1,11 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.Context;
 import com.mlib.Utility;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.time.Delay;
-import com.mlib.time.TimeHelper;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -37,15 +33,7 @@ public class OnSpawnedContext extends Context {
 
 		// it does not contain an event, and it is delayed on purpose because otherwise it could cause deadlocks on chunks with any incorrect access see EntityJoinWorldEvent for more info
 		Data data = new Data( entity );
-		Delay.onNextTick( () -> handleContexts( data ) );
-	}
-
-	public static void handleContexts( Data data ) {
-		for( OnSpawnedContext context : CONTEXTS ) {
-			if( context.check( data ) ) {
-				context.gameModifier.execute( data );
-			}
-		}
+		Delay.onNextTick( ()->handleContexts( data, CONTEXTS ) );
 	}
 
 	public static class Data extends Context.Data {

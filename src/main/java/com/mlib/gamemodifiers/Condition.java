@@ -6,6 +6,7 @@ import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
+import com.mlib.gamemodifiers.contexts.OnCheckSpawnContext;
 import com.mlib.gamemodifiers.contexts.OnPlayerInteractContext;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +17,8 @@ import java.util.Comparator;
 import java.util.function.Predicate;
 
 public abstract class Condition {
-	public static final Comparator< Condition > COMPARATOR = ( left, right ) -> Mth.sign( left.priority.ordinal() - right.priority.ordinal() );
+	public static final Comparator< Condition > COMPARATOR = ( left, right )->Mth.sign( left.priority.ordinal() - right.priority.ordinal() );
+
 	public enum Priority {
 		HIGHEST, HIGH, NORMAL, LOW, LOWEST
 	}
@@ -125,6 +127,12 @@ public abstract class Condition {
 		}
 	}
 
+	public static class ContextOnCheckSpawn extends Context< OnCheckSpawnContext.Data > {
+		public ContextOnCheckSpawn( Predicate< OnCheckSpawnContext.Data > predicate ) {
+			super( OnCheckSpawnContext.Data.class, predicate );
+		}
+	}
+
 	public static class ContextOnDamaged extends Context< com.mlib.gamemodifiers.contexts.OnDamagedContext.Data > {
 		public ContextOnDamaged( Predicate< com.mlib.gamemodifiers.contexts.OnDamagedContext.Data > predicate ) {
 			super( com.mlib.gamemodifiers.contexts.OnDamagedContext.Data.class, predicate );
@@ -137,9 +145,9 @@ public abstract class Condition {
 		}
 	}
 
-	public static class ContextOnSpawned extends Context< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > {
-		public ContextOnSpawned( Predicate< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > predicate ) {
-			super( com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data.class, predicate );
+	public static class ContextOnDimensionChanged extends Context< com.mlib.gamemodifiers.contexts.OnDimensionChangedContext.Data > {
+		public ContextOnDimensionChanged( Predicate< com.mlib.gamemodifiers.contexts.OnDimensionChangedContext.Data > predicate ) {
+			super( com.mlib.gamemodifiers.contexts.OnDimensionChangedContext.Data.class, predicate );
 		}
 	}
 
@@ -149,9 +157,27 @@ public abstract class Condition {
 		}
 	}
 
+	public static class ContextOnItemFished extends Context< com.mlib.gamemodifiers.contexts.OnItemFishedContext.Data > {
+		public ContextOnItemFished( Predicate< com.mlib.gamemodifiers.contexts.OnItemFishedContext.Data > predicate ) {
+			super( com.mlib.gamemodifiers.contexts.OnItemFishedContext.Data.class, predicate );
+		}
+	}
+
+	public static class ContextOnPickupXp extends Context< com.mlib.gamemodifiers.contexts.OnPickupXpContext.Data > {
+		public ContextOnPickupXp( Predicate< com.mlib.gamemodifiers.contexts.OnPickupXpContext.Data > predicate ) {
+			super( com.mlib.gamemodifiers.contexts.OnPickupXpContext.Data.class, predicate );
+		}
+	}
+
 	public static class ContextOnPlayerInteract extends Context< OnPlayerInteractContext.Data > {
 		public ContextOnPlayerInteract( Predicate< OnPlayerInteractContext.Data > predicate ) {
 			super( OnPlayerInteractContext.Data.class, predicate );
+		}
+	}
+
+	public static class ContextOnSpawned extends Context< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > {
+		public ContextOnSpawned( Predicate< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > predicate ) {
+			super( com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data.class, predicate );
 		}
 	}
 }

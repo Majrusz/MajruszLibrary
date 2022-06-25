@@ -6,7 +6,6 @@ import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.level.Explosion;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,21 +34,13 @@ public class OnExplosionContext extends Context {
 	@SubscribeEvent
 	public static void onExplosionStart( ExplosionEvent.Start event ) {
 		Data data = new Data( event );
-		handleContexts( data );
+		handleContexts( data, CONTEXTS );
 		updateEvent( data );
 	}
 
 	@SubscribeEvent
 	public static void onExplosionDetonate( ExplosionEvent.Detonate event ) {
-		handleContexts( new Data( event ) );
-	}
-
-	private static void handleContexts( Data data ) {
-		for( OnExplosionContext context : CONTEXTS ) {
-			if( context.check( data ) ) {
-				context.gameModifier.execute( data );
-			}
-		}
+		handleContexts( new Data( event ), CONTEXTS );
 	}
 
 	public static class Data extends Context.Data {
@@ -83,6 +74,7 @@ public class OnExplosionContext extends Context {
 		double x = data.explosion.getPosition().x, y = data.explosion.getPosition().y, z = data.explosion.getPosition().z;
 		for( ServerPlayer player : data.level.players() )
 			if( player.distanceToSqr( x, y, z ) < 4096.0 )
-				player.connection.send( new ClientboundExplodePacket( x, y, z, data.explosion.radius, data.explosion.getToBlow(), data.explosion.getHitPlayers().get( player ) ) );
+				player.connection.send( new ClientboundExplodePacket( x, y, z, data.explosion.radius, data.explosion.getToBlow(), data.explosion.getHitPlayers()
+					.get( player ) ) );
 	}
 }

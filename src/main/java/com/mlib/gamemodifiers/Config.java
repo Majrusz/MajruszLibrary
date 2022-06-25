@@ -106,7 +106,9 @@ public abstract class Config {
 			this.enchantChance = enchantChance.map( value->new DoubleConfig( "enchant_chance", "Chance for item to be randomly enchanted (enchants depend on Clamped Regional Difficulty).", false, value, 0.0, 1.0 ) );
 		}
 
-		public ItemStack( String groupName, String groupComment, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance, double enchantChance ) {
+		public ItemStack( String groupName, String groupComment, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance,
+			double enchantChance
+		) {
 			this( groupName, groupComment, item, equipmentSlot, chance, dropChance, Optional.of( enchantChance ) );
 		}
 

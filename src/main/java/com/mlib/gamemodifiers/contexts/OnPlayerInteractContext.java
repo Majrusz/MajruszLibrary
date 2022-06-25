@@ -28,25 +28,17 @@ public class OnPlayerInteractContext extends Context {
 
 	@SubscribeEvent
 	public static void onEntityInteract( PlayerInteractEvent.EntityInteract event ) {
-		handleContexts( new Data( event, Utility.castIfPossible( LivingEntity.class, event.getTarget() ) ) );
+		handleContexts( new Data( event, Utility.castIfPossible( LivingEntity.class, event.getTarget() ) ), CONTEXTS );
 	}
 
 	@SubscribeEvent
 	public static void onRightClickBlock( PlayerInteractEvent.RightClickBlock event ) {
-		handleContexts( new Data( event, event.getEntityLiving() ) );
+		handleContexts( new Data( event, event.getEntityLiving() ), CONTEXTS );
 	}
 
 	@SubscribeEvent
 	public static void onRightClickItem( PlayerInteractEvent.RightClickItem event ) {
-		handleContexts( new Data( event, event.getEntityLiving() ) );
-	}
-
-	public static void handleContexts( Data data ) {
-		for( OnPlayerInteractContext context : CONTEXTS ) {
-			if( context.check( data ) ) {
-				context.gameModifier.execute( data );
-			}
-		}
+		handleContexts( new Data( event, event.getEntityLiving() ), CONTEXTS );
 	}
 
 	public static class Data extends Context.Data {

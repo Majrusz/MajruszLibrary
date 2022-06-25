@@ -14,6 +14,14 @@ public abstract class Context {
 	final String configComment;
 	protected GameModifier gameModifier = null;
 
+	public static < DataType extends Context.Data, ContextType extends Context > void handleContexts( DataType data, List< ContextType > contexts ) {
+		for( Context context : contexts ) {
+			if( context.check( data ) ) {
+				context.gameModifier.execute( data );
+			}
+		}
+	}
+
 	public Context( String configName, String configComment ) {
 		this.configName = configName;
 		this.configComment = configComment;
@@ -66,7 +74,7 @@ public abstract class Context {
 
 	private ConfigGroup getParentConfigGroup() {
 		ConfigGroup parentGroup = this.gameModifier.getConfigGroup();
-		if( this.gameModifier.getContextsLength() == 1 ) {
+		if( this.gameModifier.getConfiguredContextsLength() == 1 ) {
 			return parentGroup;
 		} else {
 			return parentGroup.addNewGroup( this.configName, this.configComment );
