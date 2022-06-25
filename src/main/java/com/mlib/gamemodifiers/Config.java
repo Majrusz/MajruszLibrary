@@ -32,7 +32,7 @@ public abstract class Config {
 
 	public static class Effect extends Config {
 		static final int MIN_AMPLIFIER = 0, MAX_AMPLIFIER = 9;
-		static final double MIN_DURATION = 1.0, MAX_DURATION = 99.0;
+		static final double MIN_DURATION = 1.0, MAX_DURATION = 999.0;
 		static final double MIN_LIMIT = 5.0, MAX_LIMIT = 999.0;
 		final Supplier< MobEffect > effect;
 		final IntegerConfig amplifier;
@@ -93,21 +93,33 @@ public abstract class Config {
 		final EquipmentSlot equipmentSlot;
 		final DoubleConfig chance;
 		final DoubleConfig dropChance;
-		final DoubleConfig enchantChance;
+		final Optional< DoubleConfig > enchantChance;
 
 		public ItemStack( String groupName, String groupComment, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance,
-			double enchantChance
+			Optional< Double > enchantChance
 		) {
 			super( groupName, groupComment );
 			this.item = item;
 			this.equipmentSlot = equipmentSlot;
 			this.chance = new DoubleConfig( "chance", "Chance that a mob will get the item.", false, chance, 0.0, 1.0 );
 			this.dropChance = new DoubleConfig( "drop_chance", "Chance for item to drop.", false, dropChance, 0.0, 1.0 );
-			this.enchantChance = new DoubleConfig( "enchant_chance", "Chance for item to be randomly enchanted (enchants depend on Clamped Regional Difficulty).", false, enchantChance, 0.0, 1.0 );
+			this.enchantChance = enchantChance.map( value->new DoubleConfig( "enchant_chance", "Chance for item to be randomly enchanted (enchants depend on Clamped Regional Difficulty).", false, value, 0.0, 1.0 ) );
+		}
+
+		public ItemStack( String groupName, String groupComment, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance, double enchantChance ) {
+			this( groupName, groupComment, item, equipmentSlot, chance, dropChance, Optional.of( enchantChance ) );
+		}
+
+		public ItemStack( String groupName, String groupComment, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance ) {
+			this( groupName, groupComment, item, equipmentSlot, chance, dropChance, Optional.empty() );
 		}
 
 		public ItemStack( String groupName, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance, double enchantChance ) {
 			this( groupName, "", item, equipmentSlot, chance, dropChance, enchantChance );
+		}
+
+		public ItemStack( String groupName, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance ) {
+			this( groupName, "", item, equipmentSlot, chance, dropChance );
 		}
 
 		public void tryToEquip( PathfinderMob mob, double clampedRegionalDifficulty ) {
@@ -117,7 +129,7 @@ public abstract class Config {
 			net.minecraft.world.item.ItemStack itemStack = new net.minecraft.world.item.ItemStack( getItem() );
 			if( itemStack.isDamageableItem() )
 				itemStack = ItemHelper.damageItem( new net.minecraft.world.item.ItemStack( getItem() ), 0.5 );
-			if( Random.tryChance( getEnchantChance() ) )
+			if( this.enchantChance.isPresent() && Random.tryChance( getEnchantChance() ) )
 				itemStack = ItemHelper.enchantItem( itemStack, clampedRegionalDifficulty, true );
 			mob.setItemSlot( this.equipmentSlot, itemStack );
 			mob.setDropChance( this.equipmentSlot, ( float )getDropChance() );
@@ -136,12 +148,15 @@ public abstract class Config {
 		}
 
 		public double getEnchantChance() {
-			return this.enchantChance.get();
+			assert this.enchantChance.isPresent();
+
+			return this.enchantChance.get().get();
 		}
 
 		@Override
 		public void setup( ConfigGroup group ) {
-			group.addConfigs( this.chance, this.dropChance, this.enchantChance );
+			group.addConfigs( this.chance, this.dropChance );
+			this.enchantChance.ifPresent( group::addConfigs );
 		}
 	}
 }
