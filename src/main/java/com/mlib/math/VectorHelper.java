@@ -3,6 +3,7 @@ package com.mlib.math;
 import com.mojang.math.Vector3d;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -162,6 +163,30 @@ public class VectorHelper {
 		double length = length( vector );
 
 		return length < 1e-4 ? vector : divide( vector, new Vec3( length, length, length ) );
+	}
+
+	public static Vector3f lerp( float ratio, Vector3f vector1, Vector3f vector2 ) {
+		float x = Mth.lerp( ratio, vector1.x(), vector2.x() );
+		float y = Mth.lerp( ratio, vector1.y(), vector2.y() );
+		float z = Mth.lerp( ratio, vector1.z(), vector2.z() );
+
+		return new Vector3f( x, y, z );
+	}
+
+	public static Vector3d lerp( double ratio, Vector3d vector1, Vector3d vector2 ) {
+		double x = Mth.lerp( ratio, vector1.x, vector2.x );
+		double y = Mth.lerp( ratio, vector1.y, vector2.y );
+		double z = Mth.lerp( ratio, vector1.z, vector2.z );
+
+		return new Vector3d( x, y, z );
+	}
+
+	public static Vec3 lerp( double ratio, Vec3 vector1, Vec3 vector2 ) {
+		double x = Mth.lerp( ratio, vector1.x, vector2.x );
+		double y = Mth.lerp( ratio, vector1.y, vector2.y );
+		double z = Mth.lerp( ratio, vector1.z, vector2.z );
+
+		return new Vec3( x, y, z );
 	}
 
 	/** Converts block position to a centered vector. */
