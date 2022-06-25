@@ -6,6 +6,7 @@ import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
+import com.mlib.gamemodifiers.contexts.OnPlayerInteractContext;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -145,6 +146,12 @@ public abstract class Condition {
 	public static class ContextOnExplosion extends Context< com.mlib.gamemodifiers.contexts.OnExplosionContext.Data > {
 		public ContextOnExplosion( Predicate< com.mlib.gamemodifiers.contexts.OnExplosionContext.Data > predicate ) {
 			super( com.mlib.gamemodifiers.contexts.OnExplosionContext.Data.class, predicate );
+		}
+	}
+
+	public static class ContextOnPlayerInteract extends Context< OnPlayerInteractContext.Data > {
+		public ContextOnPlayerInteract( Predicate< OnPlayerInteractContext.Data > predicate ) {
+			super( OnPlayerInteractContext.Data.class, predicate );
 		}
 	}
 }
