@@ -15,22 +15,30 @@ public class ConfigGroup extends UserConfig {
 		this.addConfigs( configs );
 	}
 
+	public ConfigGroup( UserConfig... configs ) {
+		this( "", "", configs );
+	}
+
 	@Override
 	public void build( ForgeConfigSpec.Builder builder ) {
-		if( !this.comment.equals( "" ) )
-			builder.comment( this.comment );
+		if( this.name.isEmpty() ) {
+			this.configs.forEach( config -> config.build( builder ) );
+		} else {
+			if( !this.comment.isEmpty() ) {
+				builder.comment( this.comment );
+			}
 
-		builder.push( this.name );
-		for( UserConfig config : this.configs )
-			config.build( builder );
-		builder.pop();
+			builder.push( this.name );
+			this.configs.forEach( config -> config.build( builder ) );
+			builder.pop();
+		}
 	}
 
 	public ConfigGroup addGroup( ConfigGroup group ) {
 		return addConfig( group );
 	}
 
-	public void addGroups( UserConfig... groups ) {
+	public void addGroups( ConfigGroup... groups ) {
 		addConfigs( groups );
 	}
 

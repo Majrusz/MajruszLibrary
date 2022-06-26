@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Comparator;
 import java.util.function.Predicate;
 
-public abstract class Condition {
+public abstract class Condition extends ConfigGroup {
 	public static final Comparator< Condition > COMPARATOR = ( left, right )->Mth.sign( left.priority.ordinal() - right.priority.ordinal() );
 
 	public enum Priority {
@@ -35,19 +35,13 @@ public abstract class Condition {
 
 	public abstract boolean check( GameModifier feature, com.mlib.gamemodifiers.Context.Data data );
 
-	public void setup( ConfigGroup group ) {}
-
 	public static class Excludable extends Condition {
 		final BooleanConfig availability;
 
 		public Excludable() {
 			super( Priority.HIGHEST );
 			this.availability = new BooleanConfig( "is_enabled", "Specifies whether this game modifier is enabled.", false, true );
-		}
-
-		@Override
-		public void setup( ConfigGroup group ) {
-			group.addConfig( this.availability );
+			this.addConfig( this.availability );
 		}
 
 		@Override
@@ -62,11 +56,7 @@ public abstract class Condition {
 		public Chance( double defaultChance ) {
 			super( Priority.HIGH );
 			this.chance = new DoubleConfig( "chance", "Chance of this to happen.", false, defaultChance, 0.0, 1.0 );
-		}
-
-		@Override
-		public void setup( ConfigGroup group ) {
-			group.addConfig( this.chance );
+			this.addConfig( this.chance );
 		}
 
 		@Override

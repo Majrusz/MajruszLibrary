@@ -7,9 +7,8 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Context {
+public abstract class Context extends ConfigGroup {
 	final List< Condition > conditions = new ArrayList<>();
-	final List< Config > configs = new ArrayList<>();
 	final String configName;
 	final String configComment;
 	protected GameModifier gameModifier = null;
@@ -29,14 +28,7 @@ public abstract class Context {
 
 	public void setup( GameModifier gameModifier ) {
 		this.gameModifier = gameModifier;
-
-		ConfigGroup parentGroup = getParentConfigGroup();
-		for( Condition condition : this.conditions ) {
-			condition.setup( parentGroup );
-		}
-		for( Config config : this.configs ) {
-			config.setup( this.configs.size() > 1 ? config.addNewGroup( parentGroup ) : parentGroup );
-		}
+		this.configs.addAll( this.conditions );
 	}
 
 	public void addCondition( Condition condition ) {
@@ -51,17 +43,6 @@ public abstract class Context {
 		}
 	}
 
-	public void addConfig( Config config ) {
-		assert this.gameModifier == null : "context was already set up";
-		this.configs.add( config );
-	}
-
-	public void addConfigs( Config... configs ) {
-		for( Config config : configs ) {
-			addConfig( config );
-		}
-	}
-
 	public boolean check( Data data ) {
 		for( Condition condition : this.conditions ) {
 			if( !condition.check( this.gameModifier, data ) ) {
@@ -70,15 +51,6 @@ public abstract class Context {
 		}
 
 		return true;
-	}
-
-	private ConfigGroup getParentConfigGroup() {
-		ConfigGroup parentGroup = this.gameModifier.getConfigGroup();
-		if( this.gameModifier.getConfiguredContextsLength() == 1 ) {
-			return parentGroup;
-		} else {
-			return parentGroup.addNewGroup( this.configName, this.configComment );
-		}
 	}
 
 	public static abstract class Data {
