@@ -143,6 +143,12 @@ public abstract class Condition extends ConfigGroup {
 		}
 	}
 
+	public static class ContextOnEntityTick extends Context< com.mlib.gamemodifiers.contexts.OnEntityTickContext.Data > {
+		public ContextOnEntityTick( Predicate< com.mlib.gamemodifiers.contexts.OnEntityTickContext.Data > predicate ) {
+			super( com.mlib.gamemodifiers.contexts.OnEntityTickContext.Data.class, predicate );
+		}
+	}
+
 	public static class ContextOnExplosion extends Context< com.mlib.gamemodifiers.contexts.OnExplosionContext.Data > {
 		public ContextOnExplosion( Predicate< com.mlib.gamemodifiers.contexts.OnExplosionContext.Data > predicate ) {
 			super( com.mlib.gamemodifiers.contexts.OnExplosionContext.Data.class, predicate );
