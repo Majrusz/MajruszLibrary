@@ -32,7 +32,7 @@ public class OnEntityTickContext extends Context {
 		public final LivingEvent.LivingUpdateEvent event;
 
 		Data( Context context, LivingEvent.LivingUpdateEvent event ) {
-			super( context, null );
+			super( context, event.getEntityLiving() );
 			this.event = event;
 		}
 	}
