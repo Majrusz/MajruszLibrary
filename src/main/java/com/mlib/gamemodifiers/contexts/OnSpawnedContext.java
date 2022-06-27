@@ -30,15 +30,17 @@ public class OnSpawnedContext extends Context {
 			return;
 
 		// it does not contain an event, and it is delayed on purpose because otherwise it could cause deadlocks on chunks with any incorrect access see EntityJoinWorldEvent for more info
-		Delay.onNextTick( ()->handleContexts( context->new Data( context, entity ), CONTEXTS ) );
+		Delay.onNextTick( ()->handleContexts( context->new Data( context, entity, event.loadedFromDisk() ), CONTEXTS ) );
 	}
 
 	public static class Data extends Context.Data {
 		public final LivingEntity target;
+		public final boolean loadedFromDisk;
 
-		Data( Context context, LivingEntity target ) {
+		Data( Context context, LivingEntity target, boolean loadedFromDisk ) {
 			super( context, target );
 			this.target = target;
+			this.loadedFromDisk = loadedFromDisk;
 		}
 	}
 }
