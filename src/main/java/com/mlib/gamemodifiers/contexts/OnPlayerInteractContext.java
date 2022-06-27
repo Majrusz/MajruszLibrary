@@ -28,17 +28,17 @@ public class OnPlayerInteractContext extends Context {
 
 	@SubscribeEvent
 	public static void onEntityInteract( PlayerInteractEvent.EntityInteract event ) {
-		handleContexts( new Data( event, Utility.castIfPossible( LivingEntity.class, event.getTarget() ) ), CONTEXTS );
+		handleContexts( context->new Data( context, event, Utility.castIfPossible( LivingEntity.class, event.getTarget() ) ), CONTEXTS );
 	}
 
 	@SubscribeEvent
 	public static void onRightClickBlock( PlayerInteractEvent.RightClickBlock event ) {
-		handleContexts( new Data( event, event.getEntityLiving() ), CONTEXTS );
+		handleContexts( context->new Data( context, event, event.getEntityLiving() ), CONTEXTS );
 	}
 
 	@SubscribeEvent
 	public static void onRightClickItem( PlayerInteractEvent.RightClickItem event ) {
-		handleContexts( new Data( event, event.getEntityLiving() ), CONTEXTS );
+		handleContexts( context->new Data( context, event, event.getEntityLiving() ), CONTEXTS );
 	}
 
 	public static class Data extends Context.Data {
@@ -48,8 +48,8 @@ public class OnPlayerInteractContext extends Context {
 		@Nullable
 		public final LivingEntity target;
 
-		public Data( PlayerInteractEvent event, @Nullable LivingEntity target ) {
-			super( event.getEntityLiving() );
+		Data( Context context, PlayerInteractEvent event, @Nullable LivingEntity target ) {
+			super( context, event.getEntityLiving() );
 			this.event = event;
 			this.itemStack = event.getItemStack();
 			this.player = event.getPlayer();

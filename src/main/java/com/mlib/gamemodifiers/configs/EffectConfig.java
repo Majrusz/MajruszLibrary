@@ -22,7 +22,7 @@ public class EffectConfig extends ConfigGroup {
 	public EffectConfig( String groupName, Supplier< MobEffect > effect, int amplifier, double duration, Optional< Double > maxDuration ) {
 		super( groupName, "" );
 		this.effect = effect;
-		this.amplifier = new IntegerConfig( "amplifier", "Level of the effect to apply.", false, amplifier, MIN_AMPLIFIER, MAX_AMPLIFIER );
+		this.amplifier = new IntegerConfig( "amplifier", "Level of the effect to apply.", false, amplifier + 1, MIN_AMPLIFIER, MAX_AMPLIFIER );
 		this.duration = new DoubleConfig( "duration", "Duration in seconds.", false, duration, MIN_DURATION, MAX_DURATION );
 		this.maxDuration = maxDuration.map( value->new DoubleConfig( "maximum_duration", "Maximum duration in seconds it can reach.", false, value, MIN_LIMIT, MAX_LIMIT ) );
 		this.addConfigs( this.amplifier, this.duration );

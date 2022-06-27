@@ -2,12 +2,9 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -29,18 +26,18 @@ public class OnItemFishedContext extends Context {
 
 	@SubscribeEvent
 	public static void onDimensionChanged( ItemFishedEvent event ) {
-		handleContexts( new Data( event ), CONTEXTS );
+		handleContexts( context->new Data( context, event ), CONTEXTS );
 	}
 
 	public static class Data extends Context.Data {
 		public final ItemFishedEvent event;
-		public final LivingEntity entity;
+		public final Player player;
 		public final NonNullList< ItemStack > drops;
 
-		public Data( ItemFishedEvent event ) {
-			super( event.getEntityLiving() );
+		Data( Context context, ItemFishedEvent event ) {
+			super( context, event.getEntityLiving() );
 			this.event = event;
-			this.entity = event.getEntityLiving();
+			this.player = event.getPlayer();
 			this.drops = event.getDrops();
 		}
 	}

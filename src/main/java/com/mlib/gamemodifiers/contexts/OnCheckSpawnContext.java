@@ -27,7 +27,7 @@ public class OnCheckSpawnContext extends Context {
 
 	@SubscribeEvent
 	public static void onSpawnCheck( LivingSpawnEvent.CheckSpawn event ) {
-		handleContexts( new Data( event ), CONTEXTS );
+		handleContexts( context->new Data( context, event ), CONTEXTS );
 	}
 
 	public static class Data extends Context.Data {
@@ -36,8 +36,8 @@ public class OnCheckSpawnContext extends Context {
 		@Nullable
 		public final ServerLevel level;
 
-		public Data( LivingSpawnEvent.CheckSpawn event ) {
-			super( event.getEntityLiving() );
+		public Data( Context context, LivingSpawnEvent.CheckSpawn event ) {
+			super( context, event.getEntityLiving() );
 			this.event = event;
 			this.entity = event.getEntityLiving();
 			this.level = Utility.castIfPossible( ServerLevel.class, this.entity.level );

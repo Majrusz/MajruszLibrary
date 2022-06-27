@@ -22,14 +22,14 @@ public class ConfigGroup extends UserConfig {
 	@Override
 	public void build( ForgeConfigSpec.Builder builder ) {
 		if( this.name.isEmpty() ) {
-			this.configs.forEach( config -> config.build( builder ) );
+			this.configs.forEach( config->config.build( builder ) );
 		} else {
 			if( !this.comment.isEmpty() ) {
 				builder.comment( this.comment );
 			}
 
 			builder.push( this.name );
-			this.configs.forEach( config -> config.build( builder ) );
+			this.configs.forEach( config->config.build( builder ) );
 			builder.pop();
 		}
 	}

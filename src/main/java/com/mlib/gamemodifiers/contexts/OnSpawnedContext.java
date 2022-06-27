@@ -1,6 +1,5 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.Utility;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.time.Delay;
 import net.minecraft.server.level.ServerLevel;
@@ -9,7 +8,6 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,19 +30,15 @@ public class OnSpawnedContext extends Context {
 			return;
 
 		// it does not contain an event, and it is delayed on purpose because otherwise it could cause deadlocks on chunks with any incorrect access see EntityJoinWorldEvent for more info
-		Data data = new Data( entity );
-		Delay.onNextTick( ()->handleContexts( data, CONTEXTS ) );
+		Delay.onNextTick( ()->handleContexts( context->new Data( context, entity ), CONTEXTS ) );
 	}
 
 	public static class Data extends Context.Data {
 		public final LivingEntity target;
-		@Nullable
-		public final ServerLevel level;
 
-		public Data( LivingEntity target ) {
-			super( target );
+		Data( Context context, LivingEntity target ) {
+			super( context, target );
 			this.target = target;
-			this.level = Utility.castIfPossible( ServerLevel.class, this.target.level );
 		}
 	}
 }

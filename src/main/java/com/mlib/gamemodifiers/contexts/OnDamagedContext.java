@@ -3,7 +3,6 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.Utility;
 import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.Context;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -29,7 +28,7 @@ public class OnDamagedContext extends Context {
 
 	@SubscribeEvent
 	public static void onDamaged( LivingHurtEvent event ) {
-		handleContexts( new Data( event ), CONTEXTS );
+		handleContexts( context->new Data( context, event ), CONTEXTS );
 	}
 
 	public static class Data extends Context.Data {
@@ -38,16 +37,13 @@ public class OnDamagedContext extends Context {
 		@Nullable
 		public final LivingEntity attacker;
 		public final LivingEntity target;
-		@Nullable
-		public final ServerLevel level;
 
-		public Data( LivingHurtEvent event ) {
-			super( event.getEntityLiving() );
+		Data( Context context, LivingHurtEvent event ) {
+			super( context, event.getEntityLiving() );
 			this.event = event;
 			this.source = event.getSource();
 			this.attacker = Utility.castIfPossible( LivingEntity.class, source.getEntity() );
 			this.target = event.getEntityLiving();
-			this.level = Utility.castIfPossible( ServerLevel.class, this.target.level );
 		}
 	}
 

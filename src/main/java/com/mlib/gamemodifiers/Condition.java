@@ -8,6 +8,8 @@ import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.contexts.OnCheckSpawnContext;
 import com.mlib.gamemodifiers.contexts.OnPlayerInteractContext;
+import com.mlib.gamemodifiers.contexts.OnPlayerLoggedContext;
+import com.mlib.gamemodifiers.contexts.OnPlayerTickContext;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -162,6 +164,18 @@ public abstract class Condition extends ConfigGroup {
 	public static class ContextOnPlayerInteract extends Context< OnPlayerInteractContext.Data > {
 		public ContextOnPlayerInteract( Predicate< OnPlayerInteractContext.Data > predicate ) {
 			super( OnPlayerInteractContext.Data.class, predicate );
+		}
+	}
+
+	public static class ContextOnPlayerLogged extends Context< OnPlayerLoggedContext.Data > {
+		public ContextOnPlayerLogged( Predicate< OnPlayerLoggedContext.Data > predicate ) {
+			super( OnPlayerLoggedContext.Data.class, predicate );
+		}
+	}
+
+	public static class ContextOnPlayerTick extends Context< OnPlayerTickContext.Data > {
+		public ContextOnPlayerTick( Predicate< OnPlayerTickContext.Data > predicate ) {
+			super( OnPlayerTickContext.Data.class, predicate );
 		}
 	}
 

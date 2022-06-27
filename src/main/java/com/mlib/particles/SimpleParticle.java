@@ -74,10 +74,8 @@ public class SimpleParticle extends TextureSheetParticle {
 
 		Vector3f vector3f1 = new Vector3f( -1.0F, -1.0F, 0.0F );
 		vector3f1.transform( quaternion );
-		Vector3f[] avector3f = new Vector3f[]{ new Vector3f( -1.0F, -1.0F, 0.0F ),
-			new Vector3f( -1.0F, 1.0F, 0.0F ),
-			new Vector3f( 1.0F, 1.0F, 0.0F ),
-			new Vector3f( 1.0F, -1.0F, 0.0F )
+		Vector3f[] avector3f = new Vector3f[]{
+			new Vector3f( -1.0F, -1.0F, 0.0F ), new Vector3f( -1.0F, 1.0F, 0.0F ), new Vector3f( 1.0F, 1.0F, 0.0F ), new Vector3f( 1.0F, -1.0F, 0.0F )
 		};
 		float f4 = this.getQuadSize( scaleFactor );
 

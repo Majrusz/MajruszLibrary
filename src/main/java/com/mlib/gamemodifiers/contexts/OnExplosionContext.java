@@ -1,9 +1,7 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.Utility;
 import com.mlib.gamemodifiers.Context;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
@@ -33,14 +31,18 @@ public class OnExplosionContext extends Context {
 
 	@SubscribeEvent
 	public static void onExplosionStart( ExplosionEvent.Start event ) {
-		Data data = new Data( event );
-		handleContexts( data, CONTEXTS );
-		updateEvent( data );
+		for( Context context : CONTEXTS ) {
+			Data data = new Data( context, event );
+			if( context.check( data ) ) {
+				context.getGameModifier().execute( data );
+				updateEvent( data );
+			}
+		}
 	}
 
 	@SubscribeEvent
 	public static void onExplosionDetonate( ExplosionEvent.Detonate event ) {
-		handleContexts( new Data( event ), CONTEXTS );
+		handleContexts( context->new Data( context, event ), CONTEXTS );
 	}
 
 	public static class Data extends Context.Data {
@@ -48,17 +50,14 @@ public class OnExplosionContext extends Context {
 		public final Explosion explosion;
 		@Nullable
 		public final LivingEntity sourceMob;
-		@Nullable
-		public final ServerLevel level;
 		public final MutableFloat radius;
 		public final MutableBoolean causesFire;
 
-		public Data( ExplosionEvent event ) {
-			super( event.getExplosion().getSourceMob() );
+		Data( Context context, ExplosionEvent event ) {
+			super( context, event.getExplosion().getSourceMob() );
 			this.event = event;
 			this.explosion = event.getExplosion();
 			this.sourceMob = this.explosion.getSourceMob();
-			this.level = Utility.castIfPossible( ServerLevel.class, event.getWorld() );
 			this.radius = new MutableFloat( this.explosion.radius );
 			this.causesFire = new MutableBoolean( this.explosion.fire );
 		}

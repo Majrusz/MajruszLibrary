@@ -3,12 +3,8 @@ package com.mlib.gamemodifiers.configs;
 import com.mlib.Random;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
-import com.mlib.config.IntegerConfig;
-import com.mlib.effects.EffectHelper;
 import com.mlib.items.ItemHelper;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.Item;
 
@@ -45,7 +41,8 @@ public class ItemStackConfig extends ConfigGroup {
 		this( groupName, groupComment, item, equipmentSlot, chance, dropChance, Optional.empty() );
 	}
 
-	public ItemStackConfig( String groupName, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance, double enchantChance ) {
+	public ItemStackConfig( String groupName, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance, double enchantChance
+	) {
 		this( groupName, "", item, equipmentSlot, chance, dropChance, enchantChance );
 	}
 
