@@ -1,55 +1,57 @@
 package com.mlib.gamemodifiers;
 
-import com.mlib.Utility;
 import com.mlib.config.ConfigGroup;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
-public abstract class Context extends ConfigGroup {
+public abstract class Context< DataType extends ContextData > extends ConfigGroup {
+	final Consumer< DataType > consumer;
 	final List< Condition > conditions = new ArrayList<>();
 	final String configName;
 	final String configComment;
 	protected GameModifier gameModifier = null;
 
-	public static < DataType extends Context.Data, ContextType extends Context > void handleContexts( Function< Context, DataType > dataProvider,
+	public static < DataType extends ContextData, ContextType extends Context< DataType > > void handleContexts( DataType data,
 		List< ContextType > contexts
 	) {
-		for( Context context : contexts ) {
-			Data data = dataProvider.apply( context );
+		contexts.forEach( context->{
 			if( context.check( data ) ) {
-				context.gameModifier.execute( data );
+				context.consumer.accept( data );
 			}
-		}
+		} );
 	}
 
-	public Context( String configName, String configComment ) {
+	public Context( Consumer< DataType > consumer, String configName, String configComment ) {
+		this.consumer = consumer;
 		this.configName = configName;
 		this.configComment = configComment;
 	}
 
 	public void setup( GameModifier gameModifier ) {
+		assert this.gameModifier == null : "Context was already set up";
 		this.gameModifier = gameModifier;
 		this.configs.addAll( this.conditions );
 	}
 
-	public void addCondition( Condition condition ) {
-		assert this.gameModifier == null : "context was already set up";
+	public Context< DataType > addCondition( Condition condition ) {
+		assert this.gameModifier == null : "Context was already set up";
 		this.conditions.add( condition );
 		this.conditions.sort( Condition.COMPARATOR );
+
+		return this;
 	}
 
-	public void addConditions( Condition... conditions ) {
+	public Context< DataType > addConditions( Condition... conditions ) {
 		for( Condition condition : conditions ) {
-			addCondition( condition );
+			this.addCondition( condition );
 		}
+
+		return this;
 	}
 
-	public boolean check( Data data ) {
+	public boolean check( ContextData data ) {
 		for( Condition condition : this.conditions ) {
 			if( !condition.check( this.gameModifier, data ) ) {
 				return false;
@@ -61,19 +63,5 @@ public abstract class Context extends ConfigGroup {
 
 	public GameModifier getGameModifier() {
 		return this.gameModifier;
-	}
-
-	public static abstract class Data {
-		public final Context context;
-		@Nullable
-		public final LivingEntity entity;
-		@Nullable
-		public final ServerLevel level;
-
-		public Data( Context context, @Nullable LivingEntity entity ) {
-			this.context = context;
-			this.entity = entity;
-			this.level = this.entity != null ? Utility.castIfPossible( ServerLevel.class, this.entity.level ) : null;
-		}
 	}
 }

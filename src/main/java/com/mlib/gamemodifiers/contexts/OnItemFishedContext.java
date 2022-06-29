@@ -1,44 +1,29 @@
 package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import com.mlib.gamemodifiers.data.OnItemFishedData;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
-public class OnItemFishedContext extends Context {
+public class OnItemFishedContext extends Context< OnItemFishedData > {
 	static final List< OnItemFishedContext > CONTEXTS = new ArrayList<>();
 
-	public OnItemFishedContext( String configName, String configComment ) {
-		super( configName, configComment );
+	public OnItemFishedContext( Consumer< OnItemFishedData > consumer, String configName, String configComment ) {
+		super( consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 
-	public OnItemFishedContext() {
-		this( "OnItemFished", "" );
+	public OnItemFishedContext( Consumer< OnItemFishedData > consumer ) {
+		this( consumer, "OnItemFished", "" );
 	}
 
-	@SubscribeEvent
-	public static void onDimensionChanged( ItemFishedEvent event ) {
-		handleContexts( context->new Data( context, event ), CONTEXTS );
-	}
-
-	public static class Data extends Context.Data {
-		public final ItemFishedEvent event;
-		public final Player player;
-		public final NonNullList< ItemStack > drops;
-
-		Data( Context context, ItemFishedEvent event ) {
-			super( context, event.getEntityLiving() );
-			this.event = event;
-			this.player = event.getPlayer();
-			this.drops = event.getDrops();
-		}
+	@SubscribeEvent public static void onDimensionChanged( ItemFishedEvent event ) {
+		handleContexts( new OnItemFishedData( event ), CONTEXTS );
 	}
 }

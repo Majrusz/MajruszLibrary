@@ -1,46 +1,29 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.Utility;
 import com.mlib.gamemodifiers.Context;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
+import com.mlib.gamemodifiers.data.OnCheckSpawnData;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
-public class OnCheckSpawnContext extends Context {
+public class OnCheckSpawnContext extends Context< OnCheckSpawnData > {
 	static final List< OnCheckSpawnContext > CONTEXTS = new ArrayList<>();
 
-	public OnCheckSpawnContext( String configName, String configComment ) {
-		super( configName, configComment );
+	public OnCheckSpawnContext( Consumer< OnCheckSpawnData > consumer, String configName, String configComment ) {
+		super( consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 
-	public OnCheckSpawnContext() {
-		this( "OnCheckSpawn", "" );
+	public OnCheckSpawnContext( Consumer< OnCheckSpawnData > consumer ) {
+		this( consumer, "OnCheckSpawn", "" );
 	}
 
-	@SubscribeEvent
-	public static void onSpawnCheck( LivingSpawnEvent.CheckSpawn event ) {
-		handleContexts( context->new Data( context, event ), CONTEXTS );
-	}
-
-	public static class Data extends Context.Data {
-		public final LivingSpawnEvent.CheckSpawn event;
-		public final LivingEntity entity;
-		@Nullable
-		public final ServerLevel level;
-
-		public Data( Context context, LivingSpawnEvent.CheckSpawn event ) {
-			super( context, event.getEntityLiving() );
-			this.event = event;
-			this.entity = event.getEntityLiving();
-			this.level = Utility.castIfPossible( ServerLevel.class, this.entity.level );
-		}
+	@SubscribeEvent public static void onSpawnCheck( LivingSpawnEvent.CheckSpawn event ) {
+		handleContexts( new OnCheckSpawnData( event ), CONTEXTS );
 	}
 }

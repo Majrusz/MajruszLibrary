@@ -6,10 +6,7 @@ import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
-import com.mlib.gamemodifiers.contexts.OnCheckSpawnContext;
-import com.mlib.gamemodifiers.contexts.OnPlayerInteractContext;
-import com.mlib.gamemodifiers.contexts.OnPlayerLoggedContext;
-import com.mlib.gamemodifiers.contexts.OnPlayerTickContext;
+import com.mlib.gamemodifiers.data.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import org.apache.commons.lang3.mutable.MutableInt;
@@ -35,7 +32,7 @@ public abstract class Condition extends ConfigGroup {
 		this( Priority.NORMAL );
 	}
 
-	public abstract boolean check( GameModifier feature, com.mlib.gamemodifiers.Context.Data data );
+	public abstract boolean check( GameModifier feature, ContextData data );
 
 	public static class Excludable extends Condition {
 		final BooleanConfig availability;
@@ -46,8 +43,7 @@ public abstract class Condition extends ConfigGroup {
 			this.addConfig( this.availability );
 		}
 
-		@Override
-		public boolean check( GameModifier gameModifier, com.mlib.gamemodifiers.Context.Data data ) {
+		@Override public boolean check( GameModifier gameModifier, ContextData data ) {
 			return this.availability.isEnabled();
 		}
 	}
@@ -61,22 +57,19 @@ public abstract class Condition extends ConfigGroup {
 			this.addConfig( this.chance );
 		}
 
-		@Override
-		public boolean check( GameModifier gameModifier, com.mlib.gamemodifiers.Context.Data data ) {
+		@Override public boolean check( GameModifier gameModifier, ContextData data ) {
 			return Random.tryChance( this.chance.get() );
 		}
 	}
 
 	public static class IsLivingBeing extends Condition {
-		@Override
-		public boolean check( GameModifier feature, com.mlib.gamemodifiers.Context.Data data ) {
+		@Override public boolean check( GameModifier feature, ContextData data ) {
 			return EntityHelper.isAnimal( data.entity ) || EntityHelper.isHuman( data.entity );
 		}
 	}
 
 	public static class ArmorDependentChance extends Condition {
-		@Override
-		public boolean check( GameModifier feature, com.mlib.gamemodifiers.Context.Data data ) {
+		@Override public boolean check( GameModifier feature, ContextData data ) {
 			return Random.tryChance( getChance( data.entity ) );
 		}
 
@@ -100,7 +93,7 @@ public abstract class Condition extends ConfigGroup {
 	}
 
 
-	public static class Context< DataType extends com.mlib.gamemodifiers.Context.Data > extends Condition {
+	public static class Context< DataType extends ContextData > extends Condition {
 		final Class< DataType > dataClass;
 		final Predicate< DataType > predicate;
 
@@ -110,8 +103,7 @@ public abstract class Condition extends ConfigGroup {
 			this.predicate = predicate;
 		}
 
-		@Override
-		public boolean check( GameModifier gameModifier, com.mlib.gamemodifiers.Context.Data data ) {
+		@Override public boolean check( GameModifier gameModifier, ContextData data ) {
 			DataType contextData = Utility.castIfPossible( this.dataClass, data );
 			assert contextData != null;
 
@@ -119,75 +111,81 @@ public abstract class Condition extends ConfigGroup {
 		}
 	}
 
-	public static class ContextOnCheckSpawn extends Context< OnCheckSpawnContext.Data > {
-		public ContextOnCheckSpawn( Predicate< OnCheckSpawnContext.Data > predicate ) {
-			super( OnCheckSpawnContext.Data.class, predicate );
+	public static class ContextOnCheckSpawn extends Context< OnCheckSpawnData > {
+		public ContextOnCheckSpawn( Predicate< OnCheckSpawnData > predicate ) {
+			super( OnCheckSpawnData.class, predicate );
 		}
 	}
 
-	public static class ContextOnDamaged extends Context< com.mlib.gamemodifiers.contexts.OnDamagedContext.Data > {
-		public ContextOnDamaged( Predicate< com.mlib.gamemodifiers.contexts.OnDamagedContext.Data > predicate ) {
-			super( com.mlib.gamemodifiers.contexts.OnDamagedContext.Data.class, predicate );
+	public static class ContextOnDamaged extends Context< OnDamagedData > {
+		public ContextOnDamaged( Predicate< OnDamagedData > predicate ) {
+			super( OnDamagedData.class, predicate );
 		}
 	}
 
-	public static class ContextOnDeath extends Context< com.mlib.gamemodifiers.contexts.OnDeathContext.Data > {
-		public ContextOnDeath( Predicate< com.mlib.gamemodifiers.contexts.OnDeathContext.Data > predicate ) {
-			super( com.mlib.gamemodifiers.contexts.OnDeathContext.Data.class, predicate );
+	public static class ContextOnDeath extends Context< OnDeathData > {
+		public ContextOnDeath( Predicate< OnDeathData > predicate ) {
+			super( OnDeathData.class, predicate );
 		}
 	}
 
-	public static class ContextOnDimensionChanged extends Context< com.mlib.gamemodifiers.contexts.OnDimensionChangedContext.Data > {
-		public ContextOnDimensionChanged( Predicate< com.mlib.gamemodifiers.contexts.OnDimensionChangedContext.Data > predicate ) {
-			super( com.mlib.gamemodifiers.contexts.OnDimensionChangedContext.Data.class, predicate );
+	public static class ContextOnDimensionChanged extends Context< OnDimensionChangedData > {
+		public ContextOnDimensionChanged( Predicate< OnDimensionChangedData > predicate ) {
+			super( OnDimensionChangedData.class, predicate );
 		}
 	}
 
-	public static class ContextOnEntityTick extends Context< com.mlib.gamemodifiers.contexts.OnEntityTickContext.Data > {
-		public ContextOnEntityTick( Predicate< com.mlib.gamemodifiers.contexts.OnEntityTickContext.Data > predicate ) {
-			super( com.mlib.gamemodifiers.contexts.OnEntityTickContext.Data.class, predicate );
+	public static class ContextOnEntityTick extends Context< OnEntityTickData > {
+		public ContextOnEntityTick( Predicate< OnEntityTickData > predicate ) {
+			super( OnEntityTickData.class, predicate );
 		}
 	}
 
-	public static class ContextOnExplosion extends Context< com.mlib.gamemodifiers.contexts.OnExplosionContext.Data > {
-		public ContextOnExplosion( Predicate< com.mlib.gamemodifiers.contexts.OnExplosionContext.Data > predicate ) {
-			super( com.mlib.gamemodifiers.contexts.OnExplosionContext.Data.class, predicate );
+	public static class ContextOnExplosion extends Context< OnExplosionData > {
+		public ContextOnExplosion( Predicate< OnExplosionData > predicate ) {
+			super( OnExplosionData.class, predicate );
 		}
 	}
 
-	public static class ContextOnItemFished extends Context< com.mlib.gamemodifiers.contexts.OnItemFishedContext.Data > {
-		public ContextOnItemFished( Predicate< com.mlib.gamemodifiers.contexts.OnItemFishedContext.Data > predicate ) {
-			super( com.mlib.gamemodifiers.contexts.OnItemFishedContext.Data.class, predicate );
+	public static class ContextOnItemFished extends Context< OnItemFishedData > {
+		public ContextOnItemFished( Predicate< OnItemFishedData > predicate ) {
+			super( OnItemFishedData.class, predicate );
 		}
 	}
 
-	public static class ContextOnPickupXp extends Context< com.mlib.gamemodifiers.contexts.OnPickupXpContext.Data > {
-		public ContextOnPickupXp( Predicate< com.mlib.gamemodifiers.contexts.OnPickupXpContext.Data > predicate ) {
-			super( com.mlib.gamemodifiers.contexts.OnPickupXpContext.Data.class, predicate );
+	public static class ContextOnPickupXp extends Context< OnPickupXpData > {
+		public ContextOnPickupXp( Predicate< OnPickupXpData > predicate ) {
+			super( OnPickupXpData.class, predicate );
 		}
 	}
 
-	public static class ContextOnPlayerInteract extends Context< OnPlayerInteractContext.Data > {
-		public ContextOnPlayerInteract( Predicate< OnPlayerInteractContext.Data > predicate ) {
-			super( OnPlayerInteractContext.Data.class, predicate );
+	public static class ContextOnPlayerInteract extends Context< OnPlayerInteractData > {
+		public ContextOnPlayerInteract( Predicate< OnPlayerInteractData > predicate ) {
+			super( OnPlayerInteractData.class, predicate );
 		}
 	}
 
-	public static class ContextOnPlayerLogged extends Context< OnPlayerLoggedContext.Data > {
-		public ContextOnPlayerLogged( Predicate< OnPlayerLoggedContext.Data > predicate ) {
-			super( OnPlayerLoggedContext.Data.class, predicate );
+	public static class ContextOnPlayerLogged extends Context< OnPlayerLoggedData > {
+		public ContextOnPlayerLogged( Predicate< OnPlayerLoggedData > predicate ) {
+			super( OnPlayerLoggedData.class, predicate );
 		}
 	}
 
-	public static class ContextOnPlayerTick extends Context< OnPlayerTickContext.Data > {
-		public ContextOnPlayerTick( Predicate< OnPlayerTickContext.Data > predicate ) {
-			super( OnPlayerTickContext.Data.class, predicate );
+	public static class ContextOnPlayerTick extends Context< OnPlayerTickData > {
+		public ContextOnPlayerTick( Predicate< OnPlayerTickData > predicate ) {
+			super( OnPlayerTickData.class, predicate );
 		}
 	}
 
-	public static class ContextOnSpawned extends Context< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > {
-		public ContextOnSpawned( Predicate< com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data > predicate ) {
-			super( com.mlib.gamemodifiers.contexts.OnSpawnedContext.Data.class, predicate );
+	public static class ContextOnServerTick extends Context< OnServerTickData > {
+		public ContextOnServerTick( Predicate< OnServerTickData > predicate ) {
+			super( OnServerTickData.class, predicate );
+		}
+	}
+
+	public static class ContextOnSpawned extends Context< OnSpawnedData > {
+		public ContextOnSpawned( Predicate< OnSpawnedData > predicate ) {
+			super( OnSpawnedData.class, predicate );
 		}
 	}
 }

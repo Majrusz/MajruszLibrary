@@ -35,24 +35,22 @@ public class ConfigGroup extends UserConfig {
 	}
 
 	public ConfigGroup addGroup( ConfigGroup group ) {
-		return addConfig( group );
+		return this.addConfig( group );
 	}
 
-	public void addGroups( ConfigGroup... groups ) {
-		addConfigs( groups );
+	public ConfigGroup addGroups( ConfigGroup... groups ) {
+		return this.addConfigs( groups );
 	}
 
-	public ConfigGroup addNewGroup( String groupName, String comment, UserConfig... configs ) {
-		return addGroup( new ConfigGroup( groupName, comment, configs ) );
-	}
-
-	public < ConfigType extends UserConfig > ConfigType addConfig( ConfigType config ) {
+	public < ConfigType extends UserConfig > ConfigGroup addConfig( ConfigType config ) {
 		this.configs.add( config );
 
-		return config;
+		return this;
 	}
 
-	public void addConfigs( UserConfig... configs ) {
+	public ConfigGroup addConfigs( UserConfig... configs ) {
 		this.configs.addAll( Arrays.asList( configs ) );
+
+		return this;
 	}
 }

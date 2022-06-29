@@ -1,69 +1,42 @@
 package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
+import com.mlib.gamemodifiers.data.OnExplosionData;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Explosion;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.apache.commons.lang3.mutable.MutableBoolean;
-import org.apache.commons.lang3.mutable.MutableFloat;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 // this context is executed twice! (start and detonate)
 @Mod.EventBusSubscriber
-public class OnExplosionContext extends Context {
+public class OnExplosionContext extends Context< OnExplosionData > {
 	static final List< OnExplosionContext > CONTEXTS = new ArrayList<>();
 
-	public OnExplosionContext( String configName, String configComment ) {
-		super( configName, configComment );
+	public OnExplosionContext( Consumer< OnExplosionData > consumer, String configName, String configComment ) {
+		super( consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 
-	public OnExplosionContext() {
-		this( "OnExplosion", "" );
+	public OnExplosionContext( Consumer< OnExplosionData > consumer ) {
+		this( consumer, "OnExplosion", "" );
 	}
 
-	@SubscribeEvent
-	public static void onExplosionStart( ExplosionEvent.Start event ) {
-		for( Context context : CONTEXTS ) {
-			Data data = new Data( context, event );
-			if( context.check( data ) ) {
-				context.getGameModifier().execute( data );
-				updateEvent( data );
-			}
-		}
+	@SubscribeEvent public static void onExplosionStart( ExplosionEvent.Start event ) {
+		OnExplosionData data = new OnExplosionData( event );
+		handleContexts( data, CONTEXTS );
+		updateEvent( data );
 	}
 
-	@SubscribeEvent
-	public static void onExplosionDetonate( ExplosionEvent.Detonate event ) {
-		handleContexts( context->new Data( context, event ), CONTEXTS );
+	@SubscribeEvent public static void onExplosionDetonate( ExplosionEvent.Detonate event ) {
+		handleContexts( new OnExplosionData( event ), CONTEXTS );
 	}
 
-	public static class Data extends Context.Data {
-		public final ExplosionEvent event;
-		public final Explosion explosion;
-		@Nullable
-		public final LivingEntity sourceMob;
-		public final MutableFloat radius;
-		public final MutableBoolean causesFire;
-
-		Data( Context context, ExplosionEvent event ) {
-			super( context, event.getExplosion().getSourceMob() );
-			this.event = event;
-			this.explosion = event.getExplosion();
-			this.sourceMob = this.explosion.getSourceMob();
-			this.radius = new MutableFloat( this.explosion.radius );
-			this.causesFire = new MutableBoolean( this.explosion.fire );
-		}
-	}
-
-	private static void updateEvent( Data data ) {
+	private static void updateEvent( OnExplosionData data ) {
 		if( ( data.radius.getValue() - data.explosion.radius ) < 1.0 || data.level == null ) {
 			return;
 		}

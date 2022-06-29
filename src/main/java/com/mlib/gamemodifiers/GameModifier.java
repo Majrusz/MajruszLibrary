@@ -2,7 +2,9 @@ package com.mlib.gamemodifiers;
 
 import com.mlib.config.ConfigGroup;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  If you would ever wonder what the hell is going over here then let me explain...
@@ -14,8 +16,8 @@ import java.util.HashMap;
  */
 public abstract class GameModifier extends ConfigGroup {
 	static final HashMap< String, ConfigGroup > MOD_CONFIGS = new HashMap<>();
-	protected final Context[] contexts;
-	protected final String configKey;
+	final List< Context< ? extends ContextData > > contexts = new ArrayList<>();
+	final String configKey;
 
 	public static ConfigGroup addNewGroup( String configKey, String configName, String configComment ) {
 		assert !MOD_CONFIGS.containsKey( configKey ) : "Config for " + configKey + " has been initialized already!";
@@ -29,30 +31,30 @@ public abstract class GameModifier extends ConfigGroup {
 		return addNewGroup( configKey, "GameModifiers", "" );
 	}
 
-	public GameModifier( String configKey, String configName, String configComment, Context... contexts ) {
+	public GameModifier( String configKey, String configName, String configComment ) {
 		super( configName, configComment );
-		assert MOD_CONFIGS.containsKey( configKey ) : "Config for " + configKey + " has not been initialized yet!";
-
-		this.contexts = contexts;
 		this.configKey = configKey;
 
-		assert this.contexts.length > 0;
-		for( Context context : this.contexts ) {
-			context.setup( this );
-			this.addConfig( context );
+		assert MOD_CONFIGS.containsKey( this.configKey ) : "Config for " + this.configKey + " has not been initialized yet!";
+		MOD_CONFIGS.get( this.configKey ).addGroup( this );
+	}
+
+	public GameModifier( String configKey ) {
+		this( configKey, "", "" );
+	}
+
+	public < DataType extends ContextData > void addContext( Context< DataType > context ) {
+		context.setup( this );
+		this.addConfig( context );
+	}
+
+	public void addContexts( Context< ? >... contexts ) {
+		for( Context< ? > context : contexts ) {
+			addContext( context );
 		}
-
-		ConfigGroup parentGroup = MOD_CONFIGS.get( configKey );
-		parentGroup.addGroup( this );
 	}
 
-	public GameModifier( String configKey, Context... contexts ) {
-		this( configKey, "", "", contexts );
-	}
-
-	public abstract void execute( Object data );
-
-	public Context[] getContexts() {
+	public List< Context< ? extends ContextData > > getContexts() {
 		return this.contexts;
 	}
 
