@@ -1,4 +1,4 @@
 {
-  "type": "majrusz_library:harvest_crop",
+  "type": "mlib:harvest_crop",
   "conditions": []
 }

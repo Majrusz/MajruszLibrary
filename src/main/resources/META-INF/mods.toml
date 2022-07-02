@@ -4,7 +4,7 @@ license="MIT License"
 issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
 
 [[mods]]
-    modId="majrusz_library"
+    modId="mlib"
     version="2.8.0"
     displayName="Majrusz Library"
     updateJSONURL="https://raw.githubusercontent.com/Majrusz/MajruszLibrary/1.19.1/update.json"
@@ -14,14 +14,14 @@ issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
     authors="Majrusz"
     description='''Library with common code for some of Majrusz's modifications.'''
 
-[[dependencies.majrusz_library]]
+[[dependencies.mlib]]
     modId="forge"
     mandatory=true
     versionRange="[41,)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.majrusz_library]]
+[[dependencies.mlib]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.19,1.20)"

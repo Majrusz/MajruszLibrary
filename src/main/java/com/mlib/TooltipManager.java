@@ -21,7 +21,7 @@ import java.util.List;
 
 // class that is a temporary fix for tooltip because if there is too many lines then they are rendered outside the screen
 @OnlyIn( Dist.CLIENT )
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber( value = Dist.CLIENT )
 public class TooltipManager {
 	public static ObfuscationGetter.Method< GuiComponent > FILL_GRADIENT = new ObfuscationGetter.Method<>( GuiComponent.class, "m_93123_", Matrix4f.class, BufferBuilder.class, int.class, int.class, int.class, int.class, int.class, int.class, int.class );
 
