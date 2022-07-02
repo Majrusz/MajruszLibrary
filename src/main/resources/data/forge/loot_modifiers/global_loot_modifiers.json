@@ -1,8 +1,8 @@
 {
 	"replace": false,
 	"entries": [
-		"mlib:harvest_crop",
-		"mlib:any_situation",
-		"mlib:smelting_items"
+		"majruszlib:harvest_crop",
+		"majruszlib:any_situation",
+		"majruszlib:smelting_items"
 	]
 }
