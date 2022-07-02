@@ -17,6 +17,7 @@ import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 /** Loot modifier for all situations. */
 public class AnyModification extends LootModifier {
@@ -24,9 +25,8 @@ public class AnyModification extends LootModifier {
 		super( conditionsIn );
 	}
 
-	@Nonnull
 	@Override
-	public ObjectArrayList< ItemStack > doApply( ObjectArrayList< ItemStack > generatedLoot, LootContext context ) {
+	public List< ItemStack > doApply( List< ItemStack > generatedLoot, LootContext context ) {
 		BlockState blockState = LootHelper.getParameter( context, LootContextParams.BLOCK_STATE );
 		DamageSource damageSource = LootHelper.getParameter( context, LootContextParams.DAMAGE_SOURCE );
 		Entity killer = LootHelper.getParameter( context, LootContextParams.KILLER_ENTITY );

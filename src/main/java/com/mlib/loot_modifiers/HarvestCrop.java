@@ -18,6 +18,7 @@ import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 /** Loot modifier for items gathered from harvesting. (wheat, carrots etc.) */
 public class HarvestCrop extends LootModifier {
@@ -25,9 +26,8 @@ public class HarvestCrop extends LootModifier {
 		super( conditionsIn );
 	}
 
-	@Nonnull
 	@Override
-	public ObjectArrayList< ItemStack > doApply( ObjectArrayList< ItemStack > generatedLoot, LootContext context ) {
+	public List< ItemStack > doApply( List< ItemStack > generatedLoot, LootContext context ) {
 		BlockState blockState = LootHelper.getParameter( context, LootContextParams.BLOCK_STATE );
 		if( blockState == null || !( blockState.getBlock() instanceof CropBlock ) )
 			return generatedLoot;

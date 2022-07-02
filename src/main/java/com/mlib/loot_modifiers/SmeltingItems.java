@@ -39,9 +39,8 @@ public class SmeltingItems extends LootModifier {
 		super( conditions );
 	}
 
-	@Nonnull
 	@Override
-	protected ObjectArrayList< ItemStack > doApply( ObjectArrayList< ItemStack > generatedLoot, LootContext context ) {
+	protected List< ItemStack > doApply( List< ItemStack > generatedLoot, LootContext context ) {
 		ItemStack tool = LootHelper.getParameter( context, LootContextParams.TOOL );
 		Player player = EntityHelper.getPlayerFromEntity( LootHelper.getParameter( context, LootContextParams.THIS_ENTITY ) );
 		BlockState blockState = LootHelper.getParameter( context, LootContextParams.BLOCK_STATE );
@@ -53,7 +52,7 @@ public class SmeltingItems extends LootModifier {
 	}
 
 	/** Returns whether blocks should be smelted if possible. */
-	protected static boolean shouldBeExecuted( ServerLevel level, Player player, @Nullable ItemStack tool, BlockState blockState ) {
+	protected static boolean shouldBeExecuted( ServerLevel level, Player player, ItemStack tool, BlockState blockState ) {
 		for( Register register : registerList )
 			if( register.shouldBeExecuted( level, player, tool, blockState ) )
 				return true;
@@ -90,11 +89,11 @@ public class SmeltingItems extends LootModifier {
 	}
 
 	/** Returns smelted generated loot. */
-	protected ObjectArrayList< ItemStack > getSmeltedLoot( ObjectArrayList< ItemStack > generatedLoot, ServerLevel level, Vec3 position ) {
+	protected List< ItemStack > getSmeltedLoot( List< ItemStack > generatedLoot, ServerLevel level, Vec3 position ) {
 		RecipeManager recipeManager = level.getRecipeManager();
 
 		int amountOfSmeltedItems = 0;
-		ObjectArrayList< ItemStack > smeltedLoot = new ObjectArrayList<>();
+		List< ItemStack > smeltedLoot = new ArrayList<>();
 		for( ItemStack itemStack : generatedLoot ) {
 			smeltedLoot.add( getSmeltedItemStack( itemStack, level ) );
 			Optional< SmeltingRecipe > recipe = recipeManager.getRecipeFor( RecipeType.SMELTING, new SimpleContainer( itemStack ), level );
@@ -109,7 +108,7 @@ public class SmeltingItems extends LootModifier {
 		}
 
 		if( amountOfSmeltedItems > 0 )
-			ParticleHelper.spawnSmeltParticles( level, position, 3 + amountOfSmeltedItems + MajruszLibrary.RANDOM.nextInt( 4 ) );
+			ParticleHelper.spawnSmeltParticles( level, position, 3 + amountOfSmeltedItems + Random.nextInt( 4 ) );
 
 		return smeltedLoot;
 	}
