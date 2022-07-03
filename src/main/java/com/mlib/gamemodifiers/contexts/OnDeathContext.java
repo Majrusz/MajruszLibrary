@@ -15,7 +15,7 @@ public class OnDeathContext extends Context< OnDeathData > {
 	static final List< OnDeathContext > CONTEXTS = new ArrayList<>();
 
 	public OnDeathContext( Consumer< OnDeathData > consumer, String configName, String configComment ) {
-		super( consumer, configName, configComment );
+		super( OnDeathData.class, consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 

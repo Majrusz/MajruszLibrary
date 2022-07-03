@@ -15,7 +15,7 @@ public class OnCheckSpawnContext extends Context< OnCheckSpawnData > {
 	static final List< OnCheckSpawnContext > CONTEXTS = new ArrayList<>();
 
 	public OnCheckSpawnContext( Consumer< OnCheckSpawnData > consumer, String configName, String configComment ) {
-		super( consumer, configName, configComment );
+		super( OnCheckSpawnData.class, consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 

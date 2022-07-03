@@ -15,7 +15,7 @@ public class OnItemFishedContext extends Context< OnItemFishedData > {
 	static final List< OnItemFishedContext > CONTEXTS = new ArrayList<>();
 
 	public OnItemFishedContext( Consumer< OnItemFishedData > consumer, String configName, String configComment ) {
-		super( consumer, configName, configComment );
+		super( OnItemFishedData.class, consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 

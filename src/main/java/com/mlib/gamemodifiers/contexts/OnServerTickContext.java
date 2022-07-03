@@ -15,7 +15,7 @@ public class OnServerTickContext extends Context< OnServerTickData > {
 	static final List< OnServerTickContext > CONTEXTS = new ArrayList<>();
 
 	public OnServerTickContext( Consumer< OnServerTickData > consumer, String configName, String configComment ) {
-		super( consumer, configName, configComment );
+		super( OnServerTickData.class, consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 

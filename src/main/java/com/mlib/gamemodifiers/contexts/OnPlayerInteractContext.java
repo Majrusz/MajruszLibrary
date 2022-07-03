@@ -17,7 +17,7 @@ public class OnPlayerInteractContext extends Context< OnPlayerInteractData > {
 	static final List< OnPlayerInteractContext > CONTEXTS = new ArrayList<>();
 
 	public OnPlayerInteractContext( Consumer< OnPlayerInteractData > consumer, String configName, String configComment ) {
-		super( consumer, configName, configComment );
+		super( OnPlayerInteractData.class, consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 

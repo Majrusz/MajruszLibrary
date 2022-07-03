@@ -15,7 +15,7 @@ public class OnPickupXpContext extends Context< OnPickupXpData > {
 	static final List< OnPickupXpContext > CONTEXTS = new ArrayList<>();
 
 	public OnPickupXpContext( Consumer< OnPickupXpData > consumer, String configName, String configComment ) {
-		super( consumer, configName, configComment );
+		super( OnPickupXpData.class, consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 

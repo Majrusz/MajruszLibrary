@@ -18,7 +18,7 @@ public class OnExplosionContext extends Context< OnExplosionData > {
 	static final List< OnExplosionContext > CONTEXTS = new ArrayList<>();
 
 	public OnExplosionContext( Consumer< OnExplosionData > consumer, String configName, String configComment ) {
-		super( consumer, configName, configComment );
+		super( OnExplosionData.class, consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 

@@ -5,8 +5,10 @@ import com.mlib.config.ConfigGroup;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public abstract class Context< DataType extends ContextData > extends ConfigGroup {
+	final Class< DataType > dataClass;
 	final Consumer< DataType > consumer;
 	final List< Condition > conditions = new ArrayList<>();
 	final String configName;
@@ -23,7 +25,8 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 		} );
 	}
 
-	public Context( Consumer< DataType > consumer, String configName, String configComment ) {
+	public Context( Class< DataType > dataClass, Consumer< DataType > consumer, String configName, String configComment ) {
+		this.dataClass = dataClass;
 		this.consumer = consumer;
 		this.configName = configName;
 		this.configComment = configComment;
@@ -41,6 +44,10 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 		this.conditions.sort( Condition.COMPARATOR );
 
 		return this;
+	}
+
+	public Context< DataType > addCondition( Predicate< DataType > predicate ) {
+		return addCondition( new Condition.Context<>( this.dataClass, predicate ) );
 	}
 
 	public Context< DataType > addConditions( Condition... conditions ) {

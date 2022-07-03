@@ -18,7 +18,7 @@ public class OnSpawnedContext extends Context< OnSpawnedData > {
 	static final List< OnSpawnedContext > CONTEXTS = new ArrayList<>();
 
 	public OnSpawnedContext( Consumer< OnSpawnedData > consumer, String configName, String configComment ) {
-		super( consumer, configName, configComment );
+		super( OnSpawnedData.class, consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 

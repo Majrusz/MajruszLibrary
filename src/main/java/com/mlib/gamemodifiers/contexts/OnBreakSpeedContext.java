@@ -15,7 +15,7 @@ public class OnBreakSpeedContext extends Context< OnBreakSpeedData > {
 	static final List< OnBreakSpeedContext > CONTEXTS = new ArrayList<>();
 
 	public OnBreakSpeedContext( Consumer< OnBreakSpeedData > consumer, String configName, String configComment ) {
-		super( consumer, configName, configComment );
+		super( OnBreakSpeedData.class, consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 

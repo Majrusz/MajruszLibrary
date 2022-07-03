@@ -15,7 +15,7 @@ public class OnEntityTickContext extends Context< OnEntityTickData > {
 	static final List< OnEntityTickContext > CONTEXTS = new ArrayList<>();
 
 	public OnEntityTickContext( Consumer< OnEntityTickData > consumer, String configName, String configComment ) {
-		super( consumer, configName, configComment );
+		super( OnEntityTickData.class, consumer, configName, configComment );
 		CONTEXTS.add( this );
 	}
 
