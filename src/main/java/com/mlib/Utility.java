@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 import javax.annotation.Nullable;
 
@@ -48,6 +49,14 @@ public class Utility {
 
 	public static String getRegistryString( EntityType< ? > entityType ) {
 		return getRegistryKey( entityType ).toString();
+	}
+
+	public static ResourceLocation getRegistryKey( Enchantment enchantment ) {
+		return Registry.ENCHANTMENT.getKey( enchantment );
+	}
+
+	public static String getRegistryString( Enchantment enchantment ) {
+		return getRegistryKey( enchantment ).toString();
 	}
 
 	public static String getPlayerUUID( Player player ) {
