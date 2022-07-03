@@ -15,13 +15,12 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public abstract class CustomEnchantment extends Enchantment {
-	protected final Supplier< Boolean > availability;
+	protected Supplier< Boolean > availability = ()->true;
 	protected final Parameters params;
 
-	protected CustomEnchantment( Supplier< Boolean > availability, Parameters params ) {
+	protected CustomEnchantment( Parameters params ) {
 		super( params.rarity, params.category, params.slots );
 
-		this.availability = availability;
 		this.params = params;
 	}
 
@@ -118,6 +117,14 @@ public abstract class CustomEnchantment extends Enchantment {
 			itemStackList.add( livingEntity.getItemBySlot( slotType ) );
 
 		return getEnchantmentSum( itemStackList );
+	}
+
+	public void setEnabledSupplier( Supplier< Boolean > availability ) {
+		this.availability = availability;
+	}
+
+	public Parameters getParams() {
+		return this.params;
 	}
 
 	protected boolean isEnabled() {
