@@ -7,7 +7,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 
 import javax.annotation.Nullable;
-import java.util.TreeMap;
 
 public class Utility {
 	public static final int TICKS_IN_SECOND = 20;

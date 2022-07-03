@@ -3,8 +3,6 @@ package com.mlib.gamemodifiers.configs;
 import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
 
-import java.util.function.Supplier;
-
 public class EnchantmentConfig extends ConfigGroup {
 	final BooleanConfig availability;
 

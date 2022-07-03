@@ -43,7 +43,8 @@ public abstract class Condition extends ConfigGroup {
 			this.addConfig( this.availability );
 		}
 
-		@Override public boolean check( GameModifier gameModifier, ContextData data ) {
+		@Override
+		public boolean check( GameModifier gameModifier, ContextData data ) {
 			return this.availability.isEnabled();
 		}
 	}
@@ -57,19 +58,22 @@ public abstract class Condition extends ConfigGroup {
 			this.addConfig( this.chance );
 		}
 
-		@Override public boolean check( GameModifier gameModifier, ContextData data ) {
+		@Override
+		public boolean check( GameModifier gameModifier, ContextData data ) {
 			return Random.tryChance( this.chance.get() );
 		}
 	}
 
 	public static class IsLivingBeing extends Condition {
-		@Override public boolean check( GameModifier feature, ContextData data ) {
+		@Override
+		public boolean check( GameModifier feature, ContextData data ) {
 			return EntityHelper.isAnimal( data.entity ) || EntityHelper.isHuman( data.entity );
 		}
 	}
 
 	public static class ArmorDependentChance extends Condition {
-		@Override public boolean check( GameModifier feature, ContextData data ) {
+		@Override
+		public boolean check( GameModifier feature, ContextData data ) {
 			return Random.tryChance( getChance( data.entity ) );
 		}
 
@@ -103,7 +107,8 @@ public abstract class Condition extends ConfigGroup {
 			this.predicate = predicate;
 		}
 
-		@Override public boolean check( GameModifier gameModifier, ContextData data ) {
+		@Override
+		public boolean check( GameModifier gameModifier, ContextData data ) {
 			DataType contextData = Utility.castIfPossible( this.dataClass, data );
 			assert contextData != null;
 

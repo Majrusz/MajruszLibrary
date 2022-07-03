@@ -26,7 +26,8 @@ public class OnSpawnedContext extends Context< OnSpawnedData > {
 		this( consumer, "OnSpawned", "" );
 	}
 
-	@SubscribeEvent public static void onSpawn( EntityJoinWorldEvent event ) {
+	@SubscribeEvent
+	public static void onSpawn( EntityJoinWorldEvent event ) {
 		if( !( event.getEntity() instanceof LivingEntity entity ) || !( event.getWorld() instanceof ServerLevel ) )
 			return;
 

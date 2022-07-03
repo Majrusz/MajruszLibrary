@@ -24,7 +24,8 @@ public class OnDamagedContext extends Context< OnDamagedData > {
 		this( consumer, "OnDamaged", "" );
 	}
 
-	@SubscribeEvent public static void onDamaged( LivingHurtEvent event ) {
+	@SubscribeEvent
+	public static void onDamaged( LivingHurtEvent event ) {
 		handleContexts( new OnDamagedData( event ), CONTEXTS );
 	}
 

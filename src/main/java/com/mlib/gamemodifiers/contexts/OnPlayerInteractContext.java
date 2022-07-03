@@ -25,15 +25,18 @@ public class OnPlayerInteractContext extends Context< OnPlayerInteractData > {
 		this( consumer, "OnPlayerInteract", "" );
 	}
 
-	@SubscribeEvent public static void onEntityInteract( PlayerInteractEvent.EntityInteract event ) {
+	@SubscribeEvent
+	public static void onEntityInteract( PlayerInteractEvent.EntityInteract event ) {
 		handleContexts( new OnPlayerInteractData( event, Utility.castIfPossible( LivingEntity.class, event.getTarget() ) ), CONTEXTS );
 	}
 
-	@SubscribeEvent public static void onRightClickBlock( PlayerInteractEvent.RightClickBlock event ) {
+	@SubscribeEvent
+	public static void onRightClickBlock( PlayerInteractEvent.RightClickBlock event ) {
 		handleContexts( new OnPlayerInteractData( event, event.getEntityLiving() ), CONTEXTS );
 	}
 
-	@SubscribeEvent public static void onRightClickItem( PlayerInteractEvent.RightClickItem event ) {
+	@SubscribeEvent
+	public static void onRightClickItem( PlayerInteractEvent.RightClickItem event ) {
 		handleContexts( new OnPlayerInteractData( event, event.getEntityLiving() ), CONTEXTS );
 	}
 }

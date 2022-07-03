@@ -14,18 +14,12 @@ import java.util.List;
 /** Event called when any loot is generated. */
 public class AnyLootModificationEvent extends Event implements IModBusEvent {
 	public final List< ItemStack > generatedLoot;
-	@Nullable
-	public final BlockState blockState;
-	@Nullable
-	public final DamageSource damageSource;
-	@Nullable
-	public final Entity killer;
-	@Nullable
-	public final Entity entity;
-	@Nullable
-	public final ItemStack tool;
-	@Nullable
-	public final Vec3 origin;
+	@Nullable public final BlockState blockState;
+	@Nullable public final DamageSource damageSource;
+	@Nullable public final Entity killer;
+	@Nullable public final Entity entity;
+	@Nullable public final ItemStack tool;
+	@Nullable public final Vec3 origin;
 
 	public AnyLootModificationEvent( List< ItemStack > generatedLoot, @Nullable BlockState blockState, @Nullable DamageSource damageSource,
 		@Nullable Entity killer, @Nullable Entity entity, @Nullable ItemStack tool, @Nullable Vec3 origin
