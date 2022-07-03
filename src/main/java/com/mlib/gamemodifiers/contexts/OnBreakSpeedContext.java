@@ -24,7 +24,7 @@ public class OnBreakSpeedContext extends Context< OnBreakSpeedData > {
 	}
 
 	@SubscribeEvent
-	public static void onPlayerTick( PlayerEvent.BreakSpeed event ) {
+	public static void onBreakSpeed( PlayerEvent.BreakSpeed event ) {
 		handleContexts( new OnBreakSpeedData( event ), CONTEXTS );
 	}
 }
