@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
 
 [[mods]]
     modId="majruszlib"
-    version="2.8.1-unfinished"
+    version="2.9.0-unfinished"
     displayName="Majrusz Library"
     updateJSONURL="https://raw.githubusercontent.com/Majrusz/MajruszLibrary/1.19.1/update.json"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/majrusz-library"

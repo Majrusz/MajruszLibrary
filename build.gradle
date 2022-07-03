@@ -4,7 +4,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
 }
 
-version = '2.8.1-unfinished'
+version = '2.9.0-unfinished'
 group = 'com.mlib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'majrusz-library-1.19'
 
