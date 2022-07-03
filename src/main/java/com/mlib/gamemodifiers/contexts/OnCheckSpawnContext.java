@@ -23,7 +23,8 @@ public class OnCheckSpawnContext extends Context< OnCheckSpawnData > {
 		this( consumer, "OnCheckSpawn", "" );
 	}
 
-	@SubscribeEvent public static void onSpawnCheck( LivingSpawnEvent.CheckSpawn event ) {
+	@SubscribeEvent
+	public static void onSpawnCheck( LivingSpawnEvent.CheckSpawn event ) {
 		handleContexts( new OnCheckSpawnData( event ), CONTEXTS );
 	}
 }

@@ -26,13 +26,15 @@ public class OnExplosionContext extends Context< OnExplosionData > {
 		this( consumer, "OnExplosion", "" );
 	}
 
-	@SubscribeEvent public static void onExplosionStart( ExplosionEvent.Start event ) {
+	@SubscribeEvent
+	public static void onExplosionStart( ExplosionEvent.Start event ) {
 		OnExplosionData data = new OnExplosionData( event );
 		handleContexts( data, CONTEXTS );
 		updateEvent( data );
 	}
 
-	@SubscribeEvent public static void onExplosionDetonate( ExplosionEvent.Detonate event ) {
+	@SubscribeEvent
+	public static void onExplosionDetonate( ExplosionEvent.Detonate event ) {
 		handleContexts( new OnExplosionData( event ), CONTEXTS );
 	}
 

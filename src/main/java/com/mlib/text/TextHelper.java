@@ -7,12 +7,16 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.TreeMap;
 
 public class TextHelper {
 	static final ObfuscationGetter.Field< TranslatableContents, List< FormattedText > > DECOMPOSED_PARTS = new ObfuscationGetter.Field<>( TranslatableContents.class, "f_237500_" );
 	static final ObfuscationGetter.Method< TranslatableContents > DECOMPOSE = new ObfuscationGetter.Method<>( TranslatableContents.class, "m_237524_" );
 	static final TreeMap< Integer, String > ROMAN_LETTERS = new TreeMap<>();
+
 	static {
 		ROMAN_LETTERS.put( 100, "C" );
 		ROMAN_LETTERS.put( 90, "XC" );
@@ -31,7 +35,9 @@ public class TextHelper {
 		return DECOMPOSED_PARTS.get( translatableContents );
 	}
 
-	public static MutableComponent createColoredTranslatable( List< FormattedText > decomposedText, ChatFormatting defaultFormatting, FormattingData... formattingList ) {
+	public static MutableComponent createColoredTranslatable( List< FormattedText > decomposedText, ChatFormatting defaultFormatting,
+		FormattingData... formattingList
+	) {
 		MutableComponent component = Component.literal( "" ).withStyle( defaultFormatting );
 		for( int idx = 0; idx < decomposedText.size(); ++idx ) {
 			int finalIdx = idx;

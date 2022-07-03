@@ -23,7 +23,8 @@ public class OnPlayerTickContext extends Context< OnPlayerTickData > {
 		this( consumer, "OnPlayerTick", "" );
 	}
 
-	@SubscribeEvent public static void onPlayerTick( TickEvent.PlayerTickEvent event ) {
+	@SubscribeEvent
+	public static void onPlayerTick( TickEvent.PlayerTickEvent event ) {
 		handleContexts( new OnPlayerTickData( event ), CONTEXTS );
 	}
 }

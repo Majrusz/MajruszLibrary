@@ -23,7 +23,8 @@ public class OnDimensionChangedContext extends Context< OnDimensionChangedData >
 		this( consumer, "OnDimensionChanged", "" );
 	}
 
-	@SubscribeEvent public static void onDimensionChanged( PlayerEvent.PlayerChangedDimensionEvent event ) {
+	@SubscribeEvent
+	public static void onDimensionChanged( PlayerEvent.PlayerChangedDimensionEvent event ) {
 		handleContexts( new OnDimensionChangedData( event ), CONTEXTS );
 	}
 }

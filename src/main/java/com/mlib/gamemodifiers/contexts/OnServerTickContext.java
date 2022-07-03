@@ -23,7 +23,8 @@ public class OnServerTickContext extends Context< OnServerTickData > {
 		this( consumer, "OnServerTick", "" );
 	}
 
-	@SubscribeEvent public static void onServerTick( TickEvent.ServerTickEvent event ) {
+	@SubscribeEvent
+	public static void onServerTick( TickEvent.ServerTickEvent event ) {
 		handleContexts( new OnServerTickData( event ), CONTEXTS );
 	}
 }

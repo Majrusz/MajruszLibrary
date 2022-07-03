@@ -23,7 +23,8 @@ public class OnEntityTickContext extends Context< OnEntityTickData > {
 		this( consumer, "OnEntityTick", "" );
 	}
 
-	@SubscribeEvent public static void onEntityTick( LivingEvent.LivingUpdateEvent event ) {
+	@SubscribeEvent
+	public static void onEntityTick( LivingEvent.LivingUpdateEvent event ) {
 		handleContexts( new OnEntityTickData( event ), CONTEXTS );
 	}
 }

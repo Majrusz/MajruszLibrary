@@ -23,7 +23,8 @@ public class OnItemFishedContext extends Context< OnItemFishedData > {
 		this( consumer, "OnItemFished", "" );
 	}
 
-	@SubscribeEvent public static void onDimensionChanged( ItemFishedEvent event ) {
+	@SubscribeEvent
+	public static void onDimensionChanged( ItemFishedEvent event ) {
 		handleContexts( new OnItemFishedData( event ), CONTEXTS );
 	}
 }

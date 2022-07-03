@@ -23,7 +23,8 @@ public class OnPlayerLoggedContext extends Context< OnPlayerLoggedData > {
 		this( consumer, "OnPlayerLogged", "" );
 	}
 
-	@SubscribeEvent public static void onPlayerLogged( PlayerEvent.PlayerLoggedInEvent event ) {
+	@SubscribeEvent
+	public static void onPlayerLogged( PlayerEvent.PlayerLoggedInEvent event ) {
 		handleContexts( new OnPlayerLoggedData( event ), CONTEXTS );
 	}
 }

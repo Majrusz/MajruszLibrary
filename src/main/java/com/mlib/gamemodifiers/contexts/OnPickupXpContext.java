@@ -23,7 +23,8 @@ public class OnPickupXpContext extends Context< OnPickupXpData > {
 		this( consumer, "OnPickupXp", "" );
 	}
 
-	@SubscribeEvent public static void onPickupXp( PlayerXpEvent.PickupXp event ) {
+	@SubscribeEvent
+	public static void onPickupXp( PlayerXpEvent.PickupXp event ) {
 		handleContexts( new OnPickupXpData( event ), CONTEXTS );
 	}
 }

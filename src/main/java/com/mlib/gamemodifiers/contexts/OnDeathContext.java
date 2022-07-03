@@ -23,7 +23,8 @@ public class OnDeathContext extends Context< OnDeathData > {
 		this( consumer, "OnDeath", "" );
 	}
 
-	@SubscribeEvent public static void onDamaged( LivingDeathEvent event ) {
+	@SubscribeEvent
+	public static void onDamaged( LivingDeathEvent event ) {
 		handleContexts( new OnDeathData( event ), CONTEXTS );
 	}
 }

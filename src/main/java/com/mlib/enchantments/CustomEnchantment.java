@@ -1,6 +1,5 @@
 package com.mlib.enchantments;
 
-import com.mlib.gamemodifiers.GameModifier;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
