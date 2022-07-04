@@ -114,7 +114,7 @@ public class ItemHelper {
 	 Adds enchantment type to item group. (every new created enchantment of this type will automatically be added to item group)
 	 It is only required to call when you are adding new enchantment type!
 	 */
-	public static void addEnchantmentTypeToItemGroup( EnchantmentCategory category, CreativeModeTab itemTab ) {
+	public static void addEnchantmentTypeToItemGroup( CreativeModeTab itemTab, EnchantmentCategory category ) {
 		EnchantmentCategory[] group = itemTab.getEnchantmentCategories();
 		if( group.length == 0 ) {
 			itemTab.setEnchantmentCategories( category );
