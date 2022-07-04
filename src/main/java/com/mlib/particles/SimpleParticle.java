@@ -16,12 +16,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn( Dist.CLIENT )
 public class SimpleParticle extends TextureSheetParticle {
 	protected final double yOffset;
-	protected IFormula< Double > xDeltaFormula = xd->xd * 0.95;
-	protected IFormula< Double > yDeltaFormula = yd->yd - 0.0375;
-	protected IFormula< Double > zDeltaFormula = zd->zd * 0.95;
-	protected IFormula< Double > xOnGroundFormula = xd->xd * 0.5;
-	protected IFormula< Double > yOnGroundFormula = yd->yd;
-	protected IFormula< Double > zOnGroundFormula = zd->zd * 0.5;
+	protected IFormula< Double > xdFormula = xd->xd * 0.95;
+	protected IFormula< Double > ydFormula = yd->yd - 0.0375;
+	protected IFormula< Double > zdFormula = zd->zd * 0.95;
+	protected IFormula< Double > xdOnGroundFormula = xd->xd * 0.5;
+	protected IFormula< Double > ydOnGroundFormula = yd->yd;
+	protected IFormula< Double > zdOnGroundFormula = zd->zd * 0.5;
+	protected IFormula< Float > alphaFormula = alpha->alpha;
+	protected IFormula< Float > scaleFormula = lifeRatio->1.0f - 0.5f * lifeRatio;
 
 	public SimpleParticle( ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet,
 		double yOffset
@@ -40,14 +42,15 @@ public class SimpleParticle extends TextureSheetParticle {
 			remove();
 		} else {
 			this.move( this.xd, this.yd, this.zd );
-			this.xd = this.xDeltaFormula.apply( this.xd );
-			this.yd = this.yDeltaFormula.apply( this.yd );
-			this.zd = this.zDeltaFormula.apply( this.zd );
+			this.xd = this.xdFormula.apply( this.xd );
+			this.yd = this.ydFormula.apply( this.yd );
+			this.zd = this.zdFormula.apply( this.zd );
 			if( this.onGround ) {
-				this.xd = this.xOnGroundFormula.apply( this.xd );
-				this.yd = this.yOnGroundFormula.apply( this.yd );
-				this.zd = this.zOnGroundFormula.apply( this.zd );
+				this.xd = this.xdOnGroundFormula.apply( this.xd );
+				this.yd = this.ydOnGroundFormula.apply( this.yd );
+				this.zd = this.zdOnGroundFormula.apply( this.zd );
 			}
+			this.alpha = this.alphaFormula.apply( this.alpha );
 		}
 	}
 
@@ -115,8 +118,7 @@ public class SimpleParticle extends TextureSheetParticle {
 
 	@Override
 	public float getQuadSize( float scaleFactor ) {
-		float factor = ( ( float )this.age + scaleFactor ) / ( float )this.lifetime;
-		return this.quadSize * ( 1.0F - factor * 0.5F );
+		return this.quadSize * this.scaleFormula.apply( ( ( float )this.age + scaleFactor ) / ( float )this.lifetime );
 	}
 
 	@OnlyIn( Dist.CLIENT )

@@ -12,6 +12,10 @@ public class DoubleConfig extends NumberConfig< Double, ForgeConfigSpec.DoubleVa
 		return Utility.secondsToTicks( super.get() );
 	}
 
+	public float asFloat() {
+		return super.get().floatValue();
+	}
+
 	@Override
 	public ForgeConfigSpec.DoubleValue buildValue( ForgeConfigSpec.Builder builder ) {
 		return builder.defineInRange( this.name, this.defaultValue, this.min, this.max );
