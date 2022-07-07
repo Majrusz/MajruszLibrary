@@ -1,7 +1,9 @@
 package com.mlib.gamemodifiers.data;
 
+import com.mlib.Utility;
 import com.mlib.gamemodifiers.ContextData;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -11,7 +13,7 @@ public class OnLootLevelData extends ContextData {
 	public final DamageSource source;
 
 	public OnLootLevelData( LootingLevelEvent event ) {
-		super( null );
+		super( event.getDamageSource() != null ? Utility.castIfPossible( LivingEntity.class, event.getDamageSource().getEntity() ) : null );
 		this.event = event;
 		this.source = event.getDamageSource();
 	}
