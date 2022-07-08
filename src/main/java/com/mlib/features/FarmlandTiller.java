@@ -27,6 +27,10 @@ import java.util.function.Predicate;
 public class FarmlandTiller {
 	public static final List< Register > registerList = new ArrayList<>();
 
+	public static void addRegister( Register register ) {
+		registerList.add( register );
+	}
+
 	@SubscribeEvent
 	public static void onHoeUse( PlayerInteractEvent.RightClickBlock event ) {
 		Player player = event.getPlayer();
