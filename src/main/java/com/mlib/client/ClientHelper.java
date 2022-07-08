@@ -14,7 +14,7 @@ public class ClientHelper {
 	protected static int leftAltLastAction = 0;
 
 	@SubscribeEvent
-	public static void onKeyInput( InputEvent.KeyInputEvent event ) {
+	public static void onKeyInput( InputEvent.Key event ) {
 		switch( event.getKey() ) {
 			case 340 -> shiftLastAction = event.getAction();
 			case 341 -> ctrlLastAction = event.getAction();
