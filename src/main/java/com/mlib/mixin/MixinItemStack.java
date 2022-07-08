@@ -15,7 +15,7 @@ import javax.annotation.Nullable;
 public abstract class MixinItemStack {
 	@Inject( method = "hurt(ILnet/minecraft/util/RandomSource;Lnet/minecraft/server/level/ServerPlayer;)Z", at = @At( "RETURN" ), cancellable = true )
 	private void hurt( int damage, RandomSource source, @Nullable ServerPlayer player, CallbackInfoReturnable< Boolean > callback ) {
-		MajruszLibrary.LOGGER.info( "" + damage + source + player );
+		// MajruszLibrary.LOGGER.info( "" + damage + source + player );
 		callback.setReturnValue( false );
 	}
 }
