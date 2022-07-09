@@ -1,23 +1,24 @@
 package com.mlib.gamemodifiers;
 
 import com.mlib.config.ConfigGroup;
+import com.mlib.gamemodifiers.parameters.Parameters;
+import com.mlib.gamemodifiers.parameters.Priority;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class Context< DataType extends ContextData > extends ConfigGroup {
+public abstract class Context< DataType extends ContextData > extends ConfigGroup implements IParameterizable {
 	final Class< DataType > dataClass;
 	final Consumer< DataType > consumer;
 	final List< Condition > conditions = new ArrayList<>();
 	final String configName;
 	final String configComment;
+	final Parameters params;
 	protected GameModifier gameModifier = null;
 
-	public static < DataType extends ContextData, ContextType extends Context< DataType > > void handleContexts( DataType data,
-		List< ContextType > contexts
-	) {
+	public static < DataType extends ContextData, ContextType extends Context< DataType > > void accept( List< ContextType > contexts, DataType data ) {
 		contexts.forEach( context->{
 			if( context.check( data ) ) {
 				context.consumer.accept( data );
@@ -25,11 +26,26 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 		} );
 	}
 
-	public Context( Class< DataType > dataClass, Consumer< DataType > consumer, String configName, String configComment ) {
+	public static < ContextType extends Context< ? > > void addSorted( List< ContextType > contexts, ContextType context ) {
+		contexts.add( context );
+		contexts.sort( Parameters.COMPARATOR );
+	}
+
+	public Context( Class< DataType > dataClass, Consumer< DataType > consumer, String configName, String configComment, Parameters params ) {
 		this.dataClass = dataClass;
 		this.consumer = consumer;
 		this.configName = configName;
 		this.configComment = configComment;
+		this.params = params;
+	}
+
+	public Context( Class< DataType > dataClass, Consumer< DataType > consumer, String configName, String configComment ) {
+		this( dataClass, consumer, configName, configComment, new Parameters( Priority.NORMAL ) );
+	}
+
+	@Override
+	public Parameters getParams() {
+		return this.params;
 	}
 
 	public void setup( GameModifier gameModifier ) {
@@ -41,7 +57,7 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 	public Context< DataType > addCondition( Condition condition ) {
 		assert this.gameModifier == null : "Context was already set up";
 		this.conditions.add( condition );
-		this.conditions.sort( Condition.COMPARATOR );
+		this.conditions.sort( Parameters.COMPARATOR );
 
 		return this;
 	}

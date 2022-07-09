@@ -1,7 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
-import com.mlib.gamemodifiers.data.OnPlayerInteractData;
 import com.mlib.gamemodifiers.data.OnPlayerLoggedData;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,7 +16,7 @@ public class OnPlayerLoggedContext extends Context< OnPlayerLoggedData > {
 
 	public OnPlayerLoggedContext( Consumer< OnPlayerLoggedData > consumer, String configName, String configComment ) {
 		super( OnPlayerLoggedData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnPlayerLoggedContext( Consumer< OnPlayerLoggedData > consumer ) {
@@ -26,6 +25,6 @@ public class OnPlayerLoggedContext extends Context< OnPlayerLoggedData > {
 
 	@SubscribeEvent
 	public static void onPlayerLogged( PlayerEvent.PlayerLoggedInEvent event ) {
-		handleContexts( new OnPlayerLoggedData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnPlayerLoggedData( event ) );
 	}
 }

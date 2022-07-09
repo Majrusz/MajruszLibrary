@@ -16,7 +16,7 @@ public class OnItemHurtContext extends Context< OnItemHurtData > {
 
 	public OnItemHurtContext( Consumer< OnItemHurtData > consumer, String configName, String configComment ) {
 		super( OnItemHurtData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnItemHurtContext( Consumer< OnItemHurtData > consumer ) {
@@ -25,6 +25,6 @@ public class OnItemHurtContext extends Context< OnItemHurtData > {
 
 	@SubscribeEvent
 	public static void onItemHurt( ItemHurtEvent event ) {
-		handleContexts( new OnItemHurtData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnItemHurtData( event ) );
 	}
 }

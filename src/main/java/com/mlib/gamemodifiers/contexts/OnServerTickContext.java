@@ -16,7 +16,7 @@ public class OnServerTickContext extends Context< OnServerTickData > {
 
 	public OnServerTickContext( Consumer< OnServerTickData > consumer, String configName, String configComment ) {
 		super( OnServerTickData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnServerTickContext( Consumer< OnServerTickData > consumer ) {
@@ -25,6 +25,6 @@ public class OnServerTickContext extends Context< OnServerTickData > {
 
 	@SubscribeEvent
 	public static void onServerTick( TickEvent.ServerTickEvent event ) {
-		handleContexts( new OnServerTickData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnServerTickData( event ) );
 	}
 }

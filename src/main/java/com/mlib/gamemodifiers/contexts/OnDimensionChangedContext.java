@@ -16,7 +16,7 @@ public class OnDimensionChangedContext extends Context< OnDimensionChangedData >
 
 	public OnDimensionChangedContext( Consumer< OnDimensionChangedData > consumer, String configName, String configComment ) {
 		super( OnDimensionChangedData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnDimensionChangedContext( Consumer< OnDimensionChangedData > consumer ) {
@@ -25,6 +25,6 @@ public class OnDimensionChangedContext extends Context< OnDimensionChangedData >
 
 	@SubscribeEvent
 	public static void onDimensionChanged( PlayerEvent.PlayerChangedDimensionEvent event ) {
-		handleContexts( new OnDimensionChangedData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnDimensionChangedData( event ) );
 	}
 }

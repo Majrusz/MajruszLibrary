@@ -1,10 +1,8 @@
 package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
-import com.mlib.gamemodifiers.data.OnBreakSpeedData;
 import com.mlib.gamemodifiers.data.OnLootLevelData;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -18,7 +16,7 @@ public class OnLootLevelContext extends Context< OnLootLevelData > {
 
 	public OnLootLevelContext( Consumer< OnLootLevelData > consumer, String configName, String configComment ) {
 		super( OnLootLevelData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnLootLevelContext( Consumer< OnLootLevelData > consumer ) {
@@ -27,6 +25,6 @@ public class OnLootLevelContext extends Context< OnLootLevelData > {
 
 	@SubscribeEvent
 	public static void onLootLevel( LootingLevelEvent event ) {
-		handleContexts( new OnLootLevelData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnLootLevelData( event ) );
 	}
 }

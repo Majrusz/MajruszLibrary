@@ -16,7 +16,7 @@ public class OnBreakSpeedContext extends Context< OnBreakSpeedData > {
 
 	public OnBreakSpeedContext( Consumer< OnBreakSpeedData > consumer, String configName, String configComment ) {
 		super( OnBreakSpeedData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnBreakSpeedContext( Consumer< OnBreakSpeedData > consumer ) {
@@ -25,6 +25,6 @@ public class OnBreakSpeedContext extends Context< OnBreakSpeedData > {
 
 	@SubscribeEvent
 	public static void onBreakSpeed( PlayerEvent.BreakSpeed event ) {
-		handleContexts( new OnBreakSpeedData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnBreakSpeedData( event ) );
 	}
 }

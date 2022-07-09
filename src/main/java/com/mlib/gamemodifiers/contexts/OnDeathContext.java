@@ -16,7 +16,7 @@ public class OnDeathContext extends Context< OnDeathData > {
 
 	public OnDeathContext( Consumer< OnDeathData > consumer, String configName, String configComment ) {
 		super( OnDeathData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnDeathContext( Consumer< OnDeathData > consumer ) {
@@ -25,6 +25,6 @@ public class OnDeathContext extends Context< OnDeathData > {
 
 	@SubscribeEvent
 	public static void onDamaged( LivingDeathEvent event ) {
-		handleContexts( new OnDeathData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnDeathData( event ) );
 	}
 }

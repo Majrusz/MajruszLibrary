@@ -18,7 +18,7 @@ public class OnPlayerInteractContext extends Context< OnPlayerInteractData > {
 
 	public OnPlayerInteractContext( Consumer< OnPlayerInteractData > consumer, String configName, String configComment ) {
 		super( OnPlayerInteractData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnPlayerInteractContext( Consumer< OnPlayerInteractData > consumer ) {
@@ -27,16 +27,16 @@ public class OnPlayerInteractContext extends Context< OnPlayerInteractData > {
 
 	@SubscribeEvent
 	public static void onEntityInteract( PlayerInteractEvent.EntityInteract event ) {
-		handleContexts( new OnPlayerInteractData( event, Utility.castIfPossible( LivingEntity.class, event.getTarget() ) ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnPlayerInteractData( event, Utility.castIfPossible( LivingEntity.class, event.getTarget() ) ) );
 	}
 
 	@SubscribeEvent
 	public static void onRightClickBlock( PlayerInteractEvent.RightClickBlock event ) {
-		handleContexts( new OnPlayerInteractData( event, event.getEntityLiving() ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnPlayerInteractData( event, event.getEntityLiving() ) );
 	}
 
 	@SubscribeEvent
 	public static void onRightClickItem( PlayerInteractEvent.RightClickItem event ) {
-		handleContexts( new OnPlayerInteractData( event, event.getEntityLiving() ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnPlayerInteractData( event, event.getEntityLiving() ) );
 	}
 }

@@ -16,7 +16,7 @@ public class OnEquipmentChangedContext extends Context< OnEquipmentChangedData >
 
 	public OnEquipmentChangedContext( Consumer< OnEquipmentChangedData > consumer, String configName, String configComment ) {
 		super( OnEquipmentChangedData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnEquipmentChangedContext( Consumer< OnEquipmentChangedData > consumer ) {
@@ -25,6 +25,6 @@ public class OnEquipmentChangedContext extends Context< OnEquipmentChangedData >
 
 	@SubscribeEvent
 	public static void onEquipmentChanged( LivingEquipmentChangeEvent event ) {
-		handleContexts( new OnEquipmentChangedData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnEquipmentChangedData( event ) );
 	}
 }

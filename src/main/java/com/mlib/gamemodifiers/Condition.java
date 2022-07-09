@@ -6,30 +6,31 @@ import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
-import com.mlib.gamemodifiers.data.*;
-import net.minecraft.util.Mth;
+import com.mlib.gamemodifiers.parameters.Parameters;
+import com.mlib.gamemodifiers.parameters.Priority;
 import net.minecraft.world.entity.LivingEntity;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
 import java.util.function.Predicate;
 
-public abstract class Condition extends ConfigGroup {
-	public static final Comparator< Condition > COMPARATOR = ( left, right )->Mth.sign( left.priority.ordinal() - right.priority.ordinal() );
-
-	public enum Priority {
-		HIGHEST, HIGH, NORMAL, LOW, LOWEST
+public abstract class Condition extends ConfigGroup implements IParameterizable {
+	final Parameters params;
+	public Condition( Parameters params ) {
+		this.params = params;
 	}
 
-	final Priority priority;
-
 	public Condition( Priority priority ) {
-		this.priority = priority;
+		this( new Parameters( priority ) );
 	}
 
 	public Condition() {
 		this( Priority.NORMAL );
+	}
+
+	@Override
+	public Parameters getParams() {
+		return this.params;
 	}
 
 	public abstract boolean check( GameModifier feature, ContextData data );
@@ -95,7 +96,6 @@ public abstract class Condition extends ConfigGroup {
 			};
 		}
 	}
-
 
 	public static class Context< DataType extends ContextData > extends Condition {
 		final Class< DataType > dataClass;

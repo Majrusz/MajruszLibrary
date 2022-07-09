@@ -16,7 +16,7 @@ public class OnEntityTickContext extends Context< OnEntityTickData > {
 
 	public OnEntityTickContext( Consumer< OnEntityTickData > consumer, String configName, String configComment ) {
 		super( OnEntityTickData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnEntityTickContext( Consumer< OnEntityTickData > consumer ) {
@@ -25,6 +25,6 @@ public class OnEntityTickContext extends Context< OnEntityTickData > {
 
 	@SubscribeEvent
 	public static void onEntityTick( LivingEvent.LivingUpdateEvent event ) {
-		handleContexts( new OnEntityTickData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnEntityTickData( event ) );
 	}
 }

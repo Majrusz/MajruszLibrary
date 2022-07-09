@@ -16,7 +16,7 @@ public class OnItemFishedContext extends Context< OnItemFishedData > {
 
 	public OnItemFishedContext( Consumer< OnItemFishedData > consumer, String configName, String configComment ) {
 		super( OnItemFishedData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnItemFishedContext( Consumer< OnItemFishedData > consumer ) {
@@ -25,6 +25,6 @@ public class OnItemFishedContext extends Context< OnItemFishedData > {
 
 	@SubscribeEvent
 	public static void onDimensionChanged( ItemFishedEvent event ) {
-		handleContexts( new OnItemFishedData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnItemFishedData( event ) );
 	}
 }

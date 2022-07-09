@@ -19,7 +19,7 @@ public class OnSpawnedContext extends Context< OnSpawnedData > {
 
 	public OnSpawnedContext( Consumer< OnSpawnedData > consumer, String configName, String configComment ) {
 		super( OnSpawnedData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnSpawnedContext( Consumer< OnSpawnedData > consumer ) {
@@ -31,7 +31,7 @@ public class OnSpawnedContext extends Context< OnSpawnedData > {
 		if( !( event.getEntity() instanceof LivingEntity entity ) || !( event.getWorld() instanceof ServerLevel ) )
 			return;
 
-		// it does not contain an event, and it is delayed on purpose because otherwise it could cause deadlocks on chunks with any incorrect access see EntityJoinWorldEvent for more info
-		Delay.onNextTick( ()->handleContexts( new OnSpawnedData( entity, event.loadedFromDisk() ), CONTEXTS ) );
+		// it does not contain an event, and it is delayed on purpose because otherwise it could cause deadlocks on chunks with any incorrect access (see EntityJoinWorldEvent for more info)
+		Delay.onNextTick( ()->Context.accept( CONTEXTS, new OnSpawnedData( entity, event.loadedFromDisk() ) ) );
 	}
 }

@@ -16,7 +16,7 @@ public class OnPlayerTickContext extends Context< OnPlayerTickData > {
 
 	public OnPlayerTickContext( Consumer< OnPlayerTickData > consumer, String configName, String configComment ) {
 		super( OnPlayerTickData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnPlayerTickContext( Consumer< OnPlayerTickData > consumer ) {
@@ -25,6 +25,6 @@ public class OnPlayerTickContext extends Context< OnPlayerTickData > {
 
 	@SubscribeEvent
 	public static void onPlayerTick( TickEvent.PlayerTickEvent event ) {
-		handleContexts( new OnPlayerTickData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnPlayerTickData( event ) );
 	}
 }

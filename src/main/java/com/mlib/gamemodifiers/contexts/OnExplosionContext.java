@@ -19,7 +19,7 @@ public class OnExplosionContext extends Context< OnExplosionData > {
 
 	public OnExplosionContext( Consumer< OnExplosionData > consumer, String configName, String configComment ) {
 		super( OnExplosionData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnExplosionContext( Consumer< OnExplosionData > consumer ) {
@@ -29,13 +29,13 @@ public class OnExplosionContext extends Context< OnExplosionData > {
 	@SubscribeEvent
 	public static void onExplosionStart( ExplosionEvent.Start event ) {
 		OnExplosionData data = new OnExplosionData( event );
-		handleContexts( data, CONTEXTS );
+		Context.accept( CONTEXTS, data );
 		updateEvent( data );
 	}
 
 	@SubscribeEvent
 	public static void onExplosionDetonate( ExplosionEvent.Detonate event ) {
-		handleContexts( new OnExplosionData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnExplosionData( event ) );
 	}
 
 	private static void updateEvent( OnExplosionData data ) {

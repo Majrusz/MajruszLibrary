@@ -16,7 +16,7 @@ public class OnPickupXpContext extends Context< OnPickupXpData > {
 
 	public OnPickupXpContext( Consumer< OnPickupXpData > consumer, String configName, String configComment ) {
 		super( OnPickupXpData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnPickupXpContext( Consumer< OnPickupXpData > consumer ) {
@@ -25,6 +25,6 @@ public class OnPickupXpContext extends Context< OnPickupXpData > {
 
 	@SubscribeEvent
 	public static void onPickupXp( PlayerXpEvent.PickupXp event ) {
-		handleContexts( new OnPickupXpData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnPickupXpData( event ) );
 	}
 }

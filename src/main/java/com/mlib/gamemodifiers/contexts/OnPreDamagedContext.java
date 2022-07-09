@@ -16,7 +16,7 @@ public class OnPreDamagedContext extends Context< OnPreDamagedData > {
 
 	public OnPreDamagedContext( Consumer< OnPreDamagedData > consumer, String configName, String configComment ) {
 		super( OnPreDamagedData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnPreDamagedContext( Consumer< OnPreDamagedData > consumer ) {
@@ -25,6 +25,6 @@ public class OnPreDamagedContext extends Context< OnPreDamagedData > {
 
 	@SubscribeEvent
 	public static void onPreDamaged( LivingAttackEvent event ) {
-		handleContexts( new OnPreDamagedData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnPreDamagedData( event ) );
 	}
 }

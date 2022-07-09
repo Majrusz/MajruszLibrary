@@ -16,7 +16,7 @@ public class OnCheckSpawnContext extends Context< OnCheckSpawnData > {
 
 	public OnCheckSpawnContext( Consumer< OnCheckSpawnData > consumer, String configName, String configComment ) {
 		super( OnCheckSpawnData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnCheckSpawnContext( Consumer< OnCheckSpawnData > consumer ) {
@@ -25,6 +25,6 @@ public class OnCheckSpawnContext extends Context< OnCheckSpawnData > {
 
 	@SubscribeEvent
 	public static void onSpawnCheck( LivingSpawnEvent.CheckSpawn event ) {
-		handleContexts( new OnCheckSpawnData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnCheckSpawnData( event ) );
 	}
 }

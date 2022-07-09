@@ -18,7 +18,7 @@ public class OnDamagedContext extends Context< OnDamagedData > {
 
 	public OnDamagedContext( Consumer< OnDamagedData > consumer, String configName, String configComment ) {
 		super( OnDamagedData.class, consumer, configName, configComment );
-		CONTEXTS.add( this );
+		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnDamagedContext( Consumer< OnDamagedData > consumer ) {
@@ -27,6 +27,6 @@ public class OnDamagedContext extends Context< OnDamagedData > {
 
 	@SubscribeEvent
 	public static void onDamaged( LivingHurtEvent event ) {
-		handleContexts( new OnDamagedData( event ), CONTEXTS );
+		Context.accept( CONTEXTS, new OnDamagedData( event ) );
 	}
 }
