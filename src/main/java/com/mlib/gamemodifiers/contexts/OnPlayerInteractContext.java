@@ -3,6 +3,7 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.Utility;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.data.OnPlayerInteractData;
+import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,13 +17,13 @@ import java.util.function.Consumer;
 public class OnPlayerInteractContext extends Context< OnPlayerInteractData > {
 	static final List< OnPlayerInteractContext > CONTEXTS = new ArrayList<>();
 
-	public OnPlayerInteractContext( Consumer< OnPlayerInteractData > consumer, String configName, String configComment ) {
-		super( OnPlayerInteractData.class, consumer, configName, configComment );
+	public OnPlayerInteractContext( Consumer< OnPlayerInteractData > consumer, ContextParameters params ) {
+		super( OnPlayerInteractData.class, consumer, params );
 		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnPlayerInteractContext( Consumer< OnPlayerInteractData > consumer ) {
-		this( consumer, "OnPlayerInteract", "" );
+		this( consumer, new ContextParameters() );
 	}
 
 	@SubscribeEvent

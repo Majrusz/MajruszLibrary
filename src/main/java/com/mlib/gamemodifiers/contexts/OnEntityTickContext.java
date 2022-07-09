@@ -2,6 +2,7 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.data.OnEntityTickData;
+import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,13 +15,13 @@ import java.util.function.Consumer;
 public class OnEntityTickContext extends Context< OnEntityTickData > {
 	static final List< OnEntityTickContext > CONTEXTS = new ArrayList<>();
 
-	public OnEntityTickContext( Consumer< OnEntityTickData > consumer, String configName, String configComment ) {
-		super( OnEntityTickData.class, consumer, configName, configComment );
+	public OnEntityTickContext( Consumer< OnEntityTickData > consumer, ContextParameters params ) {
+		super( OnEntityTickData.class, consumer, params );
 		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnEntityTickContext( Consumer< OnEntityTickData > consumer ) {
-		this( consumer, "OnEntityTick", "" );
+		this( consumer, new ContextParameters() );
 	}
 
 	@SubscribeEvent

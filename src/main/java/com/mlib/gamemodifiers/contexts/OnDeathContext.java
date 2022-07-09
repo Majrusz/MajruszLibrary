@@ -2,6 +2,7 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.data.OnDeathData;
+import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,13 +15,13 @@ import java.util.function.Consumer;
 public class OnDeathContext extends Context< OnDeathData > {
 	static final List< OnDeathContext > CONTEXTS = new ArrayList<>();
 
-	public OnDeathContext( Consumer< OnDeathData > consumer, String configName, String configComment ) {
-		super( OnDeathData.class, consumer, configName, configComment );
+	public OnDeathContext( Consumer< OnDeathData > consumer, ContextParameters params ) {
+		super( OnDeathData.class, consumer, params );
 		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnDeathContext( Consumer< OnDeathData > consumer ) {
-		this( consumer, "OnDeath", "" );
+		this( consumer, new ContextParameters() );
 	}
 
 	@SubscribeEvent

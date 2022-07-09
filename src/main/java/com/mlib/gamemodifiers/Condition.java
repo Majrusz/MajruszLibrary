@@ -6,6 +6,7 @@ import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
+import com.mlib.gamemodifiers.parameters.ConditionParameters;
 import com.mlib.gamemodifiers.parameters.Parameters;
 import com.mlib.gamemodifiers.parameters.Priority;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,17 +16,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
 public abstract class Condition extends ConfigGroup implements IParameterizable {
-	final Parameters params;
-	public Condition( Parameters params ) {
+	final ConditionParameters params;
+
+	public Condition( ConditionParameters params ) {
 		this.params = params;
 	}
 
 	public Condition( Priority priority ) {
-		this( new Parameters( priority ) );
+		this( new ConditionParameters( priority ) );
 	}
 
 	public Condition() {
-		this( Priority.NORMAL );
+		this( new ConditionParameters() );
 	}
 
 	@Override

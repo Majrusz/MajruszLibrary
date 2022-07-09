@@ -2,6 +2,7 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.data.OnBreakSpeedData;
+import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,13 +15,13 @@ import java.util.function.Consumer;
 public class OnBreakSpeedContext extends Context< OnBreakSpeedData > {
 	static final List< OnBreakSpeedContext > CONTEXTS = new ArrayList<>();
 
-	public OnBreakSpeedContext( Consumer< OnBreakSpeedData > consumer, String configName, String configComment ) {
-		super( OnBreakSpeedData.class, consumer, configName, configComment );
+	public OnBreakSpeedContext( Consumer< OnBreakSpeedData > consumer, ContextParameters params ) {
+		super( OnBreakSpeedData.class, consumer, params );
 		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnBreakSpeedContext( Consumer< OnBreakSpeedData > consumer ) {
-		this( consumer, "OnBreakSpeed", "" );
+		this( consumer, new ContextParameters() );
 	}
 
 	@SubscribeEvent

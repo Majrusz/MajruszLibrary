@@ -2,6 +2,7 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.data.OnDimensionChangedData;
+import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,13 +15,13 @@ import java.util.function.Consumer;
 public class OnDimensionChangedContext extends Context< OnDimensionChangedData > {
 	static final List< OnDimensionChangedContext > CONTEXTS = new ArrayList<>();
 
-	public OnDimensionChangedContext( Consumer< OnDimensionChangedData > consumer, String configName, String configComment ) {
-		super( OnDimensionChangedData.class, consumer, configName, configComment );
+	public OnDimensionChangedContext( Consumer< OnDimensionChangedData > consumer, ContextParameters params ) {
+		super( OnDimensionChangedData.class, consumer, params );
 		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnDimensionChangedContext( Consumer< OnDimensionChangedData > consumer ) {
-		this( consumer, "OnDimensionChanged", "" );
+		this( consumer, new ContextParameters() );
 	}
 
 	@SubscribeEvent

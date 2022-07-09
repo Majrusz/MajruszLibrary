@@ -2,6 +2,7 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.data.OnItemFishedData;
+import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -14,13 +15,13 @@ import java.util.function.Consumer;
 public class OnItemFishedContext extends Context< OnItemFishedData > {
 	static final List< OnItemFishedContext > CONTEXTS = new ArrayList<>();
 
-	public OnItemFishedContext( Consumer< OnItemFishedData > consumer, String configName, String configComment ) {
-		super( OnItemFishedData.class, consumer, configName, configComment );
+	public OnItemFishedContext( Consumer< OnItemFishedData > consumer, ContextParameters params ) {
+		super( OnItemFishedData.class, consumer, params );
 		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnItemFishedContext( Consumer< OnItemFishedData > consumer ) {
-		this( consumer, "OnItemFished", "" );
+		this( consumer, new ContextParameters() );
 	}
 
 	@SubscribeEvent

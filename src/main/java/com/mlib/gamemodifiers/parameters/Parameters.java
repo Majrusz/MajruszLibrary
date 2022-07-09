@@ -1,5 +1,6 @@
 package com.mlib.gamemodifiers.parameters;
 
+import com.mlib.Utility;
 import com.mlib.gamemodifiers.IParameterizable;
 import net.minecraft.util.Mth;
 
@@ -14,10 +15,6 @@ public class Parameters {
 	}
 
 	public Parameters( Priority priority ) {
-		this.priority = priority;
-	}
-
-	public Parameters() {
-		this( Priority.NORMAL );
+		this.priority = Utility.or( priority, Priority.NORMAL );
 	}
 }

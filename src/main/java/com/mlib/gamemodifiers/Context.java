@@ -1,8 +1,8 @@
 package com.mlib.gamemodifiers;
 
 import com.mlib.config.ConfigGroup;
+import com.mlib.gamemodifiers.parameters.ContextParameters;
 import com.mlib.gamemodifiers.parameters.Parameters;
-import com.mlib.gamemodifiers.parameters.Priority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,7 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 	final Class< DataType > dataClass;
 	final Consumer< DataType > consumer;
 	final List< Condition > conditions = new ArrayList<>();
-	final String configName;
-	final String configComment;
-	final Parameters params;
+	final ContextParameters params;
 	protected GameModifier gameModifier = null;
 
 	public static < DataType extends ContextData, ContextType extends Context< DataType > > void accept( List< ContextType > contexts, DataType data ) {
@@ -28,19 +26,18 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 
 	public static < ContextType extends Context< ? > > void addSorted( List< ContextType > contexts, ContextType context ) {
 		contexts.add( context );
-		contexts.sort( Parameters.COMPARATOR );
+		contexts.sort( ContextParameters.COMPARATOR );
 	}
 
-	public Context( Class< DataType > dataClass, Consumer< DataType > consumer, String configName, String configComment, Parameters params ) {
+	public Context( Class< DataType > dataClass, Consumer< DataType > consumer, ContextParameters params ) {
+		super( params.getConfigName(), params.getConfigComment() );
 		this.dataClass = dataClass;
 		this.consumer = consumer;
-		this.configName = configName;
-		this.configComment = configComment;
 		this.params = params;
 	}
 
-	public Context( Class< DataType > dataClass, Consumer< DataType > consumer, String configName, String configComment ) {
-		this( dataClass, consumer, configName, configComment, new Parameters( Priority.NORMAL ) );
+	public Context( Class< DataType > dataClass, Consumer< DataType > consumer ) {
+		this( dataClass, consumer, new ContextParameters() );
 	}
 
 	@Override

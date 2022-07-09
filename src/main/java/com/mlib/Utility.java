@@ -62,4 +62,8 @@ public class Utility {
 	public static String getPlayerUUID( Player player ) {
 		return String.valueOf( player.getUUID() );
 	}
+
+	public static < Type > Type or( Type value, Type defaultValue ) {
+		return value != null ? value : defaultValue;
+	}
 }

@@ -2,6 +2,7 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.data.OnSpawnedData;
+import com.mlib.gamemodifiers.parameters.ContextParameters;
 import com.mlib.time.Delay;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,13 +18,13 @@ import java.util.function.Consumer;
 public class OnSpawnedContext extends Context< OnSpawnedData > {
 	static final List< OnSpawnedContext > CONTEXTS = new ArrayList<>();
 
-	public OnSpawnedContext( Consumer< OnSpawnedData > consumer, String configName, String configComment ) {
-		super( OnSpawnedData.class, consumer, configName, configComment );
+	public OnSpawnedContext( Consumer< OnSpawnedData > consumer, ContextParameters params ) {
+		super( OnSpawnedData.class, consumer, params );
 		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnSpawnedContext( Consumer< OnSpawnedData > consumer ) {
-		this( consumer, "OnSpawned", "" );
+		this( consumer, new ContextParameters() );
 	}
 
 	@SubscribeEvent

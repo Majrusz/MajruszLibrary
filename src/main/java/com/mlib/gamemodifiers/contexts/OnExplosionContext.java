@@ -2,6 +2,7 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.data.OnExplosionData;
+import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.world.ExplosionEvent;
@@ -17,13 +18,13 @@ import java.util.function.Consumer;
 public class OnExplosionContext extends Context< OnExplosionData > {
 	static final List< OnExplosionContext > CONTEXTS = new ArrayList<>();
 
-	public OnExplosionContext( Consumer< OnExplosionData > consumer, String configName, String configComment ) {
-		super( OnExplosionData.class, consumer, configName, configComment );
+	public OnExplosionContext( Consumer< OnExplosionData > consumer, ContextParameters params ) {
+		super( OnExplosionData.class, consumer, params );
 		Context.addSorted( CONTEXTS, this );
 	}
 
 	public OnExplosionContext( Consumer< OnExplosionData > consumer ) {
-		this( consumer, "OnExplosion", "" );
+		this( consumer, new ContextParameters() );
 	}
 
 	@SubscribeEvent
