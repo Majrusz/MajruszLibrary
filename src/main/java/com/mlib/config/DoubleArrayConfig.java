@@ -27,15 +27,19 @@ public class DoubleArrayConfig extends UserConfig {
 	}
 
 	public int asTicks( int idx ) {
-		return this.values.get( idx ).asTicks();
+		return getConfig( idx ).asTicks();
 	}
 
 	public float asFloat( int idx ) {
-		return this.values.get( idx ).asFloat();
+		return getConfig( idx ).asFloat();
 	}
 
 	public Double get( int idx ) {
-		return this.values.get( idx ).get();
+		return getConfig( idx ).get();
+	}
+
+	public DoubleConfig getConfig( int idx ) {
+		return this.values.get( Math.min( idx, this.values.size() - 1 ) );
 	}
 
 	@Override
