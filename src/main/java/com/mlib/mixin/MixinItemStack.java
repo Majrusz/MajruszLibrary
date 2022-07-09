@@ -19,9 +19,8 @@ public abstract class MixinItemStack {
 		ItemStack itemStack = ( ItemStack )( Object )this;
 		ItemHurtEvent itemHurtEvent = new ItemHurtEvent( player, itemStack, damage );
 		MinecraftForge.EVENT_BUS.post( itemHurtEvent );
-		int damageDiff = itemHurtEvent.damage - damage;
-		if( damageDiff != 0 ) {
-			itemStack.setDamageValue( itemStack.getDamageValue() + damageDiff );
+		if( itemHurtEvent.extraDamage != 0 ) {
+			itemStack.setDamageValue( itemStack.getDamageValue() + itemHurtEvent.extraDamage );
 		}
 
 		callback.setReturnValue( itemHurtEvent.hasBeenBroken() );

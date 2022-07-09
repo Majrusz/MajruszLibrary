@@ -10,12 +10,17 @@ import javax.annotation.Nullable;
 public class ItemHurtEvent extends Event implements IModBusEvent {
 	@Nullable public final ServerPlayer player;
 	public final ItemStack itemStack;
-	public int damage;
+	public final int damage;
+	public int extraDamage = 0;
 
 	public ItemHurtEvent( @Nullable ServerPlayer player, ItemStack itemStack, int damage ) {
 		this.player = player;
 		this.itemStack = itemStack;
 		this.damage = damage;
+	}
+
+	public boolean isAboutToBroke() {
+		return this.itemStack.getDamageValue() + this.extraDamage >= this.itemStack.getMaxDamage();
 	}
 
 	public boolean hasBeenBroken() {
