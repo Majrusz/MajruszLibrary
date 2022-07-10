@@ -1,7 +1,10 @@
 package com.mlib.loot_modifiers;
 
+import com.google.common.base.Suppliers;
 import com.google.gson.JsonObject;
 import com.mlib.events.HarvestCropEvent;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -14,13 +17,16 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 /** Loot modifier for items gathered from harvesting. (wheat, carrots etc.) */
 public class HarvestCrop extends LootModifier {
+	public static final Supplier< Codec< HarvestCrop > > CODEC = Suppliers.memoize( ()->RecordCodecBuilder.create( inst->codecStart( inst ).apply( inst, HarvestCrop::new ) ) );
+
 	public HarvestCrop( LootItemCondition[] conditionsIn ) {
 		super( conditionsIn );
 	}
@@ -43,15 +49,8 @@ public class HarvestCrop extends LootModifier {
 		return generatedLoot;
 	}
 
-	public static class Serializer extends GlobalLootModifierSerializer< HarvestCrop > {
-		@Override
-		public HarvestCrop read( ResourceLocation name, JsonObject object, LootItemCondition[] conditions ) {
-			return new HarvestCrop( conditions );
-		}
-
-		@Override
-		public JsonObject write( HarvestCrop instance ) {
-			return makeConditions( instance.conditions );
-		}
+	@Override
+	public Codec< ? extends IGlobalLootModifier > codec() {
+		return CODEC.get();
 	}
 }

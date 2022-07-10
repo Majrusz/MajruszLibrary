@@ -8,6 +8,6 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "refmap": "mlib.mixin-refmap.json",
+  "refmap": "mlib.refmap.json",
   "minVersion": "0.8"
 }

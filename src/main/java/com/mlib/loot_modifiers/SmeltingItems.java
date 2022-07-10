@@ -1,13 +1,14 @@
 package com.mlib.loot_modifiers;
 
-import com.google.gson.JsonObject;
+import com.google.common.base.Suppliers;
 import com.mlib.MajruszLibrary;
 import com.mlib.Random;
 import com.mlib.entities.EntityHelper;
 import com.mlib.levels.LevelHelper;
 import com.mlib.particles.ParticleHelper;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -21,7 +22,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.items.ItemHandlerHelper;
 
@@ -30,9 +31,12 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /** Smelts blocks after destroying them. */
 public class SmeltingItems extends LootModifier {
+	public static final Supplier< Codec< SmeltingItems > > CODEC = Suppliers.memoize( ()->RecordCodecBuilder.create( inst->codecStart( inst ).apply( inst, SmeltingItems::new ) ) );
+
 	public static final List< Register > registerList = new ArrayList<>();
 
 	protected SmeltingItems( LootItemCondition[] conditions ) {
@@ -114,16 +118,9 @@ public class SmeltingItems extends LootModifier {
 		return smeltedLoot;
 	}
 
-	public static class Serializer extends GlobalLootModifierSerializer< SmeltingItems > {
-		@Override
-		public SmeltingItems read( ResourceLocation name, JsonObject object, LootItemCondition[] conditionsIn ) {
-			return new SmeltingItems( conditionsIn );
-		}
-
-		@Override
-		public JsonObject write( SmeltingItems instance ) {
-			return makeConditions( instance.conditions );
-		}
+	@Override
+	public Codec< ? extends IGlobalLootModifier > codec() {
+		return CODEC.get();
 	}
 
 	@FunctionalInterface

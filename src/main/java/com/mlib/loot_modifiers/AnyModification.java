@@ -1,9 +1,10 @@
 package com.mlib.loot_modifiers;
 
-import com.google.gson.JsonObject;
+import com.google.common.base.Suppliers;
 import com.mlib.events.AnyLootModificationEvent;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -13,13 +14,16 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 /** Loot modifier for all situations. */
 public class AnyModification extends LootModifier {
+	public static final Supplier< Codec< AnyModification > > CODEC = Suppliers.memoize( ()->RecordCodecBuilder.create( inst->codecStart( inst ).apply( inst, AnyModification::new ) ) );
+
 	public AnyModification( LootItemCondition[] conditionsIn ) {
 		super( conditionsIn );
 	}
@@ -38,15 +42,8 @@ public class AnyModification extends LootModifier {
 		return generatedLoot;
 	}
 
-	public static class Serializer extends GlobalLootModifierSerializer< AnyModification > {
-		@Override
-		public AnyModification read( ResourceLocation name, JsonObject object, LootItemCondition[] conditions ) {
-			return new AnyModification( conditions );
-		}
-
-		@Override
-		public JsonObject write( AnyModification instance ) {
-			return makeConditions( instance.conditions );
-		}
+	@Override
+	public Codec< ? extends IGlobalLootModifier > codec() {
+		return CODEC.get();
 	}
 }

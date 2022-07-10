@@ -4,19 +4,20 @@ import com.mlib.loot_modifiers.AnyModification;
 import com.mlib.loot_modifiers.HarvestCrop;
 import com.mlib.loot_modifiers.SmeltingItems;
 import com.mlib.registries.DeferredRegisterHelper;
+import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Registries {
 	static final DeferredRegisterHelper HELPER = new DeferredRegisterHelper( MajruszLibrary.MOD_ID );
-	static final DeferredRegister< GlobalLootModifierSerializer< ? > > LOOT_MODIFIERS = HELPER.create( ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS );
+	static final DeferredRegister< Codec< ? extends IGlobalLootModifier > > LOOT_MODIFIERS = HELPER.create( ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS );
 
 	static {
-		LOOT_MODIFIERS.register( "any_situation", AnyModification.Serializer::new );
-		LOOT_MODIFIERS.register( "harvest_crop", HarvestCrop.Serializer::new );
-		LOOT_MODIFIERS.register( "smelting_items", SmeltingItems.Serializer::new );
+		LOOT_MODIFIERS.register( "any_situation", AnyModification.CODEC );
+		LOOT_MODIFIERS.register( "harvest_crop", HarvestCrop.CODEC );
+		LOOT_MODIFIERS.register( "smelting_items", SmeltingItems.CODEC );
 	}
 
 	public static void initialize() {

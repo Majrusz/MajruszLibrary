@@ -87,14 +87,14 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19-41.0.64'
+    minecraft 'net.minecraftforge:forge:1.19-41.0.87'
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     testAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 mixin {
-    add sourceSets.main, "mlib.general.mixin-refmap.json"
+    add sourceSets.main, "mlib.refmap.json"
 }
 
 jar {
