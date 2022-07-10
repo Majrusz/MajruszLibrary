@@ -6,6 +6,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -14,6 +15,7 @@ import javax.annotation.Nullable;
 
 @Mixin( ItemStack.class )
 public abstract class MixinItemStack {
+	@Shadow( aliases = {"this$0"} )
 	@Inject( method = "hurt(ILnet/minecraft/util/RandomSource;Lnet/minecraft/server/level/ServerPlayer;)Z", at = @At( "RETURN" ), cancellable = true )
 	private void hurt( int damage, RandomSource source, @Nullable ServerPlayer player, CallbackInfoReturnable< Boolean > callback ) {
 		ItemStack itemStack = ( ItemStack )( Object )this;
