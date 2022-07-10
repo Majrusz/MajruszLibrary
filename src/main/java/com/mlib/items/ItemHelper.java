@@ -177,4 +177,8 @@ public class ItemHelper {
 	public static boolean hasInMainHand( @Nullable LivingEntity entity, Class< ? extends Item >... itemClasses ) {
 		return has( entity, EquipmentSlot.MAINHAND, itemClasses );
 	}
+
+	public static boolean isUsableItem( ItemStack itemStack ) {
+		return itemStack.getItem().getUseDuration( itemStack ) > 0;
+	}
 }
