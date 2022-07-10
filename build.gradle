@@ -33,6 +33,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            arg "-mixin.config=mixins.mlib.json"
             
             mods {
                 mlib {
@@ -45,6 +46,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            arg "-mixin.config=mixins.mlib.json"
 
             mods {
                 mlib {
@@ -57,6 +59,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
+            arg "-mixin.config=mixins.mlib.json"
 
             mods {
                 mlib {
@@ -82,13 +85,8 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-repositories {
-}
-
 mixin {
     add sourceSets.main, 'mixins.mlib.refmap.json'
-
-    config 'mixins.mlib.json'
 }
 
 dependencies {
@@ -107,8 +105,6 @@ jar {
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "examplemodsareus",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
-                "TweakOrder": 0,
                 "MixinConfigs": "mixins.mlib.json",
         ])
     }
