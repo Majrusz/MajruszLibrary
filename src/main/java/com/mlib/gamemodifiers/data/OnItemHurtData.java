@@ -7,14 +7,12 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-public class OnItemHurtData extends ContextData {
-	public final ItemHurtEvent event;
+public class OnItemHurtData extends ContextData.Event< ItemHurtEvent > {
 	@Nullable public final ServerPlayer player;
 	public final ItemStack itemStack;
 
 	public OnItemHurtData( ItemHurtEvent event ) {
-		super( event.player );
-		this.event = event;
+		super( event.player, event );
 		this.player = event.player;
 		this.itemStack = event.itemStack;
 	}

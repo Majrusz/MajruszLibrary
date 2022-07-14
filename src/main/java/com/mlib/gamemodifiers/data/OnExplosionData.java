@@ -9,16 +9,14 @@ import org.apache.commons.lang3.mutable.MutableFloat;
 
 import javax.annotation.Nullable;
 
-public class OnExplosionData extends ContextData {
-	public final ExplosionEvent event;
+public class OnExplosionData extends ContextData.Event< ExplosionEvent > {
 	public final Explosion explosion;
 	@Nullable public final LivingEntity sourceMob;
 	public final MutableFloat radius;
 	public final MutableBoolean causesFire;
 
 	public OnExplosionData( ExplosionEvent event ) {
-		super( event.getExplosion().getSourceMob() );
-		this.event = event;
+		super( event.getExplosion().getSourceMob(), event );
 		this.explosion = event.getExplosion();
 		this.sourceMob = this.explosion.getSourceMob();
 		this.radius = new MutableFloat( this.explosion.radius );

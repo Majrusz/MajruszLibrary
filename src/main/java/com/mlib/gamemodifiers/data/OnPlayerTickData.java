@@ -4,13 +4,11 @@ import com.mlib.gamemodifiers.ContextData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 
-public class OnPlayerTickData extends ContextData {
-	public final TickEvent.PlayerTickEvent event;
+public class OnPlayerTickData extends ContextData.Event< TickEvent.PlayerTickEvent > {
 	public final Player player;
 
 	public OnPlayerTickData( TickEvent.PlayerTickEvent event ) {
-		super( null );
-		this.event = event;
+		super( event.player, event );
 		this.player = event.player;
 	}
 }

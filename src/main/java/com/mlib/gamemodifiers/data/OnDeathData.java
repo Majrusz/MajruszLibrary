@@ -8,15 +8,13 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 import javax.annotation.Nullable;
 
-public class OnDeathData extends ContextData {
-	public final LivingDeathEvent event;
+public class OnDeathData extends ContextData.Event< LivingDeathEvent > {
 	public final DamageSource source;
 	@Nullable public final LivingEntity attacker;
 	public final LivingEntity target;
 
 	public OnDeathData( LivingDeathEvent event ) {
-		super( event.getEntityLiving() );
-		this.event = event;
+		super( event.getEntityLiving(), event );
 		this.source = event.getSource();
 		this.attacker = Utility.castIfPossible( LivingEntity.class, source.getEntity() );
 		this.target = event.getEntityLiving();
