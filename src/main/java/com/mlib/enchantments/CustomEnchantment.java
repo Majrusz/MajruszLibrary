@@ -1,6 +1,5 @@
 package com.mlib.enchantments;
 
-import com.mlib.items.ItemHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -73,16 +72,6 @@ public abstract class CustomEnchantment extends Enchantment {
 	@Override
 	public boolean isCurse() {
 		return this.params.isCurse;
-	}
-
-	public int getUsableItemEnchantmentLevel( LivingEntity entity ) {
-		if( ItemHelper.isUsableItem( entity.getMainHandItem() ) ) {
-			return getEnchantmentLevel( entity.getMainHandItem() );
-		} else if( ItemHelper.isUsableItem( entity.getOffhandItem() ) ) {
-			return getEnchantmentLevel( entity.getOffhandItem() );
-		} else {
-			return 0;
-		}
 	}
 
 	public int getEnchantmentLevel( ItemStack itemStack ) {
