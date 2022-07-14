@@ -178,7 +178,7 @@ public class ItemHelper {
 		return has( entity, EquipmentSlot.MAINHAND, itemClasses );
 	}
 
-	public static boolean isUsableItem( ItemStack itemStack ) {
-		return itemStack.getItem().getUseDuration( itemStack ) > 0;
+	public static ItemStack getCurrentlyUsedItem( LivingEntity entity ) {
+		return entity.isUsingItem() ? entity.getItemInHand( entity.getUsedItemHand() ) : ItemStack.EMPTY;
 	}
 }
