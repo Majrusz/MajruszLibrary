@@ -1,5 +1,6 @@
 package com.mlib;
 
+import com.mlib.config.DoubleConfig;
 import com.mlib.math.VectorHelper;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.Vec3i;
@@ -51,6 +52,10 @@ public class Random {
 	 */
 	public static boolean tryChance( double chance ) {
 		return nextDouble() <= chance;
+	}
+
+	public static boolean tryChance( DoubleConfig config ) {
+		return tryChance( config.get() );
 	}
 
 	/**
