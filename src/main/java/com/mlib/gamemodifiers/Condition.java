@@ -129,6 +129,7 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 			super( Priority.HIGH );
 			this.cooldown = new DoubleConfig( "cooldown", "Cooldown in seconds before this happens.", false, seconds, 0.1, 300.0 );
 			this.condition = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
+			this.addConfig( this.cooldown );
 		}
 
 		public Cooldown( int ticks, Dist distribution ) {
