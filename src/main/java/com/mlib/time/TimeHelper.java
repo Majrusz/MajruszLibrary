@@ -1,6 +1,7 @@
 package com.mlib.time;
 
 import com.mlib.Utility;
+import com.mlib.config.DoubleConfig;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -39,6 +40,10 @@ public class TimeHelper {
 		return hasClientTicksPassed( Utility.secondsToTicks( secondDelay ) );
 	}
 
+	public static boolean hasClientSecondsPassed( DoubleConfig config ) {
+		return hasClientTicksPassed( config.asTicks() );
+	}
+
 	/** Returns whether client counter can be divided by given value. */
 	public static boolean hasServerTicksPassed( @Nonnegative int tickDelay ) {
 		return serverCounter % tickDelay == 0;
@@ -47,5 +52,9 @@ public class TimeHelper {
 	/** Returns whether client counter can be divided by given value. (in seconds) */
 	public static boolean hasServerSecondsPassed( @Nonnegative double secondDelay ) {
 		return hasServerTicksPassed( Utility.secondsToTicks( secondDelay ) );
+	}
+
+	public static boolean hasServerSecondsPassed( DoubleConfig config ) {
+		return hasServerTicksPassed( config.asTicks() );
 	}
 }

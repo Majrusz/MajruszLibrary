@@ -9,11 +9,14 @@ import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.parameters.ConditionParameters;
 import com.mlib.gamemodifiers.parameters.Parameters;
 import com.mlib.gamemodifiers.parameters.Priority;
+import com.mlib.time.TimeHelper;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.api.distmarker.Dist;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public abstract class Condition extends ConfigGroup implements IParameterizable {
 	final ConditionParameters params;
@@ -115,6 +118,26 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 			assert contextData != null;
 
 			return this.predicate.test( contextData );
+		}
+	}
+
+	public static class Cooldown extends Condition {
+		final DoubleConfig cooldown;
+		final Predicate< DoubleConfig > condition;
+
+		public Cooldown( double seconds, Dist distribution ) {
+			super( Priority.HIGH );
+			this.cooldown = new DoubleConfig( "cooldown", "Cooldown in seconds before this happens.", false, seconds, 0.1, 300.0 );
+			this.condition = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
+		}
+
+		public Cooldown( int ticks, Dist distribution ) {
+			this( Utility.ticksToSeconds( ticks ), distribution );
+		}
+
+		@Override
+		public boolean check( GameModifier feature, ContextData data ) {
+			return this.condition.test( this.cooldown );
 		}
 	}
 }
