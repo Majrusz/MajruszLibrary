@@ -8,7 +8,7 @@ public class OnBreakSpeedData extends ContextData.Event< PlayerEvent.BreakSpeed 
 	public final Player player;
 
 	public OnBreakSpeedData( PlayerEvent.BreakSpeed event ) {
-		super( event.getPlayer(), event );
-		this.player = event.getPlayer();
+		super( event.getEntity(), event );
+		this.player = event.getEntity();
 	}
 }

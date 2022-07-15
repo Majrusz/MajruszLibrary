@@ -5,6 +5,6 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 
 public class OnCheckSpawnData extends ContextData.Event< LivingSpawnEvent.CheckSpawn > {
 	public OnCheckSpawnData( LivingSpawnEvent.CheckSpawn event ) {
-		super( event.getEntityLiving(), event );
+		super( event.getEntity(), event );
 	}
 }

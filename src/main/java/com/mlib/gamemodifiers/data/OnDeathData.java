@@ -14,9 +14,9 @@ public class OnDeathData extends ContextData.Event< LivingDeathEvent > {
 	public final LivingEntity target;
 
 	public OnDeathData( LivingDeathEvent event ) {
-		super( event.getEntityLiving(), event );
+		super( event.getEntity(), event );
 		this.source = event.getSource();
 		this.attacker = Utility.castIfPossible( LivingEntity.class, source.getEntity() );
-		this.target = event.getEntityLiving();
+		this.target = event.getEntity();
 	}
 }

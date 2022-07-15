@@ -6,7 +6,7 @@ import com.mlib.gamemodifiers.parameters.ContextParameters;
 import com.mlib.time.Delay;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -28,8 +28,8 @@ public class OnSpawnedContext extends Context< OnSpawnedData > {
 	}
 
 	@SubscribeEvent
-	public static void onSpawn( EntityJoinWorldEvent event ) {
-		if( !( event.getEntity() instanceof LivingEntity entity ) || !( event.getWorld() instanceof ServerLevel ) )
+	public static void onSpawn( EntityJoinLevelEvent event ) {
+		if( !( event.getEntity() instanceof LivingEntity entity ) || !( event.getLevel() instanceof ServerLevel ) )
 			return;
 
 		// it does not contain an event, and it is delayed on purpose because otherwise it could cause deadlocks on chunks with any incorrect access (see EntityJoinWorldEvent for more info)

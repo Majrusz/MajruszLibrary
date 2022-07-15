@@ -8,7 +8,7 @@ public class OnPickupXpData extends ContextData.Event< PlayerXpEvent.PickupXp > 
 	public final Player player;
 
 	public OnPickupXpData( PlayerXpEvent.PickupXp event ) {
-		super( event.getEntityLiving(), event );
-		this.player = event.getPlayer();
+		super( event.getEntity(), event );
+		this.player = event.getEntity();
 	}
 }

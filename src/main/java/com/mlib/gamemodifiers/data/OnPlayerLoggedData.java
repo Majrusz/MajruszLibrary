@@ -8,7 +8,7 @@ public class OnPlayerLoggedData extends ContextData.Event< PlayerEvent.PlayerLog
 	public final Player player;
 
 	public OnPlayerLoggedData( PlayerEvent.PlayerLoggedInEvent event ) {
-		super( event.getEntityLiving(), event );
-		this.player = event.getPlayer();
+		super( event.getEntity(), event );
+		this.player = event.getEntity();
 	}
 }

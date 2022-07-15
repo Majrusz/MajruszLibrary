@@ -33,11 +33,11 @@ public class OnPlayerInteractContext extends Context< OnPlayerInteractData > {
 
 	@SubscribeEvent
 	public static void onRightClickBlock( PlayerInteractEvent.RightClickBlock event ) {
-		Context.accept( CONTEXTS, new OnPlayerInteractData( event, event.getEntityLiving() ) );
+		Context.accept( CONTEXTS, new OnPlayerInteractData( event, event.getEntity() ) );
 	}
 
 	@SubscribeEvent
 	public static void onRightClickItem( PlayerInteractEvent.RightClickItem event ) {
-		Context.accept( CONTEXTS, new OnPlayerInteractData( event, event.getEntityLiving() ) );
+		Context.accept( CONTEXTS, new OnPlayerInteractData( event, event.getEntity() ) );
 	}
 }
