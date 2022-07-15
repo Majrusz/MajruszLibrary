@@ -11,12 +11,13 @@ import com.mlib.gamemodifiers.parameters.Parameters;
 import com.mlib.gamemodifiers.parameters.Priority;
 import com.mlib.time.TimeHelper;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public abstract class Condition extends ConfigGroup implements IParameterizable {
 	final ConditionParameters params;
@@ -139,6 +140,19 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 		@Override
 		public boolean check( GameModifier feature, ContextData data ) {
 			return this.condition.test( this.cooldown );
+		}
+	}
+
+	public static class HasEnchantment extends Condition {
+		final Enchantment enchantment;
+
+		public HasEnchantment( Enchantment enchantment ) {
+			this.enchantment = enchantment;
+		}
+
+		@Override
+		public boolean check( GameModifier feature, ContextData data ) {
+			return data.entity != null && EnchantmentHelper.getEnchantmentLevel( this.enchantment, data.entity ) > 0;
 		}
 	}
 }
