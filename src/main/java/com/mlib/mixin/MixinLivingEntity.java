@@ -1,8 +1,6 @@
 package com.mlib.mixin;
 
-import com.mlib.Random;
 import com.mlib.events.ItemSwingDurationEvent;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,6 +18,6 @@ public abstract class MixinLivingEntity {
 		ItemSwingDurationEvent event = new ItemSwingDurationEvent( livingEntity, callback.getReturnValue() );
 		MinecraftForge.EVENT_BUS.post( event );
 
-		callback.setReturnValue( Mth.clamp( Random.roundRandomly( event.swingDuration + event.extraDuration ), 1, 100 ) );
+		callback.setReturnValue( event.getTotalSwingDuration() );
 	}
 }
