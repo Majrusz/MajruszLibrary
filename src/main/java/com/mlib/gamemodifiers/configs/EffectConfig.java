@@ -37,12 +37,16 @@ public class EffectConfig extends ConfigGroup {
 		this( groupName, effect, amplifier, duration, Optional.empty() );
 	}
 
-	public void apply( LivingEntity entity ) {
+	public void apply( LivingEntity entity, int extraAmplifier, int extraDuration ) {
 		if( this.maxDuration.isPresent() ) {
-			EffectHelper.stackEffectIfPossible( entity, getEffect(), getDuration(), getAmplifier(), getMaxDuration() );
+			EffectHelper.stackEffectIfPossible( entity, getEffect(), getDuration() + extraDuration, getAmplifier() + extraAmplifier, getMaxDuration() );
 		} else {
-			EffectHelper.applyEffectIfPossible( entity, getEffect(), getDuration(), getAmplifier() );
+			EffectHelper.applyEffectIfPossible( entity, getEffect(), getDuration() + extraDuration, getAmplifier() + extraAmplifier );
 		}
+	}
+
+	public void apply( LivingEntity entity ) {
+		apply( entity, 0, 0 );
 	}
 
 	public MobEffect getEffect() {
