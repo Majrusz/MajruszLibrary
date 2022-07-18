@@ -157,6 +157,10 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 	}
 
 	public static class IsServer extends Condition {
+		public IsServer() {
+			super( Priority.HIGH );
+		}
+		
 		@Override
 		public boolean check( GameModifier feature, ContextData data ) {
 			return data.level != null;
