@@ -13,7 +13,7 @@ public class BlockSmeltCheckEvent extends Event implements IModBusEvent {
 	public final Player player;
 
 	public BlockSmeltCheckEvent( AnyLootModificationEvent event ) {
-		this.shouldSmelt = true;
+		this.shouldSmelt = false;
 		this.tool = event.tool;
 		this.blockState = event.blockState;
 		this.player = ( Player )event.entity;
