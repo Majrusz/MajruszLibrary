@@ -24,7 +24,7 @@ public abstract class MixinProjectile {
 	@Nullable ItemStack weapon;
 	@Nullable ItemStack arrow;
 
-	public void setArrow( @Nullable ItemStack arrow ) {
+	public void setupArrow( @Nullable ItemStack arrow ) {
 		this.arrow = arrow;
 		if( Projectile.class.cast( this ).getOwner() instanceof LivingEntity entity ) {
 			ItemStack itemStack = entity.getMainHandItem();
@@ -32,6 +32,14 @@ public abstract class MixinProjectile {
 				this.weapon = itemStack;
 			}
 		}
+	}
+
+	public @Nullable ItemStack getWeapon() {
+		return this.weapon;
+	}
+
+	public @Nullable ItemStack getArrow() {
+		return this.arrow;
 	}
 
 	@Shadow( aliases = { "this$0" } )

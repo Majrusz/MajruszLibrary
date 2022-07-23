@@ -13,6 +13,6 @@ public abstract class MixinArrow extends MixinProjectile {
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "setEffectsFromItem(Lnet/minecraft/world/item/ItemStack;)V", at = @At( "RETURN" ) )
 	private void setEffectsFromItem( ItemStack itemStack, CallbackInfo callback ) {
-		this.setArrow( itemStack );
+		this.setupArrow( itemStack );
 	}
 }
