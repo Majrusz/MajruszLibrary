@@ -1,6 +1,7 @@
 package com.mlib.features;
 
 import com.mlib.Random;
+import com.mlib.effects.ParticleHandler;
 import com.mlib.events.BlockSmeltCheckEvent;
 import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnLootContext;
@@ -66,7 +67,7 @@ public class BlockSmelter extends GameModifier {
 		}
 
 		if( amountOfSmeltedItems > 0 )
-			ParticleHelper.spawnSmeltParticles( level, position, 3 + amountOfSmeltedItems + Random.nextInt( 1, 4 ) );
+			ParticleHandler.SMELT.spawn( level, position, amountOfSmeltedItems + Random.nextInt( 4, 7 ) );
 
 		generatedLoot.clear();
 		generatedLoot.addAll( smeltedLoot );
