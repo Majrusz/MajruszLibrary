@@ -10,9 +10,16 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 @Mod.EventBusSubscriber
 public class OnLootContext extends Context< OnLootData > {
+	public static final Predicate< OnLootData > HAS_BLOCK_STATE = data->data.blockState != null;
+	public static final Predicate< OnLootData > HAS_DAMAGE_SOURCE = data->data.damageSource != null;
+	public static final Predicate< OnLootData > HAS_KILLER = data->data.killer != null;
+	public static final Predicate< OnLootData > HAS_ENTITY = data->data.entity != null;
+	public static final Predicate< OnLootData > HAS_TOOL = data->data.tool != null;
+	public static final Predicate< OnLootData > HAS_ORIGIN = data->data.origin != null;
 	static final List< OnLootContext > CONTEXTS = new ArrayList<>();
 
 	public OnLootContext( Consumer< OnLootData > consumer, ContextParameters params ) {
