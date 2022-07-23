@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-/** Tills grass in greater area. */
 @Mod.EventBusSubscriber
 public class FarmlandTiller {
 	public static final List< Register > registerList = new ArrayList<>();
