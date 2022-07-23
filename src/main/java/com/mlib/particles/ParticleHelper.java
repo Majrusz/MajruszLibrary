@@ -9,7 +9,11 @@ import net.minecraft.world.phys.Vec3;
 /** Common functions for particles and sounds. */
 public class ParticleHelper {
 	public static void spawnSmeltParticles( ServerLevel level, Vec3 position, int amountOfParticles ) {
-		level.sendParticles( ParticleTypes.FLAME, position.x, position.y, position.z, amountOfParticles, 0.125, 0.125, 0.125, 0.03125 );
+		spawnSmeltParticles( level, position, amountOfParticles, 0.2 );
+	}
+
+	public static void spawnSmeltParticles( ServerLevel level, Vec3 position, int amountOfParticles, double offset ) {
+		level.sendParticles( ParticleTypes.FLAME, position.x, position.y, position.z, amountOfParticles, offset, offset, offset, 0.01 );
 		level.playSound( null, position.x, position.y, position.z, SoundEvents.FIRECHARGE_USE, SoundSource.AMBIENT, 0.05f, 0.8f );
 	}
 
