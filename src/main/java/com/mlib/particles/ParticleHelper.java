@@ -6,7 +6,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
 
-/** Common functions for particles and sounds. */
+@Deprecated
 public class ParticleHelper {
 	public static void spawnSmeltParticles( ServerLevel level, Vec3 position, int amountOfParticles ) {
 		spawnSmeltParticles( level, position, amountOfParticles, 0.2 );

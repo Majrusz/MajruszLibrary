@@ -5,6 +5,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
 /** Methods for easier handling effects. */
+@Deprecated
 public class EffectHelper {
 	public static boolean applyEffectIfPossible( LivingEntity entity, MobEffectInstance effectInstance ) {
 		if( entity.canBeAffected( effectInstance ) ) {
