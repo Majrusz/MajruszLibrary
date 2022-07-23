@@ -8,7 +8,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.function.Supplier;
 
 public class ParticleHandler {
-	public static final ParticleHandler AWARD = new ParticleHandler( ParticleTypes.HAPPY_VILLAGER, new Vec3( 0.1, 0.1, 0.1 ), ()->0.1f );
+	public static final ParticleHandler AWARD = new ParticleHandler( ParticleTypes.HAPPY_VILLAGER, new Vec3( 0.25, 0.25, 0.25 ), ()->0.1f );
 	public static final ParticleHandler SMELT = new ParticleHandler( ParticleTypes.FLAME, new Vec3( 0.1, 0.1, 0.1 ), ()->0.01f );
 
 	final SimpleParticleType particleType;
