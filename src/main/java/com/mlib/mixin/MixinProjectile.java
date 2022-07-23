@@ -21,57 +21,57 @@ import javax.annotation.Nullable;
 @Mixin( Projectile.class )
 public abstract class MixinProjectile implements IMixinProjectile {
 	private static final String TAG_NAME = "ProjectileExtraTags";
-	CompoundTag customTag = new CompoundTag();
-	@Nullable ItemStack weapon;
-	@Nullable ItemStack arrow;
+	CompoundTag mlibCustomTag = new CompoundTag();
+	@Nullable ItemStack mlibWeapon;
+	@Nullable ItemStack mlibArrow;
 
 	public void setupArrow( @Nullable ItemStack arrow ) {
-		this.arrow = arrow;
+		this.mlibArrow = arrow;
 		if( Projectile.class.cast( this ).getOwner() instanceof LivingEntity entity ) {
 			ItemStack itemStack = entity.getMainHandItem();
 			if( itemStack.getItem() instanceof BowItem ) {
-				this.weapon = itemStack;
+				this.mlibWeapon = itemStack;
 			}
 		}
 	}
 
 	@Override
 	public @Nullable ItemStack getWeapon() {
-		return this.weapon;
+		return this.mlibWeapon;
 	}
 
 	@Override
 	public @Nullable ItemStack getArrow() {
-		return this.arrow;
+		return this.mlibArrow;
 	}
 
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "shoot(DDDFF)V", at = @At( "RETURN" ) )
 	private void shoot( double x, double y, double z, float scale, float randomRange, CallbackInfo callback ) {
-		MinecraftForge.EVENT_BUS.post( new ProjectileEvent.Shot( Projectile.class.cast( this ), this.weapon, this.arrow, this.customTag ) );
+		MinecraftForge.EVENT_BUS.post( new ProjectileEvent.Shot( Projectile.class.cast( this ), this.mlibWeapon, this.mlibArrow, this.mlibCustomTag ) );
 	}
 
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "onHitEntity(Lnet/minecraft/world/phys/EntityHitResult;)V", at = @At( "RETURN" ) )
 	private void onHitEntity( EntityHitResult hitResult, CallbackInfo callback ) {
-		MinecraftForge.EVENT_BUS.post( new ProjectileEvent.Hit( Projectile.class.cast( this ), this.weapon, this.arrow, this.customTag, hitResult ) );
+		MinecraftForge.EVENT_BUS.post( new ProjectileEvent.Hit( Projectile.class.cast( this ), this.mlibWeapon, this.mlibArrow, this.mlibCustomTag, hitResult ) );
 	}
 
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "onHitBlock(Lnet/minecraft/world/phys/BlockHitResult;)V", at = @At( "RETURN" ) )
 	private void onHitBlock( BlockHitResult hitResult, CallbackInfo callback ) {
-		MinecraftForge.EVENT_BUS.post( new ProjectileEvent.Hit( Projectile.class.cast( this ), this.weapon, this.arrow, this.customTag, hitResult ) );
+		MinecraftForge.EVENT_BUS.post( new ProjectileEvent.Hit( Projectile.class.cast( this ), this.mlibWeapon, this.mlibArrow, this.mlibCustomTag, hitResult ) );
 	}
 
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "addAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At( "RETURN" ) )
 	private void addAdditionalSaveData( CompoundTag tag, CallbackInfo callback ) {
-		tag.put( TAG_NAME, this.customTag );
+		tag.put( TAG_NAME, this.mlibCustomTag );
 	}
 
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "readAdditionalSaveData(Lnet/minecraft/nbt/CompoundTag;)V", at = @At( "RETURN" ) )
 	private void readAdditionalSaveData( CompoundTag tag, CallbackInfo callback ) {
-		this.customTag = tag.getCompound( TAG_NAME );
+		this.mlibCustomTag = tag.getCompound( TAG_NAME );
 	}
 }
