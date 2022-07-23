@@ -11,6 +11,8 @@ import java.util.function.Supplier;
 
 public class SoundHandler {
 	public static final SoundHandler AWARD = new SoundHandler( SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.AMBIENT, ()->0.05f );
+	public static final SoundHandler CROP = new SoundHandler( SoundEvents.GROWING_PLANT_CROP, SoundSource.AMBIENT, ()->0.05f );
+	public static final SoundHandler PICKUP = new SoundHandler( SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, ()->0.05f );
 	public static final SoundHandler SMELT = new SoundHandler( SoundEvents.FIRECHARGE_USE, SoundSource.AMBIENT, ()->0.05f );
 
 	final SoundEvent event;
