@@ -42,6 +42,7 @@ public class EntityHelper {
 	 Returns Player from given entity.
 	 Returns null if casting was impossible.
 	 */
+	@Deprecated
 	@Nullable
 	public static Player getPlayerFromEntity( @Nullable Entity entity ) {
 		return Utility.castIfPossible( Player.class, entity );
