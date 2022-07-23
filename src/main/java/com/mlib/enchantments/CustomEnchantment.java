@@ -1,5 +1,6 @@
 package com.mlib.enchantments;
 
+import com.mlib.items.ItemHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -12,6 +13,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public abstract class CustomEnchantment extends Enchantment {
@@ -117,6 +119,18 @@ public abstract class CustomEnchantment extends Enchantment {
 			itemStackList.add( livingEntity.getItemBySlot( slotType ) );
 
 		return getEnchantmentSum( itemStackList );
+	}
+
+	public int getMatchingHandItemEnchantmentLevel( LivingEntity entity, Predicate< ItemStack > predicate ) {
+		return getEnchantmentLevel( ItemHelper.getMatchingHandItem( entity, predicate ) );
+	}
+
+	public ItemStack deduceUsedHandItem( LivingEntity entity ) {
+		return ItemHelper.getMatchingHandItem( entity, itemStack->this.params.category.canEnchant( itemStack.getItem() ) );
+	}
+
+	public int getDeducedHandEnchantmentLevel( LivingEntity entity ) {
+		return getEnchantmentLevel( deduceUsedHandItem( entity ) );
 	}
 
 	public void setEnabledSupplier( Supplier< Boolean > availability ) {
