@@ -1,6 +1,7 @@
 package com.mlib.mixin;
 
 import com.mlib.events.ProjectileEvent;
+import com.mlib.mixininterfaces.IMixinProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -18,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import javax.annotation.Nullable;
 
 @Mixin( Projectile.class )
-public abstract class MixinProjectile {
+public abstract class MixinProjectile implements IMixinProjectile {
 	private static final String TAG_NAME = "ProjectileExtraTags";
 	CompoundTag customTag = new CompoundTag();
 	@Nullable ItemStack weapon;
@@ -34,10 +35,12 @@ public abstract class MixinProjectile {
 		}
 	}
 
+	@Override
 	public @Nullable ItemStack getWeapon() {
 		return this.weapon;
 	}
 
+	@Override
 	public @Nullable ItemStack getArrow() {
 		return this.arrow;
 	}
