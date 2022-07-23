@@ -15,6 +15,7 @@ import java.util.List;
  It allows for more generic and reusable behaviours for all of my mods.
  */
 public abstract class GameModifier extends ConfigGroup {
+	public static final String DEFAULT_KEY = "NO_CONFIG_KEY";
 	static final HashMap< String, ConfigGroup > MOD_CONFIGS = new HashMap<>();
 	final List< Context< ? extends ContextData > > contexts = new ArrayList<>();
 	final String configKey;
@@ -41,6 +42,10 @@ public abstract class GameModifier extends ConfigGroup {
 
 	public GameModifier( String configKey ) {
 		this( configKey, "", "" );
+	}
+
+	public GameModifier() {
+		this( DEFAULT_KEY );
 	}
 
 	public < DataType extends ContextData > void addContext( Context< DataType > context ) {
