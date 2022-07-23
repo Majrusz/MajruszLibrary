@@ -15,21 +15,23 @@ import javax.annotation.Nullable;
 public class ProjectileEvent extends Event implements IModBusEvent {
 	public final Projectile projectile;
 	public final Level level;
-	@Nullable final Entity owner;
-	@Nullable public final ItemStack itemStack;
+	@Nullable public final Entity owner;
+	@Nullable public final ItemStack weapon;
+	@Nullable public final ItemStack arrow;
 	public final CompoundTag customTag;
 
-	public ProjectileEvent( Projectile projectile, @Nullable ItemStack itemStack, CompoundTag customTag ) {
+	public ProjectileEvent( Projectile projectile, @Nullable ItemStack weapon, @Nullable ItemStack arrow, CompoundTag customTag ) {
 		this.projectile = projectile;
 		this.level = projectile.level;
 		this.owner = projectile.getOwner();
-		this.itemStack = itemStack;
+		this.weapon = weapon;
+		this.arrow = arrow;
 		this.customTag = customTag;
 	}
 
 	public static class Shot extends ProjectileEvent {
-		public Shot( Projectile projectile, @Nullable ItemStack itemStack, CompoundTag customTag ) {
-			super( projectile, itemStack, customTag );
+		public Shot( Projectile projectile, @Nullable ItemStack weapon, @Nullable ItemStack arrow, CompoundTag customTag ) {
+			super( projectile, weapon, arrow, customTag );
 		}
 	}
 
@@ -37,14 +39,14 @@ public class ProjectileEvent extends Event implements IModBusEvent {
 		@Nullable public final EntityHitResult entityHitResult;
 		@Nullable public final BlockHitResult blockHitResult;
 
-		public Hit( Projectile projectile, @Nullable ItemStack itemStack, CompoundTag customTag, @Nullable EntityHitResult entityHitResult ) {
-			super( projectile, itemStack, customTag );
+		public Hit( Projectile projectile, @Nullable ItemStack weapon, @Nullable ItemStack arrow, CompoundTag customTag, @Nullable EntityHitResult entityHitResult ) {
+			super( projectile, weapon, arrow, customTag );
 			this.entityHitResult = entityHitResult;
 			this.blockHitResult = null;
 		}
 
-		public Hit( Projectile projectile, @Nullable ItemStack itemStack, CompoundTag customTag, @Nullable BlockHitResult blockHitResult ) {
-			super( projectile, itemStack, customTag );
+		public Hit( Projectile projectile, @Nullable ItemStack weapon, @Nullable ItemStack arrow, CompoundTag customTag, @Nullable BlockHitResult blockHitResult ) {
+			super( projectile, weapon, arrow, customTag );
 			this.entityHitResult = null;
 			this.blockHitResult = blockHitResult;
 		}
