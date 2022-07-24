@@ -1,6 +1,8 @@
 package com.mlib.gamemodifiers.data;
 
+import com.mlib.Utility;
 import com.mlib.gamemodifiers.ContextData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
 import net.minecraftforge.event.level.ExplosionEvent;
@@ -16,7 +18,7 @@ public class OnExplosionData extends ContextData.Event< ExplosionEvent > {
 	public final MutableBoolean causesFire;
 
 	public OnExplosionData( ExplosionEvent event ) {
-		super( event.getExplosion().getSourceMob(), event );
+		super( Utility.castIfPossible( ServerLevel.class, event.getLevel() ), event );
 		this.explosion = event.getExplosion();
 		this.sourceMob = this.explosion.getSourceMob();
 		this.radius = new MutableFloat( this.explosion.radius );

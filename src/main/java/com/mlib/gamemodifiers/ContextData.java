@@ -16,11 +16,21 @@ public abstract class ContextData {
 		this.level = this.entity != null ? Utility.castIfPossible( ServerLevel.class, this.entity.level ) : null;
 	}
 
+	public ContextData( ServerLevel level ) {
+		this.entity = null;
+		this.level = level;
+	}
+
 	public static class Event< EventType extends net.minecraftforge.eventbus.api.Event > extends ContextData {
 		public final EventType event;
 
 		public Event( @Nullable LivingEntity entity, EventType event ) {
 			super( entity );
+			this.event = event;
+		}
+
+		public Event( ServerLevel level, EventType event ) {
+			super( level );
 			this.event = event;
 		}
 	}
