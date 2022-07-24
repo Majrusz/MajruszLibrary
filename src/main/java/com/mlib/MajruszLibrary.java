@@ -1,6 +1,5 @@
 package com.mlib;
 
-import com.mlib.config.ConfigGroup;
 import com.mlib.config.ConfigHandler;
 import com.mlib.gamemodifiers.GameModifier;
 import net.minecraft.util.RandomSource;
@@ -24,7 +23,6 @@ public class MajruszLibrary {
 	public static final ConfigHandler CONFIG_HANDLER = new ConfigHandler( ModConfig.Type.COMMON, "common.toml", MOD_ID );
 
 	public MajruszLibrary() {
-		CONFIG_HANDLER.addNewGameModifierGroup( GameModifier.DEFAULT_KEY, "", "" );
 		Registries.initialize();
 		MinecraftForge.EVENT_BUS.register( this );
 	}

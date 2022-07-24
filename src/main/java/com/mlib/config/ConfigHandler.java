@@ -63,6 +63,7 @@ public class ConfigHandler {
 		return configGroup;
 	}
 
+	@Deprecated
 	public ConfigGroup addNewGameModifierGroup( String configKey, String groupName, String comment ) {
 		ConfigGroup configGroup = GameModifier.addNewGroup( configKey, groupName, comment );
 		this.configs.add( configGroup );
