@@ -39,4 +39,8 @@ public class Registries {
 	public static ResourceLocation getLocation( String register ) {
 		return HELPER.getLocation( register );
 	}
+
+	public static String getLocationString( String register ) {
+		return getLocation( register ).toString();
+	}
 }
