@@ -3,7 +3,6 @@ package com.mlib.gamemodifiers;
 import com.mlib.MajruszLibrary;
 import com.mlib.Registries;
 import com.mlib.config.ConfigGroup;
-import com.mlib.config.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +33,7 @@ public abstract class GameModifier extends ConfigGroup {
 		if( pendingModifiers != null ) {
 			pendingModifiers.forEach( group::addConfig );
 		}
-		MajruszLibrary.LOGGER.info( String.format( "Game modifier config '%s' has been initialized. (pending modifiers: %d)", key, pendingModifiers != null ? pendingModifiers.size() : 0 ) );
+		MajruszLibrary.LOGGER.info( String.format( "Game modifier group '%s' has been initialized. (pending modifiers: %d)", key, pendingModifiers != null ? pendingModifiers.size() : 0 ) );
 		return group;
 	}
 
