@@ -6,7 +6,7 @@
 - [Planet Minecraft](https://www.planetminecraft.com/mod/majrusz-library/)
 
 ## Current Library Releases (Source Code)
-- [v2.8.0 for Minecraft 1.19](https://github.com/Majrusz/MajruszLibrary/tree/1.19)
+- [v2.12.0 for Minecraft 1.19](https://github.com/Majrusz/MajruszLibrary/tree/1.19)
 - [v2.7.2 for Minecraft 1.18.2](https://github.com/Majrusz/MajruszLibrary/tree/1.18.2)
 - [v2.7.0 for Minecraft 1.18.1](https://github.com/Majrusz/MajruszLibrary/tree/1.18.1) *(not supported anymore)*
 - [v2.6.0 for Minecraft 1.17.1](https://github.com/Majrusz/MajruszLibrary/tree/1.17.1) *(not supported anymore)*
