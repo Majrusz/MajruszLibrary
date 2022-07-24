@@ -1,5 +1,6 @@
 package com.mlib.gamemodifiers;
 
+import com.mlib.MajruszLibrary;
 import com.mlib.config.ConfigGroup;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import java.util.List;
 public abstract class GameModifier extends ConfigGroup {
 	public static final String DEFAULT_KEY = "NO_CONFIG_KEY";
 	static final HashMap< String, ConfigGroup > MOD_CONFIGS = new HashMap<>();
+	static final HashMap< String, List< GameModifier > > PENDING_MODIFIERS = new HashMap<>();
 	final List< Context< ? extends ContextData > > contexts = new ArrayList<>();
 	final String configKey;
 
@@ -25,6 +27,11 @@ public abstract class GameModifier extends ConfigGroup {
 
 		ConfigGroup group = new ConfigGroup( configName, configComment );
 		MOD_CONFIGS.put( configKey, group );
+		List< GameModifier > pendingModifiers = PENDING_MODIFIERS.remove( configKey );
+		if( pendingModifiers != null ) {
+			pendingModifiers.forEach( group::addConfig );
+		}
+		MajruszLibrary.LOGGER.info( String.format( "Game modifier config '%s' has been initialized. (pending modifiers: %d)", configKey, pendingModifiers != null ? pendingModifiers.size() : 0 ) );
 		return group;
 	}
 
@@ -35,9 +42,7 @@ public abstract class GameModifier extends ConfigGroup {
 	public GameModifier( String configKey, String configName, String configComment ) {
 		super( configName, configComment );
 		this.configKey = configKey;
-
-		assert MOD_CONFIGS.containsKey( this.configKey ) : "Config for " + this.configKey + " has not been initialized yet!";
-		MOD_CONFIGS.get( this.configKey ).addGroup( this );
+		this.addToModConfig();
 	}
 
 	public GameModifier( String configKey ) {
@@ -65,5 +70,15 @@ public abstract class GameModifier extends ConfigGroup {
 
 	public String getConfigKey() {
 		return this.configKey;
+	}
+
+	private void addToModConfig() {
+		ConfigGroup modConfig = MOD_CONFIGS.get( this.configKey );
+		if( modConfig != null ) {
+			modConfig.addConfig( this );
+		} else { // to prevent race conditions
+			List< GameModifier > gameModifiers = PENDING_MODIFIERS.getOrDefault( this.configKey, new ArrayList<>() );
+			gameModifiers.add( this );
+		}
 	}
 }
