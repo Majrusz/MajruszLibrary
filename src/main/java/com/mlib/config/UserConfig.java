@@ -10,7 +10,7 @@ public abstract class UserConfig {
 		this.name = name;
 		this.comment = comment;
 	}
-	
+
 	public String getName() {
 		return this.name;
 	}
