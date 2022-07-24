@@ -10,6 +10,14 @@ public abstract class UserConfig {
 		this.name = name;
 		this.comment = comment;
 	}
+	
+	public String getName() {
+		return this.name;
+	}
+
+	public String getComment() {
+		return this.comment;
+	}
 
 	abstract public void build( ForgeConfigSpec.Builder builder );
 }
