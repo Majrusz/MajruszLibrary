@@ -36,7 +36,7 @@ public abstract class ValueConfig< Type, ConfigType extends ForgeConfigSpec.Conf
 	private static String validateComment( String comment, boolean requiresWorldRestart ) {
 		if( !comment.isEmpty() && requiresWorldRestart ) {
 			if( comment.endsWith( "." ) ) {
-				return comment.substring( 0, comment.length() - 2 ) + " (requires world/game restart).";
+				return comment.substring( 0, comment.length() - 1 ) + " (requires world/game restart).";
 			} else {
 				return comment + " (requires world/game restart)";
 			}
