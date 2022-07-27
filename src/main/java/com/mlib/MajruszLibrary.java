@@ -1,7 +1,6 @@
 package com.mlib;
 
 import com.mlib.config.ConfigHandler;
-import com.mlib.gamemodifiers.GameModifier;
 import net.minecraft.util.RandomSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
