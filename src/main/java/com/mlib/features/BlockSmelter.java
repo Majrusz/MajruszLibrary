@@ -27,7 +27,7 @@ import java.util.Optional;
 
 public class BlockSmelter extends GameModifier {
 	public BlockSmelter() {
-		super();
+		super( "BlockSmelter", "" );
 
 		OnLootContext onLoot = new OnLootContext( this::replaceWithSmeltedLoot, new ContextParameters( Priority.HIGH, "", "" ) );
 		onLoot.addCondition( data->data.blockState != null )
