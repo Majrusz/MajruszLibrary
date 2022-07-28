@@ -2,7 +2,7 @@ package com.mlib.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public abstract class ValueConfig< Type, ConfigType extends ForgeConfigSpec.ConfigValue< Type > > extends UserConfig {
+public abstract class ValueConfig< Type, ConfigType extends ForgeConfigSpec.ConfigValue< Type > > extends UserConfig implements IValueConfig< Type > {
 	protected final boolean requiresWorldRestart;
 	protected final Type defaultValue;
 	protected ConfigType config;
@@ -29,6 +29,7 @@ public abstract class ValueConfig< Type, ConfigType extends ForgeConfigSpec.Conf
 	}
 
 	/** Returns value stored in the configuration file (or cached). */
+	@Override
 	public Type get() {
 		return this.config.get();
 	}
