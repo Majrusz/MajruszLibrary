@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class StringListConfig extends ValueConfig< List< ? extends String >, ForgeConfigSpec.ConfigValue< List< ? extends String > > > {
+public class StringListConfig extends ValueConfig< List< ? extends String > > {
 	public StringListConfig( String name, String comment, boolean requiresWorldRestart, List< ? extends String > defaultValue ) {
 		super( name, comment, requiresWorldRestart, defaultValue );
 	}
@@ -16,8 +16,10 @@ public class StringListConfig extends ValueConfig< List< ? extends String >, For
 	}
 
 	@Override
-	public ForgeConfigSpec.ConfigValue< List< ? extends String > > buildValue( ForgeConfigSpec.Builder builder ) {
-		return builder.defineList( this.name, this.defaultValue, list->true );
+	public void build( ForgeConfigSpec.Builder builder ) {
+		super.build( builder );
+
+		this.config = builder.defineList( this.name, this.defaultValue, list->true );
 	}
 
 	public boolean contains( String value ) {

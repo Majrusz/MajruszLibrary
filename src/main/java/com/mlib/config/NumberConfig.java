@@ -1,8 +1,6 @@
 package com.mlib.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-
-public abstract class NumberConfig< Type extends Number, ConfigType extends ForgeConfigSpec.ConfigValue< Type > > extends ValueConfig< Type, ConfigType > {
+public abstract class NumberConfig< Type extends Number > extends ValueConfig< Type > {
 	protected final Type min;
 	protected final Type max;
 
