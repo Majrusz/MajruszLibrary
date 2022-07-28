@@ -6,9 +6,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ItemCreativeModeTab extends CreativeModeTab {
-	final RegistryObject< Item > item;
+	final RegistryObject< ? extends Item > item;
 
-	public ItemCreativeModeTab( String label, RegistryObject< Item > item ) {
+	public ItemCreativeModeTab( String label, RegistryObject< ? extends Item > item ) {
 		super( label );
 		this.item = item;
 	}
