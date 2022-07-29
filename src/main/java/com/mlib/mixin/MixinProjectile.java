@@ -5,8 +5,8 @@ import com.mlib.mixininterfaces.IMixinProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,7 +29,7 @@ public abstract class MixinProjectile implements IMixinProjectile {
 		this.mlibArrow = arrow;
 		if( Projectile.class.cast( this ).getOwner() instanceof LivingEntity entity ) {
 			ItemStack itemStack = entity.getMainHandItem();
-			if( itemStack.getItem() instanceof BowItem ) {
+			if( itemStack.getItem() instanceof ProjectileWeaponItem ) {
 				this.mlibWeapon = itemStack;
 			}
 		}
