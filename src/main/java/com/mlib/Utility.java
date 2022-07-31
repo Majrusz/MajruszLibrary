@@ -3,9 +3,12 @@ package com.mlib;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 
@@ -43,6 +46,14 @@ public class Utility {
 		return getRegistryKey( item ).toString();
 	}
 
+	public static ResourceLocation getRegistryKey( ItemStack itemStack ) {
+		return getRegistryKey( itemStack.getItem() );
+	}
+
+	public static String getRegistryString( ItemStack itemStack ) {
+		return getRegistryString( itemStack.getItem() );
+	}
+
 	public static ResourceLocation getRegistryKey( EntityType< ? > entityType ) {
 		return EntityType.getKey( entityType );
 	}
@@ -51,12 +62,28 @@ public class Utility {
 		return getRegistryKey( entityType ).toString();
 	}
 
+	public static ResourceLocation getRegistryKey( LivingEntity entity ) {
+		return getRegistryKey( entity.getType() );
+	}
+
+	public static String getRegistryString( LivingEntity entity ) {
+		return getRegistryString( entity.getType() );
+	}
+
 	public static ResourceLocation getRegistryKey( Enchantment enchantment ) {
 		return Registry.ENCHANTMENT.getKey( enchantment );
 	}
 
 	public static String getRegistryString( Enchantment enchantment ) {
 		return getRegistryKey( enchantment ).toString();
+	}
+
+	public static ResourceLocation getRegistryKey( Level level ) {
+		return level.dimension().registry();
+	}
+
+	public static String getRegistryString( Level level ) {
+		return getRegistryKey( level ).toString();
 	}
 
 	public static String getPlayerUUID( Player player ) {
