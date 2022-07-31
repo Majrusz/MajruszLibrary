@@ -30,24 +30,18 @@ public class EntityHelper {
 	public static void cheatDeath( LivingEntity entity, float healthRatio, boolean shouldPlayEffects ) {
 		entity.setHealth( entity.getMaxHealth() * healthRatio );
 
-		if( shouldPlayEffects && entity.level instanceof ServerLevel ) {
-			ServerLevel level = ( ServerLevel )entity.level;
-
+		if( shouldPlayEffects && entity.level instanceof ServerLevel level ) {
 			level.sendParticles( ParticleTypes.TOTEM_OF_UNDYING, entity.getX(), entity.getY( 0.75 ), entity.getZ(), 64, 0.25, 0.5, 0.25, 0.5 );
 			level.playSound( null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, SoundSource.AMBIENT, 1.0f, 1.0f );
 		}
 	}
 
-	/**
-	 Returns Player from given entity.
-	 Returns null if casting was impossible.
-	 */
+	@Deprecated
 	@Nullable
 	public static Player getPlayerFromEntity( @Nullable Entity entity ) {
 		return Utility.castIfPossible( Player.class, entity );
 	}
 
-	/** Checks whether given player has Creative Mode enabled. */
 	public static boolean isOnCreativeMode( Player player ) {
 		return player.getAbilities().instabuild;
 	}
@@ -60,14 +54,18 @@ public class EntityHelper {
 		return ( entity instanceof Villager || entity instanceof WanderingTrader || entity instanceof Player || entity instanceof Witch || entity instanceof Pillager );
 	}
 
-	/** Returns given entity's health ratio. */
 	public static double getHealthRatio( LivingEntity entity ) {
 		return Mth.clamp( entity.getHealth() / entity.getMaxHealth(), 0.0, 1.0 );
 	}
 
-	/** Returns given entity's missing health ratio. */
 	public static double getMissingHealthRatio( LivingEntity entity ) {
 		return 1.0 - getHealthRatio( entity );
+	}
+
+	public static void disableCurrentItem( Player player, double seconds ) {
+		player.getCooldowns().addCooldown( player.getUseItem().getItem(), Utility.secondsToTicks( seconds ) );
+		player.stopUsingItem();
+		player.level.broadcastEntityEvent( player, ( byte )30 );
 	}
 
 	/** Returns entities of a given class in a box with given side length. */

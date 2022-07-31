@@ -2,9 +2,16 @@ package com.mlib.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class BooleanConfig extends ValueConfig< Boolean, ForgeConfigSpec.BooleanValue > {
+public class BooleanConfig extends ValueConfig< Boolean > {
 	public BooleanConfig( String name, String comment, boolean requiresWorldRestart, boolean defaultValue ) {
 		super( name, comment, requiresWorldRestart, defaultValue );
+	}
+
+	@Override
+	public void build( ForgeConfigSpec.Builder builder ) {
+		super.build( builder );
+
+		this.config = builder.define( this.name, this.defaultValue );
 	}
 
 	public boolean isEnabled() {

@@ -155,4 +155,15 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 			return data.entity != null && EnchantmentHelper.getEnchantmentLevel( this.enchantment, data.entity ) > 0;
 		}
 	}
+
+	public static class IsServer extends Condition {
+		public IsServer() {
+			super( Priority.HIGH );
+		}
+
+		@Override
+		public boolean check( GameModifier feature, ContextData data ) {
+			return data.level != null;
+		}
+	}
 }

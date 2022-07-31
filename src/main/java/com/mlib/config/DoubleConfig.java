@@ -3,9 +3,16 @@ package com.mlib.config;
 import com.mlib.Utility;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class DoubleConfig extends NumberConfig< Double, ForgeConfigSpec.DoubleValue > {
+public class DoubleConfig extends NumberConfig< Double > {
 	public DoubleConfig( String name, String comment, boolean requiresWorldRestart, double defaultValue, double min, double max ) {
 		super( name, comment, requiresWorldRestart, defaultValue, min, max );
+	}
+
+	@Override
+	public void build( ForgeConfigSpec.Builder builder ) {
+		super.build( builder );
+
+		this.config = builder.defineInRange( this.name, this.defaultValue, this.min, this.max );
 	}
 
 	public int asTicks() {
@@ -14,10 +21,5 @@ public class DoubleConfig extends NumberConfig< Double, ForgeConfigSpec.DoubleVa
 
 	public float asFloat() {
 		return super.get().floatValue();
-	}
-
-	@Override
-	public ForgeConfigSpec.DoubleValue buildValue( ForgeConfigSpec.Builder builder ) {
-		return builder.defineInRange( this.name, this.defaultValue, this.min, this.max );
 	}
 }

@@ -1,10 +1,12 @@
 package com.mlib.gamemodifiers;
 
+import com.mlib.Registries;
 import com.mlib.config.ConfigGroup;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import static com.mlib.MajruszLibrary.MOD_CONFIGS;
 
 /**
  If you would ever wonder what the hell is going over here then let me explain...
@@ -12,35 +14,32 @@ import java.util.List;
  events with new functionalities via contexts. The context handles specific moment
  in the gameplay (for instance it can be a moment when player is about to take the damage)
  and it is made of conditions, which determines whether we should consider that context.
- It allows for more generic and reusable behaviours for all of my mods.
+ It allows for more generic and reusable behaviours for all of my mods and makes porting
+ mods much easier.
  */
 public abstract class GameModifier extends ConfigGroup {
-	static final HashMap< String, ConfigGroup > MOD_CONFIGS = new HashMap<>();
+	public static final String DEFAULT_KEY = Registries.getLocationString( "default" );
 	final List< Context< ? extends ContextData > > contexts = new ArrayList<>();
 	final String configKey;
 
-	public static ConfigGroup addNewGroup( String configKey, String configName, String configComment ) {
-		assert !MOD_CONFIGS.containsKey( configKey ) : "Config for " + configKey + " has been initialized already!";
-
-		ConfigGroup group = new ConfigGroup( configName, configComment );
-		MOD_CONFIGS.put( configKey, group );
+	public static ConfigGroup addNewGroup( String key, String name, String comment ) {
+		ConfigGroup group = new ConfigGroup( name, comment );
+		MOD_CONFIGS.setup( key, group );
 		return group;
 	}
 
-	public static ConfigGroup addNewGroup( String configKey ) {
-		return addNewGroup( configKey, "GameModifiers", "" );
+	public static ConfigGroup addNewGroup( String key ) {
+		return addNewGroup( key, "GameModifiers", "" );
 	}
 
 	public GameModifier( String configKey, String configName, String configComment ) {
 		super( configName, configComment );
 		this.configKey = configKey;
-
-		assert MOD_CONFIGS.containsKey( this.configKey ) : "Config for " + this.configKey + " has not been initialized yet!";
-		MOD_CONFIGS.get( this.configKey ).addGroup( this );
+		MOD_CONFIGS.insert( configKey, this );
 	}
 
-	public GameModifier( String configKey ) {
-		this( configKey, "", "" );
+	public GameModifier( String configName, String configComment ) {
+		this( DEFAULT_KEY, configName, configComment );
 	}
 
 	public < DataType extends ContextData > void addContext( Context< DataType > context ) {
