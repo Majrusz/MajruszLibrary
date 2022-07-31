@@ -79,7 +79,7 @@ public class Utility {
 	}
 
 	public static ResourceLocation getRegistryKey( Level level ) {
-		return level.dimension().registry();
+		return level.dimension().location();
 	}
 
 	public static String getRegistryString( Level level ) {
