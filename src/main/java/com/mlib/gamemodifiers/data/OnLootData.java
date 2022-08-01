@@ -8,12 +8,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class OnLootData extends ContextData.Event< AnyLootModificationEvent > {
+	public final LootContext context;
 	public final List< ItemStack > generatedLoot;
 	@Nullable public final BlockState blockState;
 	@Nullable public final DamageSource damageSource;
@@ -24,6 +26,7 @@ public class OnLootData extends ContextData.Event< AnyLootModificationEvent > {
 
 	public OnLootData( AnyLootModificationEvent event ) {
 		super( Utility.castIfPossible( LivingEntity.class, event.entity ), event );
+		this.context = event.context;
 		this.generatedLoot = event.generatedLoot;
 		this.blockState = event.blockState;
 		this.damageSource = event.damageSource;
