@@ -38,7 +38,7 @@ public class AnyModification extends LootModifier {
 		ItemStack tool = LootHelper.getParameter( context, LootContextParams.TOOL );
 		Vec3 origin = LootHelper.getParameter( context, LootContextParams.ORIGIN );
 
-		MinecraftForge.EVENT_BUS.post( new AnyLootModificationEvent( generatedLoot, blockState, damageSource, killer, entity, tool, origin ) );
+		MinecraftForge.EVENT_BUS.post( new AnyLootModificationEvent( context, generatedLoot, blockState, damageSource, killer, entity, tool, origin ) );
 		return generatedLoot;
 	}
 

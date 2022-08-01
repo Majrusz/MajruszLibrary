@@ -4,6 +4,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.fml.event.IModBusEvent;
@@ -13,6 +14,7 @@ import java.util.List;
 
 /** Event called when any loot is generated. */
 public class AnyLootModificationEvent extends Event implements IModBusEvent {
+	public final LootContext context;
 	public final List< ItemStack > generatedLoot;
 	@Nullable public final BlockState blockState;
 	@Nullable public final DamageSource damageSource;
@@ -21,9 +23,10 @@ public class AnyLootModificationEvent extends Event implements IModBusEvent {
 	@Nullable public final ItemStack tool;
 	@Nullable public final Vec3 origin;
 
-	public AnyLootModificationEvent( List< ItemStack > generatedLoot, @Nullable BlockState blockState, @Nullable DamageSource damageSource,
+	public AnyLootModificationEvent( LootContext context, List< ItemStack > generatedLoot, @Nullable BlockState blockState, @Nullable DamageSource damageSource,
 		@Nullable Entity killer, @Nullable Entity entity, @Nullable ItemStack tool, @Nullable Vec3 origin
 	) {
+		this.context = context;
 		this.generatedLoot = generatedLoot;
 		this.blockState = blockState;
 		this.damageSource = damageSource;
