@@ -71,6 +71,14 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 		return this;
 	}
 
+	public Context< DataType > addConditions( Predicate< DataType >... predicates ) {
+		for( Predicate< DataType > predicate : predicates ) {
+			this.addCondition( predicate );
+		}
+
+		return this;
+	}
+
 	public boolean check( ContextData data ) {
 		for( Condition condition : this.conditions ) {
 			if( !condition.check( this.gameModifier, data ) ) {
