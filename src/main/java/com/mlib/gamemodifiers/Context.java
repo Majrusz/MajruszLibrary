@@ -71,7 +71,8 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 		return this;
 	}
 
-	public Context< DataType > addConditions( Predicate< DataType >... predicates ) {
+	@SafeVarargs
+	public final Context< DataType > addConditions( Predicate< DataType >... predicates ) {
 		for( Predicate< DataType > predicate : predicates ) {
 			this.addCondition( predicate );
 		}
