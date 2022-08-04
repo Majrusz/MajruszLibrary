@@ -2,7 +2,7 @@ package com.mlib;
 
 import com.mlib.config.ConfigHandler;
 import com.mlib.gamemodifiers.ModConfigs;
-import net.minecraft.util.RandomSource;
+import java.util.Random;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -19,7 +19,7 @@ public class MajruszLibrary {
 	public static final String MOD_ID = "majruszlib";
 	public static final String NAME = "Majrusz Library";
 	public static final Logger LOGGER = LogManager.getLogger();
-	public static final RandomSource RANDOM = RandomSource.create();
+	public static final Random RANDOM = new Random();
 	public static final ConfigHandler CONFIG_HANDLER = new ConfigHandler( ModConfig.Type.COMMON, "common.toml", MOD_ID );
 	public static final ModConfigs MOD_CONFIGS = new ModConfigs();
 

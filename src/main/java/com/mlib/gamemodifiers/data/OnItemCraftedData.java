@@ -12,8 +12,8 @@ public class OnItemCraftedData extends ContextData.Event< PlayerEvent.ItemCrafte
 	public final Container container;
 
 	public OnItemCraftedData( PlayerEvent.ItemCraftedEvent event ) {
-		super( event.getEntity(), event );
-		this.player = event.getEntity();
+		super( event.getEntityLiving(), event );
+		this.player = event.getPlayer();
 		this.itemStack = event.getCrafting();
 		this.container = event.getInventory();
 	}

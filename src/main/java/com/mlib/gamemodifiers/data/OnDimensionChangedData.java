@@ -12,8 +12,8 @@ public class OnDimensionChangedData extends ContextData.Event< PlayerEvent.Playe
 	public final ResourceKey< Level > to;
 
 	public OnDimensionChangedData( PlayerEvent.PlayerChangedDimensionEvent event ) {
-		super( event.getEntity(), event );
-		this.entity = event.getEntity();
+		super( event.getEntityLiving(), event );
+		this.entity = event.getEntityLiving();
 		this.from = event.getFrom();
 		this.to = event.getTo();
 	}

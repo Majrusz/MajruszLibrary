@@ -5,7 +5,7 @@ import com.mlib.gamemodifiers.data.OnExplosionData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.level.ExplosionEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 

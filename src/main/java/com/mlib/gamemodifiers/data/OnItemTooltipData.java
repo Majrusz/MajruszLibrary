@@ -14,7 +14,7 @@ public class OnItemTooltipData extends ContextData.Event< ItemTooltipEvent > {
 	public final TooltipFlag flags;
 
 	public OnItemTooltipData( ItemTooltipEvent event ) {
-		super( event.getEntity(), event );
+		super( event.getEntityLiving(), event );
 		this.itemStack = event.getItemStack();
 		this.tooltip = event.getToolTip();
 		this.flags = event.getFlags();

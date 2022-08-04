@@ -82,7 +82,7 @@ public class TooltipManager {
 		RenderSystem.disableTexture();
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		BufferUploader.drawWithShader( bufferbuilder.end() );
+		BufferUploader.end( bufferbuilder );
 		RenderSystem.disableBlend();
 		RenderSystem.enableTexture();
 		MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource.immediate( Tesselator.getInstance().getBuilder() );

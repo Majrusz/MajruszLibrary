@@ -32,7 +32,7 @@ public class FarmlandTiller {
 
 	@SubscribeEvent
 	public static void onHoeUse( PlayerInteractEvent.RightClickBlock event ) {
-		Player player = event.getEntity();
+		Player player = event.getPlayer();
 		ServerLevel level = LevelHelper.getServerLevelFromEntity( player );
 		BlockPos blockPosition = event.getPos();
 		ItemStack itemStack = event.getItemStack();

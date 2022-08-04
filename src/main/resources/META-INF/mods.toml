@@ -1,13 +1,13 @@
 modLoader="javafml"
-loaderVersion="[42,)"
+loaderVersion="[40,)"
 license="MIT License"
 issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
 
 [[mods]]
     modId="majruszlib"
-    version="2.15.0-unfinished"
+    version="2.7.3"
     displayName="Majrusz Library"
-    updateJSONURL="https://raw.githubusercontent.com/Majrusz/MajruszLibrary/1.19.X/update.json"
+    updateJSONURL="https://raw.githubusercontent.com/Majrusz/MajruszLibrary/1.18.X/update.json"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/majrusz-library"
     logoFile="logo.jpg"
     credits="Thanks for all your support and downloads!"
@@ -17,13 +17,13 @@ issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
 [[dependencies.mlib]]
     modId="forge"
     mandatory=true
-    versionRange="[42.0.0,)"
+    versionRange="[40.1.69,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.mlib]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.1,1.20)"
+    versionRange="[1.18.2,1.19)"
     ordering="NONE"
     side="BOTH"

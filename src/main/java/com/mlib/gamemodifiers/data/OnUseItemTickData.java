@@ -9,7 +9,7 @@ public class OnUseItemTickData extends ContextData.Event< LivingEntityUseItemEve
 	public final int duration;
 
 	public OnUseItemTickData( LivingEntityUseItemEvent.Tick event ) {
-		super( event.getEntity(), event );
+		super( event.getEntityLiving(), event );
 		this.itemStack = event.getItem();
 		this.duration = event.getDuration();
 	}

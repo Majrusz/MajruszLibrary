@@ -75,7 +75,7 @@ public class LevelHelper {
 	/** Checks whether is raining at entity current biome. */
 	public static boolean isRainingAtEntityBiome( Entity entity ) {
 		Level level = entity.level;
-		Biome biome = level.getBiome( new BlockPos( entity.position() ) ).get();
+		Biome biome = level.getBiome( new BlockPos( entity.position() ) ).value();
 
 		return level.isRaining() && biome.getPrecipitation() == Biome.Precipitation.RAIN;
 	}

@@ -77,7 +77,7 @@ public abstract class CustomEnchantment extends Enchantment {
 	}
 
 	public int getEnchantmentLevel( ItemStack itemStack ) {
-		return itemStack.getEnchantmentLevel( this );
+		return EnchantmentHelper.getItemEnchantmentLevel( this, itemStack );
 	}
 
 	public int getEnchantmentLevel( LivingEntity entity ) {

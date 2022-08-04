@@ -1,37 +1,40 @@
 package com.mlib.loot_modifiers;
 
-import com.google.common.base.Suppliers;
+import com.google.gson.JsonObject;
 import com.mlib.events.AnyLootModificationEvent;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 
 import javax.annotation.Nonnull;
-import java.util.function.Supplier;
+import java.util.List;
 
 /** Loot modifier for all situations. */
 public class AnyModification extends LootModifier {
-	public static final Supplier< Codec< AnyModification > > CODEC = Suppliers.memoize( ()->RecordCodecBuilder.create( inst->codecStart( inst ).apply( inst, AnyModification::new ) ) );
-
 	public AnyModification( LootItemCondition[] conditionsIn ) {
 		super( conditionsIn );
 	}
 
 	@Nonnull
 	@Override
-	public ObjectArrayList< ItemStack > doApply( ObjectArrayList< ItemStack > generatedLoot, LootContext context ) {
+	public List< ItemStack > doApply( List< ItemStack > generatedLoot, LootContext context ) {
 		MinecraftForge.EVENT_BUS.post( new AnyLootModificationEvent( generatedLoot, context ) );
 		return generatedLoot;
 	}
 
-	@Override
-	public Codec< ? extends IGlobalLootModifier > codec() {
-		return CODEC.get();
+	public static class Serializer extends GlobalLootModifierSerializer< AnyModification > {
+		@Override
+		public AnyModification read( ResourceLocation name, JsonObject object, LootItemCondition[] conditions ) {
+			return new AnyModification( conditions );
+		}
+
+		@Override
+		public JsonObject write( AnyModification instance ) {
+			return makeConditions( instance.conditions );
+		}
 	}
 }

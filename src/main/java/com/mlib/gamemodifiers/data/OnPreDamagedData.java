@@ -14,9 +14,9 @@ public class OnPreDamagedData extends ContextData.Event< LivingAttackEvent > {
 	public final LivingEntity target;
 
 	public OnPreDamagedData( LivingAttackEvent event ) {
-		super( event.getEntity(), event );
+		super( event.getEntityLiving(), event );
 		this.source = event.getSource();
 		this.attacker = Utility.castIfPossible( LivingEntity.class, source.getEntity() );
-		this.target = event.getEntity();
+		this.target = event.getEntityLiving();
 	}
 }

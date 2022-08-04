@@ -7,7 +7,7 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.ExplosionEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,7 +30,7 @@ public class ExplosionSizeEvent extends Event implements IModBusEvent {
 
 	@SubscribeEvent
 	public static void onExplosion( ExplosionEvent.Start explosionEvent ) {
-		Level level = explosionEvent.getLevel();
+		Level level = explosionEvent.getWorld();
 		Explosion explosion = explosionEvent.getExplosion();
 
 		ExplosionSizeEvent event = new ExplosionSizeEvent( level, explosion );

@@ -14,9 +14,9 @@ public class OnPlayerInteractData extends ContextData.Event< PlayerInteractEvent
 	@Nullable public final LivingEntity target;
 
 	public OnPlayerInteractData( PlayerInteractEvent event, @Nullable LivingEntity target ) {
-		super( event.getEntity(), event );
+		super( event.getEntityLiving(), event );
 		this.itemStack = event.getItemStack();
-		this.player = event.getEntity();
+		this.player = event.getPlayer();
 		this.target = target;
 	}
 }

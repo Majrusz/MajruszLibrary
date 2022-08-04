@@ -11,8 +11,8 @@ public class OnItemFishedData extends ContextData.Event< ItemFishedEvent > {
 	public final NonNullList< ItemStack > drops;
 
 	public OnItemFishedData( ItemFishedEvent event ) {
-		super( event.getEntity(), event );
-		this.player = event.getEntity();
+		super( event.getEntityLiving(), event );
+		this.player = event.getPlayer();
 		this.drops = event.getDrops();
 	}
 }

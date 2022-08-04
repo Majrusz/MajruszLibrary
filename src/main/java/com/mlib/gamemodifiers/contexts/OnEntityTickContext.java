@@ -25,7 +25,7 @@ public class OnEntityTickContext extends Context< OnEntityTickData > {
 	}
 
 	@SubscribeEvent
-	public static void onEntityTick( LivingEvent.LivingTickEvent event ) {
+	public static void onEntityTick( LivingEvent.LivingUpdateEvent event ) {
 		Context.accept( CONTEXTS, new OnEntityTickData( event ) );
 	}
 }
