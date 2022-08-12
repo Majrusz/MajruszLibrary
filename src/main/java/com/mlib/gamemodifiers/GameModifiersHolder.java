@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class GameModifiersHolder< RegistryType > {
-	final List< GameModifier > modifiers = new ArrayList<>();
+public class GameModifiersHolder< RegistryType extends IRegistrable< RegistryType, ModifierType >, ModifierType extends GameModifier > {
+	final List< ModifierType > modifiers = new ArrayList<>();
 	final String configKey;
 	Supplier< RegistryType > lazySupplier;
 
@@ -23,7 +23,11 @@ public class GameModifiersHolder< RegistryType > {
 		return this.lazySupplier.get();
 	}
 
-	public void addModifier( BiFunction< Supplier< RegistryType >, String, GameModifier > provider ) {
+	public List< ModifierType > getModifiers() {
+		return this.modifiers;
+	}
+
+	public void addModifier( BiFunction< Supplier< RegistryType >, String, ModifierType > provider ) {
 		this.modifiers.add( provider.apply( this::getRegistry, this.configKey ) );
 	}
 }
