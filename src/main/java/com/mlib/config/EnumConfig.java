@@ -3,8 +3,8 @@ package com.mlib.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class EnumConfig< Type extends Enum< Type > > extends ValueConfig< Type > {
-	public EnumConfig( String name, String comment, boolean requiresWorldRestart, Type defaultValue ) {
-		super( name, comment, requiresWorldRestart, defaultValue );
+	public EnumConfig( String name, String comment, boolean worldRestartRequired, Type defaultValue ) {
+		super( name, comment, worldRestartRequired, defaultValue );
 	}
 
 	@Override

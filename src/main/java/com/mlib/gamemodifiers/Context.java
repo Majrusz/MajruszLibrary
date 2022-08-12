@@ -48,7 +48,7 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 	public void setup( GameModifier gameModifier ) {
 		assert this.gameModifier == null : "Context was already set up";
 		this.gameModifier = gameModifier;
-		this.configs.addAll( this.conditions );
+		this.conditions.forEach( this::addConfig );
 	}
 
 	public Context< DataType > addCondition( Condition condition ) {

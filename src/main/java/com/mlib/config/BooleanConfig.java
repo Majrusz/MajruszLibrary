@@ -3,8 +3,8 @@ package com.mlib.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class BooleanConfig extends ValueConfig< Boolean > {
-	public BooleanConfig( String name, String comment, boolean requiresWorldRestart, boolean defaultValue ) {
-		super( name, comment, requiresWorldRestart, defaultValue );
+	public BooleanConfig( String name, String comment, boolean worldRestartRequired, boolean defaultValue ) {
+		super( name, comment, worldRestartRequired, defaultValue );
 	}
 
 	@Override

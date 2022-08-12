@@ -7,16 +7,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /** Handler that makes creating new configs much easier. */
-public class ConfigHandler {
-	public ForgeConfigSpec configSpec;
-	protected List< UserConfig > configs = new ArrayList<>();
-	private final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-	private final ModConfig.Type type;
-	private final String filename;
+public class ConfigHandler extends ConfigGroup {
+	final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+	final ModConfig.Type type;
+	final String filename;
+	ForgeConfigSpec configSpec = null;
 
 	public ConfigHandler( ModConfig.Type type, String filename, String modId ) {
 		this.type = type;
@@ -25,48 +21,23 @@ public class ConfigHandler {
 
 	/** Registers all configs (all config values are valid after this call). */
 	public void register( final ModLoadingContext modLoadingContext ) {
-		for( UserConfig config : this.configs )
-			config.build( this.builder );
+		this.build( this.builder );
 
 		this.configSpec = this.builder.build();
 		modLoadingContext.registerConfig( this.type, this.configSpec, this.filename );
 		MinecraftForge.EVENT_BUS.post( new ConfigsLoadedEvent( this ) );
 	}
 
-	public < ConfigType extends UserConfig > ConfigType addConfig( ConfigType config ) {
-		this.configs.add( config );
-
-		return config;
-	}
-
-	public void addConfigs( UserConfig... configs ) {
-		this.configs.addAll( List.of( configs ) );
-	}
-
-	public < ConfigGroupType extends ConfigGroup > ConfigGroupType addGroup( ConfigGroupType configGroup ) {
-		this.configs.add( configGroup );
-
-		return configGroup;
-	}
-
-	public ConfigGroup addNewGroup( String groupName, String comment, UserConfig... configs ) {
-		ConfigGroup configGroup = new ConfigGroup( groupName, comment, configs );
-		this.configs.add( configGroup );
+	public ConfigGroup addNewGroup( String name, String comment, UserConfig... configs ) {
+		ConfigGroup configGroup = new ConfigGroup( name, comment, configs );
+		this.addConfig( configGroup );
 
 		return configGroup;
 	}
 
 	public ConfigGroup addNewGameModifierGroup( String configKey ) {
 		ConfigGroup configGroup = GameModifier.addNewGroup( configKey );
-		this.configs.add( configGroup );
-
-		return configGroup;
-	}
-
-	@Deprecated
-	public ConfigGroup addNewGameModifierGroup( String configKey, String groupName, String comment ) {
-		ConfigGroup configGroup = GameModifier.addNewGroup( configKey, groupName, comment );
-		this.configs.add( configGroup );
+		this.addConfig( configGroup );
 
 		return configGroup;
 	}
