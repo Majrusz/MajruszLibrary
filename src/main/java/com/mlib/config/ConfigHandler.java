@@ -28,20 +28,6 @@ public class ConfigHandler extends ConfigGroup {
 		MinecraftForge.EVENT_BUS.post( new ConfigsLoadedEvent( this ) );
 	}
 
-	public ConfigGroup addNewGroup( String name, String comment, UserConfig... configs ) {
-		ConfigGroup configGroup = new ConfigGroup( name, comment, configs );
-		this.addConfig( configGroup );
-
-		return configGroup;
-	}
-
-	public ConfigGroup addNewGameModifierGroup( String configKey ) {
-		ConfigGroup configGroup = GameModifier.addNewGroup( configKey );
-		this.addConfig( configGroup );
-
-		return configGroup;
-	}
-
 	public ModConfig.Type getType() {
 		return this.type;
 	}
