@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class GameModifiersHolder< RegistryType extends IRegistrable< RegistryType > > {
+public class GameModifiersHolder< RegistryType extends IRegistrable > {
 	final List< GameModifier > modifiers = new ArrayList<>();
 	final String configKey;
 	Supplier< RegistryType > lazySupplier;
@@ -14,6 +14,7 @@ public class GameModifiersHolder< RegistryType extends IRegistrable< RegistryTyp
 		this.configKey = configKey;
 		this.lazySupplier = ()->{
 			RegistryType register = lazySupplier.get();
+			register.setHolder( this );
 			this.lazySupplier = ()->register;
 			return register;
 		};

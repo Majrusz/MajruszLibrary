@@ -1,5 +1,7 @@
 package com.mlib.gamemodifiers;
 
-public interface IRegistrable< RegistryType extends IRegistrable< RegistryType > > {
-	GameModifiersHolder< RegistryType > getHolder();
+public interface IRegistrable {
+	void setHolder( GameModifiersHolder< ? > holder );
+
+	GameModifiersHolder< ? > getHolder();
 }
