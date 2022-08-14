@@ -30,4 +30,20 @@ public class TextHelper {
 			return Double.toString( number );
 		}
 	}
+
+	public static String signed( float number ) {
+		return String.format( "%s%.2f", number > 0.0f ? "+" : "", number );
+	}
+
+	public static String signed( int number ) {
+		return String.format( "%s%d", number > 0 ? "+" : "", number );
+	}
+
+	public static String signedPercent( float number ) {
+		return String.format( "%s%.0f%%", number > 0.0f ? "+" : "", number * 100.0f );
+	}
+
+	public static String signedPercent( int number ) {
+		return String.format( "%s%d%%", number > 0 ? "+" : "", number * 100 );
+	}
 }
