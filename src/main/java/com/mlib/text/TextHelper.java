@@ -46,4 +46,12 @@ public class TextHelper {
 	public static String signedPercent( int number ) {
 		return String.format( "%s%d%%", number > 0 ? "+" : "", number * 100 );
 	}
+
+	public static String percent( float number ) {
+		return String.format( "%.2f%%", number * 100.0f );
+	}
+
+	public static String percent( int number ) {
+		return String.format( "%d%%", number * 100 );
+	}
 }
