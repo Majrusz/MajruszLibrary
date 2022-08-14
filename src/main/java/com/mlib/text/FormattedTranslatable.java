@@ -31,7 +31,11 @@ public class FormattedTranslatable {
 		return Component.translatable( this.id, this.parameters.toArray() ).withStyle( this.defaultFormat );
 	}
 
-	public void insertTo( List< Component > components, int index ) {
+	public void insertInto( List< Component > components, int index ) {
 		components.add( index, this.create() );
+	}
+
+	public void insertInto( List< Component > components ) {
+		components.add( this.create() );
 	}
 }
