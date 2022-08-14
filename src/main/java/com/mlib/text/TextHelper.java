@@ -1,5 +1,7 @@
 package com.mlib.text;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.TreeMap;
 
 public class TextHelper {
@@ -24,15 +26,23 @@ public class TextHelper {
 	}
 
 	public static String minPrecision( double number ) {
-		if( number == ( long )number ) {
+		if( Math.abs( number - ( long )number ) < 0.001 ) {
 			return String.format( "%.0f", number );
 		} else {
-			return Double.toString( number );
+			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toString();
+		}
+	}
+
+	public static String minPrecision( float number ) {
+		if( Math.abs( number - ( int )number ) < 0.001f ) {
+			return String.format( "%.0f", number );
+		} else {
+			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toString();
 		}
 	}
 
 	public static String signed( float number ) {
-		return String.format( "%s%.2f", number > 0.0f ? "+" : "", number );
+		return String.format( "%s%s", number > 0.0f ? "+" : "", minPrecision( number ) );
 	}
 
 	public static String signed( int number ) {
@@ -40,7 +50,7 @@ public class TextHelper {
 	}
 
 	public static String signedPercent( float number ) {
-		return String.format( "%s%.0f%%", number > 0.0f ? "+" : "", number * 100.0f );
+		return String.format( "%s%s%%", number > 0.0f ? "+" : "", minPrecision( number * 100.0f ) );
 	}
 
 	public static String signedPercent( int number ) {
@@ -48,7 +58,7 @@ public class TextHelper {
 	}
 
 	public static String percent( float number ) {
-		return String.format( "%.2f%%", number * 100.0f );
+		return String.format( "%s%%", minPrecision( number * 100.0f ) );
 	}
 
 	public static String percent( int number ) {
