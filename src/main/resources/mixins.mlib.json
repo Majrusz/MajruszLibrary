@@ -6,6 +6,7 @@
     "MixinArrow",
     "MixinItemStack",
     "MixinLivingEntity",
+    "MixinLootTableSerializer",
     "MixinProjectile"
   ],
   "injectors": {

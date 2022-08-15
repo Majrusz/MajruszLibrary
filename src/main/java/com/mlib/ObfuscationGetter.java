@@ -31,6 +31,17 @@ public class ObfuscationGetter {
 				return null;
 			}
 		}
+
+		@Nullable
+		public void set( Type instance, ReturnType value ) {
+			if( this.field == null )
+				return;
+
+			try {
+				this.field.set( instance, value );
+			} catch( Exception ignored ) {
+			}
+		}
 	}
 
 	public static class Method< Type > {
