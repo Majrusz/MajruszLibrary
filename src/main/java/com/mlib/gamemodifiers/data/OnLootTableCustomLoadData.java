@@ -9,6 +9,7 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 import java.util.List;
 
@@ -26,13 +27,23 @@ public class OnLootTableCustomLoadData extends ContextData {
 		this.pools = POOLS.get( table );
 	}
 
-	public void addEntry( int poolId, Item item, int weight, int quality ) {
+	public void addEntry( int poolId, Item item, int weight, int quality, LootItemCondition.Builder... conditions ) {
 		LootPool lootPool = this.pools.get( poolId );
 		LootPoolEntryContainer[] entries = ENTRIES.get( lootPool );
 		assert entries != null;
 		LootPoolEntryContainer[] newEntries = new LootPoolEntryContainer[ entries.length + 1 ];
 		System.arraycopy( entries, 0, newEntries, 0, entries.length );
-		newEntries[ entries.length ] = LootItem.lootTableItem( item ).setWeight( weight ).setQuality( quality ).build();
+		var builder = LootItem.lootTableItem( item ).setWeight( weight ).setQuality( quality );
+		for( LootItemCondition.Builder condition : conditions ) {
+			builder.when( condition );
+		}
+		newEntries[ entries.length ] = builder.build();
 		ENTRIES.set( lootPool, newEntries );
+	}
+
+	public int addPool() {
+		this.pools.add( LootPool.lootPool().name( String.format( "custom#%s%d", this.name.toString(), this.pools.size() ) ).build() );
+
+		return this.pools.size() - 1;
 	}
 }
