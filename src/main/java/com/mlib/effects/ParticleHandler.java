@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 
 public class ParticleHandler {
 	public static final ParticleHandler AWARD = new ParticleHandler( ParticleTypes.HAPPY_VILLAGER, new Vec3( 0.25, 0.25, 0.25 ), ()->0.1f );
-	public static final ParticleHandler AWARD_BIG = new ParticleHandler( ParticleTypes.HAPPY_VILLAGER, new Vec3( 0.75, 0.75, 0.75 ), ()->0.1f );
+	public static final ParticleHandler AWARD_BIG = new ParticleHandler( ParticleTypes.HAPPY_VILLAGER, new Vec3( 0.5, 0.5, 0.5 ), ()->0.1f );
 	public static final ParticleHandler SMELT = new ParticleHandler( ParticleTypes.FLAME, new Vec3( 0.1, 0.1, 0.1 ), ()->0.01f );
 	public static final ParticleHandler SMELT_BIG = new ParticleHandler( ParticleTypes.FLAME, new Vec3( 0.2, 0.2, 0.2 ), ()->0.01f );
 
