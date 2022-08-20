@@ -29,7 +29,7 @@ public class TextHelper {
 		if( Math.abs( number - ( long )number ) < 0.001 ) {
 			return String.format( "%.0f", number );
 		} else {
-			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toString();
+			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toPlainString();
 		}
 	}
 
@@ -37,7 +37,7 @@ public class TextHelper {
 		if( Math.abs( number - ( int )number ) < 0.001f ) {
 			return String.format( "%.0f", number );
 		} else {
-			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toString();
+			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toPlainString();
 		}
 	}
 
