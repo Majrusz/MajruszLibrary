@@ -22,7 +22,8 @@ public class ParticleHandler {
 	}
 
 	public void spawn( ServerLevel level, Vec3 position, int amountOfParticles, double offsetMultiplier ) {
-		level.sendParticles( this.particleType, position.x, position.y, position.z, amountOfParticles, this.offset.x, this.offset.y, this.offset.z, this.speedProvider.get() );
+		Vec3 offset = this.offset.multiply( offsetMultiplier, offsetMultiplier, offsetMultiplier );
+		level.sendParticles( this.particleType, position.x, position.y, position.z, amountOfParticles, offset.x, offset.y, offset.z, this.speedProvider.get() );
 	}
 
 	public void spawn( ServerLevel level, Vec3 position, int amountOfParticles ) {
