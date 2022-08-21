@@ -9,9 +9,7 @@ import java.util.function.Supplier;
 
 public class ParticleHandler {
 	public static final ParticleHandler AWARD = new ParticleHandler( ParticleTypes.HAPPY_VILLAGER, new Vec3( 0.25, 0.25, 0.25 ), ()->0.1f );
-	public static final ParticleHandler AWARD_BIG = new ParticleHandler( ParticleTypes.HAPPY_VILLAGER, new Vec3( 0.5, 0.5, 0.5 ), ()->0.1f );
 	public static final ParticleHandler SMELT = new ParticleHandler( ParticleTypes.FLAME, new Vec3( 0.1, 0.1, 0.1 ), ()->0.01f );
-	public static final ParticleHandler SMELT_BIG = new ParticleHandler( ParticleTypes.FLAME, new Vec3( 0.2, 0.2, 0.2 ), ()->0.01f );
 
 	final SimpleParticleType particleType;
 	final Vec3 offset;
@@ -23,7 +21,11 @@ public class ParticleHandler {
 		this.speedProvider = speedProvider;
 	}
 
-	public void spawn( ServerLevel level, Vec3 position, int amountOfParticles ) {
+	public void spawn( ServerLevel level, Vec3 position, int amountOfParticles, double offsetMultiplier ) {
 		level.sendParticles( this.particleType, position.x, position.y, position.z, amountOfParticles, this.offset.x, this.offset.y, this.offset.z, this.speedProvider.get() );
+	}
+
+	public void spawn( ServerLevel level, Vec3 position, int amountOfParticles ) {
+		this.spawn( level, position, amountOfParticles, 1.0 );
 	}
 }
