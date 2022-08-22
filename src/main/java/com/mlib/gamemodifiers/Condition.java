@@ -60,10 +60,14 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 	public static class Chance extends Condition {
 		final DoubleConfig chance;
 
-		public Chance( double defaultChance, String name, String comment ) {
+		public Chance( DoubleConfig config ) {
 			super( Priority.HIGH );
-			this.chance = new DoubleConfig( name, comment, false, defaultChance, 0.0, 1.0 );
+			this.chance = config;
 			this.addConfig( this.chance );
+		}
+
+		public Chance( double defaultChance, String name, String comment ) {
+			this( new DoubleConfig( name, comment, false, defaultChance, 0.0, 1.0 ) );
 		}
 
 		public Chance( double defaultChance ) {
