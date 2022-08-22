@@ -8,8 +8,7 @@ import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockHelper {
-	public static boolean isCropAtMaxAge( Level level, BlockPos position ) {
-		BlockState blockState = level.getBlockState( position );
+	public static boolean isCropAtMaxAge( BlockState blockState ) {
 		Block block = blockState.getBlock();
 		if( block instanceof CropBlock cropBlock ) {
 			return cropBlock.isMaxAge( blockState );
@@ -18,6 +17,10 @@ public class BlockHelper {
 		}
 
 		return false;
+	}
+
+	public static boolean isCropAtMaxAge( Level level, BlockPos position ) {
+		return isCropAtMaxAge( level.getBlockState( position ) );
 	}
 
 	public static void growCrop( Level level, BlockPos position ) {
