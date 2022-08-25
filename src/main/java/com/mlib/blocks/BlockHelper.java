@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 public class BlockHelper {
 	public static boolean isCropAtMaxAge( BlockState blockState ) {
@@ -32,5 +33,13 @@ public class BlockHelper {
 			int age = Math.min( blockState.getValue( NetherWartBlock.AGE ) + 1, 3 );
 			level.setBlockAndUpdate( position, blockState.setValue( NetherWartBlock.AGE, age ) );
 		}
+	}
+
+	public static BlockState getBlockState( Level level, BlockPos position ) {
+		return level.getBlockState( position );
+	}
+
+	public static BlockState getBlockState( Level level, Vec3 position ) {
+		return getBlockState( level, new BlockPos( position.x, position.y, position.z ) );
 	}
 }
