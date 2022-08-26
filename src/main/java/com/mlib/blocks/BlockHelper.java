@@ -5,6 +5,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.NetherWartBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -41,5 +42,17 @@ public class BlockHelper {
 
 	public static BlockState getBlockState( Level level, Vec3 position ) {
 		return getBlockState( level, new BlockPos( position.x, position.y, position.z ) );
+	}
+
+	public static BlockEntity getBlockEntity( Level level, BlockPos position ) {
+		return level.getBlockEntity( position );
+	}
+
+	public static BlockEntity getBlockEntity( Level level, Vec3 position ) {
+		return getBlockEntity( level, new BlockPos( position.x, position.y, position.z ) );
+	}
+
+	public static BlockPos toBlockPos( Vec3 position ) {
+		return new BlockPos( position.x, position.y, position.z );
 	}
 }
