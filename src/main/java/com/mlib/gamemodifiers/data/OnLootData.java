@@ -15,6 +15,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.List;
 
+@Deprecated
 public class OnLootData extends ContextData.Event< AnyLootModificationEvent > {
 	public final List< ItemStack > generatedLoot;
 	public final LootContext context;
