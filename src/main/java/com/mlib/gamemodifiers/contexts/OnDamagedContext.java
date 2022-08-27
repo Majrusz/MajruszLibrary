@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnDamagedContext extends ContextBase< OnDamagedData > {
 	public static final Predicate< OnDamagedData > DIRECT_DAMAGE = data->data.source.getDirectEntity() == data.attacker;
