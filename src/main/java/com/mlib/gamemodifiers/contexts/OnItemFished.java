@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 
 public class OnItemFished {
 	@Mod.EventBusSubscriber
-	public class Context extends ContextBase< Data > {
+	public static class Context extends ContextBase< Data > {
 		static final List< Context > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 		public Context( Consumer< Data > consumer, ContextParameters params ) {
