@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnSpawnedContext extends ContextBase< OnSpawnedData > {
 	static final List< OnSpawnedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
