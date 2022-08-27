@@ -1,6 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.Context;
+import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.data.OnItemFishedData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
-public class OnItemFishedContext extends Context< OnItemFishedData > {
+public class OnItemFishedContext extends ContextBase< OnItemFishedData > {
 	static final List< OnItemFishedContext > CONTEXTS = new ArrayList<>();
 
 	public OnItemFishedContext( Consumer< OnItemFishedData > consumer, ContextParameters params ) {
 		super( OnItemFishedData.class, consumer, params );
-		Context.addSorted( CONTEXTS, this );
+		ContextBase.addSorted( CONTEXTS, this );
 	}
 
 	public OnItemFishedContext( Consumer< OnItemFishedData > consumer ) {
@@ -26,6 +26,6 @@ public class OnItemFishedContext extends Context< OnItemFishedData > {
 
 	@SubscribeEvent
 	public static void onDimensionChanged( ItemFishedEvent event ) {
-		Context.accept( CONTEXTS, new OnItemFishedData( event ) );
+		ContextBase.accept( CONTEXTS, new OnItemFishedData( event ) );
 	}
 }

@@ -1,6 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.Context;
+import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.data.OnDimensionChangedData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
-public class OnDimensionChangedContext extends Context< OnDimensionChangedData > {
+public class OnDimensionChangedContext extends ContextBase< OnDimensionChangedData > {
 	static final List< OnDimensionChangedContext > CONTEXTS = new ArrayList<>();
 
 	public OnDimensionChangedContext( Consumer< OnDimensionChangedData > consumer, ContextParameters params ) {
 		super( OnDimensionChangedData.class, consumer, params );
-		Context.addSorted( CONTEXTS, this );
+		ContextBase.addSorted( CONTEXTS, this );
 	}
 
 	public OnDimensionChangedContext( Consumer< OnDimensionChangedData > consumer ) {
@@ -26,6 +26,6 @@ public class OnDimensionChangedContext extends Context< OnDimensionChangedData >
 
 	@SubscribeEvent
 	public static void onDimensionChanged( PlayerEvent.PlayerChangedDimensionEvent event ) {
-		Context.accept( CONTEXTS, new OnDimensionChangedData( event ) );
+		ContextBase.accept( CONTEXTS, new OnDimensionChangedData( event ) );
 	}
 }

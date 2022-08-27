@@ -1,6 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.Context;
+import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.data.OnLootTableCustomLoadData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 
@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class OnLootTableCustomLoadContext extends Context< OnLootTableCustomLoadData > {
+public class OnLootTableCustomLoadContext extends ContextBase< OnLootTableCustomLoadData > {
 	static final List< OnLootTableCustomLoadContext > CONTEXTS = new ArrayList<>();
 
 	public OnLootTableCustomLoadContext( Consumer< OnLootTableCustomLoadData > consumer, ContextParameters params ) {
 		super( OnLootTableCustomLoadData.class, consumer, params );
-		Context.addSorted( CONTEXTS, this );
+		ContextBase.addSorted( CONTEXTS, this );
 	}
 
 	public OnLootTableCustomLoadContext( Consumer< OnLootTableCustomLoadData > consumer ) {
@@ -21,6 +21,6 @@ public class OnLootTableCustomLoadContext extends Context< OnLootTableCustomLoad
 	}
 
 	public static void broadcast( OnLootTableCustomLoadData data ) {
-		Context.accept( CONTEXTS, data );
+		ContextBase.accept( CONTEXTS, data );
 	}
 }

@@ -1,6 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.Context;
+import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.data.OnLootTableLoadData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraftforge.event.LootTableLoadEvent;
@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
-public class OnLootTableLoadContext extends Context< OnLootTableLoadData > {
+public class OnLootTableLoadContext extends ContextBase< OnLootTableLoadData > {
 	static final List< OnLootTableLoadContext > CONTEXTS = new ArrayList<>();
 
 	public OnLootTableLoadContext( Consumer< OnLootTableLoadData > consumer, ContextParameters params ) {
 		super( OnLootTableLoadData.class, consumer, params );
-		Context.addSorted( CONTEXTS, this );
+		ContextBase.addSorted( CONTEXTS, this );
 	}
 
 	public OnLootTableLoadContext( Consumer< OnLootTableLoadData > consumer ) {
@@ -26,6 +26,6 @@ public class OnLootTableLoadContext extends Context< OnLootTableLoadData > {
 
 	@SubscribeEvent
 	public static void onLootTableLoad( LootTableLoadEvent event ) {
-		Context.accept( CONTEXTS, new OnLootTableLoadData( event ) );
+		ContextBase.accept( CONTEXTS, new OnLootTableLoadData( event ) );
 	}
 }
