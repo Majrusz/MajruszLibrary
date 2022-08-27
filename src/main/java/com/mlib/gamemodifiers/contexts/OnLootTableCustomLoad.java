@@ -50,7 +50,7 @@ public class OnLootTableCustomLoad {
 			this.pools = POOLS.get( table );
 		}
 
-		public synchronized void addEntry( int poolId, Item item, int weight, int quality, LootItemCondition.Builder... conditions ) {
+		public void addEntry( int poolId, Item item, int weight, int quality, LootItemCondition.Builder... conditions ) {
 			LootPool lootPool = this.pools.get( poolId );
 			LootPoolEntryContainer[] entries = ENTRIES.get( lootPool );
 			assert entries != null;
@@ -64,7 +64,7 @@ public class OnLootTableCustomLoad {
 			ENTRIES.set( lootPool, newEntries );
 		}
 
-		public synchronized int addPool() {
+		public int addPool() {
 			this.pools.add( LootPool.lootPool().name( String.format( "custom#%s%d", this.name.toString(), this.pools.size() ) ).build() );
 
 			return this.pools.size() - 1;
