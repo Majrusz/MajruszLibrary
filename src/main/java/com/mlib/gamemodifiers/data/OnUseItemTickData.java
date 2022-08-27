@@ -4,6 +4,7 @@ import com.mlib.gamemodifiers.ContextData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 
+@Deprecated
 public class OnUseItemTickData extends ContextData.Event< LivingEntityUseItemEvent.Tick > {
 	public final ItemStack itemStack;
 	public final int duration;
