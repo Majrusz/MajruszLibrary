@@ -7,6 +7,7 @@ import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 
+@Deprecated
 public class OnItemFishedData extends ContextData.Event< ItemFishedEvent > {
 	public final Player player;
 	public final FishingHook hook;
