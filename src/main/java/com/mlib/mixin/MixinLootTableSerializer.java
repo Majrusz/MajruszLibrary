@@ -3,8 +3,7 @@ package com.mlib.mixin;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mlib.gamemodifiers.contexts.OnLootTableCustomLoadContext;
-import com.mlib.gamemodifiers.data.OnLootTableCustomLoadData;
+import com.mlib.gamemodifiers.contexts.OnLootTableCustomLoad;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -23,8 +22,8 @@ public abstract class MixinLootTableSerializer {
 	private void deserialize( JsonElement jsonElement, Type type, JsonDeserializationContext context, CallbackInfoReturnable< LootTable > callback ) {
 		JsonObject jsonObject = GsonHelper.convertToJsonObject( jsonElement, "loot table" );
 		if( jsonObject.has( "mlib" ) ) {
-			var data = new OnLootTableCustomLoadData( new ResourceLocation( jsonObject.get( "mlib" ).getAsString() ), callback.getReturnValue() );
-			OnLootTableCustomLoadContext.broadcast( data );
+			var data = new OnLootTableCustomLoad.Data( new ResourceLocation( jsonObject.get( "mlib" ).getAsString() ), callback.getReturnValue() );
+			OnLootTableCustomLoad.Context.broadcast( data );
 		}
 	}
 }
