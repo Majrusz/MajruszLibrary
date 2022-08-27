@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnPotionBrewedContext extends ContextBase< OnPotionBrewedData > {
-	static final List< OnPotionBrewedContext > CONTEXTS = new ArrayList<>();
+	static final List< OnPotionBrewedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnPotionBrewedContext( Consumer< OnPotionBrewedData > consumer, ContextParameters params ) {
 		super( OnPotionBrewedData.class, consumer, params );

@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnPreDamagedContext extends ContextBase< OnPreDamagedData > {
-	static final List< OnPreDamagedContext > CONTEXTS = new ArrayList<>();
+	static final List< OnPreDamagedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnPreDamagedContext( Consumer< OnPreDamagedData > consumer, ContextParameters params ) {
 		super( OnPreDamagedData.class, consumer, params );

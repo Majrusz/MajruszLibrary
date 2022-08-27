@@ -8,13 +8,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnBlockSmeltCheckContext extends ContextBase< OnBlockSmeltCheckData > {
 	public static final Consumer< OnBlockSmeltCheckData > ENABLE_SMELT = data->data.event.shouldSmelt = true;
-	static final List< OnBlockSmeltCheckContext > CONTEXTS = new ArrayList<>();
+	static final List< OnBlockSmeltCheckContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnBlockSmeltCheckContext( Consumer< OnBlockSmeltCheckData > consumer, ContextParameters params ) {
 		super( OnBlockSmeltCheckData.class, consumer, params );

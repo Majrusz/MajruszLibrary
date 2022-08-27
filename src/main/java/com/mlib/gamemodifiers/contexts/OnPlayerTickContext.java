@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnPlayerTickContext extends ContextBase< OnPlayerTickData > {
-	static final List< OnPlayerTickContext > CONTEXTS = new ArrayList<>();
+	static final List< OnPlayerTickContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnPlayerTickContext( Consumer< OnPlayerTickData > consumer, ContextParameters params ) {
 		super( OnPlayerTickData.class, consumer, params );

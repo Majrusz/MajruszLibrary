@@ -5,11 +5,12 @@ import com.mlib.gamemodifiers.data.OnLootTableCustomLoadData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class OnLootTableCustomLoadContext extends ContextBase< OnLootTableCustomLoadData > {
-	static final List< OnLootTableCustomLoadContext > CONTEXTS = new ArrayList<>();
+	static final List< OnLootTableCustomLoadContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnLootTableCustomLoadContext( Consumer< OnLootTableCustomLoadData > consumer, ContextParameters params ) {
 		super( OnLootTableCustomLoadData.class, consumer, params );

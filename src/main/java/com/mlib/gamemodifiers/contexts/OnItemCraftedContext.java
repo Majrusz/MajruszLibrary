@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnItemCraftedContext extends ContextBase< OnItemCraftedData > {
-	static final List< OnItemCraftedContext > CONTEXTS = new ArrayList<>();
+	static final List< OnItemCraftedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnItemCraftedContext( Consumer< OnItemCraftedData > consumer, ContextParameters params ) {
 		super( OnItemCraftedData.class, consumer, params );

@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnAnimalTameContext extends ContextBase< OnAnimalTameData > {
-	static final List< OnAnimalTameContext > CONTEXTS = new ArrayList<>();
+	static final List< OnAnimalTameContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnAnimalTameContext( Consumer< OnAnimalTameData > consumer, ContextParameters params ) {
 		super( OnAnimalTameData.class, consumer, params );

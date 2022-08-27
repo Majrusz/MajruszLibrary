@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnDimensionChangedContext extends ContextBase< OnDimensionChangedData > {
-	static final List< OnDimensionChangedContext > CONTEXTS = new ArrayList<>();
+	static final List< OnDimensionChangedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnDimensionChangedContext( Consumer< OnDimensionChangedData > consumer, ContextParameters params ) {
 		super( OnDimensionChangedData.class, consumer, params );

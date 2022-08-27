@@ -10,13 +10,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 // this context is executed twice! (start and detonate)
 @Mod.EventBusSubscriber
 public class OnExplosionContext extends ContextBase< OnExplosionData > {
-	static final List< OnExplosionContext > CONTEXTS = new ArrayList<>();
+	static final List< OnExplosionContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnExplosionContext( Consumer< OnExplosionData > consumer, ContextParameters params ) {
 		super( OnExplosionData.class, consumer, params );

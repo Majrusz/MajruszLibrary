@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnProjectileShotContext extends ContextBase< OnProjectileData.Shot > {
-	static final List< OnProjectileShotContext > CONTEXTS = new ArrayList<>();
+	static final List< OnProjectileShotContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnProjectileShotContext( Consumer< OnProjectileData.Shot > consumer, ContextParameters params ) {
 		super( OnProjectileData.Shot.class, consumer, params );

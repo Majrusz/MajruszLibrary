@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnCheckSpawnContext extends ContextBase< OnCheckSpawnData > {
-	static final List< OnCheckSpawnContext > CONTEXTS = new ArrayList<>();
+	static final List< OnCheckSpawnContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnCheckSpawnContext( Consumer< OnCheckSpawnData > consumer, ContextParameters params ) {
 		super( OnCheckSpawnData.class, consumer, params );

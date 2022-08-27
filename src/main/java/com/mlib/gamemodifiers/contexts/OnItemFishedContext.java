@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnItemFishedContext extends ContextBase< OnItemFishedData > {
-	static final List< OnItemFishedContext > CONTEXTS = new ArrayList<>();
+	static final List< OnItemFishedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnItemFishedContext( Consumer< OnItemFishedData > consumer, ContextParameters params ) {
 		super( OnItemFishedData.class, consumer, params );

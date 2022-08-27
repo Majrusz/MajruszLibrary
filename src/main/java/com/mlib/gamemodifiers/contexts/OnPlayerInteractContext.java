@@ -10,12 +10,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnPlayerInteractContext extends ContextBase< OnPlayerInteractData > {
-	static final List< OnPlayerInteractContext > CONTEXTS = new ArrayList<>();
+	static final List< OnPlayerInteractContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnPlayerInteractContext( Consumer< OnPlayerInteractData > consumer, ContextParameters params ) {
 		super( OnPlayerInteractData.class, consumer, params );

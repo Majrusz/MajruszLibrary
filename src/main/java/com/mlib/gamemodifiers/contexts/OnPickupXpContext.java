@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnPickupXpContext extends ContextBase< OnPickupXpData > {
-	static final List< OnPickupXpContext > CONTEXTS = new ArrayList<>();
+	static final List< OnPickupXpContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnPickupXpContext( Consumer< OnPickupXpData > consumer, ContextParameters params ) {
 		super( OnPickupXpData.class, consumer, params );

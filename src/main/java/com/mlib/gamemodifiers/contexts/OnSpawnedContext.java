@@ -11,12 +11,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnSpawnedContext extends ContextBase< OnSpawnedData > {
-	static final List< OnSpawnedContext > CONTEXTS = new ArrayList<>();
+	static final List< OnSpawnedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnSpawnedContext( Consumer< OnSpawnedData > consumer, ContextParameters params ) {
 		super( OnSpawnedData.class, consumer, params );

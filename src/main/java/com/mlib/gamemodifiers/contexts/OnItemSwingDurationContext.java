@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnItemSwingDurationContext extends ContextBase< OnItemSwingDurationData > {
-	static final List< OnItemSwingDurationContext > CONTEXTS = new ArrayList<>();
+	static final List< OnItemSwingDurationContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnItemSwingDurationContext( Consumer< OnItemSwingDurationData > consumer, ContextParameters params ) {
 		super( OnItemSwingDurationData.class, consumer, params );

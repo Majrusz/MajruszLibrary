@@ -11,13 +11,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class OnTradeSetup {
 	@Mod.EventBusSubscriber
 	public static class Context extends ContextBase< Data > {
-		static final List< Context > CONTEXTS = new ArrayList<>();
+		static final List< Context > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 		public Context( Consumer< Data > consumer, ContextParameters params ) {
 			super( Data.class, consumer, params );

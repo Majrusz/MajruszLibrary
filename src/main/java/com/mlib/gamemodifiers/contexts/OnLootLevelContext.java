@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnLootLevelContext extends ContextBase< OnLootLevelData > {
-	static final List< OnLootLevelContext > CONTEXTS = new ArrayList<>();
+	static final List< OnLootLevelContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnLootLevelContext( Consumer< OnLootLevelData > consumer, ContextParameters params ) {
 		super( OnLootLevelData.class, consumer, params );

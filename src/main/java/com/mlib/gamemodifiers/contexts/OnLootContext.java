@@ -8,6 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -21,7 +22,7 @@ public class OnLootContext extends ContextBase< OnLootData > {
 	public static final Predicate< OnLootData > HAS_LAST_DAMAGE_PLAYER = data->data.lastDamagePlayer != null;
 	public static final Predicate< OnLootData > HAS_TOOL = data->data.tool != null;
 	public static final Predicate< OnLootData > HAS_ORIGIN = data->data.origin != null;
-	static final List< OnLootContext > CONTEXTS = new ArrayList<>();
+	static final List< OnLootContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnLootContext( Consumer< OnLootData > consumer, ContextParameters params ) {
 		super( OnLootData.class, consumer, params );

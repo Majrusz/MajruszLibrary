@@ -8,12 +8,13 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnBreakSpeedContext extends ContextBase< OnBreakSpeedData > {
-	static final List< OnBreakSpeedContext > CONTEXTS = new ArrayList<>();
+	static final List< OnBreakSpeedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnBreakSpeedContext( Consumer< OnBreakSpeedData > consumer, ContextParameters params ) {
 		super( OnBreakSpeedData.class, consumer, params );
