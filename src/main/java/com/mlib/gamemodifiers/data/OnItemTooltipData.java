@@ -10,6 +10,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import javax.annotation.Nullable;
 import java.util.List;
 
+@Deprecated
 public class OnItemTooltipData extends ContextData.Event< ItemTooltipEvent > {
 	public final ItemStack itemStack;
 	public final List< Component > tooltip;

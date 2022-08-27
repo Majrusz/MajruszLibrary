@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnItemTooltipContext extends ContextBase< OnItemTooltipData > {
 	static final List< OnItemTooltipContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
