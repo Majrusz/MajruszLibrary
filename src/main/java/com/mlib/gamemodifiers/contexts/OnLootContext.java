@@ -1,7 +1,7 @@
 package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.events.AnyLootModificationEvent;
-import com.mlib.gamemodifiers.Context;
+import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.data.OnLootData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -13,7 +13,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @Mod.EventBusSubscriber
-public class OnLootContext extends Context< OnLootData > {
+public class OnLootContext extends ContextBase< OnLootData > {
 	public static final Predicate< OnLootData > HAS_BLOCK_STATE = data->data.blockState != null;
 	public static final Predicate< OnLootData > HAS_DAMAGE_SOURCE = data->data.damageSource != null;
 	public static final Predicate< OnLootData > HAS_KILLER = data->data.killer != null;
@@ -25,7 +25,7 @@ public class OnLootContext extends Context< OnLootData > {
 
 	public OnLootContext( Consumer< OnLootData > consumer, ContextParameters params ) {
 		super( OnLootData.class, consumer, params );
-		Context.addSorted( CONTEXTS, this );
+		ContextBase.addSorted( CONTEXTS, this );
 	}
 
 	public OnLootContext( Consumer< OnLootData > consumer ) {
@@ -34,6 +34,6 @@ public class OnLootContext extends Context< OnLootData > {
 
 	@SubscribeEvent
 	public static void onAnyLoot( AnyLootModificationEvent event ) {
-		Context.accept( CONTEXTS, new OnLootData( event ) );
+		ContextBase.accept( CONTEXTS, new OnLootData( event ) );
 	}
 }

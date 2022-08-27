@@ -1,6 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.Context;
+import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.data.OnPreDamagedData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
-public class OnPreDamagedContext extends Context< OnPreDamagedData > {
+public class OnPreDamagedContext extends ContextBase< OnPreDamagedData > {
 	static final List< OnPreDamagedContext > CONTEXTS = new ArrayList<>();
 
 	public OnPreDamagedContext( Consumer< OnPreDamagedData > consumer, ContextParameters params ) {
 		super( OnPreDamagedData.class, consumer, params );
-		Context.addSorted( CONTEXTS, this );
+		ContextBase.addSorted( CONTEXTS, this );
 	}
 
 	public OnPreDamagedContext( Consumer< OnPreDamagedData > consumer ) {
@@ -26,6 +26,6 @@ public class OnPreDamagedContext extends Context< OnPreDamagedData > {
 
 	@SubscribeEvent
 	public static void onPreDamaged( LivingAttackEvent event ) {
-		Context.accept( CONTEXTS, new OnPreDamagedData( event ) );
+		ContextBase.accept( CONTEXTS, new OnPreDamagedData( event ) );
 	}
 }

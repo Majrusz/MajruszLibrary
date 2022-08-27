@@ -1,6 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.Context;
+import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.data.OnExplosionData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
@@ -15,12 +15,12 @@ import java.util.function.Consumer;
 
 // this context is executed twice! (start and detonate)
 @Mod.EventBusSubscriber
-public class OnExplosionContext extends Context< OnExplosionData > {
+public class OnExplosionContext extends ContextBase< OnExplosionData > {
 	static final List< OnExplosionContext > CONTEXTS = new ArrayList<>();
 
 	public OnExplosionContext( Consumer< OnExplosionData > consumer, ContextParameters params ) {
 		super( OnExplosionData.class, consumer, params );
-		Context.addSorted( CONTEXTS, this );
+		ContextBase.addSorted( CONTEXTS, this );
 	}
 
 	public OnExplosionContext( Consumer< OnExplosionData > consumer ) {
@@ -30,13 +30,13 @@ public class OnExplosionContext extends Context< OnExplosionData > {
 	@SubscribeEvent
 	public static void onExplosionStart( ExplosionEvent.Start event ) {
 		OnExplosionData data = new OnExplosionData( event );
-		Context.accept( CONTEXTS, data );
+		ContextBase.accept( CONTEXTS, data );
 		updateEvent( data );
 	}
 
 	@SubscribeEvent
 	public static void onExplosionDetonate( ExplosionEvent.Detonate event ) {
-		Context.accept( CONTEXTS, new OnExplosionData( event ) );
+		ContextBase.accept( CONTEXTS, new OnExplosionData( event ) );
 	}
 
 	private static void updateEvent( OnExplosionData data ) {

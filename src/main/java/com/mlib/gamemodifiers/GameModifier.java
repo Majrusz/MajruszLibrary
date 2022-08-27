@@ -19,7 +19,7 @@ import static com.mlib.MajruszLibrary.MOD_CONFIGS;
  */
 public abstract class GameModifier extends ConfigGroup {
 	public static final String DEFAULT_KEY = Registries.getLocationString( "default" );
-	final List< Context< ? extends ContextData > > contexts = new ArrayList<>();
+	final List< ContextBase< ? extends ContextData > > contexts = new ArrayList<>();
 	final String configKey;
 
 	public static ConfigGroup addNewGroup( String key, String name, String comment ) {
@@ -42,18 +42,18 @@ public abstract class GameModifier extends ConfigGroup {
 		this( DEFAULT_KEY, configName, configComment );
 	}
 
-	public < DataType extends ContextData > void addContext( Context< DataType > context ) {
+	public < DataType extends ContextData > void addContext( ContextBase< DataType > context ) {
 		context.setup( this );
 		this.addConfig( context );
 	}
 
-	public void addContexts( Context< ? >... contexts ) {
-		for( Context< ? > context : contexts ) {
+	public void addContexts( ContextBase< ? >... contexts ) {
+		for( ContextBase< ? > context : contexts ) {
 			addContext( context );
 		}
 	}
 
-	public List< Context< ? extends ContextData > > getContexts() {
+	public List< ContextBase< ? extends ContextData > > getContexts() {
 		return this.contexts;
 	}
 

@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class Context< DataType extends ContextData > extends ConfigGroup implements IParameterizable {
+public abstract class ContextBase< DataType extends ContextData > extends ConfigGroup implements IParameterizable {
 	final Class< DataType > dataClass;
 	final Consumer< DataType > consumer;
 	final List< Condition > conditions = new ArrayList<>();
 	final ContextParameters params;
 	protected GameModifier gameModifier = null;
 
-	public static < DataType extends ContextData, ContextType extends Context< DataType > > void accept( List< ContextType > contexts, DataType data ) {
+	public static < DataType extends ContextData, ContextType extends ContextBase< DataType > > void accept( List< ContextType > contexts, DataType data ) {
 		contexts.forEach( context->{
 			if( context.check( data ) ) {
 				context.consumer.accept( data );
@@ -24,19 +24,19 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 		} );
 	}
 
-	public static < ContextType extends Context< ? > > void addSorted( List< ContextType > contexts, ContextType context ) {
+	public static < ContextType extends ContextBase< ? > > void addSorted( List< ContextType > contexts, ContextType context ) {
 		contexts.add( context );
 		contexts.sort( ContextParameters.COMPARATOR );
 	}
 
-	public Context( Class< DataType > dataClass, Consumer< DataType > consumer, ContextParameters params ) {
+	public ContextBase( Class< DataType > dataClass, Consumer< DataType > consumer, ContextParameters params ) {
 		super( params.getConfigName(), params.getConfigComment() );
 		this.dataClass = dataClass;
 		this.consumer = consumer;
 		this.params = params;
 	}
 
-	public Context( Class< DataType > dataClass, Consumer< DataType > consumer ) {
+	public ContextBase( Class< DataType > dataClass, Consumer< DataType > consumer ) {
 		this( dataClass, consumer, new ContextParameters() );
 	}
 
@@ -51,7 +51,7 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 		this.conditions.forEach( this::addConfig );
 	}
 
-	public Context< DataType > addCondition( Condition condition ) {
+	public ContextBase< DataType > addCondition( Condition condition ) {
 		assert this.gameModifier == null : "Context was already set up";
 		this.conditions.add( condition );
 		this.conditions.sort( Parameters.COMPARATOR );
@@ -59,11 +59,11 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 		return this;
 	}
 
-	public Context< DataType > addCondition( Predicate< DataType > predicate ) {
+	public ContextBase< DataType > addCondition( Predicate< DataType > predicate ) {
 		return addCondition( new Condition.Context<>( this.dataClass, predicate ) );
 	}
 
-	public Context< DataType > addConditions( Condition... conditions ) {
+	public ContextBase< DataType > addConditions( Condition... conditions ) {
 		for( Condition condition : conditions ) {
 			this.addCondition( condition );
 		}
@@ -72,7 +72,7 @@ public abstract class Context< DataType extends ContextData > extends ConfigGrou
 	}
 
 	@SafeVarargs
-	public final Context< DataType > addConditions( Predicate< DataType >... predicates ) {
+	public final ContextBase< DataType > addConditions( Predicate< DataType >... predicates ) {
 		for( Predicate< DataType > predicate : predicates ) {
 			this.addCondition( predicate );
 		}

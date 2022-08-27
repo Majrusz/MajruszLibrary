@@ -1,6 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.Context;
+import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.data.OnDeathData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
-public class OnDeathContext extends Context< OnDeathData > {
+public class OnDeathContext extends ContextBase< OnDeathData > {
 	static final List< OnDeathContext > CONTEXTS = new ArrayList<>();
 
 	public OnDeathContext( Consumer< OnDeathData > consumer, ContextParameters params ) {
 		super( OnDeathData.class, consumer, params );
-		Context.addSorted( CONTEXTS, this );
+		ContextBase.addSorted( CONTEXTS, this );
 	}
 
 	public OnDeathContext( Consumer< OnDeathData > consumer ) {
@@ -26,6 +26,6 @@ public class OnDeathContext extends Context< OnDeathData > {
 
 	@SubscribeEvent
 	public static void onDamaged( LivingDeathEvent event ) {
-		Context.accept( CONTEXTS, new OnDeathData( event ) );
+		ContextBase.accept( CONTEXTS, new OnDeathData( event ) );
 	}
 }
