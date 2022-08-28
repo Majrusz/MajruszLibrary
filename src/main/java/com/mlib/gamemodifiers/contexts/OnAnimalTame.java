@@ -39,7 +39,7 @@ public class OnAnimalTame {
 		public final Player tamer;
 
 		public Data( AnimalTameEvent event ) {
-			super( event.getAnimal(), event );
+			super( event.getTamer(), event );
 			this.animal = event.getAnimal();
 			this.tamer = event.getTamer();
 		}

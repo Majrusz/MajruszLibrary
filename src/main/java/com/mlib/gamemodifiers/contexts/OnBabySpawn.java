@@ -42,7 +42,7 @@ public class OnBabySpawn {
 		public final Player player;
 
 		public Data( BabyEntitySpawnEvent event ) {
-			super( event.getChild(), event );
+			super( event.getCausedByPlayer(), event );
 			this.child = event.getChild();
 			this.parentA = event.getParentA();
 			this.parentB = event.getParentB();
