@@ -14,9 +14,15 @@ public class ConfigHandler extends ConfigGroup {
 	final String filename;
 	ForgeConfigSpec configSpec = null;
 
+	@Deprecated
 	public ConfigHandler( ModConfig.Type type, String filename, String modId ) {
 		this.type = type;
 		this.filename = modId + "-" + filename;
+	}
+
+	public ConfigHandler( ModConfig.Type type ) {
+		this.type = type;
+		this.filename = null;
 	}
 
 	/** Registers all configs (all config values are valid after this call). */
@@ -24,7 +30,7 @@ public class ConfigHandler extends ConfigGroup {
 		this.build( this.builder );
 
 		this.configSpec = this.builder.build();
-		modLoadingContext.registerConfig( this.type, this.configSpec, this.filename );
+		modLoadingContext.registerConfig( this.type, this.configSpec );
 		MinecraftForge.EVENT_BUS.post( new ConfigsLoadedEvent( this ) );
 	}
 
@@ -32,6 +38,7 @@ public class ConfigHandler extends ConfigGroup {
 		return this.type;
 	}
 
+	@Deprecated
 	public String getFilename() {
 		return this.filename;
 	}
