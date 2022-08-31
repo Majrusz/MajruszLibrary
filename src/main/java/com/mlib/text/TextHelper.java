@@ -1,17 +1,10 @@
 package com.mlib.text;
 
-import com.mlib.ObfuscationGetter;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.*;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.TreeMap;
 
 public class TextHelper {
-	static final ObfuscationGetter.Field< TranslatableComponent, List< FormattedText > > DECOMPOSED_PARTS = new ObfuscationGetter.Field<>( TranslatableComponent.class, "f_131301_" );
-	static final ObfuscationGetter.Method< TranslatableComponent > DECOMPOSE = new ObfuscationGetter.Method<>( TranslatableComponent.class, "m_131330_" );
 	static final TreeMap< Integer, String > ROMAN_LETTERS = new TreeMap<>();
 
 	static {
@@ -26,26 +19,6 @@ public class TextHelper {
 		ROMAN_LETTERS.put( 1, "I" );
 	}
 
-	public static List< FormattedText > decomposeTranslatableText( String key, Object... params ) {
-		TranslatableComponent TranslatableComponent = new TranslatableComponent( key, params );
-		DECOMPOSE.invoke( TranslatableComponent );
-		return DECOMPOSED_PARTS.get( TranslatableComponent );
-	}
-
-	public static MutableComponent createColoredTranslatable( List< FormattedText > decomposedText, ChatFormatting defaultFormatting,
-		FormattingData... formattingList
-	) {
-		MutableComponent component = new TextComponent( "" ).withStyle( defaultFormatting );
-		for( int idx = 0; idx < decomposedText.size(); ++idx ) {
-			int finalIdx = idx;
-			Optional< FormattingData > formattingData = Arrays.stream( formattingList ).filter( data->data.idx == finalIdx ).findFirst();
-			ChatFormatting chatFormatting = formattingData.orElse( new FormattingData( idx, defaultFormatting ) ).formatting;
-			component.append( new TextComponent( decomposedText.get( idx ).getString() ).withStyle( chatFormatting ) );
-		}
-
-		return component;
-	}
-
 	public static String toRoman( int number ) {
 		int nearestKey = ROMAN_LETTERS.floorKey( number );
 
@@ -53,12 +26,42 @@ public class TextHelper {
 	}
 
 	public static String minPrecision( double number ) {
-		if( number == ( long )number ) {
+		if( Math.abs( number - ( long )number ) < 0.001 ) {
 			return String.format( "%.0f", number );
 		} else {
-			return Double.toString( number );
+			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toPlainString();
 		}
 	}
 
-	public record FormattingData( int idx, ChatFormatting formatting ) {}
+	public static String minPrecision( float number ) {
+		if( Math.abs( number - ( int )number ) < 0.001f ) {
+			return String.format( "%.0f", number );
+		} else {
+			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toPlainString();
+		}
+	}
+
+	public static String signed( float number ) {
+		return String.format( "%s%s", number > 0.0f ? "+" : "", minPrecision( number ) );
+	}
+
+	public static String signed( int number ) {
+		return String.format( "%s%d", number > 0 ? "+" : "", number );
+	}
+
+	public static String signedPercent( float number ) {
+		return String.format( "%s%s%%", number > 0.0f ? "+" : "", minPrecision( number * 100.0f ) );
+	}
+
+	public static String signedPercent( int number ) {
+		return String.format( "%s%d%%", number > 0 ? "+" : "", number * 100 );
+	}
+
+	public static String percent( float number ) {
+		return String.format( "%s%%", minPrecision( number * 100.0f ) );
+	}
+
+	public static String percent( int number ) {
+		return String.format( "%d%%", number * 100 );
+	}
 }

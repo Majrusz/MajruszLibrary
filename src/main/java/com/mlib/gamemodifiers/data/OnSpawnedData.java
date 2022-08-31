@@ -3,6 +3,7 @@ package com.mlib.gamemodifiers.data;
 import com.mlib.gamemodifiers.ContextData;
 import net.minecraft.world.entity.LivingEntity;
 
+@Deprecated
 public class OnSpawnedData extends ContextData {
 	public final LivingEntity target;
 	public final boolean loadedFromDisk;

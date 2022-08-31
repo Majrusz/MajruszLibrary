@@ -6,16 +6,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/** Represents a group that contains many configs (and other groups). */
+/** Represents a group that contains many other configs and/or groups. */
 public class ConfigGroup extends UserConfig {
-	protected List< UserConfig > configs = new ArrayList<>();
+	final List< IConfigurable > configs = new ArrayList<>();
 
-	public ConfigGroup( String groupName, String comment, UserConfig... configs ) {
-		super( groupName, comment );
+	public ConfigGroup( String name, String comment, IConfigurable... configs ) {
+		super( name, comment, false );
 		this.addConfigs( configs );
 	}
 
-	public ConfigGroup( UserConfig... configs ) {
+	public ConfigGroup( IConfigurable... configs ) {
 		this( "", "", configs );
 	}
 
@@ -42,14 +42,14 @@ public class ConfigGroup extends UserConfig {
 		return this.addConfigs( groups );
 	}
 
-	public < ConfigType extends UserConfig > ConfigGroup addConfig( ConfigType config ) {
+	public ConfigGroup addConfig( IConfigurable config ) {
 		this.configs.add( config );
 
 		return this;
 	}
 
-	public ConfigGroup addConfigs( UserConfig... configs ) {
-		this.configs.addAll( Arrays.asList( configs ) );
+	public ConfigGroup addConfigs( IConfigurable... configs ) {
+		Arrays.asList( configs ).forEach( this::addConfig );
 
 		return this;
 	}

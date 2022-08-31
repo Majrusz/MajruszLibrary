@@ -18,6 +18,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public abstract class Condition extends ConfigGroup implements IParameterizable {
 	final ConditionParameters params;
@@ -59,10 +60,18 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 	public static class Chance extends Condition {
 		final DoubleConfig chance;
 
-		public Chance( double defaultChance ) {
+		public Chance( DoubleConfig config ) {
 			super( Priority.HIGH );
-			this.chance = new DoubleConfig( "chance", "Chance of this to happen.", false, defaultChance, 0.0, 1.0 );
+			this.chance = config;
 			this.addConfig( this.chance );
+		}
+
+		public Chance( double defaultChance, String name, String comment ) {
+			this( new DoubleConfig( name, comment, false, defaultChance, 0.0, 1.0 ) );
+		}
+
+		public Chance( double defaultChance ) {
+			this( defaultChance, "chance", "Chance of this to happen." );
 		}
 
 		@Override
@@ -123,23 +132,35 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 	}
 
 	public static class Cooldown extends Condition {
-		final DoubleConfig cooldown;
-		final Predicate< DoubleConfig > condition;
+		final Supplier< Boolean > test;
+
+		public Cooldown( double seconds, Dist distribution, boolean isConfigurable ) {
+			super( Priority.HIGH );
+			Predicate< Double > predicate = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
+			if( isConfigurable ) {
+				DoubleConfig config = new DoubleConfig( "cooldown", "Cooldown in seconds before this happens.", false, seconds, 0.1, 300.0 );
+				this.test = ()->predicate.test( config.get() );
+				this.addConfig( config );
+			} else {
+				this.test = ()->predicate.test( seconds );
+			}
+		}
 
 		public Cooldown( double seconds, Dist distribution ) {
-			super( Priority.HIGH );
-			this.cooldown = new DoubleConfig( "cooldown", "Cooldown in seconds before this happens.", false, seconds, 0.1, 300.0 );
-			this.condition = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
-			this.addConfig( this.cooldown );
+			this( seconds, distribution, true );
+		}
+
+		public Cooldown( int ticks, Dist distribution, boolean isConfigurable ) {
+			this( Utility.ticksToSeconds( ticks ), distribution, isConfigurable );
 		}
 
 		public Cooldown( int ticks, Dist distribution ) {
-			this( Utility.ticksToSeconds( ticks ), distribution );
+			this( ticks, distribution, true );
 		}
 
 		@Override
 		public boolean check( GameModifier feature, ContextData data ) {
-			return this.condition.test( this.cooldown );
+			return this.test.get();
 		}
 	}
 

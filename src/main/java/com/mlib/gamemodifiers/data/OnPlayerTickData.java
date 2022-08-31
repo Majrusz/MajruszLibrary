@@ -4,6 +4,7 @@ import com.mlib.gamemodifiers.ContextData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
 
+@Deprecated
 public class OnPlayerTickData extends ContextData.Event< TickEvent.PlayerTickEvent > {
 	public final Player player;
 

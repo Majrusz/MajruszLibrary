@@ -20,7 +20,7 @@ public class MajruszLibrary {
 	public static final String NAME = "Majrusz Library";
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final Random RANDOM = new Random();
-	public static final ConfigHandler CONFIG_HANDLER = new ConfigHandler( ModConfig.Type.COMMON, "common.toml", MOD_ID );
+	public static final ConfigHandler CONFIG_HANDLER = new ConfigHandler( ModConfig.Type.SERVER );
 	public static final ModConfigs MOD_CONFIGS = new ModConfigs();
 
 	public MajruszLibrary() {

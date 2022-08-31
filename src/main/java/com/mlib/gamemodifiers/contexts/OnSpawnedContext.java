@@ -1,6 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.Context;
+import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.data.OnSpawnedData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import com.mlib.time.Delay;
@@ -11,16 +11,18 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
-public class OnSpawnedContext extends Context< OnSpawnedData > {
-	static final List< OnSpawnedContext > CONTEXTS = new ArrayList<>();
+public class OnSpawnedContext extends ContextBase< OnSpawnedData > {
+	static final List< OnSpawnedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
 
 	public OnSpawnedContext( Consumer< OnSpawnedData > consumer, ContextParameters params ) {
 		super( OnSpawnedData.class, consumer, params );
-		Context.addSorted( CONTEXTS, this );
+		ContextBase.addSorted( CONTEXTS, this );
 	}
 
 	public OnSpawnedContext( Consumer< OnSpawnedData > consumer ) {
@@ -33,6 +35,6 @@ public class OnSpawnedContext extends Context< OnSpawnedData > {
 			return;
 
 		// it does not contain an event, and it is delayed on purpose because otherwise it could cause deadlocks on chunks with any incorrect access (see EntityJoinWorldEvent for more info)
-		Delay.onNextTick( ()->Context.accept( CONTEXTS, new OnSpawnedData( entity, event.loadedFromDisk() ) ) );
+		Delay.onNextTick( ()->ContextBase.accept( CONTEXTS, new OnSpawnedData( entity, event.loadedFromDisk() ) ) );
 	}
 }
