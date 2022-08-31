@@ -18,10 +18,10 @@ public class OnItemTooltipData extends ContextData.Event< ItemTooltipEvent > {
 	@Nullable public final Player player;
 
 	public OnItemTooltipData( ItemTooltipEvent event ) {
-		super( event.getEntityLiving(), event );
+		super( event.getPlayer(), event );
 		this.itemStack = event.getItemStack();
 		this.tooltip = event.getToolTip();
 		this.flags = event.getFlags();
-		this.player = event.getEntity();
+		this.player = event.getPlayer();
 	}
 }

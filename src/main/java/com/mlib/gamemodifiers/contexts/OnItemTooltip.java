@@ -44,11 +44,11 @@ public class OnItemTooltip {
 		@Nullable public final Player player;
 
 		public Data( ItemTooltipEvent event ) {
-			super( event.getEntity(), event );
+			super( event.getPlayer(), event );
 			this.itemStack = event.getItemStack();
 			this.tooltip = event.getToolTip();
 			this.flags = event.getFlags();
-			this.player = event.getEntity();
+			this.player = event.getPlayer();
 		}
 	}
 }

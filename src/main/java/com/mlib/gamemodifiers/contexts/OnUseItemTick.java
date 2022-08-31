@@ -38,7 +38,7 @@ public class OnUseItemTick {
 		public final int duration;
 
 		public Data( LivingEntityUseItemEvent.Tick event ) {
-			super( event.getEntity(), event );
+			super( event.getEntityLiving(), event );
 			this.itemStack = event.getItem();
 			this.duration = event.getDuration();
 		}

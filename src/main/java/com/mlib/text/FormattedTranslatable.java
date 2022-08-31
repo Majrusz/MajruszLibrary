@@ -3,6 +3,8 @@ package com.mlib.text;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +26,11 @@ public class FormattedTranslatable {
 	}
 
 	public FormattedTranslatable addParameter( String text, ChatFormatting... format ) {
-		return this.addParameter( Component.literal( text ).withStyle( format ) );
+		return this.addParameter( new TextComponent( text ).withStyle( format ) );
 	}
 
 	public MutableComponent create() {
-		return Component.translatable( this.id, this.parameters.toArray() ).withStyle( this.defaultFormat );
+		return new TranslatableComponent( this.id, this.parameters.toArray() ).withStyle( this.defaultFormat );
 	}
 
 	public void insertInto( List< Component > components, int index ) {

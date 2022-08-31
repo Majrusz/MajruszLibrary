@@ -42,8 +42,8 @@ public class OnItemFished {
 		public final NonNullList< ItemStack > drops;
 
 		public Data( ItemFishedEvent event ) {
-			super( event.getEntity(), event );
-			this.player = event.getEntity();
+			super( event.getPlayer(), event );
+			this.player = event.getPlayer();
 			this.hook = event.getHookEntity();
 			this.drops = event.getDrops();
 		}
