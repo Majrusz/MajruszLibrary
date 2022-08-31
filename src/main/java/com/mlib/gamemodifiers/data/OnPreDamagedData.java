@@ -8,6 +8,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 
 import javax.annotation.Nullable;
 
+@Deprecated
 public class OnPreDamagedData extends ContextData.Event< LivingAttackEvent > {
 	public final DamageSource source;
 	@Nullable public final LivingEntity attacker;
