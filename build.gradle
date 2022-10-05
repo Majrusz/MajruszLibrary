@@ -14,7 +14,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '2.15.0'
+version = '2.15.1'
 group = 'com.mlib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'majrusz-library-1.19.2'
 
