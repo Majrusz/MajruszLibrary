@@ -183,7 +183,6 @@ public class LevelHelper {
 		}
 	}
 
-	/** Spawns ItemEntity that flies towards given direction. */
 	public static void spawnItemEntityFlyingTowardsDirection( ItemStack itemStack, Level level, Vec3 from, Vec3 to ) {
 		Vec3 spawnPosition = VectorHelper.add( from, Random.getRandomVector3d( -0.25, 0.25, 0.125, 0.5, -0.25, 0.25 ) );
 		Vec3 motion = VectorHelper.multiply( VectorHelper.subtract( to, spawnPosition ), 0.1 );
@@ -192,5 +191,13 @@ public class LevelHelper {
 		itemEntity.setDeltaMovement( VectorHelper.add( motion, new Vec3( 0.0, Math.pow( VectorHelper.length( motion ), 0.5 ) * 0.25, 0.0 ) ) );
 
 		level.addFreshEntity( itemEntity );
+	}
+
+	public static void startRaining( Level level, boolean withThunder ) {
+		level.getLevelData().setRaining( true );
+		level.setRainLevel( 0.0f );
+		if( withThunder ) {
+			level.setThunderLevel( 0.0f );
+		}
 	}
 }
