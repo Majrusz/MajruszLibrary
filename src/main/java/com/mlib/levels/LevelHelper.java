@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
@@ -193,10 +194,18 @@ public class LevelHelper {
 		level.addFreshEntity( itemEntity );
 	}
 
-	public static void startRaining( Level level, boolean withThunder ) {
-		level.getLevelData().setRaining( true );
+	public static void startRaining( Level level, int ticks, boolean withThunder ) {
+		if( !( level.getLevelData() instanceof ServerLevelData data ) ) {
+			return;
+		}
+
+		data.setClearWeatherTime( 0 );
+		data.setRaining( true );
+		data.setRainTime( ticks );
 		level.setRainLevel( 0.0f );
 		if( withThunder ) {
+			data.setThundering( true );
+			data.setThunderTime( ticks );
 			level.setThunderLevel( 0.0f );
 		}
 	}
