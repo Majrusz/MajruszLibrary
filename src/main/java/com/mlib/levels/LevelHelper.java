@@ -194,12 +194,12 @@ public class LevelHelper {
 		level.addFreshEntity( itemEntity );
 	}
 
-	public static void startRaining( Level level, int ticks, boolean withThunder ) {
+	public static void startRaining( Level level, int ticks, boolean withThunder, int transitionTicks ) {
 		if( !( level.getLevelData() instanceof ServerLevelData data ) ) {
 			return;
 		}
 
-		data.setClearWeatherTime( 0 );
+		data.setClearWeatherTime( transitionTicks );
 		data.setRaining( true );
 		data.setRainTime( ticks );
 		level.setRainLevel( 0.0f );
@@ -208,5 +208,27 @@ public class LevelHelper {
 			data.setThunderTime( ticks );
 			level.setThunderLevel( 0.0f );
 		}
+	}
+
+	public static void startRaining( Level level, int ticks ) {
+		startRaining( level, ticks, false, 0 );
+	}
+
+	public static void setClearWeather( Level level, int ticks, int transitionTicks ) {
+		if( !( level.getLevelData() instanceof ServerLevelData data ) ) {
+			return;
+		}
+
+		data.setClearWeatherTime( ticks );
+		data.setRaining( false );
+		data.setRainTime( transitionTicks );
+		level.setRainLevel( 1.0f );
+		data.setThundering( false );
+		data.setThunderTime( transitionTicks );
+		level.setThunderLevel( 1.0f );
+	}
+
+	public static void setClearWeather( Level level, int ticks ) {
+		setClearWeather( level, ticks, 0 );
 	}
 }
