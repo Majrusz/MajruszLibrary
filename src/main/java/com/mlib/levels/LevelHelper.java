@@ -195,9 +195,8 @@ public class LevelHelper {
 	}
 
 	public static void startRaining( Level level, int ticks, boolean withThunder, int transitionTicks ) {
-		if( !( level.getLevelData() instanceof ServerLevelData data ) ) {
+		if( !( level.getLevelData() instanceof ServerLevelData data ) )
 			return;
-		}
 
 		data.setClearWeatherTime( transitionTicks );
 		data.setRaining( true );
@@ -215,9 +214,8 @@ public class LevelHelper {
 	}
 
 	public static void setClearWeather( Level level, int ticks, int transitionTicks ) {
-		if( !( level.getLevelData() instanceof ServerLevelData data ) ) {
+		if( !( level.getLevelData() instanceof ServerLevelData data ) )
 			return;
-		}
 
 		data.setClearWeatherTime( ticks );
 		data.setRaining( false );
