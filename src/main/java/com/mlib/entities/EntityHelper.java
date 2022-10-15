@@ -46,6 +46,10 @@ public class EntityHelper {
 		return player.getAbilities().instabuild;
 	}
 
+	public static boolean isOnSpectatorMode( Player player ) {
+		return player.isSpectator();
+	}
+
 	public static boolean isAnimal( @Nullable Entity entity ) {
 		return entity instanceof Animal;
 	}
