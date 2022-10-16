@@ -6,6 +6,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
+@Deprecated
 public class OnItemCraftedData extends ContextData.Event< PlayerEvent.ItemCraftedEvent > {
 	public final Player player;
 	public final ItemStack itemStack;

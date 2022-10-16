@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnItemCraftedContext extends ContextBase< OnItemCraftedData > {
 	static final List< OnItemCraftedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
