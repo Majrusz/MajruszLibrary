@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnPlayerInteractContext extends ContextBase< OnPlayerInteractData > {
 	static final List< OnPlayerInteractContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );

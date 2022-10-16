@@ -8,6 +8,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import javax.annotation.Nullable;
 
+@Deprecated
 public class OnPlayerInteractData extends ContextData.Event< PlayerInteractEvent > {
 	public final ItemStack itemStack;
 	public final Player player;
