@@ -44,6 +44,10 @@ public class TimeHelper {
 		return hasClientTicksPassed( config.asTicks() );
 	}
 
+	public static long getClientTicks() {
+		return clientCounter;
+	}
+
 	/** Returns whether client counter can be divided by given value. */
 	public static boolean hasServerTicksPassed( @Nonnegative int tickDelay ) {
 		return serverCounter % tickDelay == 0;
@@ -56,5 +60,9 @@ public class TimeHelper {
 
 	public static boolean hasServerSecondsPassed( DoubleConfig config ) {
 		return hasServerTicksPassed( config.asTicks() );
+	}
+
+	public static long getServerTicks() {
+		return serverCounter;
 	}
 }
