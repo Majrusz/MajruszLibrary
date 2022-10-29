@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnBreakSpeedContext extends ContextBase< OnBreakSpeedData > {
 	static final List< OnBreakSpeedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
