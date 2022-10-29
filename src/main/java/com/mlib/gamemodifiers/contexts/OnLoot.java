@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -45,7 +46,7 @@ public class OnLoot {
 			this( consumer, new ContextParameters() );
 		}
 
-		@SubscribeEvent
+		@SubscribeEvent( priority = EventPriority.LOW )
 		public static void onAnyLoot( AnyLootModificationEvent event ) {
 			ContextBase.accept( CONTEXTS, new Data( event ) );
 		}
