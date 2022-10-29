@@ -9,12 +9,12 @@ import java.util.List;
 public class Contexts< DataType extends ContextData, ContextType extends ContextBase< DataType > > {
 	final List< ContextType > contexts = Collections.synchronizedList( new ArrayList<>() );
 
-	void add( ContextType context ) {
+	public void add( ContextType context ) {
 		this.contexts.add( context );
 		this.contexts.sort( ContextParameters.COMPARATOR );
 	}
 
-	void accept( DataType data ) {
+	public void accept( DataType data ) {
 		this.contexts.forEach( context->{
 			if( context.check( data ) ) {
 				context.consumer.accept( data );
