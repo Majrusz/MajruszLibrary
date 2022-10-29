@@ -45,19 +45,12 @@ public class OnPreDamaged {
 		}
 
 		private static boolean willBeCancelled( Data data ) {
-			boolean isInvulnerable = data.target.isInvulnerableTo( data.source );
+			boolean isInvulnerable = data.target.isInvulnerableTo( data.source ) || data.target.invulnerableTime > 10.0f;
 			boolean isClientSide = data.level == null;
 			boolean isDeadOrDying = data.target.isDeadOrDying();
 			boolean isFireResistant = data.source.isFire() && data.target.hasEffect( MobEffects.FIRE_RESISTANCE );
-			boolean hasInvulnerabilityTicks = data.target.invulnerableTime > 10.0f && dealtLessDamage( data );
 
-			return isInvulnerable || isClientSide || isDeadOrDying || isFireResistant || hasInvulnerabilityTicks;
-		}
-
-		private static boolean dealtLessDamage( Data data ) {
-			CombatEntry entry = data.target.getCombatTracker().getLastEntry();
-
-			return entry != null && entry.getDamage() >= data.event.getAmount();
+			return isInvulnerable || isClientSide || isDeadOrDying || isFireResistant;
 		}
 	}
 
