@@ -6,6 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
+@Deprecated
 public class OnDimensionChangedData extends ContextData.Event< PlayerEvent.PlayerChangedDimensionEvent > {
 	public final LivingEntity entity;
 	public final ResourceKey< Level > from;

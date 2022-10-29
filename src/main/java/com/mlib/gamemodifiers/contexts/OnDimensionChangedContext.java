@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnDimensionChangedContext extends ContextBase< OnDimensionChangedData > {
 	static final List< OnDimensionChangedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
