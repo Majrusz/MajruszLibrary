@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnDeathContext extends ContextBase< OnDeathData > {
 	static final List< OnDeathContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
