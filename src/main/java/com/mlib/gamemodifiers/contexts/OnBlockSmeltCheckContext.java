@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnBlockSmeltCheckContext extends ContextBase< OnBlockSmeltCheckData > {
 	public static final Consumer< OnBlockSmeltCheckData > ENABLE_SMELT = data->data.event.shouldSmelt = true;
