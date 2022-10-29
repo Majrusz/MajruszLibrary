@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnCheckSpawnContext extends ContextBase< OnCheckSpawnData > {
 	static final List< OnCheckSpawnContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
