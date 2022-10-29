@@ -16,6 +16,7 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 	final ContextParameters params;
 	protected GameModifier gameModifier = null;
 
+	@Deprecated
 	public static < DataType extends ContextData, ContextType extends ContextBase< DataType > > void accept( List< ContextType > contexts, DataType data ) {
 		contexts.forEach( context->{
 			if( context.check( data ) ) {
@@ -24,6 +25,7 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 		} );
 	}
 
+	@Deprecated
 	public static < ContextType extends ContextBase< ? > > void addSorted( List< ContextType > contexts, ContextType context ) {
 		contexts.add( context );
 		contexts.sort( ContextParameters.COMPARATOR );
