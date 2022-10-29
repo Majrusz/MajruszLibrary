@@ -4,6 +4,7 @@ import com.mlib.Utility;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
+import net.minecraft.world.damagesource.CombatEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -48,8 +49,15 @@ public class OnPreDamaged {
 			boolean isClientSide = data.level == null;
 			boolean isDeadOrDying = data.target.isDeadOrDying();
 			boolean isFireResistant = data.source.isFire() && data.target.hasEffect( MobEffects.FIRE_RESISTANCE );
+			boolean hasInvulnerabilityTicks = data.target.invulnerableTime > 10.0f && dealtLessDamage( data );
 
-			return isInvulnerable || isClientSide || isDeadOrDying || isFireResistant;
+			return isInvulnerable || isClientSide || isDeadOrDying || isFireResistant || hasInvulnerabilityTicks;
+		}
+
+		private static boolean dealtLessDamage( Data data ) {
+			CombatEntry entry = data.target.getCombatTracker().getLastEntry();
+
+			return entry != null && entry.getDamage() >= data.event.getAmount();
 		}
 	}
 
