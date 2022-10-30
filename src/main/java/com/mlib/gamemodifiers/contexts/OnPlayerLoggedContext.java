@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnPlayerLoggedContext extends ContextBase< OnPlayerLoggedData > {
 	static final List< OnPlayerLoggedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
