@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnEntityTickContext extends ContextBase< OnEntityTickData > {
 	static final List< OnEntityTickContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );

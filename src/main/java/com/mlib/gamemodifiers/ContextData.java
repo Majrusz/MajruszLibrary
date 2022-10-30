@@ -3,7 +3,6 @@ package com.mlib.gamemodifiers;
 import com.mlib.Utility;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.eventbus.api.Event;
 
 import javax.annotation.Nullable;
 
