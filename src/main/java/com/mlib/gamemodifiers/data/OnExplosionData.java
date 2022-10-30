@@ -11,6 +11,7 @@ import org.apache.commons.lang3.mutable.MutableFloat;
 
 import javax.annotation.Nullable;
 
+@Deprecated
 public class OnExplosionData extends ContextData.Event< ExplosionEvent > {
 	public final Explosion explosion;
 	@Nullable public final LivingEntity sourceMob;

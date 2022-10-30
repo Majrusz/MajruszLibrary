@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 // this context is executed twice! (start and detonate)
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnExplosionContext extends ContextBase< OnExplosionData > {
 	static final List< OnExplosionContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
