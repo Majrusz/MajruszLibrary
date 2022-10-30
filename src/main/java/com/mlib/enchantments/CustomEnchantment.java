@@ -1,5 +1,6 @@
 package com.mlib.enchantments;
 
+import com.mlib.Utility;
 import com.mlib.items.ItemHelper;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -103,6 +104,23 @@ public abstract class CustomEnchantment extends Enchantment {
 			this.setEnchantmentTag( itemStack, enchantmentLevel + 1 );
 			return true;
 		}
+	}
+
+	public boolean removeEnchantment( ItemStack itemStack ) {
+		if( this.getEnchantmentLevel( itemStack ) == 0 )
+			return false;
+
+		ListTag nbt = itemStack.getEnchantmentTags();
+		for( int i = 0; i < nbt.size(); ++i ) {
+			CompoundTag enchantmentData = nbt.getCompound( i );
+			if( enchantmentData.getString( "id" ).contains( Utility.getRegistryString( this ) ) ) {
+				nbt.remove( i );
+				break;
+			}
+		}
+
+		itemStack.addTagElement( "Enchantments", nbt );
+		return true;
 	}
 
 	public int getEnchantmentSum( Iterable< ItemStack > itemStacks ) {
