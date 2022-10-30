@@ -12,6 +12,7 @@ public class ParticleHandler {
 	public static final ParticleHandler AWARD = new ParticleHandler( ParticleTypes.HAPPY_VILLAGER, offset( 0.25f ), speed( 0.1f ) );
 	public static final ParticleHandler ENCHANTED_HIT = new ParticleHandler( ParticleTypes.ENCHANTED_HIT, offset( 0.25f ), speed( 0.1f ) );
 	public static final ParticleHandler SMELT = new ParticleHandler( ParticleTypes.FLAME, offset( 0.1f ), speed( 0.01f ) );
+	public static final ParticleHandler SMOKE = new ParticleHandler( ParticleTypes.SMOKE, offset( 0.25f ), speed( 0.01f ) );
 	public static final ParticleHandler WITCH = new ParticleHandler( ParticleTypes.WITCH, offset( 0.25f ), speed( 0.01f ) );
 
 	final SimpleParticleType particleType;
