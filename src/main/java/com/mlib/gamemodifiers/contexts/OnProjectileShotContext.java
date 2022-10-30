@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnProjectileShotContext extends ContextBase< OnProjectileData.Shot > {
 	static final List< OnProjectileShotContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );

@@ -14,6 +14,7 @@ import net.minecraft.world.phys.EntityHitResult;
 
 import javax.annotation.Nullable;
 
+@Deprecated
 public class OnProjectileData extends ContextData.Event< ProjectileEvent > {
 	public final Projectile projectile;
 	public final Level level;
