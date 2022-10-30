@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.function.Supplier;
 
 public class SoundHandler {
-	public static final float DEFAULT_VOLUME = 0.7f;
+	public static final Supplier< Float > DEFAULT_VOLUME = randomized( 0.7f );
 	public static final SoundHandler AWARD = new SoundHandler( SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.AMBIENT, DEFAULT_VOLUME );
 	public static final SoundHandler DRINK = new SoundHandler( SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, DEFAULT_VOLUME );
 	public static final SoundHandler BONE_MEAL = new SoundHandler( SoundEvents.BONE_MEAL_USE, SoundSource.AMBIENT, DEFAULT_VOLUME );
@@ -38,10 +38,6 @@ public class SoundHandler {
 
 	public SoundHandler( SoundEvent event, SoundSource source, Supplier< Float > volumeProvider ) {
 		this( event, source, volumeProvider, randomized( 1.0f ) );
-	}
-
-	public SoundHandler( SoundEvent event, SoundSource source, float volume ) {
-		this( event, source, randomized( volume ), randomized( 1.0f ) );
 	}
 
 	public void play( ServerLevel level, Vec3 position ) {
