@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
+@Deprecated
 public class OnItemHurtData extends ContextData.Event< ItemHurtEvent > {
 	@Nullable public final ServerPlayer player;
 	public final ItemStack itemStack;
