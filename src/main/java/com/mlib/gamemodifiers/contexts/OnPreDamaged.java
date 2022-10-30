@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 public class OnPreDamaged {
 	public static final Predicate< Data > DIRECT_DAMAGE = data->data.source.getDirectEntity() == data.attacker;
 	public static final Predicate< Data > DEALT_ANY_DAMAGE = data->data.event.getAmount() > 0.0f;
-	public static final Predicate< Data > WILL_TAKE_FULL_DAMAGE = data->data.target.invulnerableTime < 10.0f; // sources like fire deal damage every tick and only invulnerableTime blocks them from applying damage
+	public static final Predicate< Data > WILL_TAKE_FULL_DAMAGE = data->data.target.invulnerableTime <= 10; // sources like fire deal damage every tick and only invulnerableTime blocks them from applying damage
 
 	@Mod.EventBusSubscriber
 	public static class Context extends ContextBase< Data > {
