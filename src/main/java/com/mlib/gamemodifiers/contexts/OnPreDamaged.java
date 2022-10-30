@@ -3,8 +3,8 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.Utility;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
-import net.minecraft.world.damagesource.CombatEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,23 +13,21 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class OnPreDamaged {
 	public static final Predicate< Data > DIRECT_DAMAGE = data->data.source.getDirectEntity() == data.attacker;
 	public static final Predicate< Data > DEALT_ANY_DAMAGE = data->data.event.getAmount() > 0.0f;
+	public static final Predicate< Data > WILL_TAKE_FULL_DAMAGE = data->data.target.invulnerableTime < 10.0f; // sources like fire deal damage every tick and only invulnerableTime blocks them from applying damage
 
 	@Mod.EventBusSubscriber
 	public static class Context extends ContextBase< Data > {
-		static final List< Context > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
+		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
 
 		public Context( Consumer< Data > consumer, ContextParameters params ) {
 			super( Data.class, consumer, params );
-			ContextBase.addSorted( CONTEXTS, this );
+			CONTEXTS.add( this );
 		}
 
 		public Context( Consumer< Data > consumer ) {
@@ -40,12 +38,12 @@ public class OnPreDamaged {
 		public static void onPreDamaged( LivingAttackEvent event ) {
 			Data data = new Data( event );
 			if( !willBeCancelled( data ) ) {
-				ContextBase.accept( CONTEXTS, data );
+				CONTEXTS.accept( data );
 			}
 		}
 
 		private static boolean willBeCancelled( Data data ) {
-			boolean isInvulnerable = data.target.isInvulnerableTo( data.source ) || data.target.invulnerableTime > 10.0f;
+			boolean isInvulnerable = data.target.isInvulnerableTo( data.source );
 			boolean isClientSide = data.level == null;
 			boolean isDeadOrDying = data.target.isDeadOrDying();
 			boolean isFireResistant = data.source.isFire() && data.target.hasEffect( MobEffects.FIRE_RESISTANCE );
