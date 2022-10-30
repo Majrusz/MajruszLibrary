@@ -4,11 +4,9 @@ import com.mlib.Random;
 import com.mlib.effects.ParticleHandler;
 import com.mlib.events.BlockSmeltCheckEvent;
 import com.mlib.gamemodifiers.GameModifier;
-import com.mlib.gamemodifiers.contexts.OnLootContext;
-import com.mlib.gamemodifiers.data.OnLootData;
+import com.mlib.gamemodifiers.contexts.OnLoot;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import com.mlib.gamemodifiers.parameters.Priority;
-import com.mlib.particles.ParticleHelper;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;
@@ -29,7 +27,7 @@ public class BlockSmelter extends GameModifier {
 	public BlockSmelter() {
 		super( "BlockSmelter", "" );
 
-		OnLootContext onLoot = new OnLootContext( this::replaceWithSmeltedLoot, new ContextParameters( Priority.HIGH, "", "" ) );
+		OnLoot.Context onLoot = new OnLoot.Context( this::replaceWithSmeltedLoot, new ContextParameters( Priority.HIGH, "", "" ) );
 		onLoot.addCondition( data->data.blockState != null )
 			.addCondition( data->data.level != null )
 			.addCondition( data->data.entity instanceof Player player && !player.isCrouching() )
@@ -38,14 +36,14 @@ public class BlockSmelter extends GameModifier {
 		this.addContext( onLoot );
 	}
 
-	private boolean checkEventListeners( OnLootData data ) {
+	private boolean checkEventListeners( OnLoot.Data data ) {
 		BlockSmeltCheckEvent event = new BlockSmeltCheckEvent( data.event );
 		MinecraftForge.EVENT_BUS.post( event );
 
 		return event.shouldSmelt;
 	}
 
-	private void replaceWithSmeltedLoot( OnLootData data ) {
+	private void replaceWithSmeltedLoot( OnLoot.Data data ) {
 		List< ItemStack > generatedLoot = data.generatedLoot;
 		ServerLevel level = data.level;
 		Vec3 position = data.origin;
