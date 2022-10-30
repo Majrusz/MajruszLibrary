@@ -32,6 +32,10 @@ public class SoundHandler {
 		this( event, source, volumeProvider, ()->Random.nextFloat( 0.8f, 1.2f ) );
 	}
 
+	public SoundHandler( SoundEvent event, SoundSource source, float volume ) {
+		this( event, source, ()->volume * Random.nextFloat( 0.8f, 1.2f ), ()->Random.nextFloat( 0.8f, 1.2f ) );
+	}
+
 	public void play( ServerLevel level, Vec3 position ) {
 		level.playSound( null, position.x, position.y, position.z, this.event, this.source, this.volumeProvider.get(), this.pitchProvider.get() );
 	}
