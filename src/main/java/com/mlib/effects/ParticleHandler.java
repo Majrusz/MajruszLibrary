@@ -55,8 +55,9 @@ public class ParticleHandler {
 	}
 
 	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int amountOfParticles, Supplier< Vec3 > offsetProvider, Supplier< Float > speedProvider ) {
+		Vec3 difference = VectorHelper.subtract( to, from );
 		for( int i = 0; i <= amountOfParticles; i++ ) {
-			Vec3 step = VectorHelper.add( from, VectorHelper.multiply( to, ( float )( i ) / amountOfParticles ) );
+			Vec3 step = VectorHelper.add( from, VectorHelper.multiply( difference, ( float )( i ) / amountOfParticles ) );
 			this.spawn( level, step, 1, offsetProvider, speedProvider );
 		}
 	}
