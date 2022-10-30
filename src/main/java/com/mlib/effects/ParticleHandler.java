@@ -12,6 +12,7 @@ public class ParticleHandler {
 	public static final ParticleHandler AWARD = new ParticleHandler( ParticleTypes.HAPPY_VILLAGER, offset( 0.25f ), speed( 0.1f ) );
 	public static final ParticleHandler ENCHANTED_HIT = new ParticleHandler( ParticleTypes.ENCHANTED_HIT, offset( 0.25f ), speed( 0.1f ) );
 	public static final ParticleHandler SMELT = new ParticleHandler( ParticleTypes.FLAME, offset( 0.1f ), speed( 0.01f ) );
+	public static final ParticleHandler WITCH = new ParticleHandler( ParticleTypes.WITCH, offset( 0.25f ), speed( 0.01f ) );
 
 	final SimpleParticleType particleType;
 	final Supplier< Vec3 > offsetProvider;
@@ -54,19 +55,20 @@ public class ParticleHandler {
 		this.spawn( level, position, amountOfParticles, ()->VectorHelper.multiply( this.offsetProvider.get(), offsetMultiplier ), this.speedProvider );
 	}
 
-	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int amountOfParticles, Supplier< Vec3 > offsetProvider, Supplier< Float > speedProvider ) {
+	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int particlesPerBlock, Supplier< Vec3 > offsetProvider, Supplier< Float > speedProvider ) {
 		Vec3 difference = VectorHelper.subtract( to, from );
+		int amountOfParticles = ( int )Math.ceil( from.distanceTo( to ) * particlesPerBlock );
 		for( int i = 0; i <= amountOfParticles; i++ ) {
 			Vec3 step = VectorHelper.add( from, VectorHelper.multiply( difference, ( float )( i ) / amountOfParticles ) );
 			this.spawn( level, step, 1, offsetProvider, speedProvider );
 		}
 	}
 
-	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int amountOfParticles, Supplier< Vec3 > offsetProvider ) {
-		this.spawnLine( level, from, to, amountOfParticles, offsetProvider, speed( 0.0f ) );
+	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int particlesPerBlock, Supplier< Vec3 > offsetProvider ) {
+		this.spawnLine( level, from, to, particlesPerBlock, offsetProvider, speed( 0.0f ) );
 	}
 
-	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int amountOfParticles ) {
-		this.spawnLine( level, from, to, amountOfParticles, offset( 0.0f ), speed( 0.0f ) );
+	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int particlesPerBlock ) {
+		this.spawnLine( level, from, to, particlesPerBlock, offset( 0.0f ), speed( 0.0f ) );
 	}
 }
