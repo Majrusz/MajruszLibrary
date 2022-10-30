@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnEquipmentChangedContext extends ContextBase< OnEquipmentChangedData > {
 	static final List< OnEquipmentChangedContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
