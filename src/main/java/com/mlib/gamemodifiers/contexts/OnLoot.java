@@ -4,6 +4,7 @@ import com.mlib.Utility;
 import com.mlib.events.AnyLootModificationEvent;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -18,8 +19,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -35,11 +34,11 @@ public class OnLoot {
 
 	@Mod.EventBusSubscriber
 	public static class Context extends ContextBase< Data > {
-		static final List< Context > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
+		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
 
 		public Context( Consumer< Data > consumer, ContextParameters params ) {
 			super( Data.class, consumer, params );
-			ContextBase.addSorted( CONTEXTS, this );
+			CONTEXTS.add( this );
 		}
 
 		public Context( Consumer< Data > consumer ) {
@@ -48,7 +47,7 @@ public class OnLoot {
 
 		@SubscribeEvent( priority = EventPriority.LOW )
 		public static void onAnyLoot( AnyLootModificationEvent event ) {
-			ContextBase.accept( CONTEXTS, new Data( event ) );
+			CONTEXTS.accept( new Data( event ) );
 		}
 	}
 
