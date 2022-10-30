@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnLootLevelContext extends ContextBase< OnLootLevelData > {
 	static final List< OnLootLevelContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );

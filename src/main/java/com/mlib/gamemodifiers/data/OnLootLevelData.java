@@ -8,6 +8,7 @@ import net.minecraftforge.event.entity.living.LootingLevelEvent;
 
 import javax.annotation.Nullable;
 
+@Deprecated
 public class OnLootLevelData extends ContextData.Event< LootingLevelEvent > {
 	@Nullable public final DamageSource source;
 
