@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnItemSwingDurationContext extends ContextBase< OnItemSwingDurationData > {
 	static final List< OnItemSwingDurationContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
