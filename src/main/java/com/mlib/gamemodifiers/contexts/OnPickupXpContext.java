@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Mod.EventBusSubscriber
 public class OnPickupXpContext extends ContextBase< OnPickupXpData > {
 	static final List< OnPickupXpContext > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
