@@ -1,10 +1,11 @@
 package com.mlib.mobeffects;
 
+import com.mlib.effects.EffectHelper;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
-public class MobEffectHelper {
+public class MobEffectHelper extends EffectHelper {
 	public static boolean tryToApply( LivingEntity entity, MobEffectInstance effectInstance ) {
 		if( entity.canBeAffected( effectInstance ) ) {
 			entity.addEffect( effectInstance );
