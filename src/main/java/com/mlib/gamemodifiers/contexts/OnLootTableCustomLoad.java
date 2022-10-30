@@ -3,6 +3,7 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.ObfuscationGetter;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,18 +14,16 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class OnLootTableCustomLoad {
 	public static class Context extends ContextBase< Data > {
-		static final List< Context > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
+		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
 
 		public Context( Consumer< Data > consumer, ContextParameters params ) {
 			super( Data.class, consumer, params );
-			ContextBase.addSorted( CONTEXTS, this );
+			CONTEXTS.add( this );
 		}
 
 		public Context( Consumer< Data > consumer ) {
@@ -32,7 +31,7 @@ public class OnLootTableCustomLoad {
 		}
 
 		public static void broadcast( Data data ) {
-			ContextBase.accept( CONTEXTS, data );
+			CONTEXTS.accept( data );
 		}
 	}
 
