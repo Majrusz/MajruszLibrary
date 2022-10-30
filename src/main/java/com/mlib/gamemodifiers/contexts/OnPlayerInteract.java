@@ -3,6 +3,7 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.Utility;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,19 +14,21 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class OnPlayerInteract {
+	public static final Predicate< Data > IS_ENTITY_INTERACTION = data->data.event instanceof PlayerInteractEvent.EntityInteract;
+	public static final Predicate< Data > IS_BLOCK_INTERACTION = data->data.event instanceof PlayerInteractEvent.RightClickBlock;
+	public static final Predicate< Data > IS_ITEM_INTERACTION = data->data.event instanceof PlayerInteractEvent.RightClickItem;
+
 	@Mod.EventBusSubscriber
 	public static class Context extends ContextBase< Data > {
-		static final List< Context > CONTEXTS = Collections.synchronizedList( new ArrayList<>() );
+		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
 
 		public Context( Consumer< Data > consumer, ContextParameters params ) {
 			super( Data.class, consumer, params );
-			ContextBase.addSorted( CONTEXTS, this );
+			CONTEXTS.add( this );
 		}
 
 		public Context( Consumer< Data > consumer ) {
@@ -34,17 +37,17 @@ public class OnPlayerInteract {
 
 		@SubscribeEvent
 		public static void onEntityInteract( PlayerInteractEvent.EntityInteract event ) {
-			ContextBase.accept( CONTEXTS, new Data( event, Utility.castIfPossible( LivingEntity.class, event.getTarget() ) ) );
+			CONTEXTS.accept( new Data( event, Utility.castIfPossible( LivingEntity.class, event.getTarget() ) ) );
 		}
 
 		@SubscribeEvent
 		public static void onRightClickBlock( PlayerInteractEvent.RightClickBlock event ) {
-			ContextBase.accept( CONTEXTS, new Data( event, event.getEntity() ) );
+			CONTEXTS.accept( new Data( event, event.getEntity() ) );
 		}
 
 		@SubscribeEvent
 		public static void onRightClickItem( PlayerInteractEvent.RightClickItem event ) {
-			ContextBase.accept( CONTEXTS, new Data( event, event.getEntity() ) );
+			CONTEXTS.accept( new Data( event, event.getEntity() ) );
 		}
 	}
 
