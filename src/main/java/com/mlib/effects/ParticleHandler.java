@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 public class ParticleHandler {
 	public static final ParticleHandler AWARD = new ParticleHandler( ParticleTypes.HAPPY_VILLAGER, offset( 0.25f ), speed( 0.1f ) );
-	public static final ParticleHandler ENCHANTED_HIT = new ParticleHandler( ParticleTypes.ENCHANTED_HIT, offset( 0.25f ), speed( 0.0f ) );
+	public static final ParticleHandler ENCHANTED_HIT = new ParticleHandler( ParticleTypes.ENCHANTED_HIT, offset( 0.25f ), speed( 0.1f ) );
 	public static final ParticleHandler SMELT = new ParticleHandler( ParticleTypes.FLAME, offset( 0.1f ), speed( 0.01f ) );
 
 	final SimpleParticleType particleType;
@@ -63,10 +63,10 @@ public class ParticleHandler {
 	}
 
 	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int amountOfParticles, Supplier< Vec3 > offsetProvider ) {
-		this.spawnLine( level, from, to, amountOfParticles, offsetProvider, this.speedProvider );
+		this.spawnLine( level, from, to, amountOfParticles, offsetProvider, speed( 0.0f ) );
 	}
 
 	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int amountOfParticles ) {
-		this.spawnLine( level, from, to, amountOfParticles, this.offsetProvider, this.speedProvider );
+		this.spawnLine( level, from, to, amountOfParticles, offset( 0.0f ), speed( 0.0f ) );
 	}
 }
