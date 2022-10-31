@@ -4,31 +4,43 @@ import com.mlib.config.DoubleConfig;
 import com.mlib.math.VectorHelper;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.Vec3i;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
 public class Random {
+	static final RandomSource CLIENT = RandomSource.create();
+	static final RandomSource SERVER = RandomSource.create();
+
+	/**
+	 Returns random source which depends on current thread, to make sure all functions are
+	 thread safe and can be accessed on both server and client at the same time.
+	 */
+	public static RandomSource getThreadSafe() {
+		return Utility.isServerSide() ? SERVER : CLIENT;
+	}
+
 	public static float nextFloat() {
-		return MajruszLibrary.RANDOM.nextFloat();
+		return getThreadSafe().nextFloat();
 	}
 
 	public static float nextFloat( float min, float max ) {
-		return ( max - min ) * MajruszLibrary.RANDOM.nextFloat() + min;
+		return ( max - min ) * nextFloat() + min;
 	}
 
 	public static double nextDouble() {
-		return MajruszLibrary.RANDOM.nextDouble();
+		return getThreadSafe().nextDouble();
 	}
 
 	public static double nextDouble( double min, double max ) {
-		return ( max - min ) * MajruszLibrary.RANDOM.nextDouble() + min;
+		return ( max - min ) * nextDouble() + min;
 	}
 
 	public static int nextInt() {
-		return MajruszLibrary.RANDOM.nextInt();
+		return getThreadSafe().nextInt();
 	}
 
 	public static int nextInt( int max ) {
-		return MajruszLibrary.RANDOM.nextInt( max );
+		return getThreadSafe().nextInt( max );
 	}
 
 	public static int nextInt( int min, int max ) {
@@ -36,20 +48,13 @@ public class Random {
 	}
 
 	public static boolean nextBoolean() {
-		return MajruszLibrary.RANDOM.nextBoolean();
+		return getThreadSafe().nextBoolean();
 	}
 
 	public static < Type > Type nextRandom( Type[] elements ) {
 		return elements[ nextInt( elements.length ) ];
 	}
 
-	/**
-	 The method responsible for the random event.
-
-	 @param chance Chance from range [0.0;1.0].
-
-	 @return Returns true if drawn number was from range [0.0;chance], and false otherwise.
-	 */
 	public static boolean tryChance( double chance ) {
 		return nextDouble() <= chance;
 	}

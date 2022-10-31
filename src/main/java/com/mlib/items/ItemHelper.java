@@ -1,6 +1,5 @@
 package com.mlib.items;
 
-import com.mlib.MajruszLibrary;
 import com.mlib.Random;
 import com.mlib.entities.EntityHelper;
 import net.minecraft.server.level.ServerLevel;
@@ -31,14 +30,14 @@ public class ItemHelper {
 		if( itemStack.getMaxDamage() * factor < 1.0 )
 			return ItemStack.EMPTY;
 
-		itemStack.setDamageValue( MajruszLibrary.RANDOM.nextInt( ( int )( itemStack.getMaxDamage() * factor ) ) );
+		itemStack.setDamageValue( Random.getThreadSafe().nextInt( ( int )( itemStack.getMaxDamage() * factor ) ) );
 		return itemStack;
 	}
 
 	public static ItemStack enchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed ) {
 		int enchantmentLevel = getEnchantmentLevel( clampedRegionalDifficulty );
 
-		return EnchantmentHelper.enchantItem( MajruszLibrary.RANDOM, itemStack, enchantmentLevel, isTreasureAllowed );
+		return EnchantmentHelper.enchantItem( Random.getThreadSafe(), itemStack, enchantmentLevel, isTreasureAllowed );
 	}
 
 	public static ItemStack tryEnchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed, double chance ) {
