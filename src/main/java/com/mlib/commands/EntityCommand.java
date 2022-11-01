@@ -6,6 +6,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.world.entity.Entity;
 
 /** For easier creating entity commands. (2 similar commands with arguments: one entity or entity list) */
+@Deprecated
 public abstract class EntityCommand extends BaseCommand {
 	protected void registerEntityCommand( CommandDispatcher< CommandSourceStack > commandDispatcher, Data data ) {
 		CommandManager commandManager = new CommandManager( commandDispatcher );

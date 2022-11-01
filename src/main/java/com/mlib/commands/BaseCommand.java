@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 /** Base class for easier creating simple commands. */
+@Deprecated
 public class BaseCommand {
 	private static final String DEFAULT_POSITION_ARGUMENT = "position";
 	private static final String DEFAULT_ENTITY_ARGUMENT = "entity";

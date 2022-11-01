@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
 /** For easier creating position commands. (4 similar commands with arguments: location, entity, entities or source location) */
+@Deprecated
 public abstract class PositionCommand extends BaseCommand {
 	protected void registerLocationCommand( CommandDispatcher< CommandSourceStack > commandDispatcher, Data data ) {
 		CommandManager commandManager = new CommandManager( commandDispatcher );

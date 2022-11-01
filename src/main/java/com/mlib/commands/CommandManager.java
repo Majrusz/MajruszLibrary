@@ -10,6 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import java.util.function.Predicate;
 
 /** Manager for easier creating simple commands. (it was created only because Minecraft/Minecraft Forge interface often changes) */
+@Deprecated
 public class CommandManager {
 	protected CommandDispatcher< CommandSourceStack > dispatcher;
 
