@@ -35,6 +35,10 @@ public class Random {
 		return ( max - min ) * nextDouble() + min;
 	}
 
+	public static double nextGaussian() {
+		return getThreadSafe().nextGaussian();
+	}
+
 	public static int nextInt() {
 		return getThreadSafe().nextInt();
 	}
