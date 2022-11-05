@@ -1,14 +1,13 @@
 package com.mlib.annotations;
 
 import com.mlib.MajruszLibrary;
-import net.minecraftforge.fml.ModLoader;
-import net.minecraftforge.fml.common.Mod;
-import org.objectweb.asm.Type;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 public class AnnotationHandler {
 	final List< Class< ? > > classes = new ArrayList<>();
