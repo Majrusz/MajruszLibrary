@@ -2,8 +2,10 @@ package com.mlib.annotations;
 
 import com.mlib.MajruszLibrary;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -41,9 +43,9 @@ public class AnnotationHandler {
 				if( outputClass.isAssignableFrom( _class ) ) {
 					try {
 						ClassType instance = ( ClassType )_class.getConstructor().newInstance();
-						MajruszLibrary.log( "[AnnotationHandler] Class %s has been loaded.", instance.toString() );
+						MajruszLibrary.log( "[AnnotationHandler] Class %s has been initialised.", instance.toString() );
 						instances.add( instance );
-					} catch( Exception e ) {
+					} catch( Throwable e ) {
 						throw new AnnotationException( "%s does not have empty constructor", _class.getName() );
 					}
 				}
@@ -58,14 +60,18 @@ public class AnnotationHandler {
 	private Enumeration< URL > buildResources( String rootPackage ) throws AnnotationException {
 		try {
 			return ClassLoader.getSystemResources( rootPackage );
-		} catch( Exception ignored ) {
+		} catch( Throwable ignored ) {
 			throw new AnnotationException( "Invalid package %s", rootPackage );
 		}
 	}
 
-	private void handle( File[] files ) throws AnnotationException {
+	private void handle( File[] files ) {
 		for( File file : files ) {
-			this.handle( file );
+			try {
+				this.handle( file );
+			} catch( AnnotationHandler.AnnotationException exception ) {
+				MajruszLibrary.log( "[AnnotationHandler] %s", exception.getMessage() );
+			}
 		}
 	}
 
@@ -80,8 +86,8 @@ public class AnnotationHandler {
 				if( _class.isAnnotationPresent( this.annotationClass ) ) {
 					this.classes.add( _class );
 				}
-			} catch( Exception ignored ) {
-				throw new AnnotationException( "Package %s has failed to load", classPackage );
+			} catch( Throwable ignored ) {
+				throw new AnnotationException( "Class %s has failed to load.", classPackage );
 			}
 		}
 	}
