@@ -1,4 +1,4 @@
-package com.mlib;
+package com.mlib.annotations;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
