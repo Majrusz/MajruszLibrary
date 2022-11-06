@@ -54,19 +54,19 @@ public class CommandBuilder {
 		this.arguments.add( argument );
 	}
 
-	private boolean hasArguments() {
-		return this.arguments.size() > 0;
+	private boolean emptyArguments() {
+		return this.arguments.size() <= 0;
 	}
 
 	private LiteralArgumentBuilder< CommandSourceStack > getFirstArgument() {
-		if( !this.hasArguments() )
+		if( this.emptyArguments() )
 			throw new IllegalArgumentException();
 
 		return this.arguments.get( 0 );
 	}
 
 	private LiteralArgumentBuilder< CommandSourceStack > getLastArgument() {
-		if( !this.hasArguments() )
+		if( this.emptyArguments() )
 			throw new IllegalArgumentException();
 
 		return this.arguments.get( this.arguments.size() - 1 );
