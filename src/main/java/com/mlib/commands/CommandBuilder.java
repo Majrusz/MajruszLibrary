@@ -14,8 +14,6 @@ public class CommandBuilder {
 	final List< List< IModification > > modifications = new ArrayList<>();
 	final List< LiteralArgumentBuilder< CommandSourceStack > > arguments = new ArrayList<>();
 
-	public CommandBuilder() {}
-
 	public CommandBuilder add( Predicate< CommandSourceStack > predicate ) {
 		return this.add( ()->this.getLastArgument().requires( predicate ) );
 	}
@@ -42,16 +40,23 @@ public class CommandBuilder {
 	}
 
 	public void register( CommandDispatcher< CommandSourceStack > dispatcher ) {
-		for( List< IModification > modification : this.modifications ) {
-			modification.get( 0 ).apply();
+		List< List< Integer > > permutations = this.generatePermutations();
+		for( List< Integer > permutation : permutations ) {
+			this.clearArguments();
+			for( int idx = 0; idx < permutation.size(); ++idx ) {
+				this.modifications.get( idx ).get( permutation.get( idx ) ).apply();
+			}
+			this.tryToMergePreviousArguments();
+			dispatcher.register( this.getFirstArgument() );
 		}
-		this.tryToMergePreviousArguments();
-
-		dispatcher.register( this.getFirstArgument() );
 	}
 
 	private void addArgument( LiteralArgumentBuilder< CommandSourceStack > argument ) {
 		this.arguments.add( argument );
+	}
+
+	private void clearArguments() {
+		this.arguments.clear();
 	}
 
 	private boolean emptyArguments() {
@@ -80,6 +85,26 @@ public class CommandBuilder {
 		LiteralArgumentBuilder< CommandSourceStack > nextArgument = this.arguments.get( this.arguments.size() - 1 );
 
 		previousArgument.then( nextArgument );
+	}
+
+	private List< List< Integer > > generatePermutations() {
+		List< List< Integer > > permutations = new ArrayList<>();
+		permutations.add( new ArrayList<>() );
+		for( List< IModification > modification : this.modifications ) {
+			List< List< Integer > > newPermutations = new ArrayList<>();
+			for( int idx = 0; idx < modification.size(); ++idx ) {
+				List< List< Integer > > copy = new ArrayList<>();
+				for( List< Integer > permutation : permutations ) {
+					copy.add( new ArrayList<>( permutation ) );
+				}
+				for( List< Integer > permutation : copy ) {
+					permutation.add( idx );
+				}
+				newPermutations.addAll( copy );
+			}
+			permutations = newPermutations;
+		}
+		return permutations;
 	}
 
 	private CommandBuilder add( IModification modification ) {
