@@ -1,5 +1,8 @@
 package com.mlib;
 
+import com.mlib.annotations.AnnotationHandler;
+import com.mlib.annotations.AutoInstance;
+import com.mlib.commands.Command;
 import com.mlib.features.BlockSmelter;
 import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.loot_modifiers.AnyModification;
@@ -7,6 +10,7 @@ import com.mlib.loot_modifiers.HarvestCrop;
 import com.mlib.registries.DeferredRegisterHelper;
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -21,6 +25,7 @@ public class Registries {
 	static final DeferredRegisterHelper HELPER = new DeferredRegisterHelper( MajruszLibrary.MOD_ID );
 	static final DeferredRegister< Codec< ? extends IGlobalLootModifier > > LOOT_MODIFIERS = HELPER.create( ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS );
 	static final List< GameModifier > GAME_MODIFIERS = new ArrayList<>();
+	static final List< Command > COMMANDS;
 
 	static {
 		CONFIG_HANDLER.addGroup( GameModifier.addNewGroup( GameModifier.DEFAULT_KEY, "", "" ) );
@@ -29,6 +34,10 @@ public class Registries {
 		LOOT_MODIFIERS.register( "harvest_crop", HarvestCrop.CODEC );
 
 		GAME_MODIFIERS.add( new BlockSmelter() );
+
+		COMMANDS = new AnnotationHandler( "com.mlib" ).getInstances( Command.class );
+
+		MinecraftForge.EVENT_BUS.addListener( Command::registerAll );
 	}
 
 	public static void initialize() {
