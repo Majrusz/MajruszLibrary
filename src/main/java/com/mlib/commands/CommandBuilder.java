@@ -88,6 +88,14 @@ public class CommandBuilder {
 		return this.addArgument( ()->Commands.argument( name, EntityArgument.entity() ) );
 	}
 
+	public CommandBuilder entities() {
+		return this.entities( DefaultKeys.ENTITIES );
+	}
+
+	public CommandBuilder entities( String name ) {
+		return this.addArgument( ()->Commands.argument( name, EntityArgument.entities() ) );
+	}
+
 	public CommandBuilder hasPermission( int requiredLevel ) {
 		return this.add( ( CommandSourceStack stack )->stack.hasPermission( requiredLevel ) );
 	}
@@ -194,6 +202,7 @@ public class CommandBuilder {
 	}
 
 	public static class DefaultKeys {
+		public static final String ENTITIES = "entities";
 		public static final String ENTITY = "entity";
 		public static final String ENUM = "enum";
 		public static final String INT = "value";

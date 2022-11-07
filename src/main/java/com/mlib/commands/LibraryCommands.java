@@ -9,7 +9,7 @@ public class LibraryCommands {
 	@AutoInstance
 	public static class GetModList extends Command {
 		public GetModList() {
-			CommandBuilder builder1 = this.newBuilder();
+			CommandBuilder builder1 = new CommandBuilder();
 			builder1.literal( "mlib" )
 				.hasPermission( 4 )
 				.literal( "mods1" )
@@ -19,7 +19,7 @@ public class LibraryCommands {
 				.enumeration( Enumeration.class )
 				.execute( this::withEnum );
 
-			CommandBuilder builder2 = this.newBuilder();
+			CommandBuilder builder2 = new CommandBuilder();
 			builder2.literal( "mlib" )
 				.hasPermission( 4 )
 				.literal( "mods2" )
@@ -28,6 +28,8 @@ public class LibraryCommands {
 				.execute( this::withPosition )
 				.entity()
 				.execute( this::withEntity );
+
+			this.addBuilders( builder1, builder2 );
 		}
 
 		private int empty( CommandContext< CommandSourceStack > context ) {
