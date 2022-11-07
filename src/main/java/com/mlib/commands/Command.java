@@ -1,7 +1,6 @@
 package com.mlib.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -34,7 +33,17 @@ public class Command {
 	}
 
 	protected int getInteger( CommandContext< CommandSourceStack > context, String name ) {
-		return IntegerArgumentType.getInteger( context, name );
+		return context.getArgument( name, int.class );
+	}
+
+	protected < EnumType extends Enum< EnumType > > EnumType getEnumeration( CommandContext< CommandSourceStack > context, Class< EnumType > enumClass ) {
+		return this.getEnumeration( context, CommandBuilder.DefaultKeys.ENUM, enumClass );
+	}
+
+	protected < EnumType extends Enum< EnumType > > EnumType getEnumeration( CommandContext< CommandSourceStack > context, String name,
+		Class< EnumType > enumClass
+	) {
+		return context.getArgument( name, enumClass );
 	}
 
 	private void register( CommandDispatcher< CommandSourceStack > dispatcher ) {
