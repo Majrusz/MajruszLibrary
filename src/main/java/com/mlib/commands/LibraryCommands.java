@@ -8,9 +8,8 @@ public class LibraryCommands {
 	public static class GetModList extends Command {
 		public GetModList() {
 			CommandBuilder builder = this.newBuilder();
-			builder.literal( "mlib" ).hasPermission( 4 );
-			builder.literal( "mods1", "mods2" ).execute( context -> {
-				MajruszLibrary.log( "test" );
+			builder.literal( "mlib" ).hasPermission( 4 ).literal( "mods1" ).integer( "value" ).execute( context -> {
+				MajruszLibrary.log( "test %d", this.getInteger( context, "value" ) );
 
 				return 1;
 			} );

@@ -1,7 +1,10 @@
 package com.mlib.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -9,26 +12,51 @@ import net.minecraft.commands.Commands;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class CommandBuilder {
 	final List< List< IModification > > modifications = new ArrayList<>();
-	final List< LiteralArgumentBuilder< CommandSourceStack > > arguments = new ArrayList<>();
+	final List< ArgumentBuilder< CommandSourceStack, ? > > arguments = new ArrayList<>();
 
 	public CommandBuilder add( Predicate< CommandSourceStack > predicate ) {
 		return this.add( ()->this.getLastArgument().requires( predicate ) );
 	}
 
+	public CommandBuilder addArgument( Supplier< ArgumentBuilder< CommandSourceStack, ? > > argument ) {
+		return this.add( ()->this.addArgument( argument.get() ) );
+	}
+
 	public CommandBuilder literal( String... names ) {
 		List< IModification > modifications = new ArrayList<>();
 		for( String name : names ) {
-			modifications.add( ()->{
-				LiteralArgumentBuilder< CommandSourceStack > argument = Commands.literal( name );
-				this.tryToMergePreviousArguments();
-				this.addArgument( argument );
-			} );
+			modifications.add( ()->this.addArgument( Commands.literal( name ) ) );
 		}
 
 		return this.add( modifications );
+	}
+
+	public CommandBuilder integer() {
+		return this.addArgument( ()->Commands.argument( DefaultKeys.INT, IntegerArgumentType.integer() ) );
+	}
+
+	public CommandBuilder integer( String name ) {
+		return this.addArgument( ()->Commands.argument( name, IntegerArgumentType.integer() ) );
+	}
+
+	public CommandBuilder integer( String name, int min ) {
+		return this.addArgument( ()->Commands.argument( name, IntegerArgumentType.integer( min ) ) );
+	}
+
+	public CommandBuilder integer( int min ) {
+		return this.addArgument( ()->Commands.argument( DefaultKeys.INT, IntegerArgumentType.integer( min ) ) );
+	}
+
+	public CommandBuilder integer( String name, int min, int max ) {
+		return this.addArgument( ()->Commands.argument( name, IntegerArgumentType.integer( min, max ) ) );
+	}
+
+	public CommandBuilder integer( int min, int max ) {
+		return this.addArgument( ()->Commands.argument( DefaultKeys.INT, IntegerArgumentType.integer( min, max ) ) );
 	}
 
 	public CommandBuilder hasPermission( int requiredLevel ) {
@@ -46,12 +74,16 @@ public class CommandBuilder {
 			for( int idx = 0; idx < permutation.size(); ++idx ) {
 				this.modifications.get( idx ).get( permutation.get( idx ) ).apply();
 			}
-			this.tryToMergePreviousArguments();
-			dispatcher.register( this.getFirstArgument() );
+			this.mergeArguments();
+			try {
+				dispatcher.register( ( LiteralArgumentBuilder< CommandSourceStack > )this.getFirstArgument() );
+			} catch( Exception exception ) {
+				throw new IllegalArgumentException( "First argument of any command must be a literal" );
+			}
 		}
 	}
 
-	private void addArgument( LiteralArgumentBuilder< CommandSourceStack > argument ) {
+	private void addArgument( ArgumentBuilder< CommandSourceStack, ? > argument ) {
 		this.arguments.add( argument );
 	}
 
@@ -63,28 +95,30 @@ public class CommandBuilder {
 		return this.arguments.size() <= 0;
 	}
 
-	private LiteralArgumentBuilder< CommandSourceStack > getFirstArgument() {
+	private ArgumentBuilder< CommandSourceStack, ? > getFirstArgument() {
 		if( this.emptyArguments() )
 			throw new IllegalArgumentException();
 
 		return this.arguments.get( 0 );
 	}
 
-	private LiteralArgumentBuilder< CommandSourceStack > getLastArgument() {
+	private ArgumentBuilder< CommandSourceStack, ? > getLastArgument() {
 		if( this.emptyArguments() )
 			throw new IllegalArgumentException();
 
 		return this.arguments.get( this.arguments.size() - 1 );
 	}
 
-	private void tryToMergePreviousArguments() {
+	private void mergeArguments() {
 		if( this.arguments.size() < 2 )
 			return;
 
-		LiteralArgumentBuilder< CommandSourceStack > previousArgument = this.arguments.get( this.arguments.size() - 2 );
-		LiteralArgumentBuilder< CommandSourceStack > nextArgument = this.arguments.get( this.arguments.size() - 1 );
+		for( int idx = this.arguments.size(); idx >= 2; --idx ) {
+			ArgumentBuilder< CommandSourceStack, ? > previousArgument = this.arguments.get( idx - 2 );
+			ArgumentBuilder< CommandSourceStack, ? > nextArgument = this.arguments.get( idx - 1 );
 
-		previousArgument.then( nextArgument );
+			previousArgument.then( nextArgument );
+		}
 	}
 
 	private List< List< Integer > > generatePermutations() {
@@ -128,5 +162,9 @@ public class CommandBuilder {
 	@FunctionalInterface
 	interface IExecutable {
 		int execute( CommandContext< CommandSourceStack > context );
+	}
+
+	public static class DefaultKeys {
+		public static final String INT = "value";
 	}
 }

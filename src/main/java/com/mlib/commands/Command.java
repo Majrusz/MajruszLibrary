@@ -1,6 +1,8 @@
 package com.mlib.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 
@@ -25,6 +27,10 @@ public class Command {
 		this.builders.add( builder );
 
 		return builder;
+	}
+
+	protected int getInteger( CommandContext< CommandSourceStack > context, String name ) {
+		return IntegerArgumentType.getInteger( context, name );
 	}
 
 	private void register( CommandDispatcher< CommandSourceStack > dispatcher ) {
