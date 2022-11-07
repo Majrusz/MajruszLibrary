@@ -29,6 +29,10 @@ public class Command {
 		return builder;
 	}
 
+	protected int getInteger( CommandContext< CommandSourceStack > context ) {
+		return this.getInteger( context, CommandBuilder.DefaultKeys.INT );
+	}
+
 	protected int getInteger( CommandContext< CommandSourceStack > context, String name ) {
 		return IntegerArgumentType.getInteger( context, name );
 	}

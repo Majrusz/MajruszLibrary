@@ -36,27 +36,27 @@ public class CommandBuilder {
 	}
 
 	public CommandBuilder integer() {
-		return this.addArgument( ()->Commands.argument( DefaultKeys.INT, IntegerArgumentType.integer() ) );
+		return this.integer( DefaultKeys.INT );
 	}
 
 	public CommandBuilder integer( String name ) {
 		return this.addArgument( ()->Commands.argument( name, IntegerArgumentType.integer() ) );
 	}
 
+	public CommandBuilder integer( int min ) {
+		return this.integer( DefaultKeys.INT, min );
+	}
+
 	public CommandBuilder integer( String name, int min ) {
 		return this.addArgument( ()->Commands.argument( name, IntegerArgumentType.integer( min ) ) );
 	}
 
-	public CommandBuilder integer( int min ) {
-		return this.addArgument( ()->Commands.argument( DefaultKeys.INT, IntegerArgumentType.integer( min ) ) );
+	public CommandBuilder integer( int min, int max ) {
+		return this.integer( DefaultKeys.INT, min, max );
 	}
 
 	public CommandBuilder integer( String name, int min, int max ) {
 		return this.addArgument( ()->Commands.argument( name, IntegerArgumentType.integer( min, max ) ) );
-	}
-
-	public CommandBuilder integer( int min, int max ) {
-		return this.addArgument( ()->Commands.argument( DefaultKeys.INT, IntegerArgumentType.integer( min, max ) ) );
 	}
 
 	public CommandBuilder hasPermission( int requiredLevel ) {
