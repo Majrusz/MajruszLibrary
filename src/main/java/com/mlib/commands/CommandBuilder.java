@@ -8,8 +8,10 @@ import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.Coordinates;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.server.command.EnumArgument;
 
 import java.util.ArrayList;
@@ -76,6 +78,14 @@ public class CommandBuilder {
 
 	public CommandBuilder position( String name ) {
 		return this.addArgument( ()->Commands.argument( name, Vec3Argument.vec3() ) );
+	}
+
+	public CommandBuilder entity() {
+		return this.entity( DefaultKeys.ENTITY );
+	}
+
+	public CommandBuilder entity( String name ) {
+		return this.addArgument( ()->Commands.argument( name, EntityArgument.entity() ) );
 	}
 
 	public CommandBuilder hasPermission( int requiredLevel ) {
@@ -184,8 +194,9 @@ public class CommandBuilder {
 	}
 
 	public static class DefaultKeys {
-		public static final String INT = "value";
+		public static final String ENTITY = "entity";
 		public static final String ENUM = "enum";
+		public static final String INT = "value";
 		public static final String POSITION = "position";
 	}
 }

@@ -25,7 +25,9 @@ public class LibraryCommands {
 				.literal( "mods2" )
 				.execute( this::empty )
 				.position()
-				.execute( this::withPosition );
+				.execute( this::withPosition )
+				.entity()
+				.execute( this::withEntity );
 		}
 
 		private int empty( CommandContext< CommandSourceStack > context ) {
@@ -48,6 +50,12 @@ public class LibraryCommands {
 
 		private int withPosition( CommandContext< CommandSourceStack > context ) {
 			MajruszLibrary.log( "test %s", this.getPosition( context ).toString() );
+
+			return 1;
+		}
+
+		private int withEntity( CommandContext< CommandSourceStack > context ) {
+			MajruszLibrary.log( "test %s %s", this.getPosition( context ).toString(), this.getEntity( context ).toString() );
 
 			return 1;
 		}

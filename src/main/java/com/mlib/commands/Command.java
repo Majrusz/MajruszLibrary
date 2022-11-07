@@ -4,6 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.coordinates.Coordinates;
+import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
 
@@ -54,6 +56,18 @@ public class Command {
 
 	protected Vec3 getPosition( CommandContext< CommandSourceStack > context, String name ) {
 		return context.getArgument( name, Coordinates.class ).getPosition( context.getSource() );
+	}
+
+	protected Entity getEntity( CommandContext< CommandSourceStack > context ) {
+		return this.getEntity( context, CommandBuilder.DefaultKeys.ENTITY );
+	}
+
+	protected Entity getEntity( CommandContext< CommandSourceStack > context, String name ) {
+		try {
+			return context.getArgument( name, EntitySelector.class ).findSingleEntity( context.getSource() );
+		} catch( Throwable exception ) {
+			return null;
+		}
 	}
 
 	private void register( CommandDispatcher< CommandSourceStack > dispatcher ) {
