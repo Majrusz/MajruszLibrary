@@ -9,8 +9,8 @@ public class LibraryCommands {
 	@AutoInstance
 	public static class GetModList extends Command {
 		public GetModList() {
-			CommandBuilder builder = this.newBuilder();
-			builder.literal( "mlib" )
+			CommandBuilder builder1 = this.newBuilder();
+			builder1.literal( "mlib" )
 				.hasPermission( 4 )
 				.literal( "mods1" )
 				.execute( this::empty )
@@ -18,6 +18,14 @@ public class LibraryCommands {
 				.execute( this::withInteger )
 				.enumeration( Enumeration.class )
 				.execute( this::withEnum );
+
+			CommandBuilder builder2 = this.newBuilder();
+			builder2.literal( "mlib" )
+				.hasPermission( 4 )
+				.literal( "mods2" )
+				.execute( this::empty )
+				.position()
+				.execute( this::withPosition );
 		}
 
 		private int empty( CommandContext< CommandSourceStack > context ) {
@@ -34,6 +42,12 @@ public class LibraryCommands {
 
 		private int withEnum( CommandContext< CommandSourceStack > context ) {
 			MajruszLibrary.log( "test %d %s", this.getInteger( context ), this.getEnumeration( context, Enumeration.class ).name() );
+
+			return 1;
+		}
+
+		private int withPosition( CommandContext< CommandSourceStack > context ) {
+			MajruszLibrary.log( "test %s", this.getPosition( context ).toString() );
 
 			return 1;
 		}

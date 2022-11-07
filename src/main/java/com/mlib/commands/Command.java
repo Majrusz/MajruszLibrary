@@ -3,6 +3,8 @@ package com.mlib.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.arguments.coordinates.Coordinates;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
 
 import java.util.ArrayList;
@@ -44,6 +46,14 @@ public class Command {
 		Class< EnumType > enumClass
 	) {
 		return context.getArgument( name, enumClass );
+	}
+
+	protected Vec3 getPosition( CommandContext< CommandSourceStack > context ) {
+		return this.getPosition( context, CommandBuilder.DefaultKeys.POSITION );
+	}
+
+	protected Vec3 getPosition( CommandContext< CommandSourceStack > context, String name ) {
+		return context.getArgument( name, Coordinates.class ).getPosition( context.getSource() );
 	}
 
 	private void register( CommandDispatcher< CommandSourceStack > dispatcher ) {

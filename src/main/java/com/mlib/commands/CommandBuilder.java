@@ -4,9 +4,12 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.coordinates.Coordinates;
+import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraftforge.server.command.EnumArgument;
 
 import java.util.ArrayList;
@@ -65,6 +68,14 @@ public class CommandBuilder {
 
 	public < EnumType extends Enum< EnumType > > CommandBuilder enumeration( String name, Class< EnumType > enumClass ) {
 		return this.addArgument( ()->Commands.argument( name, EnumArgument.enumArgument( enumClass ) ) );
+	}
+
+	public CommandBuilder position() {
+		return this.position( DefaultKeys.POSITION );
+	}
+
+	public CommandBuilder position( String name ) {
+		return this.addArgument( ()->Commands.argument( name, Vec3Argument.vec3() ) );
 	}
 
 	public CommandBuilder hasPermission( int requiredLevel ) {
@@ -175,5 +186,6 @@ public class CommandBuilder {
 	public static class DefaultKeys {
 		public static final String INT = "value";
 		public static final String ENUM = "enum";
+		public static final String POSITION = "position";
 	}
 }
