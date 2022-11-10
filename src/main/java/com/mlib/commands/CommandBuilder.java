@@ -4,14 +4,11 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.coordinates.Coordinates;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
-import net.minecraft.world.entity.Entity;
 import net.minecraftforge.server.command.EnumArgument;
 
 import java.util.ArrayList;
@@ -20,8 +17,23 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class CommandBuilder {
-	final List< List< IModification > > modifications = new ArrayList<>();
-	final List< ArgumentBuilder< CommandSourceStack, ? > > arguments = new ArrayList<>();
+	final List< List< IModification > > modifications;
+	final List< ArgumentBuilder< CommandSourceStack, ? > > arguments;
+
+	public CommandBuilder( CommandBuilder builder ) {
+		this.modifications = new ArrayList<>();
+		builder.modifications.forEach( modification->this.modifications.add( new ArrayList<>( modification ) ) );
+		this.arguments = new ArrayList<>( builder.arguments );
+	}
+
+	public CommandBuilder() {
+		this.modifications = new ArrayList<>();
+		this.arguments = new ArrayList<>();
+	}
+
+	public CommandBuilder copy() {
+		return new CommandBuilder( this );
+	}
 
 	public CommandBuilder add( Predicate< CommandSourceStack > predicate ) {
 		return this.add( ()->this.getLastArgument().requires( predicate ) );
