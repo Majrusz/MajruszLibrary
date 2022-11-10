@@ -76,6 +76,21 @@ public class Command {
 		}
 	}
 
+	protected List< Vec3 > getAnyPositions( CommandContext< CommandSourceStack > context ) {
+		List< Vec3 > positions = new ArrayList<>();
+		try {
+			positions.add( this.getPosition( context ) );
+		} catch( Throwable ignored ) {}
+		try {
+			positions.add( this.getEntity( context ).position() );
+		} catch( Throwable ignored ) {}
+		try {
+			this.getEntities( context ).forEach( entity->positions.add( entity.position() ) );
+		} catch( Throwable ignored ) {}
+
+		return positions;
+	}
+
 	protected void addBuilders( CommandBuilder... builders ) {
 		for( CommandBuilder builder : builders ) {
 			this.addBuilder( builder );

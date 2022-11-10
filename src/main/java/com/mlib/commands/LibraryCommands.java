@@ -42,7 +42,10 @@ public class LibraryCommands {
 			CommandBuilder builder3_3 = builder3.copy();
 			builder3_3.entity().execute( context->this.withRandomPosition( context, this.getEntity( context ).position() ) );
 
-			this.addBuilders( builder1, builder2, builder3_1, builder3_2, builder3_3 );
+			CommandBuilder builder4 = new CommandBuilder();
+			builder4.literal( "mlib" ).hasPermission( 4 ).literal( "mods4" ).anyPosition().execute( this::withAnyPosition );
+
+			this.addBuilders( builder1, builder2, builder3_1, builder3_2, builder3_3, builder4 );
 		}
 
 		private int empty( CommandContext< CommandSourceStack > context ) {
@@ -77,6 +80,12 @@ public class LibraryCommands {
 
 		private int withRandomPosition( CommandContext< CommandSourceStack > context, Vec3 position ) {
 			MajruszLibrary.log( "test %s", position.toString() );
+
+			return 1;
+		}
+
+		private int withAnyPosition( CommandContext< CommandSourceStack > context ) {
+			MajruszLibrary.log( "test %s", this.getAnyPositions( context ).toString() );
 
 			return 1;
 		}

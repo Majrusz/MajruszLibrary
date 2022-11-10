@@ -36,17 +36,17 @@ public class CommandBuilder {
 	}
 
 	public CommandBuilder add( Predicate< CommandSourceStack > predicate ) {
-		return this.add( ()->this.getLastArgument().requires( predicate ) );
+		return this.add( ( CommandBuilder builder )->builder.getLastArgument().requires( predicate ) );
 	}
 
 	public CommandBuilder addArgument( Supplier< ArgumentBuilder< CommandSourceStack, ? > > argument ) {
-		return this.add( ()->this.addArgument( argument.get() ) );
+		return this.add( ( CommandBuilder builder )->builder.addArgument( argument.get() ) );
 	}
 
 	public CommandBuilder literal( String... names ) {
 		List< IModification > modifications = new ArrayList<>();
 		for( String name : names ) {
-			modifications.add( ()->this.addArgument( Commands.literal( name ) ) );
+			modifications.add( ( CommandBuilder builder )->builder.addArgument( Commands.literal( name ) ) );
 		}
 
 		return this.add( modifications );
@@ -108,12 +108,21 @@ public class CommandBuilder {
 		return this.addArgument( ()->Commands.argument( name, EntityArgument.entities() ) );
 	}
 
+	public CommandBuilder anyPosition() {
+		List< IModification > modifications = new ArrayList<>();
+		modifications.add( ( CommandBuilder builder )->builder.addArgument( Commands.argument( DefaultKeys.POSITION, Vec3Argument.vec3() ) ) );
+		modifications.add( ( CommandBuilder builder )->builder.addArgument( Commands.argument( DefaultKeys.ENTITY, EntityArgument.entity() ) ) );
+		modifications.add( ( CommandBuilder builder )->builder.addArgument( Commands.argument( DefaultKeys.ENTITIES, EntityArgument.entities() ) ) );
+
+		return this.add( modifications );
+	}
+
 	public CommandBuilder hasPermission( int requiredLevel ) {
 		return this.add( ( CommandSourceStack stack )->stack.hasPermission( requiredLevel ) );
 	}
 
 	public CommandBuilder execute( IExecutable executable ) {
-		return this.add( ()->this.getLastArgument().executes( context->executable.execute( context ) ) );
+		return this.add( ( CommandBuilder builder )->builder.getLastArgument().executes( context->executable.execute( context ) ) );
 	}
 
 	public void register( CommandDispatcher< CommandSourceStack > dispatcher ) {
@@ -121,7 +130,7 @@ public class CommandBuilder {
 		for( List< Integer > permutation : permutations ) {
 			this.clearArguments();
 			for( int idx = 0; idx < permutation.size(); ++idx ) {
-				this.modifications.get( idx ).get( permutation.get( idx ) ).apply();
+				this.modifications.get( idx ).get( permutation.get( idx ) ).apply( this );
 			}
 			this.mergeArguments();
 			try {
@@ -205,7 +214,7 @@ public class CommandBuilder {
 
 	@FunctionalInterface
 	interface IModification {
-		void apply();
+		void apply( CommandBuilder builder );
 	}
 
 	@FunctionalInterface
