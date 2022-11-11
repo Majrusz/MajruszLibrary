@@ -45,7 +45,17 @@ public class LibraryCommands {
 			CommandBuilder builder4 = new CommandBuilder();
 			builder4.literal( "mlib" ).hasPermission( 4 ).literal( "mods4" ).anyPosition().execute( this::withAnyPosition );
 
-			this.addBuilders( builder1, builder2, builder3_1, builder3_2, builder3_3, builder4 );
+			CommandBuilder builder5 = new CommandBuilder();
+			builder5.literal( "mlib" )
+				.hasPermission( 4 )
+				.literal( "mods5" )
+				.execute( this::withOptional )
+				.integer()
+				.execute( this::withOptional )
+				.position()
+				.execute( this::withOptional );
+
+			this.addBuilders( builder1, builder2, builder3_1, builder3_2, builder3_3, builder4, builder5 );
 		}
 
 		private int empty( CommandContext< CommandSourceStack > context ) {
@@ -86,6 +96,14 @@ public class LibraryCommands {
 
 		private int withAnyPosition( CommandContext< CommandSourceStack > context ) {
 			MajruszLibrary.log( "test %s", this.getAnyPositions( context ).toString() );
+
+			return 1;
+		}
+
+		private int withOptional( CommandContext< CommandSourceStack > context ) {
+			MajruszLibrary.log( "test %d %s", this.getOptionalInteger( context ).orElse( -1 ), this.getOptionalPosition( context )
+				.orElse( Vec3.ZERO )
+				.toString() );
 
 			return 1;
 		}

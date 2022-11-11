@@ -9,10 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Command {
 	static final List< Command > COMMANDS = Collections.synchronizedList( new ArrayList<>() );
@@ -34,6 +31,22 @@ public class Command {
 		return context.getArgument( name, int.class );
 	}
 
+	protected Optional< Integer > getOptionalInteger( CommandContext< CommandSourceStack > context ) {
+		try {
+			return Optional.of( this.getInteger( context ) );
+		} catch( Throwable exception ) {
+			return Optional.empty();
+		}
+	}
+
+	protected Optional< Integer > getOptionalInteger( CommandContext< CommandSourceStack > context, String name ) {
+		try {
+			return Optional.of( this.getInteger( context, name ) );
+		} catch( Throwable exception ) {
+			return Optional.empty();
+		}
+	}
+
 	protected < EnumType extends Enum< EnumType > > EnumType getEnumeration( CommandContext< CommandSourceStack > context, Class< EnumType > enumClass ) {
 		return this.getEnumeration( context, CommandBuilder.DefaultKeys.ENUM, enumClass );
 	}
@@ -44,12 +57,48 @@ public class Command {
 		return context.getArgument( name, enumClass );
 	}
 
+	protected < EnumType extends Enum< EnumType > > Optional< EnumType > getOptionalEnumeration( CommandContext< CommandSourceStack > context,
+		Class< EnumType > enumClass
+	) {
+		try {
+			return Optional.of( this.getEnumeration( context, enumClass ) );
+		} catch( Throwable exception ) {
+			return Optional.empty();
+		}
+	}
+
+	protected < EnumType extends Enum< EnumType > > Optional< EnumType > getOptionalEnumeration( CommandContext< CommandSourceStack > context, String name,
+		Class< EnumType > enumClass
+	) {
+		try {
+			return Optional.of( this.getEnumeration( context, name, enumClass ) );
+		} catch( Throwable exception ) {
+			return Optional.empty();
+		}
+	}
+
 	protected Vec3 getPosition( CommandContext< CommandSourceStack > context ) {
 		return this.getPosition( context, CommandBuilder.DefaultKeys.POSITION );
 	}
 
 	protected Vec3 getPosition( CommandContext< CommandSourceStack > context, String name ) {
 		return context.getArgument( name, Coordinates.class ).getPosition( context.getSource() );
+	}
+
+	protected Optional< Vec3 > getOptionalPosition( CommandContext< CommandSourceStack > context ) {
+		try {
+			return Optional.of( this.getPosition( context ) );
+		} catch( Throwable exception ) {
+			return Optional.empty();
+		}
+	}
+
+	protected Optional< Vec3 > getOptionalPosition( CommandContext< CommandSourceStack > context, String name ) {
+		try {
+			return Optional.of( this.getPosition( context, name ) );
+		} catch( Throwable exception ) {
+			return Optional.empty();
+		}
 	}
 
 	protected Entity getEntity( CommandContext< CommandSourceStack > context ) {
@@ -61,6 +110,22 @@ public class Command {
 			return context.getArgument( name, EntitySelector.class ).findSingleEntity( context.getSource() );
 		} catch( Throwable exception ) {
 			return null;
+		}
+	}
+
+	protected Optional< Entity > getOptionalEntity( CommandContext< CommandSourceStack > context ) {
+		try {
+			return Optional.of( this.getEntity( context ) );
+		} catch( Throwable exception ) {
+			return Optional.empty();
+		}
+	}
+
+	protected Optional< Entity > getOptionalEntity( CommandContext< CommandSourceStack > context, String name ) {
+		try {
+			return Optional.of( this.getEntity( context, name ) );
+		} catch( Throwable exception ) {
+			return Optional.empty();
 		}
 	}
 
