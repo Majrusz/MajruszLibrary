@@ -1,6 +1,7 @@
 package com.mlib.features;
 
 import com.mlib.Random;
+import com.mlib.annotations.AutoInstance;
 import com.mlib.effects.ParticleHandler;
 import com.mlib.events.BlockSmeltCheckEvent;
 import com.mlib.gamemodifiers.GameModifier;
@@ -23,6 +24,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import java.util.List;
 import java.util.Optional;
 
+@AutoInstance
 public class BlockSmelter extends GameModifier {
 	public BlockSmelter() {
 		super( "BlockSmelter", "" );
