@@ -213,12 +213,12 @@ public class CommandBuilder {
 	}
 
 	@FunctionalInterface
-	interface IModification {
+	public interface IModification {
 		void apply( CommandBuilder builder );
 	}
 
 	@FunctionalInterface
-	interface IExecutable {
+	public interface IExecutable {
 		int execute( CommandContext< CommandSourceStack > context );
 	}
 
