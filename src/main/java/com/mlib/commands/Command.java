@@ -1,7 +1,7 @@
 package com.mlib.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.coordinates.Coordinates;
 import net.minecraft.commands.arguments.selector.EntitySelector;
@@ -134,6 +134,14 @@ public class Command {
 		} catch( Throwable exception ) {
 			return Optional.empty();
 		}
+	}
+
+	protected Entity getOptionalEntityOrPlayer( CommandData data ) throws CommandSyntaxException {
+		Optional< Entity > entity = this.getOptionalEntity( data );
+		if( entity.isPresent() )
+			return entity.get();
+
+		return data.source.getEntityOrException();
 	}
 
 	protected Collection< ? extends Entity > getEntities( CommandData data ) {
