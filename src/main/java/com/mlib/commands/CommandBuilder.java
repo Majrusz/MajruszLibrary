@@ -122,7 +122,7 @@ public class CommandBuilder {
 	}
 
 	public CommandBuilder execute( IExecutable executable ) {
-		return this.add( ( CommandBuilder builder )->builder.getLastArgument().executes( context->executable.execute( context ) ) );
+		return this.add( ( CommandBuilder builder )->builder.getLastArgument().executes( context->executable.execute( new CommandData( context ) ) ) );
 	}
 
 	public void register( CommandDispatcher< CommandSourceStack > dispatcher ) {
