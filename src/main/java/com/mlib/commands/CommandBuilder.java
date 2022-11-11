@@ -219,7 +219,7 @@ public class CommandBuilder {
 
 	@FunctionalInterface
 	public interface IExecutable {
-		int execute( CommandContext< CommandSourceStack > context );
+		int execute( CommandData data );
 	}
 
 	public static class DefaultKeys {

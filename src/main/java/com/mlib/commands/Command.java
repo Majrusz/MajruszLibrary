@@ -30,134 +30,134 @@ public class Command {
 		return builder;
 	}
 
-	protected int getInteger( CommandContext< CommandSourceStack > context ) {
-		return this.getInteger( context, CommandBuilder.DefaultKeys.INT );
+	protected int getInteger( CommandData data ) {
+		return this.getInteger( data, CommandBuilder.DefaultKeys.INT );
 	}
 
-	protected int getInteger( CommandContext< CommandSourceStack > context, String name ) {
-		return context.getArgument( name, int.class );
+	protected int getInteger( CommandData data, String name ) {
+		return data.context.getArgument( name, int.class );
 	}
 
-	protected Optional< Integer > getOptionalInteger( CommandContext< CommandSourceStack > context ) {
+	protected Optional< Integer > getOptionalInteger( CommandData data ) {
 		try {
-			return Optional.of( this.getInteger( context ) );
+			return Optional.of( this.getInteger( data ) );
 		} catch( Throwable exception ) {
 			return Optional.empty();
 		}
 	}
 
-	protected Optional< Integer > getOptionalInteger( CommandContext< CommandSourceStack > context, String name ) {
+	protected Optional< Integer > getOptionalInteger( CommandData data, String name ) {
 		try {
-			return Optional.of( this.getInteger( context, name ) );
+			return Optional.of( this.getInteger( data, name ) );
 		} catch( Throwable exception ) {
 			return Optional.empty();
 		}
 	}
 
-	protected < EnumType extends Enum< EnumType > > EnumType getEnumeration( CommandContext< CommandSourceStack > context, Class< EnumType > enumClass ) {
-		return this.getEnumeration( context, CommandBuilder.DefaultKeys.ENUM, enumClass );
+	protected < EnumType extends Enum< EnumType > > EnumType getEnumeration( CommandData data, Class< EnumType > enumClass ) {
+		return this.getEnumeration( data, CommandBuilder.DefaultKeys.ENUM, enumClass );
 	}
 
-	protected < EnumType extends Enum< EnumType > > EnumType getEnumeration( CommandContext< CommandSourceStack > context, String name,
+	protected < EnumType extends Enum< EnumType > > EnumType getEnumeration( CommandData data, String name,
 		Class< EnumType > enumClass
 	) {
-		return context.getArgument( name, enumClass );
+		return data.context.getArgument( name, enumClass );
 	}
 
-	protected < EnumType extends Enum< EnumType > > Optional< EnumType > getOptionalEnumeration( CommandContext< CommandSourceStack > context,
-		Class< EnumType > enumClass
-	) {
-		try {
-			return Optional.of( this.getEnumeration( context, enumClass ) );
-		} catch( Throwable exception ) {
-			return Optional.empty();
-		}
-	}
-
-	protected < EnumType extends Enum< EnumType > > Optional< EnumType > getOptionalEnumeration( CommandContext< CommandSourceStack > context, String name,
+	protected < EnumType extends Enum< EnumType > > Optional< EnumType > getOptionalEnumeration( CommandData data,
 		Class< EnumType > enumClass
 	) {
 		try {
-			return Optional.of( this.getEnumeration( context, name, enumClass ) );
+			return Optional.of( this.getEnumeration( data, enumClass ) );
 		} catch( Throwable exception ) {
 			return Optional.empty();
 		}
 	}
 
-	protected Vec3 getPosition( CommandContext< CommandSourceStack > context ) {
-		return this.getPosition( context, CommandBuilder.DefaultKeys.POSITION );
-	}
-
-	protected Vec3 getPosition( CommandContext< CommandSourceStack > context, String name ) {
-		return context.getArgument( name, Coordinates.class ).getPosition( context.getSource() );
-	}
-
-	protected Optional< Vec3 > getOptionalPosition( CommandContext< CommandSourceStack > context ) {
+	protected < EnumType extends Enum< EnumType > > Optional< EnumType > getOptionalEnumeration( CommandData data, String name,
+		Class< EnumType > enumClass
+	) {
 		try {
-			return Optional.of( this.getPosition( context ) );
+			return Optional.of( this.getEnumeration( data, name, enumClass ) );
 		} catch( Throwable exception ) {
 			return Optional.empty();
 		}
 	}
 
-	protected Optional< Vec3 > getOptionalPosition( CommandContext< CommandSourceStack > context, String name ) {
+	protected Vec3 getPosition( CommandData data ) {
+		return this.getPosition( data, CommandBuilder.DefaultKeys.POSITION );
+	}
+
+	protected Vec3 getPosition( CommandData data, String name ) {
+		return data.context.getArgument( name, Coordinates.class ).getPosition( data.context.getSource() );
+	}
+
+	protected Optional< Vec3 > getOptionalPosition( CommandData data ) {
 		try {
-			return Optional.of( this.getPosition( context, name ) );
+			return Optional.of( this.getPosition( data ) );
 		} catch( Throwable exception ) {
 			return Optional.empty();
 		}
 	}
 
-	protected Entity getEntity( CommandContext< CommandSourceStack > context ) {
-		return this.getEntity( context, CommandBuilder.DefaultKeys.ENTITY );
+	protected Optional< Vec3 > getOptionalPosition( CommandData data, String name ) {
+		try {
+			return Optional.of( this.getPosition( data, name ) );
+		} catch( Throwable exception ) {
+			return Optional.empty();
+		}
 	}
 
-	protected Entity getEntity( CommandContext< CommandSourceStack > context, String name ) {
+	protected Entity getEntity( CommandData data ) {
+		return this.getEntity( data, CommandBuilder.DefaultKeys.ENTITY );
+	}
+
+	protected Entity getEntity( CommandData data, String name ) {
 		try {
-			return context.getArgument( name, EntitySelector.class ).findSingleEntity( context.getSource() );
+			return data.context.getArgument( name, EntitySelector.class ).findSingleEntity( data.context.getSource() );
 		} catch( Throwable exception ) {
 			return null;
 		}
 	}
 
-	protected Optional< Entity > getOptionalEntity( CommandContext< CommandSourceStack > context ) {
+	protected Optional< Entity > getOptionalEntity( CommandData data ) {
 		try {
-			return Optional.of( this.getEntity( context ) );
+			return Optional.of( this.getEntity( data ) );
 		} catch( Throwable exception ) {
 			return Optional.empty();
 		}
 	}
 
-	protected Optional< Entity > getOptionalEntity( CommandContext< CommandSourceStack > context, String name ) {
+	protected Optional< Entity > getOptionalEntity( CommandData data, String name ) {
 		try {
-			return Optional.of( this.getEntity( context, name ) );
+			return Optional.of( this.getEntity( data, name ) );
 		} catch( Throwable exception ) {
 			return Optional.empty();
 		}
 	}
 
-	protected Collection< ? extends Entity > getEntities( CommandContext< CommandSourceStack > context ) {
-		return this.getEntities( context, CommandBuilder.DefaultKeys.ENTITIES );
+	protected Collection< ? extends Entity > getEntities( CommandData data ) {
+		return this.getEntities( data, CommandBuilder.DefaultKeys.ENTITIES );
 	}
 
-	protected Collection< ? extends Entity > getEntities( CommandContext< CommandSourceStack > context, String name ) {
+	protected Collection< ? extends Entity > getEntities( CommandData data, String name ) {
 		try {
-			return context.getArgument( name, EntitySelector.class ).findEntities( context.getSource() );
+			return data.context.getArgument( name, EntitySelector.class ).findEntities( data.context.getSource() );
 		} catch( Throwable exception ) {
 			return new ArrayList<>();
 		}
 	}
 
-	protected List< Vec3 > getAnyPositions( CommandContext< CommandSourceStack > context ) {
+	protected List< Vec3 > getAnyPositions( CommandData data ) {
 		List< Vec3 > positions = new ArrayList<>();
 		try {
-			positions.add( this.getPosition( context ) );
+			positions.add( this.getPosition( data ) );
 		} catch( Throwable ignored ) {}
 		try {
-			positions.add( this.getEntity( context ).position() );
+			positions.add( this.getEntity( data ).position() );
 		} catch( Throwable ignored ) {}
 		try {
-			this.getEntities( context ).forEach( entity->positions.add( entity.position() ) );
+			this.getEntities( data ).forEach( entity->positions.add( entity.position() ) );
 		} catch( Throwable ignored ) {}
 
 		return positions;
