@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -223,7 +224,7 @@ public class CommandBuilder {
 
 	@FunctionalInterface
 	public interface IExecutable {
-		int execute( CommandData data );
+		int execute( CommandData data ) throws CommandSyntaxException;
 	}
 
 	public static class DefaultKeys {
