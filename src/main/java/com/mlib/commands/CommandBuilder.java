@@ -121,6 +121,10 @@ public class CommandBuilder {
 		return this.add( ( CommandSourceStack stack )->stack.hasPermission( requiredLevel ) );
 	}
 
+	public CommandBuilder isPlayer() {
+		return this.add( CommandSourceStack::isPlayer );
+	}
+
 	public CommandBuilder execute( IExecutable executable ) {
 		return this.add( ( CommandBuilder builder )->builder.getLastArgument().executes( context->executable.execute( new CommandData( context ) ) ) );
 	}
