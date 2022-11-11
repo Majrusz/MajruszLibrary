@@ -23,6 +23,13 @@ public class Command {
 		COMMANDS.add( this );
 	}
 
+	protected CommandBuilder newBuilder() {
+		CommandBuilder builder = new CommandBuilder();
+		this.addBuilder( builder );
+
+		return builder;
+	}
+
 	protected int getInteger( CommandContext< CommandSourceStack > context ) {
 		return this.getInteger( context, CommandBuilder.DefaultKeys.INT );
 	}
