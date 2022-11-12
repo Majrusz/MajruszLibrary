@@ -55,7 +55,7 @@ public class Command {
 	}
 
 	protected < EnumType extends Enum< EnumType > > EnumType getEnumeration( CommandData data, Class< EnumType > enumClass ) {
-		return this.getEnumeration( data, CommandBuilder.DefaultKeys.ENUM, enumClass );
+		return this.getEnumeration( data, enumClass.getSimpleName().toLowerCase(), enumClass );
 	}
 
 	protected < EnumType extends Enum< EnumType > > EnumType getEnumeration( CommandData data, String name,

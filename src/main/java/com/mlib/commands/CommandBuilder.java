@@ -78,7 +78,7 @@ public class CommandBuilder {
 	}
 
 	public < EnumType extends Enum< EnumType > > CommandBuilder enumeration( Class< EnumType > enumClass ) {
-		return this.enumeration( DefaultKeys.ENUM, enumClass );
+		return this.enumeration( enumClass.getSimpleName().toLowerCase(), enumClass );
 	}
 
 	public < EnumType extends Enum< EnumType > > CommandBuilder enumeration( String name, Class< EnumType > enumClass ) {
@@ -230,7 +230,6 @@ public class CommandBuilder {
 	public static class DefaultKeys {
 		public static final String ENTITIES = "entities";
 		public static final String ENTITY = "entity";
-		public static final String ENUM = "enum";
 		public static final String INT = "value";
 		public static final String POSITION = "position";
 	}
