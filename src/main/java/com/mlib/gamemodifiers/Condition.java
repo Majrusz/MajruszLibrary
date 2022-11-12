@@ -47,10 +47,14 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 	public static class Excludable extends Condition {
 		final BooleanConfig availability;
 
-		public Excludable() {
+		public Excludable( BooleanConfig config ) {
 			super( Priority.HIGHEST );
-			this.availability = new BooleanConfig( "is_enabled", "Specifies whether this game modifier is enabled.", false, true );
+			this.availability = config;
 			this.addConfig( this.availability );
+		}
+
+		public Excludable() {
+			this( new BooleanConfig( "is_enabled", "Specifies whether this game modifier is enabled.", false, true ) );
 		}
 
 		@Override
