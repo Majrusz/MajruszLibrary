@@ -10,6 +10,7 @@ import com.mlib.gamemodifiers.parameters.ConditionParameters;
 import com.mlib.gamemodifiers.parameters.Parameters;
 import com.mlib.gamemodifiers.parameters.Priority;
 import com.mlib.time.TimeHelper;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -174,6 +175,23 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 		@Override
 		public boolean check( GameModifier feature, ContextData data ) {
 			return data.entity != null && EnchantmentHelper.getEnchantmentLevel( this.enchantment, data.entity ) > 0;
+		}
+	}
+
+	public static class HasEffect extends Condition {
+		final Supplier< MobEffect > effect;
+
+		public HasEffect( Supplier< MobEffect > effect ) {
+			this.effect = effect;
+		}
+
+		public HasEffect( MobEffect effect ) {
+			this( ()->effect );
+		}
+
+		@Override
+		public boolean check( GameModifier feature, ContextData data ) {
+			return data.entity != null && data.entity.hasEffect( this.effect.get() );
 		}
 	}
 
