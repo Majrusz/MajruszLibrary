@@ -15,6 +15,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 
@@ -181,12 +182,12 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 	public static class HasEffect extends Condition {
 		final Supplier< MobEffect > effect;
 
-		public HasEffect( Supplier< MobEffect > effect ) {
-			this.effect = effect;
+		public HasEffect( RegistryObject< ? extends MobEffect > effect ) {
+			this.effect = effect::get;
 		}
 
 		public HasEffect( MobEffect effect ) {
-			this( ()->effect );
+			this.effect = ()->effect;
 		}
 
 		@Override
