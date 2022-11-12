@@ -5,6 +5,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
@@ -15,7 +16,7 @@ public class ParticleHandler {
 	public static final ParticleHandler SMOKE = new ParticleHandler( ParticleTypes.SMOKE, offset( 0.25f ), speed( 0.01f ) );
 	public static final ParticleHandler WITCH = new ParticleHandler( ParticleTypes.WITCH, offset( 0.25f ), speed( 0.01f ) );
 
-	final SimpleParticleType particleType;
+	final Supplier< SimpleParticleType > particleType;
 	final Supplier< Vec3 > offsetProvider;
 	final Supplier< Float > speedProvider;
 
@@ -27,8 +28,16 @@ public class ParticleHandler {
 		return ()->value;
 	}
 
+	public ParticleHandler( RegistryObject< ? extends SimpleParticleType > particleType, Supplier< Vec3 > offsetProvider,
+		Supplier< Float > speedProvider
+	) {
+		this.particleType = particleType::get;
+		this.offsetProvider = offsetProvider;
+		this.speedProvider = speedProvider;
+	}
+
 	public ParticleHandler( SimpleParticleType particleType, Supplier< Vec3 > offsetProvider, Supplier< Float > speedProvider ) {
-		this.particleType = particleType;
+		this.particleType = ()->particleType;
 		this.offsetProvider = offsetProvider;
 		this.speedProvider = speedProvider;
 	}
@@ -38,9 +47,11 @@ public class ParticleHandler {
 		this( particleType, ()->offsetProvider, speedProvider );
 	}
 
-	public void spawn( ServerLevel level, Vec3 position, int amountOfParticles, Supplier< Vec3 > offsetProvider, Supplier< Float > speedProvider ) {
+	public void spawn( ServerLevel level, Vec3 position, int amountOfParticles, Supplier< Vec3 > offsetProvider,
+		Supplier< Float > speedProvider
+	) {
 		Vec3 offset = offsetProvider.get();
-		level.sendParticles( this.particleType, position.x, position.y, position.z, amountOfParticles, offset.x, offset.y, offset.z, speedProvider.get() );
+		level.sendParticles( this.particleType.get(), position.x, position.y, position.z, amountOfParticles, offset.x, offset.y, offset.z, speedProvider.get() );
 	}
 
 	public void spawn( ServerLevel level, Vec3 position, int amountOfParticles, Supplier< Vec3 > offsetProvider ) {
@@ -56,7 +67,9 @@ public class ParticleHandler {
 		this.spawn( level, position, amountOfParticles, ()->VectorHelper.multiply( this.offsetProvider.get(), offsetMultiplier ), this.speedProvider );
 	}
 
-	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int particlesPerBlock, Supplier< Vec3 > offsetProvider, Supplier< Float > speedProvider ) {
+	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int particlesPerBlock, Supplier< Vec3 > offsetProvider,
+		Supplier< Float > speedProvider
+	) {
 		Vec3 difference = VectorHelper.subtract( to, from );
 		int amountOfParticles = ( int )Math.ceil( from.distanceTo( to ) * particlesPerBlock );
 		for( int i = 0; i <= amountOfParticles; i++ ) {
