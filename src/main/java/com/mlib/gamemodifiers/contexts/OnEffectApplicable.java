@@ -33,8 +33,8 @@ public class OnEffectApplicable {
 	}
 
 	public static class Data extends ContextData.Event< MobEffectEvent.Applicable > {
-		final MobEffectInstance effectInstance;
-		final MobEffect effect;
+		public final MobEffectInstance effectInstance;
+		public final MobEffect effect;
 
 		public Data( MobEffectEvent.Applicable event ) {
 			super( event.getEntity(), event );
