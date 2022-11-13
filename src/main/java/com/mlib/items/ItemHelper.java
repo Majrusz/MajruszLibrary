@@ -10,9 +10,11 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -122,5 +124,22 @@ public class ItemHelper {
 
 	public static ItemStack getMatchingHandItem( LivingEntity entity, Predicate< ItemStack > predicate ) {
 		return predicate.test( entity.getMainHandItem() ) ? entity.getMainHandItem() : entity.getOffhandItem();
+	}
+
+	public static void addCooldown( Player player, int duration, Item... items ) {
+		ItemCooldowns cooldowns = player.getCooldowns();
+		for( Item item : items ) {
+			cooldowns.addCooldown( item, duration );
+		}
+	}
+
+	public static boolean isOnCooldown( Player player, Item... items ) {
+		ItemCooldowns cooldowns = player.getCooldowns();
+		for( Item item : items ) {
+			if( cooldowns.isOnCooldown( item ) )
+				return true;
+		}
+
+		return false;
 	}
 }
