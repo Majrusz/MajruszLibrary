@@ -19,6 +19,7 @@ import net.minecraftforge.registries.RegistryObject;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -46,20 +47,31 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 
 	public static class Excludable extends Condition {
 		final BooleanConfig availability;
+		final Function< BooleanConfig, Boolean > check;
 
-		public Excludable( BooleanConfig config ) {
+		public Excludable( BooleanConfig config, Function< BooleanConfig, Boolean > check ) {
 			super( Priority.HIGHEST );
 			this.availability = config;
+			this.check = check;
+
 			this.addConfig( this.availability );
 		}
 
+		public Excludable( boolean defaultValue, String name, String comment, Function< BooleanConfig, Boolean > check ) {
+			this( new BooleanConfig( name, comment, false, defaultValue ), check );
+		}
+
+		public Excludable( boolean defaultValue, String name, String comment ) {
+			this( defaultValue, name, comment, BooleanConfig::isEnabled );
+		}
+
 		public Excludable() {
-			this( new BooleanConfig( "is_enabled", "Specifies whether this game modifier is enabled.", false, true ) );
+			this( true, "is_enabled", "Specifies whether this feature is enabled." );
 		}
 
 		@Override
 		public boolean check( GameModifier gameModifier, ContextData data ) {
-			return this.availability.isEnabled();
+			return this.check.get();
 		}
 	}
 
