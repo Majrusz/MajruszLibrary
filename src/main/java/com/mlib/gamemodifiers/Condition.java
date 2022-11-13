@@ -71,7 +71,7 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 
 		@Override
 		public boolean check( GameModifier gameModifier, ContextData data ) {
-			return this.check.get();
+			return this.check.apply( this.availability );
 		}
 	}
 
