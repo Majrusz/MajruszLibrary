@@ -8,7 +8,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import java.util.UUID;
 
-/** Handling attributes in easier and shorter way. */
 public class AttributeHandler {
 	protected final UUID uuid;
 	protected final String name;
@@ -23,34 +22,30 @@ public class AttributeHandler {
 		this.operation = operation;
 	}
 
-	/** Checks whether entity has a given attribute. */
 	public static boolean hasAttribute( LivingEntity entity, Attribute attribute ) {
-		AttributeMap attributeMap = entity.getAttributes();
-
-		return attributeMap.hasAttribute( attribute );
+		return entity.getAttributes().hasAttribute( attribute );
 	}
 
-	/** Returns current attribute value. */
+	public boolean hasValueChanged( AttributeInstance attributeInstance ) {
+		AttributeModifier modifier = attributeInstance.getModifier( this.uuid );
+
+		return modifier == null || modifier.getAmount() != this.value;
+	}
+
 	public double getValue() {
 		return this.value;
 	}
 
-	/** Setting current attribute value. */
 	public AttributeHandler setValue( double value ) {
 		this.value = value;
 
 		return this;
 	}
 
-	/**
-	 Applying current attribute to the target.
-
-	 @param target Entity to apply attribute.
-	 */
 	public AttributeHandler apply( LivingEntity target ) {
 		AttributeInstance attributeInstance = target.getAttribute( this.attribute );
 
-		if( attributeInstance != null ) {
+		if( attributeInstance != null && this.hasValueChanged( attributeInstance ) ) {
 			attributeInstance.removeModifier( this.uuid );
 			AttributeModifier modifier = createAttribute();
 			attributeInstance.addPermanentModifier( modifier );
@@ -59,24 +54,16 @@ public class AttributeHandler {
 		return this;
 	}
 
-	/**
-	 Changing current attribute value and applying it to the entity.
-
-	 @param target Entity to apply attribute.
-	 @param value  New attribute value.
-	 */
 	public AttributeHandler setValueAndApply( LivingEntity target, double value ) {
 		setValue( value );
 
 		return apply( target );
 	}
 
-	/** Returns attribute modifier with given parameters. */
 	public AttributeModifier createAttribute() {
 		return new AttributeModifier( this.uuid, this.name, this.value, this.operation );
 	}
 
-	/** Returns uuid. */
 	public UUID getUUID() {
 		return this.uuid;
 	}
