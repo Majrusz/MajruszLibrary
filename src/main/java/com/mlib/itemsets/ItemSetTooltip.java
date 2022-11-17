@@ -4,6 +4,7 @@ import com.mlib.client.ClientHelper;
 import com.mlib.text.TextHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -56,7 +57,8 @@ public class ItemSetTooltip {
 	}
 
 	private static void addItemList( List< Component > tooltip, ItemSet itemSet, Player player ) {
-		tooltip.add( Component.translatable( ITEM_TITLE_KEY, itemSet.getTranslatedName(), itemSet.countEquippedItems( player ), itemSet.getTotalItemsCount() ) );
+		MutableComponent title = Component.translatable( ITEM_TITLE_KEY, itemSet.getTranslatedName(), itemSet.countEquippedItems( player ), itemSet.getTotalItemsCount() );
+		tooltip.add( title.withStyle( HINT_FORMAT ) );
 		itemSet.getItems().forEach( item->{
 			ChatFormatting chatFormatting = item.isEquipped( player ) ? itemSet.getChatFormatting() : DISABLED_FORMAT;
 
