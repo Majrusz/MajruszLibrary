@@ -11,6 +11,7 @@ import com.mlib.loot_modifiers.AnyModification;
 import com.mlib.loot_modifiers.HarvestCrop;
 import com.mlib.registries.DeferredRegisterHelper;
 import com.mojang.serialization.Codec;
+import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Items;
@@ -62,7 +63,7 @@ public class Registries {
 		static final ItemData ITEM_1 = new ItemData( Items.IRON_HELMET, EquipmentSlot.HEAD );
 		static final ItemData ITEM_2 = new ItemData( Items.IRON_CHESTPLATE, EquipmentSlot.CHEST );
 		public TestSet() {
-			super( ()->Stream.of( ITEM_1, ITEM_2 ) );
+			super( ()->Stream.of( ITEM_1, ITEM_2 ), ChatFormatting.RED, "test" );
 		}
 	}
 }

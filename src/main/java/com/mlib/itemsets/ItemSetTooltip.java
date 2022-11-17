@@ -56,9 +56,9 @@ public class ItemSetTooltip {
 	}
 
 	private static void addItemList( List< Component > tooltip, ItemSet itemSet, Player player ) {
-		tooltip.add( Component.translatable( ITEM_TITLE_KEY ) );
+		tooltip.add( Component.translatable( ITEM_TITLE_KEY, itemSet.getTranslatedName(), itemSet.countEquippedItems( player ), itemSet.getTotalItemsCount() ) );
 		itemSet.getItems().forEach( item->{
-			ChatFormatting chatFormatting = DISABLED_FORMAT;//itemData.hasItemEquipped( player ) ? itemSet.getChatFormatting() : DISABLED_FORMAT;
+			ChatFormatting chatFormatting = item.isEquipped( player ) ? itemSet.getChatFormatting() : DISABLED_FORMAT;
 
 			tooltip.add( Component.translatable( ITEM_KEY, item.getTranslatedName() ).withStyle( chatFormatting ) );
 		} );

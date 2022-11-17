@@ -15,12 +15,12 @@ import java.util.stream.Stream;
 public class ItemData {
 	final Predicate< ItemStack > condition;
 	final Supplier< MutableComponent > name;
-	final Stream< EquipmentSlot > equipmentSlots;
+	final Supplier< Stream< EquipmentSlot > > equipmentSlots;
 
 	public ItemData( Predicate< ItemStack > condition, Supplier< MutableComponent > name, EquipmentSlot... equipmentSlots ) {
 		this.condition = condition;
 		this.name = name;
-		this.equipmentSlots = Arrays.stream( equipmentSlots );
+		this.equipmentSlots = ()->Arrays.stream( equipmentSlots );
 	}
 
 	public ItemData( Supplier< Item > item, EquipmentSlot... equipmentSlots ) {
@@ -36,7 +36,7 @@ public class ItemData {
 	}
 
 	public boolean isEquipped( Player player ) {
-		return this.equipmentSlots.anyMatch( slot->this.matches( player.getItemBySlot( slot ) ) );
+		return this.equipmentSlots.get().anyMatch( slot->this.matches( player.getItemBySlot( slot ) ) );
 	}
 
 	public boolean matches( ItemStack itemStack ) {
