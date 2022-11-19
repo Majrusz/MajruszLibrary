@@ -2,6 +2,7 @@ package com.mlib.itemsets;
 
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -35,8 +36,8 @@ public class ItemData {
 		this( item::get, equipmentSlots );
 	}
 
-	public boolean isEquipped( Player player ) {
-		return this.equipmentSlots.get().anyMatch( slot->this.matches( player.getItemBySlot( slot ) ) );
+	public boolean isEquipped( LivingEntity entity ) {
+		return this.equipmentSlots.get().anyMatch( slot->this.matches( entity.getItemBySlot( slot ) ) );
 	}
 
 	public boolean matches( ItemStack itemStack ) {

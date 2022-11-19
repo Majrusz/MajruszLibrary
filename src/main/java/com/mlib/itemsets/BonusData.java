@@ -4,6 +4,7 @@ import com.mlib.text.FormattedTranslatable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.Arrays;
@@ -16,11 +17,11 @@ public class BonusData {
 	final Object[] parameters;
 
 	public static ICondition requiredItems( int count ) {
-		return ( itemSet, player )->itemSet.countEquippedItems( player ) >= count;
+		return ( itemSet, entity )->itemSet.countEquippedItems( entity ) >= count;
 	}
 
 	public static IRequirementFormat requiredItemsFormat( int count ) {
-		return ( itemSet, player )->Component.translatable( "%1$s/%2$s", count, itemSet.getTotalItemsCount() );
+		return ( itemSet, entity )->Component.translatable( "%1$s/%2$s", count, itemSet.getTotalItemsCount() );
 	}
 
 	public BonusData( ICondition condition, String keyId, IRequirementFormat requirementFormat, Object... parameters ) {
@@ -34,8 +35,8 @@ public class BonusData {
 		this( requiredItems( requiredItems ), keyId, requiredItemsFormat( requiredItems ), parameters );
 	}
 
-	public boolean isConditionMet( ItemSet itemSet, Player player ) {
-		return this.condition.check( itemSet, player );
+	public boolean isConditionMet( ItemSet itemSet, LivingEntity entity ) {
+		return this.condition.check( itemSet, entity );
 	}
 
 	public MutableComponent buildTranslatedRequirements( ItemSet itemSet, boolean isConditionMet ) {
@@ -52,13 +53,13 @@ public class BonusData {
 		return component.create();
 	}
 
-	private ChatFormatting getChatFormatting( ItemSet itemSet, Player player ) {
-		return this.isConditionMet( itemSet, player ) ? itemSet.getChatFormatting() : ChatFormatting.GRAY;
+	private ChatFormatting getChatFormatting( ItemSet itemSet, LivingEntity entity ) {
+		return this.isConditionMet( itemSet, entity ) ? itemSet.getChatFormatting() : ChatFormatting.GRAY;
 	}
 
 	@FunctionalInterface
 	public interface ICondition {
-		boolean check( ItemSet itemSet, Player player );
+		boolean check( ItemSet itemSet, LivingEntity player );
 	}
 
 	@FunctionalInterface

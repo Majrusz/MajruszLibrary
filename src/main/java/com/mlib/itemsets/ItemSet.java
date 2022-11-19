@@ -3,6 +3,7 @@ package com.mlib.itemsets;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -28,8 +29,8 @@ public abstract class ItemSet {
 		ITEM_SETS.add( this );
 	}
 
-	public int countEquippedItems( Player player ) {
-		return ( int )this.getItems().filter( item->item.isEquipped( player ) ).count();
+	public int countEquippedItems( LivingEntity entity ) {
+		return ( int )this.getItems().filter( item->item.isEquipped( entity ) ).count();
 	}
 
 	public int getTotalItemsCount() {
