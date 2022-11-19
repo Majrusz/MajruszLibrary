@@ -32,6 +32,19 @@ public class MobEffectHelper extends EffectHelper {
 		return tryToStack( entity, effectInstance.getEffect(), effectInstance.getDuration(), effectInstance.getAmplifier(), maxTicks );
 	}
 
+	public static boolean tryToStackAmplifier( LivingEntity entity, MobEffect effect, int ticks, int amplifier, int maxAmplifier ) {
+		MobEffectInstance previousEffectInstance = entity.getEffect( effect );
+		if( previousEffectInstance == null )
+			return tryToApply( entity, effect, ticks, amplifier );
+
+		amplifier = Math.min( amplifier + previousEffectInstance.getAmplifier() + 1, maxAmplifier );
+		return tryToApply( entity, effect, ticks, amplifier );
+	}
+
+	public static boolean tryToStackAmplifier( LivingEntity entity, MobEffectInstance effectInstance, int maxAmplifier ) {
+		return tryToStackAmplifier( entity, effectInstance.getEffect(), effectInstance.getDuration(), effectInstance.getAmplifier(), maxAmplifier );
+	}
+
 	public static int getAmplifier( LivingEntity entity, MobEffect effect ) {
 		MobEffectInstance effectInstance = entity.getEffect( effect );
 
