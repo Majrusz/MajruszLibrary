@@ -5,6 +5,7 @@ import com.mlib.annotations.AutoInstance;
 import com.mlib.commands.Command;
 import com.mlib.features.BlockSmelter;
 import com.mlib.gamemodifiers.GameModifier;
+import com.mlib.itemsets.BonusData;
 import com.mlib.itemsets.ItemData;
 import com.mlib.itemsets.ItemSet;
 import com.mlib.loot_modifiers.AnyModification;
@@ -60,10 +61,12 @@ public class Registries {
 	}
 
 	public static class TestSet extends ItemSet {
+		static final BonusData BONUS_1 = new BonusData( 1, "bonus (%1$s)", 0.3 );
+		static final BonusData BONUS_2 = new BonusData( 2, "wooo (%1$s) (%2$s)", "ok", 3 );
 		static final ItemData ITEM_1 = new ItemData( Items.IRON_HELMET, EquipmentSlot.HEAD );
 		static final ItemData ITEM_2 = new ItemData( Items.IRON_CHESTPLATE, EquipmentSlot.CHEST );
 		public TestSet() {
-			super( ()->Stream.of( ITEM_1, ITEM_2 ), ChatFormatting.RED, "test" );
+			super( ()->Stream.of( ITEM_1, ITEM_2 ), ()->Stream.of( BONUS_1, BONUS_2 ), ChatFormatting.RED, "test" );
 		}
 	}
 }

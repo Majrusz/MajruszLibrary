@@ -15,11 +15,13 @@ import java.util.stream.Stream;
 public abstract class ItemSet {
 	public static final List< ItemSet > ITEM_SETS = Collections.synchronizedList( new ArrayList<>() );
 	final Supplier< Stream< ItemData > > items;
+	final Supplier< Stream< BonusData > > bonuses;
 	final ChatFormatting chatFormatting;
 	final String keyId;
 
-	public ItemSet( Supplier< Stream< ItemData > > items, ChatFormatting chatFormatting, String keyId ) {
+	public ItemSet( Supplier< Stream< ItemData > > items, Supplier< Stream< BonusData > > bonuses, ChatFormatting chatFormatting, String keyId ) {
 		this.items = items;
+		this.bonuses = bonuses;
 		this.chatFormatting = chatFormatting;
 		this.keyId = keyId;
 
@@ -40,6 +42,10 @@ public abstract class ItemSet {
 
 	public Stream< ItemData > getItems() {
 		return this.items.get();
+	}
+
+	public Stream< BonusData > getBonuses() {
+		return this.bonuses.get();
 	}
 
 	public ChatFormatting getChatFormatting() {

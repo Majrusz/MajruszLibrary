@@ -1,6 +1,7 @@
 package com.mlib.itemsets;
 
 import com.mlib.client.ClientHelper;
+import com.mlib.text.FormattedTranslatable;
 import com.mlib.text.TextHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -47,8 +48,8 @@ public class ItemSetTooltip {
 			TextHelper.addEmptyLine( tooltip );
 			addItemList( tooltip, itemSet, player );
 
-			// TextHelper.addEmptyLine( tooltip );
-			// addBonusList( tooltip, itemSet, player );
+			TextHelper.addEmptyLine( tooltip );
+			addBonusList( tooltip, itemSet, player );
 		}
 	}
 
@@ -63,6 +64,20 @@ public class ItemSetTooltip {
 			ChatFormatting chatFormatting = item.isEquipped( player ) ? itemSet.getChatFormatting() : DISABLED_FORMAT;
 
 			tooltip.add( Component.translatable( ITEM_KEY, item.getTranslatedName() ).withStyle( chatFormatting ) );
+		} );
+	}
+
+	private static void addBonusList( List< Component > tooltip, ItemSet itemSet, Player player ) {
+		MutableComponent title = Component.translatable( BONUS_TITLE_KEY, itemSet.getTranslatedName() );
+		tooltip.add( title.withStyle( HINT_FORMAT ) );
+		itemSet.getBonuses().forEach( bonus->{
+			boolean isConditionMet = bonus.isConditionMet( itemSet, player );
+			ChatFormatting chatFormatting = isConditionMet ? itemSet.getChatFormatting() : ChatFormatting.DARK_GRAY;
+			FormattedTranslatable component = new FormattedTranslatable( BONUS_KEY, chatFormatting );
+			component.addParameter( bonus.buildTranslatedRequirements( itemSet, isConditionMet ) )
+				.addParameter( bonus.buildTranslatedName( itemSet, isConditionMet ) );
+
+			tooltip.add( component.create() );
 		} );
 	}
 }
