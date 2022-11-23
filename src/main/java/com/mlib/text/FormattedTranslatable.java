@@ -23,6 +23,14 @@ public class FormattedTranslatable {
 		return this;
 	}
 
+	public FormattedTranslatable addParameter( Object object, ChatFormatting... format ) {
+		if( object instanceof Component component ) {
+			return this.addParameter( component.copy().withStyle( format ) );
+		} else {
+			return this.addParameter( object.toString(), format );
+		}
+	}
+
 	public FormattedTranslatable addParameter( String text, ChatFormatting... format ) {
 		return this.addParameter( Component.literal( text ).withStyle( format ) );
 	}

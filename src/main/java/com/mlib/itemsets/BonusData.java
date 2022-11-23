@@ -48,7 +48,7 @@ public class BonusData {
 	public MutableComponent buildTranslatedName( ItemSet itemSet, boolean isConditionMet ) {
 		ChatFormatting chatFormatting = isConditionMet ? itemSet.getChatFormatting() : ChatFormatting.DARK_GRAY;
 		FormattedTranslatable component = new FormattedTranslatable( this.keyId, isConditionMet ? ChatFormatting.GRAY : chatFormatting );
-		Arrays.stream( this.parameters ).forEach( parameter->component.addParameter( parameter.toString(), chatFormatting ) );
+		Arrays.stream( this.parameters ).forEach( parameter->component.addParameter( parameter, chatFormatting ) );
 
 		return component.create();
 	}
