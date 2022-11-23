@@ -7,6 +7,8 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.List;
+
 public class Random {
 	static final RandomSource CLIENT = RandomSource.create();
 	static final RandomSource SERVER = RandomSource.create();
@@ -57,6 +59,10 @@ public class Random {
 
 	public static < Type > Type nextRandom( Type[] elements ) {
 		return elements[ nextInt( elements.length ) ];
+	}
+
+	public static < Type > Type nextRandom( List< Type > elements ) {
+		return elements.get( nextInt( elements.size() ) );
 	}
 
 	public static boolean tryChance( double chance ) {
