@@ -1,18 +1,21 @@
 package com.mlib.time;
 
 import com.mlib.Utility;
+import com.mlib.gamemodifiers.contexts.OnServerTick;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Mod.EventBusSubscriber
 public class Delay {
 	static final List< Delay > PENDING_DELAYS = new ArrayList<>();
 	static final List< Delay > DELAYS = new ArrayList<>();
+
+	static {
+		new OnServerTick.Context( Delay::update )
+			.addCondition( data->data.event.phase != TickEvent.Phase.START );
+	}
 
 	public static void onNextTick( ICallable callable ) {
 		new Delay( 0, callable );
@@ -36,12 +39,7 @@ public class Delay {
 		return this.ticksLeft <= 0;
 	}
 
-	@SubscribeEvent
-	public static void onServerTick( TickEvent.ServerTickEvent event ) {
-		if( event.phase != TickEvent.Phase.START ) {
-			return;
-		}
-
+	private static void update( OnServerTick.Data data ) {
 		DELAYS.addAll( PENDING_DELAYS );
 		PENDING_DELAYS.clear();
 		for( Iterator< Delay > iterator = DELAYS.iterator(); iterator.hasNext(); ) {
