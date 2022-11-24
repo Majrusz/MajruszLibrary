@@ -16,6 +16,7 @@ public class ParticleHandler {
 	public static final ParticleHandler PORTAL = new ParticleHandler( ParticleTypes.PORTAL, offset( 0.5f ), ()->Random.nextFloat( -1.0f, 0.0f ) );
 	public static final ParticleHandler SMELT = new ParticleHandler( ParticleTypes.FLAME, offset( 0.1f ), speed( 0.01f ) );
 	public static final ParticleHandler SMOKE = new ParticleHandler( ParticleTypes.SMOKE, offset( 0.25f ), speed( 0.01f ) );
+	public static final ParticleHandler SOUL = new ParticleHandler( ParticleTypes.SOUL, offset( 0.5f ), speed( 0.02f ) );
 	public static final ParticleHandler WITCH = new ParticleHandler( ParticleTypes.WITCH, offset( 0.25f ), speed( 0.01f ) );
 
 	final Supplier< SimpleParticleType > particleType;
