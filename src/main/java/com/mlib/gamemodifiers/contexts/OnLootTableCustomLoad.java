@@ -1,5 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
+import com.google.gson.JsonObject;
 import com.mlib.ObfuscationGetter;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
@@ -41,12 +42,14 @@ public class OnLootTableCustomLoad {
 		public final ResourceLocation name;
 		public final LootTable table;
 		public final List< LootPool > pools;
+		public final JsonObject jsonObject;
 
-		public Data( ResourceLocation name, LootTable table ) {
+		public Data( ResourceLocation name, LootTable table, JsonObject jsonObject ) {
 			super( ( LivingEntity )null );
 			this.name = name;
 			this.table = table;
 			this.pools = POOLS.get( table );
+			this.jsonObject = jsonObject;
 		}
 
 		public void addEntry( int poolId, Item item, int weight, int quality, LootItemCondition.Builder... conditions ) {

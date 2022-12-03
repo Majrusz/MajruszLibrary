@@ -22,7 +22,7 @@ public abstract class MixinLootTableSerializer {
 	private void deserialize( JsonElement jsonElement, Type type, JsonDeserializationContext context, CallbackInfoReturnable< LootTable > callback ) {
 		JsonObject jsonObject = GsonHelper.convertToJsonObject( jsonElement, "loot table" );
 		if( jsonObject.has( "mlib" ) ) {
-			var data = new OnLootTableCustomLoad.Data( new ResourceLocation( jsonObject.get( "mlib" ).getAsString() ), callback.getReturnValue() );
+			var data = new OnLootTableCustomLoad.Data( new ResourceLocation( jsonObject.get( "mlib" ).getAsString() ), callback.getReturnValue(), jsonObject );
 			OnLootTableCustomLoad.Context.broadcast( data );
 		}
 	}
