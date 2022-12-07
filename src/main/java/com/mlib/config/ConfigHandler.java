@@ -47,7 +47,7 @@ public class ConfigHandler extends ConfigGroup {
 
 	private void registerHelpConfigSpec( final ModLoadingContext modLoadingContext ) {
 		String[] comments = {
-			" Hello, Majrusz over there!",
+			" Hello, Majrusz over here!",
 			" Since one of 1.19.2 release, configs used by my mods are mostly server-side",
 			" which means that they are now stored separately per world. Thanks to this change,",
 			" configuration files are synchronised with other players on the server.",
