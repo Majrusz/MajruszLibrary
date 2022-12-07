@@ -43,6 +43,10 @@ public abstract class GameModifier extends ConfigGroup {
 		return addNewGroup( parent, key, "GameModifiers", "" );
 	}
 
+	public static ConfigGroup addNewGroup( String parentKey, String key, String name, String comment ) {
+		return addNewGroup( MOD_CONFIGS.get( parentKey ), key, name, comment );
+	}
+
 	public GameModifier( String configKey, String configName, String configComment ) {
 		super( configName, configComment );
 		this.configKey = configKey;

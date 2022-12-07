@@ -25,4 +25,10 @@ public class ModConfigs {
 	public synchronized boolean has( String key ) {
 		return this.map.containsKey( key );
 	}
+
+	public synchronized ConfigGroup get( String key ) {
+		assert this.map.containsKey( key ) : "Config for " + key + " has not been initialized yet!";
+
+		return this.map.get( key );
+	}
 }
