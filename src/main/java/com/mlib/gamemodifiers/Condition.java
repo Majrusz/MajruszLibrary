@@ -12,6 +12,7 @@ import com.mlib.gamemodifiers.parameters.Priority;
 import com.mlib.time.TimeHelper;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,6 +26,7 @@ import java.util.function.Supplier;
 
 public abstract class Condition extends ConfigGroup implements IParameterizable {
 	final ConditionParameters params;
+	boolean isNegated = false;
 
 	public Condition( ConditionParameters params ) {
 		this.params = params;
@@ -44,6 +46,16 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 	}
 
 	public abstract boolean check( GameModifier feature, ContextData data );
+
+	public Condition negate() {
+		this.isNegated = !this.isNegated;
+
+		return this;
+	}
+
+	public boolean isNegated() {
+		return this.isNegated;
+	}
 
 	public static class Excludable extends Condition {
 		final BooleanConfig availability;

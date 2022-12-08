@@ -84,7 +84,7 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 
 	public boolean check( ContextData data ) {
 		for( Condition condition : this.conditions ) {
-			if( !condition.check( this.gameModifier, data ) ) {
+			if( condition.isNegated() == condition.check( this.gameModifier, data ) ) {
 				return false;
 			}
 		}
