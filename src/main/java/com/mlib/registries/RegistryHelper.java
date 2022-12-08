@@ -1,5 +1,7 @@
 package com.mlib.registries;
 
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -11,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegistryHelper {
-	private final String modId;
-	private final List< DeferredRegister< ? > > registers = new ArrayList<>();
+	final String modId;
+	final List< DeferredRegister< ? > > registers = new ArrayList<>();
 
 	public RegistryHelper( String modId ) {
 		this.modId = modId;
@@ -33,5 +35,21 @@ public class RegistryHelper {
 
 	public ResourceLocation getLocation( String register ) {
 		return new ResourceLocation( this.modId, register );
+	}
+
+	public String getLocationString( String register ) {
+		return this.getLocation( register ).toString();
+	}
+
+	public ModelLayerLocation getModelLayer( String register, String layer ) {
+		return new ModelLayerLocation( this.getLocation( register ), layer );
+	}
+
+	public ModelLayerLocation getModelLayer( String register ) {
+		return new ModelLayerLocation( this.getLocation( register ), "main" );
+	}
+
+	public RenderType getEyesRenderType( String register ) {
+		return RenderType.eyes( this.getLocation( register ) );
 	}
 }
