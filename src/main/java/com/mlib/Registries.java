@@ -5,7 +5,7 @@ import com.mlib.commands.Command;
 import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.loot_modifiers.AnyModification;
 import com.mlib.loot_modifiers.HarvestCrop;
-import com.mlib.registries.DeferredRegisterHelper;
+import com.mlib.registries.RegistryHelper;
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -19,7 +19,7 @@ import java.util.List;
 import static com.mlib.MajruszLibrary.CONFIG_HANDLER;
 
 public class Registries {
-	static final DeferredRegisterHelper HELPER = new DeferredRegisterHelper( MajruszLibrary.MOD_ID );
+	static final RegistryHelper HELPER = new RegistryHelper( MajruszLibrary.MOD_ID );
 	static final DeferredRegister< Codec< ? extends IGlobalLootModifier > > LOOT_MODIFIERS = HELPER.create( ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS );
 	static final List< Command > COMMANDS;
 	static final List< GameModifier > GAME_MODIFIERS;

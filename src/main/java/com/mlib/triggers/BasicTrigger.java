@@ -2,6 +2,7 @@ package com.mlib.triggers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mlib.registries.RegistryHelper;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
@@ -9,12 +10,12 @@ import net.minecraft.server.level.ServerPlayer;
 
 import java.util.function.Supplier;
 
-/** Trigger that is called without any parameters, only with its id. */
+/** Trigger that is called only with custom id. */
 public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance > {
 	private final ResourceLocation triggerID;
 
-	public BasicTrigger( String modID ) {
-		this.triggerID = new ResourceLocation( modID, "basic_trigger" );
+	public BasicTrigger( RegistryHelper helper ) {
+		this.triggerID = helper.getLocation( "basic_trigger" );
 	}
 
 	@Override
@@ -29,12 +30,10 @@ public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance 
 		return new BasicTrigger.Instance( this.triggerID, predicate, triggerType.getAsString() );
 	}
 
-	/** Creates and registers instance of BasicTrigger with given mod id. */
-	public static BasicTrigger createRegisteredInstance( String modID ) {
-		return CriteriaTriggers.register( new BasicTrigger( modID ) );
+	public static BasicTrigger createRegisteredInstance( RegistryHelper helper ) {
+		return CriteriaTriggers.register( new BasicTrigger( helper ) );
 	}
 
-	/** Triggers an advancement for given player. */
 	public void trigger( ServerPlayer player, String triggerType ) {
 		this.trigger( player, instance->instance.test( triggerType ) );
 	}
@@ -56,7 +55,6 @@ public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance 
 			return jsonObject;
 		}
 
-		/** Checks whether conditions were met. */
 		public boolean test( String triggerType ) {
 			return this.triggerType.equals( triggerType );
 		}

@@ -10,11 +10,11 @@ import net.minecraftforge.registries.DeferredRegister;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeferredRegisterHelper {
+public class RegistryHelper {
 	private final String modId;
 	private final List< DeferredRegister< ? > > registers = new ArrayList<>();
 
-	public DeferredRegisterHelper( String modId ) {
+	public RegistryHelper( String modId ) {
 		this.modId = modId;
 	}
 
