@@ -17,9 +17,7 @@ import org.apache.logging.log4j.Logger;
 @Mod( MajruszLibrary.MOD_ID )
 public class MajruszLibrary {
 	public static final String MOD_ID = "majruszlib";
-	public static final String NAME = "Majrusz Library";
 	public static final Logger LOGGER = LogManager.getLogger();
-	@Deprecated public static final RandomSource RANDOM = RandomSource.create();
 	public static final ConfigHandler CONFIG_HANDLER = new ConfigHandler( ModConfig.Type.SERVER );
 	public static final ModConfigs MOD_CONFIGS = new ModConfigs();
 
