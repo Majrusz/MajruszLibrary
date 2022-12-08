@@ -33,7 +33,6 @@ public class Utility {
 		return ( double )( ticks ) / TICKS_IN_MINUTE;
 	}
 
-	/** Tries to cast the object to given class type or returns null otherwise. */
 	@Nullable
 	public static < NewType > NewType castIfPossible( Class< NewType > newClass, Object object ) {
 		return newClass.isInstance( object ) ? newClass.cast( object ) : null;
