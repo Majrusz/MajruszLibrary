@@ -26,9 +26,9 @@ public class FormattedTranslatable {
 	public FormattedTranslatable addParameter( Object object, ChatFormatting... format ) {
 		if( object instanceof Component component ) {
 			return this.addParameter( component.copy().withStyle( format ) );
-		} else {
-			return this.addParameter( object.toString(), format );
 		}
+
+		return this.addParameter( object.toString(), format );
 	}
 
 	public FormattedTranslatable addParameter( String text, ChatFormatting... format ) {
