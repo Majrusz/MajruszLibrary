@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@Deprecated
 public class Slider {
 	static final List< Slider > PENDING_SLIDERS = new ArrayList<>();
 	static final List< Slider > SLIDERS = new ArrayList<>();

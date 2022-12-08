@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@Deprecated
 public class Delay {
 	static final List< Delay > PENDING_DELAYS = new ArrayList<>();
 	static final List< Delay > DELAYS = new ArrayList<>();
