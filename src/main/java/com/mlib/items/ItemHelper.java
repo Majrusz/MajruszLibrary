@@ -32,14 +32,12 @@ public class ItemHelper {
 		if( itemStack.getMaxDamage() * factor < 1.0 )
 			return ItemStack.EMPTY;
 
-		itemStack.setDamageValue( Random.getThreadSafe().nextInt( ( int )( itemStack.getMaxDamage() * factor ) ) );
+		itemStack.setDamageValue( Random.nextInt( ( int )( itemStack.getMaxDamage() * factor ) ) );
 		return itemStack;
 	}
 
 	public static ItemStack enchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed ) {
-		int enchantmentLevel = getEnchantmentLevel( clampedRegionalDifficulty );
-
-		return EnchantmentHelper.enchantItem( Random.getThreadSafe(), itemStack, enchantmentLevel, isTreasureAllowed );
+		return EnchantmentHelper.enchantItem( Random.getThreadSafe(), itemStack, getEnchantmentLevel( clampedRegionalDifficulty ), isTreasureAllowed );
 	}
 
 	public static ItemStack tryEnchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed, double chance ) {
@@ -57,18 +55,6 @@ public class ItemHelper {
 	public static ItemStack damageAndEnchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed, double damageFactor
 	) {
 		return damageItem( enchantItem( itemStack, clampedRegionalDifficulty, isTreasureAllowed ), damageFactor );
-	}
-
-	public static void addEnchantmentTypeToItemGroup( CreativeModeTab itemTab, EnchantmentCategory category ) {
-		EnchantmentCategory[] group = itemTab.getEnchantmentCategories();
-		if( group.length == 0 ) {
-			itemTab.setEnchantmentCategories( category );
-			return;
-		}
-		EnchantmentCategory[] temporary = new EnchantmentCategory[ group.length + 1 ];
-		System.arraycopy( group, 0, temporary, 0, group.length );
-		temporary[ group.length - 1 ] = category;
-		itemTab.setEnchantmentCategories( temporary );
 	}
 
 	public static void addEnchantmentTypesToItemGroup( CreativeModeTab itemTab, EnchantmentCategory... categories ) {
