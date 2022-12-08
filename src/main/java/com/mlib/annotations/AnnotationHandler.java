@@ -44,7 +44,7 @@ public class AnnotationHandler {
 					try {
 						ClassType instance = ( ClassType )_class.getConstructor().newInstance();
 						instances.add( instance );
-						MajruszLibrary.log( "[AnnotationHandler] Class %s has been initialized.", instance.toString() );
+						MajruszLibrary.log( "[AnnotationHandler] Class %s has been initialized.", _class.getCanonicalName() );
 					} catch( Throwable e ) {
 						throw new AnnotationException( "%s does not have empty constructor", _class.getName() );
 					}
