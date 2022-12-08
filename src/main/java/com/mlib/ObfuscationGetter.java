@@ -22,25 +22,22 @@ public class ObfuscationGetter {
 
 		@Nullable
 		public ReturnType get( Type instance ) {
-			if( this.field == null )
-				return null;
-
 			try {
-				return ( ReturnType )this.field.get( instance );
-			} catch( Exception exception ) {
-				return null;
-			}
+				if( this.field != null ) {
+					return ( ReturnType )this.field.get( instance );
+				}
+			} catch( Exception ignored ) {}
+
+			return null;
 		}
 
-		@Nullable
 		public void set( Type instance, ReturnType value ) {
 			if( this.field == null )
 				return;
 
 			try {
 				this.field.set( instance, value );
-			} catch( Exception ignored ) {
-			}
+			} catch( Exception ignored ) {}
 		}
 	}
 
@@ -60,14 +57,13 @@ public class ObfuscationGetter {
 
 		@Nullable
 		public Object invoke( Type instance, Object... args ) {
-			if( this.method == null )
-				return null;
-
 			try {
-				return this.method.invoke( instance, args );
-			} catch( Exception exception ) {
-				return null;
-			}
+				if( this.method != null ) {
+					return this.method.invoke( instance, args );
+				}
+			} catch( Exception ignored ) {}
+
+			return null;
 		}
 	}
 }
