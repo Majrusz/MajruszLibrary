@@ -60,8 +60,9 @@ public class BlockSmelter extends GameModifier {
 				continue;
 
 			int experience = Random.roundRandomly( recipe.get().getExperience() * itemStack.getCount() );
-			if( experience > 0 )
+			if( experience > 0 ) {
 				level.addFreshEntity( new ExperienceOrb( level, position.x, position.y, position.z, experience ) );
+			}
 
 			amountOfSmeltedItems = amountOfSmeltedItems + itemStack.getCount();
 		}
@@ -84,8 +85,9 @@ public class BlockSmelter extends GameModifier {
 
 	private ItemStack getSmeltedItemStack( ItemStack itemStackToSmelt, ServerLevel level ) {
 		ItemStack smeltedItemStack = smeltIfPossible( itemStackToSmelt, level );
-		if( smeltedItemStack.getCount() != itemStackToSmelt.getCount() )
+		if( smeltedItemStack.getCount() != itemStackToSmelt.getCount() ) {
 			smeltedItemStack.setCount( itemStackToSmelt.getCount() );
+		}
 
 		return smeltedItemStack;
 	}
