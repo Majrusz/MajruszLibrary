@@ -1,4 +1,4 @@
-package com.mlib.loot_modifiers;
+package com.mlib.features;
 
 import com.google.common.base.Suppliers;
 import com.mlib.events.AnyLootModificationEvent;
@@ -15,7 +15,7 @@ import net.minecraftforge.common.loot.LootModifier;
 import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
-/** Loot modifier for all situations. */
+/** Loot modifier for all situations to handle . */
 public class AnyModification extends LootModifier {
 	public static final Supplier< Codec< AnyModification > > CODEC = Suppliers.memoize( ()->RecordCodecBuilder.create( inst->codecStart( inst ).apply( inst, AnyModification::new ) ) );
 

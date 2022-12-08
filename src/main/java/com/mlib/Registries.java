@@ -3,8 +3,7 @@ package com.mlib;
 import com.mlib.annotations.AnnotationHandler;
 import com.mlib.commands.Command;
 import com.mlib.gamemodifiers.GameModifier;
-import com.mlib.loot_modifiers.AnyModification;
-import com.mlib.loot_modifiers.HarvestCrop;
+import com.mlib.features.AnyModification;
 import com.mlib.registries.RegistryHelper;
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
@@ -28,10 +27,10 @@ public class Registries {
 		CONFIG_HANDLER.addGroup( GameModifier.addNewGroup( GameModifier.DEFAULT_KEY, "", "" ) );
 
 		LOOT_MODIFIERS.register( "any_situation", AnyModification.CODEC );
-		LOOT_MODIFIERS.register( "harvest_crop", HarvestCrop.CODEC );
 
 		COMMANDS = new AnnotationHandler( "com.mlib.commands" ).getInstances( Command.class );
 		GAME_MODIFIERS = new AnnotationHandler( "com.mlib.features" ).getInstances( GameModifier.class );
+		new AnnotationHandler( "com.mlib.features" ).getInstances( GameModifier.class );
 
 		MinecraftForge.EVENT_BUS.addListener( Command::registerAll );
 	}
@@ -46,6 +45,6 @@ public class Registries {
 	}
 
 	public static String getLocationString( String register ) {
-		return getLocation( register ).toString();
+		return HELPER.getLocationString( register );
 	}
 }
