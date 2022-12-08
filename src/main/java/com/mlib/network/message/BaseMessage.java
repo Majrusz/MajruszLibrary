@@ -9,6 +9,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 /** Class for easier sending basic value messages from client to server. */
+@Deprecated
 public class BaseMessage {
 	public void handle( Supplier< NetworkEvent.Context > contextSupplier ) {
 		NetworkEvent.Context context = contextSupplier.get();
