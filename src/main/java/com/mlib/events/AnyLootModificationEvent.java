@@ -1,12 +1,12 @@
 package com.mlib.events;
 
-import com.mlib.loot_modifiers.LootHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.Event;
@@ -30,12 +30,16 @@ public class AnyLootModificationEvent extends Event implements IModBusEvent {
 	public AnyLootModificationEvent( List< ItemStack > generatedLoot, LootContext context ) {
 		this.generatedLoot = generatedLoot;
 		this.context = context;
-		this.blockState = LootHelper.getParameter( context, LootContextParams.BLOCK_STATE );
-		this.damageSource = LootHelper.getParameter( context, LootContextParams.DAMAGE_SOURCE );
-		this.killer = LootHelper.getParameter( context, LootContextParams.KILLER_ENTITY );
-		this.entity = LootHelper.getParameter( context, LootContextParams.THIS_ENTITY );
-		this.lastDamagePlayer = LootHelper.getParameter( context, LootContextParams.LAST_DAMAGE_PLAYER );
-		this.tool = LootHelper.getParameter( context, LootContextParams.TOOL );
-		this.origin = LootHelper.getParameter( context, LootContextParams.ORIGIN );
+		this.blockState = this.getParameter( LootContextParams.BLOCK_STATE );
+		this.damageSource = this.getParameter( LootContextParams.DAMAGE_SOURCE );
+		this.killer = this.getParameter( LootContextParams.KILLER_ENTITY );
+		this.entity = this.getParameter( LootContextParams.THIS_ENTITY );
+		this.lastDamagePlayer = this.getParameter( LootContextParams.LAST_DAMAGE_PLAYER );
+		this.tool = this.getParameter( LootContextParams.TOOL );
+		this.origin = this.getParameter( LootContextParams.ORIGIN );
+	}
+
+	public < Type > Type getParameter( LootContextParam< Type > parameter ) {
+		return this.context.hasParam( parameter ) ? this.context.getParam( parameter ) : null;
 	}
 }

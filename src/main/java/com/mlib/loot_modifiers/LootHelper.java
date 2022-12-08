@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 public class LootHelper {
 	/** Returns parameter from context if it exists or null otherwise. */
 	@Nullable
+	@Deprecated
 	public static < Type > Type getParameter( LootContext context, LootContextParam< Type > parameter ) {
 		return context.hasParam( parameter ) ? context.getParam( parameter ) : null;
 	}
