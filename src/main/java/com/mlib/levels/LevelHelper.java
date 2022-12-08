@@ -31,49 +31,39 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-/** Simple class for more explicit way to handling world functions. */
 public class LevelHelper {
-	/** Checks whether the entity is in a particular dimension. */
 	public static boolean isEntityIn( Entity entity, ResourceKey< Level > worldRegistryKey ) {
 		return entity.level.dimension() == worldRegistryKey;
 	}
 
-	/** Returns difficulty instance of position where entity is currently at. */
 	public static DifficultyInstance getDifficultyInstance( Entity entity ) {
 		return getDifficultyInstance( entity.level, entity.position() );
 	}
 
-	/** Returns difficulty instance at given position. */
 	public static DifficultyInstance getDifficultyInstance( Level level, Vec3 position ) {
 		return level.getCurrentDifficultyAt( new BlockPos( position ) );
 	}
 
-	/** Returns current regional difficulty of the entity. */
 	public static double getRegionalDifficulty( Entity entity ) {
 		return getRegionalDifficulty( entity.level, entity.position() );
 	}
 
-	/** Returns current regional difficulty at given position. */
 	public static double getRegionalDifficulty( Level level, Vec3 position ) {
 		return getDifficultyInstance( level, position ).getEffectiveDifficulty();
 	}
 
-	/** Returns current clamped regional difficulty of the entity. (range [0.0;1.0]) */
 	public static double getClampedRegionalDifficulty( Entity entity ) {
 		return getClampedRegionalDifficulty( entity.level, entity.position() );
 	}
 
-	/** Returns current clamped regional difficulty at given position. (range [0.0;1.0]) */
 	public static double getClampedRegionalDifficulty( Level level, Vec3 position ) {
 		return getDifficultyInstance( level, position ).getSpecialMultiplier();
 	}
 
-	/** Checks whether entity is outside. */
 	public static boolean isEntityOutside( Entity entity ) {
 		return entity.level.canSeeSky( new BlockPos( entity.position() ) );
 	}
 
-	/** Checks whether is raining at entity current biome. */
 	public static boolean isRainingAtEntityBiome( Entity entity ) {
 		Level level = entity.level;
 		Biome biome = level.getBiome( new BlockPos( entity.position() ) ).get();
@@ -81,28 +71,16 @@ public class LevelHelper {
 		return level.isRaining() && biome.getPrecipitation() == Biome.Precipitation.RAIN;
 	}
 
-	/** Checks whether entity is outside when it is raining. */
 	public static boolean isEntityOutsideWhenItIsRaining( Entity entity ) {
 		return isEntityOutside( entity ) && isRainingAtEntityBiome( entity );
 	}
 
-	/** Checks whether entity is outside during the day. */
 	public static boolean isEntityOutsideDuringTheDay( Entity entity ) {
 		return isEntityOutside( entity ) && entity.level.isDay();
 	}
 
-	/** Checks whether entity is outside during the night. */
 	public static boolean isEntityOutsideDuringTheNight( Entity entity ) {
 		return isEntityOutside( entity ) && entity.level.isNight();
-	}
-
-	/**
-	 Returns ServerLevel from given entity.
-	 Returns null if casting was impossible.
-	 */
-	@Nullable
-	public static ServerLevel getServerLevelFromEntity( @Nullable Entity entity ) {
-		return ( entity != null && entity.level instanceof ServerLevel ) ? ( ServerLevel )entity.level : null;
 	}
 
 	public static Pair< Vec3, ServerLevel > getSpawnData( ServerPlayer player ) {
@@ -135,6 +113,7 @@ public class LevelHelper {
 		player.teleportTo( serverLevel, spawnPosition.x, spawnPosition.y, spawnPosition.z, player.getYRot(), player.getXRot() );
 	}
 
+	@Deprecated
 	public static boolean teleportNearby( LivingEntity target, ServerLevel level, double offset ) {
 		boolean isEntityInside = target.yOld + 8 > level.getHeight( Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ( int )target.xOld, ( int )target.zOld );
 		if( isEntityInside )
@@ -142,7 +121,7 @@ public class LevelHelper {
 
 		Vec3 newPosition = Random.getRandomVector3d( -offset, offset, -1.0, 1.0, -offset, offset ).add( target.position() );
 		double y = level.getHeight( Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ( int )newPosition.x, ( int )newPosition.z ) + 1;
-		if( !( y < -45 ) && target.randomTeleport( newPosition.x, target.yOld + 8 > y ? y : newPosition.y, newPosition.z, true ) ) {
+		if( !( y < level.getMinBuildHeight() + 1 ) && target.randomTeleport( newPosition.x, target.yOld + 8 > y ? y : newPosition.y, newPosition.z, true ) ) {
 			level.playSound( null, target.xo, target.yo, target.zo, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 1.0f );
 			level.sendParticles( ParticleTypes.PORTAL, target.xo, target.getY( 0.5 ), target.zo, 10, 0.25, 0.25, 0.25, 0.1 );
 			return true;
@@ -194,6 +173,7 @@ public class LevelHelper {
 		level.addFreshEntity( itemEntity );
 	}
 
+	@Deprecated
 	public static void startRaining( Level level, int ticks, boolean withThunder, int transitionTicks ) {
 		if( !( level.getLevelData() instanceof ServerLevelData data ) )
 			return;
