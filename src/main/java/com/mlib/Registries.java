@@ -29,8 +29,7 @@ public class Registries {
 		LOOT_MODIFIERS.register( "any_situation", AnyModification.CODEC );
 
 		COMMANDS = new AnnotationHandler( "com.mlib.commands" ).getInstances( Command.class );
-		GAME_MODIFIERS = new AnnotationHandler( "com.mlib.features" ).getInstances( GameModifier.class );
-		new AnnotationHandler( "com.mlib.features" ).getInstances( GameModifier.class );
+		GAME_MODIFIERS = new AnnotationHandler( "com.mlib" ).getInstances( GameModifier.class );
 
 		MinecraftForge.EVENT_BUS.addListener( Command::registerAll );
 	}
