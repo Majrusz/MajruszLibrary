@@ -234,4 +234,21 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 			return data.level != null;
 		}
 	}
+
+	public static class IsShiftKeyDown< Type extends ContextData > extends Condition {
+		final Function< Type, Player > player;
+
+		public IsShiftKeyDown( Function< Type, Player > player ) {
+			this.player = player;
+		}
+
+		public IsShiftKeyDown() {
+			this( data->( Player )data.entity );
+		}
+
+		@Override
+		public boolean check( GameModifier feature, ContextData data ) {
+			return this.player.apply( ( Type )data ).isShiftKeyDown();
+		}
+	}
 }
