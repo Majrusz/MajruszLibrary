@@ -43,8 +43,8 @@ public class AnnotationHandler {
 				if( outputClass.isAssignableFrom( _class ) ) {
 					try {
 						ClassType instance = ( ClassType )_class.getConstructor().newInstance();
-						MajruszLibrary.log( "[AnnotationHandler] Class %s has been initialized.", instance.toString() );
 						instances.add( instance );
+						MajruszLibrary.log( "[AnnotationHandler] Class %s has been initialized.", instance.toString() );
 					} catch( Throwable e ) {
 						throw new AnnotationException( "%s does not have empty constructor", _class.getName() );
 					}

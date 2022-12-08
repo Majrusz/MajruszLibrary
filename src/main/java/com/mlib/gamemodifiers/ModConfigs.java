@@ -12,7 +12,7 @@ public class ModConfigs {
 		assert !this.map.containsKey( key ) : "Config for " + key + " has been initialized already!";
 		this.map.put( key, group );
 
-		MajruszLibrary.log( "Game modifier group '%s' has been initialized.", key );
+		MajruszLibrary.log( "[ModConfigs] Game modifier group '%s' has been initialized.", key );
 	}
 
 	public synchronized void insert( String key, GameModifier modifier ) {
@@ -21,7 +21,7 @@ public class ModConfigs {
 
 		String name = modifier.getName();
 		String message = name.isEmpty() ? "Unnamed game modifier" : String.format( "Game modifier '%s'", name );
-		MajruszLibrary.log( "%s has been inserted to '%s'.", message, key );
+		MajruszLibrary.log( "[ModConfigs] %s has been inserted to '%s'.", message, key );
 	}
 
 	public synchronized void insert( GameModifier modifier ) {
