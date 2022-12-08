@@ -121,7 +121,7 @@ public class LevelHelper {
 		if( exactSpawnPosition == null ) {
 			serverLevel = player.server.getLevel( Level.OVERWORLD );
 			assert serverLevel != null;
-			exactSpawnPosition = VectorHelper.convertToVec3( serverLevel.getSharedSpawnPos() );
+			exactSpawnPosition = VectorHelper.vec3( serverLevel.getSharedSpawnPos() );
 		}
 
 		return new Pair<>( exactSpawnPosition, serverLevel );

@@ -107,7 +107,7 @@ public class EntityHelper {
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass,
 		ServerLevel level, BlockPos blockPosition, double sideLength, Predicate< EntityType > extraPredicate
 	) {
-		return getEntitiesInBox( entityClass, level, VectorHelper.convertToVec3( blockPosition ), sideLength, extraPredicate );
+		return getEntitiesInBox( entityClass, level, VectorHelper.vec3( blockPosition ), sideLength, extraPredicate );
 	}
 
 	/** Returns entities of a given class in a box with given side length. */
@@ -130,7 +130,7 @@ public class EntityHelper {
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass,
 		ServerLevel level, BlockPos blockPosition, double radius, Predicate< EntityType > extraPredicate
 	) {
-		return getEntitiesInSphere( entityClass, level, VectorHelper.convertToVec3( blockPosition ), radius, extraPredicate );
+		return getEntitiesInSphere( entityClass, level, VectorHelper.vec3( blockPosition ), radius, extraPredicate );
 	}
 
 	/** Returns entities of a given class in a sphere with given radius. */

@@ -189,8 +189,51 @@ public class VectorHelper {
 		return new Vec3( x, y, z );
 	}
 
-	/** Converts block position to a centered vector. */
-	public static Vec3 convertToVec3( BlockPos blockPosition ) {
+	public static BlockPos block( Vec3 vector ) {
+		return new BlockPos( vector.x, vector.y, vector.z );
+	}
+
+	public static BlockPos block( Vector3f vector ) {
+		return new BlockPos( vector.x(), vector.y(), vector.z() );
+	}
+
+	public static BlockPos block( Vector3d vector ) {
+		return new BlockPos( vector.x, vector.y, vector.z );
+	}
+
+	public static Vec3 vec3( BlockPos blockPosition ) {
 		return new Vec3( blockPosition.getX() + 0.5, blockPosition.getY() + 0.5, blockPosition.getZ() + 0.5 );
+	}
+
+	public static Vec3 vec3( Vector3f vector ) {
+		return new Vec3( vector.x(), vector.y(), vector.z() );
+	}
+
+	public static Vec3 vec3( Vector3d vector ) {
+		return new Vec3( vector.x, vector.y, vector.z );
+	}
+
+	public static Vector3f vec3f( BlockPos blockPosition ) {
+		return new Vector3f( blockPosition.getX() + 0.5f, blockPosition.getY() + 0.5f, blockPosition.getZ() + 0.5f );
+	}
+
+	public static Vector3f vec3f( Vec3 vector ) {
+		return new Vector3f( ( float )vector.x, ( float )vector.y, ( float )vector.z );
+	}
+
+	public static Vector3f vec3f( Vector3d vector ) {
+		return new Vector3f( ( float )vector.x, ( float )vector.y, ( float )vector.z );
+	}
+
+	public static Vector3d vec3d( BlockPos blockPosition ) {
+		return new Vector3d( blockPosition.getX() + 0.5, blockPosition.getY() + 0.5, blockPosition.getZ() + 0.5 );
+	}
+
+	public static Vector3d vec3d( Vec3 vector ) {
+		return new Vector3d( vector.x, vector.y, vector.z );
+	}
+
+	public static Vector3d vec3d( Vector3f vector ) {
+		return new Vector3d( vector.x(), vector.y(), vector.z() );
 	}
 }
