@@ -19,7 +19,13 @@ public class ModConfigs {
 		assert this.map.containsKey( key ) : "Config for " + key + " has not been initialized yet!";
 		this.map.get( key ).addConfig( modifier );
 
-		MajruszLibrary.log( "Game modifier '%s' has been inserted to '%s'.", modifier.getName(), key );
+		String name = modifier.getName();
+		String message = name.isEmpty() ? "Unnamed game modifier" : String.format( "Game modifier '%s'", name );
+		MajruszLibrary.log( "%s has been inserted to '%s'.", message, key );
+	}
+
+	public synchronized void insert( GameModifier modifier ) {
+		insert( GameModifier.DEFAULT_KEY, modifier );
 	}
 
 	public synchronized boolean has( String key ) {

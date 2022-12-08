@@ -57,6 +57,10 @@ public abstract class GameModifier extends ConfigGroup {
 		this( DEFAULT_KEY, configName, configComment );
 	}
 
+	public GameModifier() {
+		this( DEFAULT_KEY, "", "" );
+	}
+
 	public < DataType extends ContextData > void addContext( ContextBase< DataType > context ) {
 		context.setup( this );
 		this.addConfig( context );
