@@ -17,9 +17,7 @@ public class ContextTests extends BaseTest {
 			MutableInt max = new MutableInt( Integer.MIN_VALUE );
 			contexts.forEach( context->{
 				int priority = context.getParams().getPriorityAsInt();
-				if( priority < max.getValue() ) {
-					helper.fail( String.format( "%s has invalid priority", getFullSimpleName( context.getClass() ) ) );
-				}
+				assertThat( helper, priority < max.getValue(), ()->String.format( "%s has invalid priority", getClassName( context ) ) );
 				max.setValue( priority );
 			} );
 		} );

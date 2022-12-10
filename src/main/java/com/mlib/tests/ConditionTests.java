@@ -17,9 +17,7 @@ public class ConditionTests extends BaseTest {
 			MutableInt max = new MutableInt( Integer.MIN_VALUE );
 			context.getConditions().forEach( condition->{
 				int priority = condition.getParams().getPriorityAsInt();
-				if( priority < max.getValue() ) {
-					helper.fail( String.format( "%s has invalid priority in %s", getFullSimpleName( condition.getClass() ), getFullSimpleName( context.getClass() ) ) );
-				}
+				assertThat( helper, priority < max.getValue(), ()->String.format( "%s has invalid priority in %s", getClassName( condition ), getClassName( context ) ) );
 				max.setValue( priority );
 			} );
 		} ) );
