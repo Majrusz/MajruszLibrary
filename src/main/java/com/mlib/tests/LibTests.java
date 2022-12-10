@@ -32,7 +32,7 @@ public class LibTests {
 		Contexts.getInstances().forEach( contexts->contexts.forEach( context->{
 			MutableInt max = new MutableInt( Integer.MIN_VALUE );
 			context.getConditions().forEach( condition->{
-				int priority = context.getParams().getPriorityAsInt();
+				int priority = condition.getParams().getPriorityAsInt();
 				if( priority < max.getValue() ) {
 					helper.fail( String.format( "%s has invalid priority in %s", getFullSimpleName( condition.getClass() ), getFullSimpleName( context.getClass() ) ) );
 				}
