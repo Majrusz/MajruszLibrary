@@ -8,53 +8,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
-public abstract class ContextBase< DataType extends ContextData > extends ConfigGroup implements IParameterizable {
-	final Class< DataType > dataClass;
+public abstract class ContextBase< DataType extends ContextData > extends ConfigGroup implements IParameterizable< ContextParameters > {
 	final Consumer< DataType > consumer;
-	final List< Condition > conditions = new ArrayList<>();
+	final List< Condition< DataType > > conditions = new ArrayList<>();
 	final ContextParameters params;
 	protected GameModifier gameModifier = null;
 
-	@Deprecated
-	public static < DataType extends ContextData, ContextType extends ContextBase< DataType > > void accept( List< ContextType > contexts, DataType data ) {
-		contexts.forEach( context->{
-			if( context.check( data ) ) {
-				context.consumer.accept( data );
-			}
-		} );
-	}
-
-	@Deprecated
-	public static < ContextType extends ContextBase< ? > > void addSorted( List< ContextType > contexts, ContextType context ) {
-		contexts.add( context );
-		contexts.sort( ContextParameters.COMPARATOR );
-	}
-
-	public ContextBase( Class< DataType > dataClass, Consumer< DataType > consumer, ContextParameters params ) {
+	public ContextBase( Consumer< DataType > consumer, ContextParameters params ) {
 		super( params.getConfigName(), params.getConfigComment() );
-		this.dataClass = dataClass;
 		this.consumer = consumer;
 		this.params = params;
 	}
 
-	public ContextBase( Class< DataType > dataClass, Consumer< DataType > consumer ) {
-		this( dataClass, consumer, new ContextParameters() );
+	public ContextBase( Consumer< DataType > consumer ) {
+		this( consumer, new ContextParameters() );
 	}
 
 	@Override
-	public Parameters getParams() {
+	public ContextParameters getParams() {
 		return this.params;
 	}
 
 	public void setup( GameModifier gameModifier ) {
-		assert this.gameModifier == null : "Context was already set up";
+		assert this.gameModifier == null : "Context has already been set up";
 		this.gameModifier = gameModifier;
-		this.conditions.forEach( this::addConfig );
+		this.conditions.stream()
+			.filter( condition->condition.getParams().isConfigurable() )
+			.forEach( this::addConfig );
 	}
 
-	public ContextBase< DataType > addCondition( Condition condition ) {
-		assert this.gameModifier == null : "Context was already set up";
+	public ContextBase< DataType > addCondition( Condition< DataType > condition ) {
+		assert this.gameModifier == null : "Context has already been set up";
 		this.conditions.add( condition );
 		this.conditions.sort( Parameters.COMPARATOR );
 
@@ -62,34 +48,26 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 	}
 
 	public ContextBase< DataType > addCondition( Predicate< DataType > predicate ) {
-		return addCondition( new Condition.Context<>( this.dataClass, predicate ) );
+		return addCondition( new Condition.Context<>( predicate ) );
 	}
 
-	public ContextBase< DataType > addConditions( Condition... conditions ) {
-		for( Condition condition : conditions ) {
-			this.addCondition( condition );
-		}
+	@SafeVarargs
+	public final ContextBase< DataType > addConditions( Condition< DataType >... conditions ) {
+		Stream.of( conditions ).forEach( this::addCondition );
 
 		return this;
 	}
 
 	@SafeVarargs
 	public final ContextBase< DataType > addConditions( Predicate< DataType >... predicates ) {
-		for( Predicate< DataType > predicate : predicates ) {
-			this.addCondition( predicate );
-		}
+		Stream.of( predicates ).forEach( this::addCondition );
 
 		return this;
 	}
 
-	public boolean check( ContextData data ) {
-		for( Condition condition : this.conditions ) {
-			if( condition.isNegated() == condition.check( this.gameModifier, data ) ) {
-				return false;
-			}
-		}
-
-		return true;
+	public boolean check( DataType data ) {
+		return this.conditions.stream()
+			.allMatch( condition->condition.getParams().isNegated() ^ condition.check( this.gameModifier, data ) );
 	}
 
 	public GameModifier getGameModifier() {

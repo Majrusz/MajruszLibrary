@@ -29,12 +29,16 @@ public class GameModifiersHolder< RegistryType extends IRegistrable > {
 		return this.modifiers;
 	}
 
+	public void forEach( Consumer< GameModifier > consumer ) {
+		this.modifiers.forEach( consumer );
+	}
+
 	public < Type > void forEach( Class< Type > classType, Consumer< Type > consumer ) {
-		for( GameModifier modifier : this.modifiers ) {
+		this.modifiers.forEach( modifier->{
 			if( classType.isInstance( modifier ) ) {
 				consumer.accept( classType.cast( modifier ) );
 			}
-		}
+		} );
 	}
 
 	public void addModifier( BiFunction< Supplier< RegistryType >, String, GameModifier > provider ) {

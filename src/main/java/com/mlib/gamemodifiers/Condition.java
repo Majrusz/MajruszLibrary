@@ -4,242 +4,246 @@ import com.mlib.Random;
 import com.mlib.Utility;
 import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
+import com.mlib.config.DoubleArrayConfig;
 import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.parameters.ConditionParameters;
-import com.mlib.gamemodifiers.parameters.Parameters;
 import com.mlib.gamemodifiers.parameters.Priority;
 import com.mlib.time.TimeHelper;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.registries.RegistryObject;
-import org.apache.commons.lang3.mutable.MutableInt;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
-public abstract class Condition extends ConfigGroup implements IParameterizable {
-	final ConditionParameters params;
-	boolean isNegated = false;
-
-	public Condition( ConditionParameters params ) {
-		this.params = params;
-	}
-
-	public Condition( Priority priority ) {
-		this( new ConditionParameters( priority ) );
-	}
-
-	public Condition() {
-		this( new ConditionParameters() );
-	}
+public abstract class Condition< DataType extends ContextData > extends ConfigGroup implements IParameterizable< ConditionParameters > {
+	protected final ConditionParameters params = new ConditionParameters();
 
 	@Override
-	public Parameters getParams() {
+	public ConditionParameters getParams() {
 		return this.params;
 	}
 
-	public abstract boolean check( GameModifier feature, ContextData data );
+	public abstract boolean check( GameModifier feature, DataType data );
 
-	public Condition negate() {
-		this.isNegated = !this.isNegated;
+	public Condition< DataType > apply( Consumer< ConditionParameters > consumer ) {
+		consumer.accept( this.params );
 
 		return this;
 	}
 
-	public boolean isNegated() {
-		return this.isNegated;
-	}
-
-	public static class Excludable extends Condition {
+	public static class Excludable< DataType extends ContextData > extends Condition< DataType > {
 		final BooleanConfig availability;
-		final Function< BooleanConfig, Boolean > check;
 
-		public Excludable( BooleanConfig config, Function< BooleanConfig, Boolean > check ) {
-			super( Priority.HIGHEST );
+		public Excludable( BooleanConfig config ) {
 			this.availability = config;
-			this.check = check;
 
 			this.addConfig( this.availability );
-		}
-
-		public Excludable( boolean defaultValue, String name, String comment, Function< BooleanConfig, Boolean > check ) {
-			this( new BooleanConfig( name, comment, false, defaultValue ), check );
+			this.apply( params->params.setConfigurable( true ).setPriority( Priority.HIGHEST ) );
 		}
 
 		public Excludable( boolean defaultValue, String name, String comment ) {
-			this( defaultValue, name, comment, BooleanConfig::isEnabled );
+			this( new BooleanConfig( name, comment, false, defaultValue ) );
 		}
 
 		public Excludable() {
-			this( true, "is_enabled", "Specifies whether this feature is enabled." );
+			this( true, "is_enabled", "Specifies whether this is enabled." );
 		}
 
 		@Override
-		public boolean check( GameModifier gameModifier, ContextData data ) {
-			return this.check.apply( this.availability );
+		public boolean check( GameModifier gameModifier, DataType data ) {
+			return this.availability.getOrDefault();
 		}
 	}
 
-	public static class Chance extends Condition {
+	public static class Chance< DataType extends ContextData > extends Condition< DataType > {
 		final DoubleConfig chance;
 
 		public Chance( DoubleConfig config ) {
-			super( Priority.HIGH );
 			this.chance = config;
+
 			this.addConfig( this.chance );
+			this.apply( params->params.setConfigurable( true ).setPriority( Priority.HIGH ) );
 		}
 
-		public Chance( double defaultChance, String name, String comment ) {
-			this( new DoubleConfig( name, comment, false, defaultChance, 0.0, 1.0 ) );
+		public Chance( double chance, String name, String comment ) {
+			this( new DoubleConfig( name, comment, false, chance, 0.0, 1.0 ) );
 		}
 
-		public Chance( double defaultChance ) {
-			this( defaultChance, "chance", "Chance of this to happen." );
+		public Chance( double chance ) {
+			this( chance, "chance", "Chance for this to happen." );
 		}
 
 		@Override
-		public boolean check( GameModifier gameModifier, ContextData data ) {
-			return Random.tryChance( this.chance.get() );
+		public boolean check( GameModifier gameModifier, DataType data ) {
+			return Random.tryChance( this.chance.getOrDefault() );
 		}
 	}
 
-	public static class IsLivingBeing extends Condition {
+	public static class IsLivingBeing< DataType extends ContextData > extends Condition< DataType > {
 		@Override
-		public boolean check( GameModifier feature, ContextData data ) {
+		public boolean check( GameModifier feature, DataType data ) {
 			return EntityHelper.isAnimal( data.entity ) || EntityHelper.isHuman( data.entity );
 		}
 	}
 
-	public static class ArmorDependentChance extends Condition {
-		@Override
-		public boolean check( GameModifier feature, ContextData data ) {
-			return Random.tryChance( getChance( data.entity ) );
+	public static class ArmorDependentChance< DataType extends ContextData > extends Condition< DataType > {
+		static final Function< Integer, String > CONFIG_FORMAT = idx->String.format( "equipped_%d", idx );
+		final DoubleArrayConfig chances;
+
+		public ArmorDependentChance() {
+			this.chances = new DoubleArrayConfig( "chances", "Chances which depend on amount of equipped armor pieces.", CONFIG_FORMAT, false, 0.0, 1.0, 1.0, 0.7, 0.49, 0.34, 0.24 );
+
+			this.addConfig( this.chances );
+			this.apply( params->params.setConfigurable( true ) );
 		}
 
-		private double getChance( @Nullable LivingEntity entity ) {
-			if( entity == null )
-				return 1.0;
+		@Override
+		public boolean check( GameModifier feature, DataType data ) {
+			return Random.tryChance( this.getChance( data.entity ) );
+		}
 
-			MutableInt armorCount = new MutableInt( 0 );
-			entity.getArmorSlots().forEach( itemStack->{
-				if( !itemStack.isEmpty() )
-					armorCount.add( 1 );
-			} );
-			return switch( armorCount.getValue() ) {
-				default -> 1.0;
-				case 1 -> 0.7;
-				case 2 -> 0.49;
-				case 3 -> 0.34;
-				case 4 -> 0.24;
-			};
+		private double getChance( @Nullable Entity entity ) {
+			if( entity == null )
+				return this.chances.getOrDefault( 0 );
+
+			int equippedArmorPieces = ( int )StreamSupport.stream( entity.getArmorSlots().spliterator(), false )
+				.filter( itemStack->!itemStack.isEmpty() )
+				.count();
+			return this.chances.getOrDefault( equippedArmorPieces );
 		}
 	}
 
-	public static class Context< DataType extends ContextData > extends Condition {
-		final Class< DataType > dataClass;
+	public static class Context< DataType extends ContextData > extends Condition< DataType > {
 		final Predicate< DataType > predicate;
 
-		public Context( Class< DataType > dataClass, Predicate< DataType > predicate ) {
-			super( Priority.LOW );
-			this.dataClass = dataClass;
+		public Context( Predicate< DataType > predicate ) {
 			this.predicate = predicate;
+
+			this.apply( params->params.setPriority( Priority.LOW ) );
 		}
 
 		@Override
-		public boolean check( GameModifier gameModifier, ContextData data ) {
-			DataType contextData = Utility.castIfPossible( this.dataClass, data );
-			assert contextData != null;
-
-			return this.predicate.test( contextData );
+		public boolean check( GameModifier gameModifier, DataType data ) {
+			return this.predicate.test( data );
 		}
 	}
 
-	public static class Cooldown extends Condition {
-		final Supplier< Boolean > test;
+	public static class Cooldown< DataType extends ContextData > extends Condition< DataType > {
+		final Predicate< Double > distribution;
+		final DoubleConfig cooldown;
 
-		public Cooldown( double seconds, Dist distribution, boolean isConfigurable ) {
-			super( Priority.HIGH );
-			Predicate< Double > predicate = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
-			if( isConfigurable ) {
-				DoubleConfig config = new DoubleConfig( "cooldown", "Cooldown in seconds before this happens.", false, seconds, 0.1, 300.0 );
-				this.test = ()->predicate.test( config.get() );
-				this.addConfig( config );
-			} else {
-				this.test = ()->predicate.test( seconds );
-			}
+		public Cooldown( DoubleConfig cooldown, Dist distribution ) {
+			this.distribution = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
+			this.cooldown = cooldown;
+
+			this.addConfig( cooldown );
+			this.apply( params->params.setConfigurable( true ).setPriority( Priority.HIGH ) );
 		}
 
 		public Cooldown( double seconds, Dist distribution ) {
-			this( seconds, distribution, true );
-		}
-
-		public Cooldown( int ticks, Dist distribution, boolean isConfigurable ) {
-			this( Utility.ticksToSeconds( ticks ), distribution, isConfigurable );
+			this( new DoubleConfig( "cooldown", "Cooldown in seconds before it happens.", false, seconds, 0.1, 300.0 ), distribution );
 		}
 
 		public Cooldown( int ticks, Dist distribution ) {
-			this( ticks, distribution, true );
+			this( Utility.ticksToSeconds( ticks ), distribution );
 		}
 
 		@Override
-		public boolean check( GameModifier feature, ContextData data ) {
-			return this.test.get();
+		public boolean check( GameModifier feature, DataType data ) {
+			return this.distribution.test( this.cooldown.getOrDefault() );
 		}
 	}
 
-	public static class HasEnchantment extends Condition {
-		final Enchantment enchantment;
+	public static class HasEnchantment< DataType extends ContextData > extends Condition< DataType > {
+		final Supplier< Enchantment > enchantment;
+		final Function< DataType, LivingEntity > entity;
+
+		public HasEnchantment( RegistryObject< ? extends Enchantment > enchantment, Function< DataType, LivingEntity > entity ) {
+			this.enchantment = enchantment::get;
+			this.entity = entity;
+		}
+
+		public HasEnchantment( RegistryObject< ? extends Enchantment > enchantment ) {
+			this( enchantment, data->( LivingEntity )data.entity );
+		}
+
+		public HasEnchantment( Enchantment enchantment, Function< DataType, LivingEntity > entity ) {
+			this.enchantment = ()->enchantment;
+			this.entity = entity;
+		}
 
 		public HasEnchantment( Enchantment enchantment ) {
-			this.enchantment = enchantment;
+			this( enchantment, data->( LivingEntity )data.entity );
 		}
 
 		@Override
-		public boolean check( GameModifier feature, ContextData data ) {
-			return data.entity != null && EnchantmentHelper.getEnchantmentLevel( this.enchantment, data.entity ) > 0;
+		public boolean check( GameModifier feature, DataType data ) {
+			LivingEntity entity = this.entity.apply( data );
+
+			return entity != null && EnchantmentHelper.getEnchantmentLevel( this.enchantment.get(), entity ) > 0;
 		}
 	}
 
-	public static class HasEffect extends Condition {
+	public static class HasEffect< DataType extends ContextData > extends Condition< DataType > {
 		final Supplier< MobEffect > effect;
+		final Function< DataType, LivingEntity > entity;
+
+		public HasEffect( RegistryObject< ? extends MobEffect > effect, Function< DataType, LivingEntity > entity ) {
+			this.effect = effect::get;
+			this.entity = entity;
+		}
 
 		public HasEffect( RegistryObject< ? extends MobEffect > effect ) {
-			this.effect = effect::get;
+			this( effect, data->( LivingEntity )data.entity );
+		}
+
+		public HasEffect( MobEffect effect, Function< DataType, LivingEntity > entity ) {
+			this.effect = ()->effect;
+			this.entity = entity;
 		}
 
 		public HasEffect( MobEffect effect ) {
-			this.effect = ()->effect;
+			this( effect, data->( LivingEntity )data.entity );
 		}
 
 		@Override
-		public boolean check( GameModifier feature, ContextData data ) {
-			return data.entity != null && data.entity.hasEffect( this.effect.get() );
+		public boolean check( GameModifier feature, DataType data ) {
+			LivingEntity entity = this.entity.apply( data );
+
+			return entity != null && entity.hasEffect( this.effect.get() );
 		}
 	}
 
-	public static class IsServer extends Condition {
+	public static class IsServer< DataType extends ContextData > extends Condition< DataType > {
 		public IsServer() {
-			super( Priority.HIGH );
+			this.apply( params->params.setPriority( Priority.HIGH ) );
 		}
 
 		@Override
-		public boolean check( GameModifier feature, ContextData data ) {
+		public boolean check( GameModifier feature, DataType data ) {
 			return data.level != null;
 		}
 	}
 
-	public static class IsShiftKeyDown< Type extends ContextData > extends Condition {
-		final Function< Type, Player > player;
+	public static class IsShiftKeyDown< DataType extends ContextData > extends Condition< DataType > {
+		final Function< DataType, Player > player;
 
-		public IsShiftKeyDown( Function< Type, Player > player ) {
+		public IsShiftKeyDown( Function< DataType, Player > player ) {
 			this.player = player;
+
+			this.apply( params->params.setPriority( Priority.HIGH ) );
 		}
 
 		public IsShiftKeyDown() {
@@ -247,8 +251,10 @@ public abstract class Condition extends ConfigGroup implements IParameterizable 
 		}
 
 		@Override
-		public boolean check( GameModifier feature, ContextData data ) {
-			return this.player.apply( ( Type )data ).isShiftKeyDown();
+		public boolean check( GameModifier feature, DataType data ) {
+			Player player = this.player.apply( data );
+
+			return player != null && player.isShiftKeyDown();
 		}
 	}
 }

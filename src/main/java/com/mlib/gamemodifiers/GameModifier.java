@@ -5,6 +5,7 @@ import com.mlib.config.ConfigGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.mlib.MajruszLibrary.MOD_CONFIGS;
 
@@ -67,9 +68,7 @@ public abstract class GameModifier extends ConfigGroup {
 	}
 
 	public void addContexts( ContextBase< ? >... contexts ) {
-		for( ContextBase< ? > context : contexts ) {
-			addContext( context );
-		}
+		Stream.of( contexts ).forEach( this::addContext );
 	}
 
 	public List< ContextBase< ? extends ContextData > > getContexts() {

@@ -1,20 +1,29 @@
 package com.mlib.gamemodifiers.parameters;
 
-import com.mlib.Utility;
 import com.mlib.gamemodifiers.IParameterizable;
 import net.minecraft.util.Mth;
 
 import java.util.Comparator;
 
 public class Parameters {
-	public static final Comparator< IParameterizable > COMPARATOR = ( left, right )->Mth.sign( priorityAsInt( left ) - priorityAsInt( right ) );
-	final Priority priority;
+	public static final Comparator< IParameterizable< ? > > COMPARATOR = ( left, right )->Mth.sign( getPriorityAsInt( left ) - getPriorityAsInt( right ) );
+	Priority priority = Priority.NORMAL;
 
-	public static int priorityAsInt( IParameterizable parameterizable ) {
-		return parameterizable.getParams().priority.ordinal();
+	public Parameters setPriority( Priority priority ) {
+		this.priority = priority;
+
+		return this;
 	}
 
-	public Parameters( Priority priority ) {
-		this.priority = Utility.or( priority, Priority.NORMAL );
+	public Priority getPriority() {
+		return this.priority;
+	}
+
+	public int getPriorityAsInt() {
+		return this.priority.ordinal();
+	}
+
+	private static int getPriorityAsInt( IParameterizable< ? > parameterizable ) {
+		return parameterizable.getParams().getPriorityAsInt();
 	}
 }
