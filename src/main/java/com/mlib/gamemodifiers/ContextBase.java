@@ -75,6 +75,10 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 			.allMatch( condition->condition.getParams().isNegated() ^ condition.check( this.gameModifier, data ) );
 	}
 
+	public List< Condition< DataType > > getConditions() {
+		return this.conditions;
+	}
+
 	public GameModifier getGameModifier() {
 		return this.gameModifier;
 	}

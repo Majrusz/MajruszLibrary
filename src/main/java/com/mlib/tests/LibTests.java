@@ -27,6 +27,21 @@ public class LibTests {
 		helper.succeed();
 	}
 
+	@GameTest( template = "empty" )
+	public static void conditionPriority( GameTestHelper helper ) {
+		Contexts.getInstances().forEach( contexts->contexts.forEach( context->{
+			MutableInt max = new MutableInt( Integer.MIN_VALUE );
+			context.getConditions().forEach( condition->{
+				int priority = context.getParams().getPriorityAsInt();
+				if( priority < max.getValue() ) {
+					helper.fail( String.format( "%s has invalid priority in %s", getFullSimpleName( condition.getClass() ), getFullSimpleName( context.getClass() ) ) );
+				}
+				max.setValue( priority );
+			} );
+		} ) );
+		helper.succeed();
+	}
+
 	public static String getFullSimpleName( Class< ? > clazz ) {
 		if( clazz.isMemberClass() ) {
 			return String.format( "%s.%s", clazz.getEnclosingClass().getSimpleName(), clazz.getSimpleName() );
