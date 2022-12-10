@@ -9,11 +9,11 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import java.util.UUID;
 
 public class AttributeHandler {
-	protected final UUID uuid;
-	protected final String name;
-	protected final Attribute attribute;
-	protected final AttributeModifier.Operation operation;
-	private double value = 1.0;
+	final UUID uuid;
+	final String name;
+	final Attribute attribute;
+	final AttributeModifier.Operation operation;
+	double value = 0.0;
 
 	public AttributeHandler( String uuid, String name, Attribute attribute, AttributeModifier.Operation operation ) {
 		this.uuid = UUID.fromString( uuid );
