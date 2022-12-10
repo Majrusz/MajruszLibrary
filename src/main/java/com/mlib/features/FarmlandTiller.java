@@ -23,11 +23,13 @@ public class FarmlandTiller extends GameModifier {
 	final Function< OnPlayerInteract.Data, Player > PLAYER_SUPPLIER = data->data.player;
 
 	public FarmlandTiller() {
-		new OnPlayerInteract.Context( this::applyHoeBonus )
-			.addCondition( new Condition.IsServer<>() )
+		OnPlayerInteract.Context onInteract = new OnPlayerInteract.Context( this::applyHoeBonus );
+		onInteract.addCondition( new Condition.IsServer<>() )
 			.addCondition( new Condition.IsShiftKeyDown<>( PLAYER_SUPPLIER ).negate() )
 			.addCondition( OnPlayerInteract.IS_BLOCK_INTERACTION )
 			.addCondition( OnPlayerInteract.HAS_FACE );
+
+		this.addContext( onInteract );
 	}
 
 	private void applyHoeBonus( OnPlayerInteract.Data data ) {

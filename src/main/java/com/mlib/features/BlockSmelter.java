@@ -26,8 +26,6 @@ import java.util.Optional;
 @AutoInstance
 public class BlockSmelter extends GameModifier {
 	public BlockSmelter() {
-		super( "BlockSmelter", "" );
-
 		OnLoot.Context onLoot = new OnLoot.Context( this::replaceWithSmeltedLoot );
 		onLoot.priority( Priority.HIGH )
 			.addCondition( data->data.blockState != null )
