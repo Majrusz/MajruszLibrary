@@ -22,7 +22,7 @@ public class OnItemTooltip {
 		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
 
 		public Context( Consumer< Data > consumer, ContextParameters params ) {
-			super( Data.class, consumer, params );
+			super( consumer, params );
 			CONTEXTS.add( this );
 		}
 
