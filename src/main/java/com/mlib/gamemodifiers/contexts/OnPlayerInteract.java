@@ -5,6 +5,7 @@ import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.parameters.ContextParameters;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -21,6 +22,7 @@ public class OnPlayerInteract {
 	public static final Predicate< Data > IS_ENTITY_INTERACTION = data->data.event instanceof PlayerInteractEvent.EntityInteract;
 	public static final Predicate< Data > IS_BLOCK_INTERACTION = data->data.event instanceof PlayerInteractEvent.RightClickBlock;
 	public static final Predicate< Data > IS_ITEM_INTERACTION = data->data.event instanceof PlayerInteractEvent.RightClickItem;
+	public static final Predicate< Data > HAS_FACE = data->data.face != null;
 
 	@Mod.EventBusSubscriber
 	public static class Context extends ContextBase< Data > {
@@ -56,6 +58,7 @@ public class OnPlayerInteract {
 		public final Player player;
 		@Nullable public final LivingEntity target;
 		public final InteractionHand hand;
+		@Nullable public final Direction face;
 
 		public Data( PlayerInteractEvent event, @Nullable LivingEntity target ) {
 			super( event.getEntity(), event );
@@ -63,6 +66,7 @@ public class OnPlayerInteract {
 			this.player = event.getEntity();
 			this.target = target;
 			this.hand = event.getHand();
+			this.face = event.getFace();
 		}
 	}
 }
