@@ -1,5 +1,6 @@
 package com.mlib.features;
 
+import com.mlib.annotations.AutoInstance;
 import com.mlib.events.FarmlandTillCheckEvent;
 import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.GameModifier;
@@ -19,6 +20,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+@AutoInstance
 public class FarmlandTiller extends GameModifier {
 	final Function< OnPlayerInteract.Data, Player > PLAYER_SUPPLIER = data->data.player;
 
