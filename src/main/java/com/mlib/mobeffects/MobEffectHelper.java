@@ -1,6 +1,5 @@
 package com.mlib.mobeffects;
 
-import com.mlib.effects.EffectHelper;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;

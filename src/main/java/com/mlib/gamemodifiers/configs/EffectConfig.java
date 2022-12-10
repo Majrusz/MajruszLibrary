@@ -3,7 +3,6 @@ package com.mlib.gamemodifiers.configs;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
 import com.mlib.config.IntegerConfig;
-import com.mlib.effects.EffectHelper;
 import com.mlib.mobeffects.MobEffectHelper;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
