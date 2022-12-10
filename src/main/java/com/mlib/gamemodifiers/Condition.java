@@ -24,7 +24,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public abstract class Condition< DataType extends ContextData > extends ConfigGroup implements IParameterizable< ConditionParameters > {
@@ -41,6 +40,18 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		consumer.accept( this.params );
 
 		return this;
+	}
+
+	public Condition< DataType > negate() {
+		return this.apply( params->params.setNegated( !params.isNegated() ) );
+	}
+
+	public Condition< DataType > setConfigurable( boolean isConfigurable ) {
+		return this.apply( params->params.setConfigurable( isConfigurable ) );
+	}
+
+	public Condition< DataType > priority( Priority priority ) {
+		return this.apply( params->params.setPriority( priority ) );
 	}
 
 	public static class Excludable< DataType extends ContextData > extends Condition< DataType > {

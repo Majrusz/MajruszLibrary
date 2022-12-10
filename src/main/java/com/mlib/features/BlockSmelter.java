@@ -28,8 +28,9 @@ public class BlockSmelter extends GameModifier {
 	public BlockSmelter() {
 		super( "BlockSmelter", "" );
 
-		OnLoot.Context onLoot = new OnLoot.Context( this::replaceWithSmeltedLoot, new ContextParameters( Priority.HIGH, "", "" ) );
-		onLoot.addCondition( data->data.blockState != null )
+		OnLoot.Context onLoot = new OnLoot.Context( this::replaceWithSmeltedLoot );
+		onLoot.priority( Priority.HIGH )
+			.addCondition( data->data.blockState != null )
 			.addCondition( data->data.level != null )
 			.addCondition( data->data.entity instanceof Player player && !player.isCrouching() )
 			.addCondition( this::checkEventListeners );

@@ -48,14 +48,14 @@ public abstract class GameModifier extends ConfigGroup {
 		return addNewGroup( MOD_CONFIGS.get( parentKey ), key, name, comment );
 	}
 
-	public GameModifier( String configKey, String configName, String configComment ) {
-		super( configName, configComment );
+	public GameModifier( String configKey, String name, String comment ) {
+		super( name, comment );
 		this.configKey = configKey;
 		MOD_CONFIGS.insert( configKey, this );
 	}
 
-	public GameModifier( String configName, String configComment ) {
-		this( DEFAULT_KEY, configName, configComment );
+	public GameModifier( String name, String comment ) {
+		this( DEFAULT_KEY, name, comment );
 	}
 
 	public GameModifier() {

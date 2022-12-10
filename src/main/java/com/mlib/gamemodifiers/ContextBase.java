@@ -2,6 +2,7 @@ package com.mlib.gamemodifiers;
 
 import com.mlib.config.ConfigGroup;
 import com.mlib.gamemodifiers.parameters.Parameters;
+import com.mlib.gamemodifiers.parameters.Priority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,12 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 	@Override
 	public Parameters getParams() {
 		return this.params;
+	}
+
+	public ContextBase< DataType > priority( Priority priority ) {
+		this.params.setPriority( priority );
+
+		return this;
 	}
 
 	public void setup( GameModifier gameModifier ) {
