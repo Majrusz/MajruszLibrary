@@ -61,19 +61,4 @@ public class NetworkMessage {
 
 		return entity.getId();
 	}
-
-	public static class Test extends NetworkMessage {
-		final boolean isValid;
-		final float num;
-
-		public Test( boolean isValid ) {
-			this.isValid = this.write( isValid );
-			this.num = this.write( 1.0f );
-		}
-
-		public Test( FriendlyByteBuf buffer ) {
-			this.isValid = buffer.readBoolean();
-			this.num = buffer.readFloat();
-		}
-	}
 }
