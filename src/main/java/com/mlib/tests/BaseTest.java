@@ -19,7 +19,7 @@ public class BaseTest extends GameModifier {
 	}
 
 	public static void assertThat( GameTestHelper helper, boolean condition, Supplier< String > message ) {
-		if( !condition ) {
+		if( condition ) {
 			helper.fail( message.get() );
 		}
 	}
