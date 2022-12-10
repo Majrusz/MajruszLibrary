@@ -1,5 +1,7 @@
 package com.mlib.gamemodifiers;
 
+import com.mlib.gamemodifiers.parameters.Parameters;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +11,7 @@ public class Contexts< DataType extends ContextData, ContextType extends Context
 
 	public void add( ContextType context ) {
 		this.contexts.add( context );
-		this.contexts.sort( ContextParameters.COMPARATOR );
+		this.contexts.sort( Parameters.COMPARATOR );
 	}
 
 	public void accept( DataType data ) {
