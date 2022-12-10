@@ -4,7 +4,7 @@ license="MIT License"
 issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
 
 [[mods]]
-    modId="majruszlib"
+    modId="mlib"
     version="3.0.0-unfinished"
     displayName="Majrusz Library"
     updateJSONURL="https://raw.githubusercontent.com/Majrusz/MajruszLibrary/1.19.X/update.json"

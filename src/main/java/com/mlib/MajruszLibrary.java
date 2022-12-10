@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
  @since 2020-01-14 */
 @Mod( MajruszLibrary.MOD_ID )
 public class MajruszLibrary {
-	public static final String MOD_ID = "majruszlib";
+	public static final String MOD_ID = "mlib";
 	public static final Logger LOGGER = LogManager.getLogger();
 	public static final ConfigHandler CONFIG_HANDLER = new ConfigHandler( ModConfig.Type.SERVER );
 	public static final ModConfigs MOD_CONFIGS = new ModConfigs();
