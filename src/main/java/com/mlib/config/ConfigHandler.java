@@ -10,18 +10,10 @@ import net.minecraftforge.fml.config.ModConfig;
 public class ConfigHandler extends ConfigGroup {
 	final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 	final ModConfig.Type type;
-	@Deprecated final String filename;
 	ForgeConfigSpec configSpec = null;
-
-	@Deprecated
-	public ConfigHandler( ModConfig.Type type, String filename, String modId ) {
-		this.type = type;
-		this.filename = modId + "-" + filename;
-	}
 
 	public ConfigHandler( ModConfig.Type type ) {
 		this.type = type;
-		this.filename = null;
 	}
 
 	/** Registers all configs (all config values are valid after this call). */
@@ -38,11 +30,6 @@ public class ConfigHandler extends ConfigGroup {
 
 	public ModConfig.Type getType() {
 		return this.type;
-	}
-
-	@Deprecated
-	public String getFilename() {
-		return this.filename;
 	}
 
 	private void registerHelpConfigSpec( final ModLoadingContext modLoadingContext ) {

@@ -83,7 +83,6 @@ public class NBTHelper {
 		}
 	}
 
-	@Deprecated
 	@FunctionalInterface
 	public interface IValueFormula< Type > {
 		Type apply( Type value );

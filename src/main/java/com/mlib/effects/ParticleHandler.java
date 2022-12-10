@@ -45,11 +45,6 @@ public class ParticleHandler {
 		this.speedProvider = speedProvider;
 	}
 
-	@Deprecated
-	public ParticleHandler( SimpleParticleType particleType, Vec3 offsetProvider, Supplier< Float > speedProvider ) {
-		this( particleType, ()->offsetProvider, speedProvider );
-	}
-
 	public void spawn( ServerLevel level, Vec3 position, int amountOfParticles, Supplier< Vec3 > offsetProvider,
 		Supplier< Float > speedProvider
 	) {
@@ -63,11 +58,6 @@ public class ParticleHandler {
 
 	public void spawn( ServerLevel level, Vec3 position, int amountOfParticles ) {
 		this.spawn( level, position, amountOfParticles, this.offsetProvider, this.speedProvider );
-	}
-
-	@Deprecated
-	public void spawn( ServerLevel level, Vec3 position, int amountOfParticles, double offsetMultiplier ) {
-		this.spawn( level, position, amountOfParticles, ()->VectorHelper.multiply( this.offsetProvider.get(), offsetMultiplier ), this.speedProvider );
 	}
 
 	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int particlesPerBlock, Supplier< Vec3 > offsetProvider,

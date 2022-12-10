@@ -1,15 +1,14 @@
 package com.mlib.levels;
 
 import com.mlib.Random;
+import com.mlib.effects.ParticleHandler;
+import com.mlib.effects.SoundHandler;
 import com.mlib.math.VectorHelper;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
@@ -28,7 +27,6 @@ import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class LevelHelper {
@@ -113,7 +111,6 @@ public class LevelHelper {
 		player.teleportTo( serverLevel, spawnPosition.x, spawnPosition.y, spawnPosition.z, player.getYRot(), player.getXRot() );
 	}
 
-	@Deprecated
 	public static boolean teleportNearby( LivingEntity target, ServerLevel level, double offset ) {
 		boolean isEntityInside = target.yOld + 8 > level.getHeight( Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ( int )target.xOld, ( int )target.zOld );
 		if( isEntityInside )
@@ -122,8 +119,9 @@ public class LevelHelper {
 		Vec3 newPosition = Random.getRandomVector3d( -offset, offset, -1.0, 1.0, -offset, offset ).add( target.position() );
 		double y = level.getHeight( Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ( int )newPosition.x, ( int )newPosition.z ) + 1;
 		if( !( y < level.getMinBuildHeight() + 1 ) && target.randomTeleport( newPosition.x, target.yOld + 8 > y ? y : newPosition.y, newPosition.z, true ) ) {
-			level.playSound( null, target.xo, target.yo, target.zo, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 1.0f );
-			level.sendParticles( ParticleTypes.PORTAL, target.xo, target.getY( 0.5 ), target.zo, 10, 0.25, 0.25, 0.25, 0.1 );
+			Vec3 position = new Vec3( target.xo, target.getY( 0.5 ), target.zo );
+			SoundHandler.ENDERMAN_TELEPORT.play( level, position );
+			ParticleHandler.PORTAL.spawn( level, position, 10 );
 			return true;
 		} else {
 			return false;
@@ -134,7 +132,9 @@ public class LevelHelper {
 		freezeWater( entity, radius, minimumIceDuration, maximumIceDuration, true );
 	}
 
-	public static void freezeWater( LivingEntity entity, double radius, int minimumIceDuration, int maximumIceDuration, boolean requireOnGround ) {
+	public static void freezeWater( LivingEntity entity, double radius, int minimumIceDuration, int maximumIceDuration,
+		boolean requireOnGround
+	) {
 		if( requireOnGround && !entity.isOnGround() )
 			return;
 

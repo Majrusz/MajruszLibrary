@@ -12,12 +12,12 @@ import java.util.function.Supplier;
 public class SoundHandler {
 	public static final Supplier< Float > DEFAULT_VOLUME = randomized( 0.7f );
 	public static final SoundHandler AWARD = new SoundHandler( SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.AMBIENT, DEFAULT_VOLUME );
-	public static final SoundHandler DRINK = new SoundHandler( SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, DEFAULT_VOLUME );
 	public static final SoundHandler BONE_MEAL = new SoundHandler( SoundEvents.BONE_MEAL_USE, SoundSource.AMBIENT, DEFAULT_VOLUME );
+	public static final SoundHandler DRINK = new SoundHandler( SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, DEFAULT_VOLUME );
+	public static final SoundHandler ENDERMAN_TELEPORT = new SoundHandler( SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, DEFAULT_VOLUME );
 	public static final SoundHandler FIRE_EXTINGUISH = new SoundHandler( SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.AMBIENT, DEFAULT_VOLUME );
 	public static final SoundHandler ITEM_BREAK = new SoundHandler( SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, DEFAULT_VOLUME );
 	public static final SoundHandler ITEM_PICKUP = new SoundHandler( SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, DEFAULT_VOLUME );
-	@Deprecated public static final SoundHandler PICKUP = new SoundHandler( SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, DEFAULT_VOLUME );
 	public static final SoundHandler SMELT = new SoundHandler( SoundEvents.FIRECHARGE_USE, SoundSource.AMBIENT, DEFAULT_VOLUME );
 
 	final SoundEvent event;
