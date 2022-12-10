@@ -27,9 +27,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Predicate;
 
-/** Class with common code for entities. */
 public class EntityHelper {
-	/** Simulates cheating death like Totem of Undying does. */
 	public static void cheatDeath( LivingEntity entity, float healthRatio, boolean shouldPlayEffects ) {
 		entity.setHealth( entity.getMaxHealth() * healthRatio );
 
@@ -37,12 +35,6 @@ public class EntityHelper {
 			level.sendParticles( ParticleTypes.TOTEM_OF_UNDYING, entity.getX(), entity.getY( 0.75 ), entity.getZ(), 64, 0.25, 0.5, 0.25, 0.5 );
 			level.playSound( null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, SoundSource.AMBIENT, 1.0f, 1.0f );
 		}
-	}
-
-	@Deprecated
-	@Nullable
-	public static Player getPlayerFromEntity( @Nullable Entity entity ) {
-		return Utility.castIfPossible( Player.class, entity );
 	}
 
 	public static boolean isOnCreativeMode( Player player ) {
@@ -94,7 +86,6 @@ public class EntityHelper {
 		return spawn( entityType.get(), level, position );
 	}
 
-	/** Returns entities of a given class in a box with given side length. */
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass,
 		ServerLevel level, Vec3 position, double sideLength, Predicate< EntityType > extraPredicate
 	) {
@@ -103,21 +94,18 @@ public class EntityHelper {
 		return level.getEntitiesOfClass( entityClass, axisAligned, extraPredicate );
 	}
 
-	/** Returns entities of a given class in a box with given side length. */
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass,
 		ServerLevel level, BlockPos blockPosition, double sideLength, Predicate< EntityType > extraPredicate
 	) {
 		return getEntitiesInBox( entityClass, level, VectorHelper.vec3( blockPosition ), sideLength, extraPredicate );
 	}
 
-	/** Returns entities of a given class in a box with given side length. */
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass,
 		ServerLevel level, Entity entity, double sideLength, Predicate< EntityType > extraPredicate
 	) {
 		return getEntitiesInBox( entityClass, level, entity.position(), sideLength, extraPredicate );
 	}
 
-	/** Returns entities of a given class in a sphere with given radius. */
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass,
 		ServerLevel level, Vec3 position, double radius, Predicate< EntityType > extraPredicate
 	) {
@@ -126,14 +114,12 @@ public class EntityHelper {
 		return getEntitiesInBox( entityClass, level, position, radius * 2.0, distancePredicate.and( extraPredicate ) );
 	}
 
-	/** Returns entities of a given class in a sphere with given radius. */
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass,
 		ServerLevel level, BlockPos blockPosition, double radius, Predicate< EntityType > extraPredicate
 	) {
 		return getEntitiesInSphere( entityClass, level, VectorHelper.vec3( blockPosition ), radius, extraPredicate );
 	}
 
-	/** Returns entities of a given class in a sphere with given radius. */
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass,
 		ServerLevel level, Entity entity, double radius, Predicate< EntityType > extraPredicate
 	) {

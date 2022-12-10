@@ -5,7 +5,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 
-public class MobEffectHelper extends EffectHelper {
+public class MobEffectHelper {
 	public static boolean tryToApply( LivingEntity entity, MobEffectInstance effectInstance ) {
 		if( entity.canBeAffected( effectInstance ) ) {
 			entity.addEffect( effectInstance );

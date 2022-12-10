@@ -4,6 +4,7 @@ import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
 import com.mlib.config.IntegerConfig;
 import com.mlib.effects.EffectHelper;
+import com.mlib.mobeffects.MobEffectHelper;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -39,9 +40,9 @@ public class EffectConfig extends ConfigGroup {
 
 	public void apply( LivingEntity entity, int extraAmplifier, int extraDuration ) {
 		if( this.maxDuration.isPresent() ) {
-			EffectHelper.stackEffectIfPossible( entity, getEffect(), getDuration() + extraDuration, getAmplifier() + extraAmplifier, getMaxDuration() );
+			MobEffectHelper.tryToStack( entity, getEffect(), getDuration() + extraDuration, getAmplifier() + extraAmplifier, getMaxDuration() );
 		} else {
-			EffectHelper.applyEffectIfPossible( entity, getEffect(), getDuration() + extraDuration, getAmplifier() + extraAmplifier );
+			MobEffectHelper.tryToApply( entity, getEffect(), getDuration() + extraDuration, getAmplifier() + extraAmplifier );
 		}
 	}
 
