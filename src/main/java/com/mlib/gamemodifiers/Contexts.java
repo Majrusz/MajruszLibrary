@@ -1,7 +1,5 @@
 package com.mlib.gamemodifiers;
 
-import com.mlib.gamemodifiers.parameters.ContextParameters;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -4,7 +4,6 @@ import com.mlib.Utility;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,9 +16,6 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableFloat;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class OnExplosion {
@@ -28,13 +24,13 @@ public class OnExplosion {
 	public static class Context extends ContextBase< Data > {
 		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
 
-		public Context( Consumer< Data > consumer, ContextParameters params ) {
-			super( consumer, params );
+		public Context( Consumer< Data > consumer, String name, String comment ) {
+			super( consumer, name, comment );
 			CONTEXTS.add( this );
 		}
 
 		public Context( Consumer< Data > consumer ) {
-			this( consumer, new ContextParameters() );
+			this( consumer, "", "" );
 		}
 
 		@SubscribeEvent

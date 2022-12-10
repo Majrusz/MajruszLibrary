@@ -3,16 +3,12 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.AnimalTameEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class OnAnimalTame {
@@ -20,13 +16,13 @@ public class OnAnimalTame {
 	public static class Context extends ContextBase< Data > {
 		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
 
-		public Context( Consumer< Data > consumer, ContextParameters params ) {
-			super( consumer, params );
+		public Context( Consumer< Data > consumer, String name, String comment ) {
+			super( consumer, name, comment );
 			CONTEXTS.add( this );
 		}
 
 		public Context( Consumer< Data > consumer ) {
-			this( consumer, new ContextParameters() );
+			this( consumer, "", "" );
 		}
 
 		@SubscribeEvent

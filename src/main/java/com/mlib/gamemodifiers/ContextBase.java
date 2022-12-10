@@ -1,7 +1,6 @@
 package com.mlib.gamemodifiers;
 
 import com.mlib.config.ConfigGroup;
-import com.mlib.gamemodifiers.parameters.ContextParameters;
 import com.mlib.gamemodifiers.parameters.Parameters;
 
 import java.util.ArrayList;
@@ -10,24 +9,23 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public abstract class ContextBase< DataType extends ContextData > extends ConfigGroup implements IParameterizable< ContextParameters > {
+public abstract class ContextBase< DataType extends ContextData > extends ConfigGroup implements IParameterizable< Parameters > {
 	final Consumer< DataType > consumer;
 	final List< Condition< DataType > > conditions = new ArrayList<>();
-	final ContextParameters params;
+	final Parameters params = new Parameters();
 	protected GameModifier gameModifier = null;
 
-	public ContextBase( Consumer< DataType > consumer, ContextParameters params ) {
-		super( params.getConfigName(), params.getConfigComment() );
+	public ContextBase( Consumer< DataType > consumer, String name, String comment ) {
+		super( name, comment );
 		this.consumer = consumer;
-		this.params = params;
 	}
 
 	public ContextBase( Consumer< DataType > consumer ) {
-		this( consumer, new ContextParameters() );
+		this( consumer, "", "" );
 	}
 
 	@Override
-	public ContextParameters getParams() {
+	public Parameters getParams() {
 		return this.params;
 	}
 

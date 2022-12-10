@@ -4,7 +4,6 @@ import com.mlib.Utility;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,13 +27,13 @@ public class OnPlayerInteract {
 	public static class Context extends ContextBase< Data > {
 		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
 
-		public Context( Consumer< Data > consumer, ContextParameters params ) {
-			super( consumer, params );
+		public Context( Consumer< Data > consumer, String name, String comment ) {
+			super( consumer, name, comment );
 			CONTEXTS.add( this );
 		}
 
 		public Context( Consumer< Data > consumer ) {
-			this( consumer, new ContextParameters() );
+			this( consumer, "", "" );
 		}
 
 		@SubscribeEvent

@@ -3,7 +3,6 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.parameters.ContextParameters;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
@@ -17,13 +16,13 @@ public class OnEffectApplicable {
 	public static class Context extends ContextBase< Data > {
 		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
 
-		public Context( Consumer< Data > consumer, ContextParameters params ) {
-			super( consumer, params );
+		public Context( Consumer< Data > consumer, String name, String comment ) {
+			super( consumer, name, comment );
 			CONTEXTS.add( this );
 		}
 
 		public Context( Consumer< Data > consumer ) {
-			this( consumer, new ContextParameters() );
+			this( consumer, "", "" );
 		}
 
 		@SubscribeEvent
