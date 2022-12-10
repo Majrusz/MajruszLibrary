@@ -2,7 +2,6 @@ package com.mlib;
 
 import com.mlib.config.ConfigHandler;
 import com.mlib.gamemodifiers.ModConfigs;
-import net.minecraft.util.RandomSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -21,12 +20,18 @@ public class MajruszLibrary {
 	public static final ConfigHandler CONFIG_HANDLER = new ConfigHandler( ModConfig.Type.SERVER );
 	public static final ModConfigs MOD_CONFIGS = new ModConfigs();
 
+	public static void log( String format, Object... args ) {
+		LOGGER.info( String.format( format, args ) );
+	}
+
+	public static void logOnDev( String format, Object... args ) {
+		if( !Utility.isProduction() ) {
+			log( format, args );
+		}
+	}
+
 	public MajruszLibrary() {
 		com.mlib.Registries.initialize();
 		MinecraftForge.EVENT_BUS.register( this );
-	}
-
-	public static void log( String format, Object... args ) {
-		LOGGER.info( String.format( format, args ) );
 	}
 }

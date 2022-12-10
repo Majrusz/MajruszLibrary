@@ -24,7 +24,7 @@ public class AnnotationHandler {
 				this.handle( new File( resources.nextElement().getPath() ) );
 			}
 		} catch( AnnotationHandler.AnnotationException exception ) {
-			MajruszLibrary.log( "[AnnotationHandler] %s", exception.getMessage() );
+			MajruszLibrary.logOnDev( "[AnnotationHandler] %s", exception.getMessage() );
 		}
 	}
 
@@ -44,14 +44,14 @@ public class AnnotationHandler {
 					try {
 						ClassType instance = ( ClassType )_class.getConstructor().newInstance();
 						instances.add( instance );
-						MajruszLibrary.log( "[AnnotationHandler] Class %s has been initialized.", _class.getCanonicalName() );
+						MajruszLibrary.logOnDev( "[AnnotationHandler] Class %s has been initialized.", _class.getCanonicalName() );
 					} catch( Throwable e ) {
 						throw new AnnotationException( "%s does not have empty constructor", _class.getName() );
 					}
 				}
 			}
 		} catch( AnnotationHandler.AnnotationException exception ) {
-			MajruszLibrary.log( "[AnnotationHandler] %s", exception.getMessage() );
+			MajruszLibrary.logOnDev( "[AnnotationHandler] %s", exception.getMessage() );
 		}
 
 		return instances;
@@ -70,7 +70,7 @@ public class AnnotationHandler {
 			try {
 				this.handle( file );
 			} catch( AnnotationHandler.AnnotationException exception ) {
-				MajruszLibrary.log( "[AnnotationHandler] %s", exception.getMessage() );
+				MajruszLibrary.logOnDev( "[AnnotationHandler] %s", exception.getMessage() );
 			}
 		}
 	}
