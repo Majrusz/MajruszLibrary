@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 
 import javax.annotation.Nullable;
@@ -90,15 +91,15 @@ public class Utility {
 		return String.valueOf( player.getUUID() );
 	}
 
-	public static < Type > Type or( Type value, Type defaultValue ) {
-		return value != null ? value : defaultValue;
-	}
-
 	public static boolean isServerSide() {
 		return Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER;
 	}
 
 	public static boolean isClientSide() {
 		return Thread.currentThread().getThreadGroup() == SidedThreadGroups.CLIENT;
+	}
+
+	public static boolean isProduction() {
+		return FMLEnvironment.production;
 	}
 }
