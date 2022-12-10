@@ -4,6 +4,7 @@ import com.mlib.Utility;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -58,6 +59,7 @@ public class OnPlayerInteract {
 		@Nullable public final LivingEntity target;
 		public final InteractionHand hand;
 		@Nullable public final Direction face;
+		public final BlockPos position;
 
 		public Data( PlayerInteractEvent event, @Nullable LivingEntity target ) {
 			super( event.getEntity(), event );
@@ -66,6 +68,7 @@ public class OnPlayerInteract {
 			this.target = target;
 			this.hand = event.getHand();
 			this.face = event.getFace();
+			this.position = event.getPos();
 		}
 	}
 }
