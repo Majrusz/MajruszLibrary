@@ -25,7 +25,7 @@ public class MajruszLibrary {
 	}
 
 	public static void logOnDev( String format, Object... args ) {
-		if( !Utility.isProduction() ) {
+		if( Utility.isDevBuild() ) {
 			log( format, args );
 		}
 	}

@@ -99,7 +99,7 @@ public class Utility {
 		return Thread.currentThread().getThreadGroup() == SidedThreadGroups.CLIENT;
 	}
 
-	public static boolean isProduction() {
-		return FMLEnvironment.production;
+	public static boolean isDevBuild() {
+		return !FMLEnvironment.production;
 	}
 }

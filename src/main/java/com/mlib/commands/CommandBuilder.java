@@ -1,10 +1,10 @@
 package com.mlib.commands;
 
+import com.mlib.Utility;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -124,6 +124,10 @@ public class CommandBuilder {
 
 	public CommandBuilder isPlayer() {
 		return this.add( CommandSourceStack::isPlayer );
+	}
+
+	public CommandBuilder isDevelopmentBuild() {
+		return this.add( ( CommandSourceStack stack )->Utility.isDevBuild() );
 	}
 
 	public CommandBuilder execute( IExecutable executable ) {
