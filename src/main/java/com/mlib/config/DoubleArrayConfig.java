@@ -36,6 +36,10 @@ public class DoubleArrayConfig implements IConfigurable {
 		return getConfig( idx ).get();
 	}
 
+	public Double getOrDefault( int idx ) {
+		return getConfig( idx ).getOrDefault();
+	}
+
 	public DoubleConfig getConfig( int idx ) {
 		return this.values.get( Math.min( idx, this.values.size() - 1 ) );
 	}

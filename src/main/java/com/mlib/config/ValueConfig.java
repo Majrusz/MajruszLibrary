@@ -19,4 +19,8 @@ public abstract class ValueConfig< Type > extends UserConfig implements Supplier
 		assert this.config != null : "Config has not been initialized yet!";
 		return this.config.get();
 	}
+
+	public Type getOrDefault() {
+		return this.config != null ? this.config.get() : this.defaultValue;
+	}
 }
