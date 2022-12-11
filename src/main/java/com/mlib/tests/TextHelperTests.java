@@ -23,7 +23,24 @@ public class TextHelperTests extends BaseTest {
 	}
 
 	private static void assertThatRomanLetter( GameTestHelper helper, String roman, int decimal ) {
-		assertThat( helper, roman.equals( TextHelper.toRoman( decimal ) ), ()->"TextHelper.toRoman() does not give proper output" );
+		assertThat( helper, roman.equals( TextHelper.toRoman( decimal ) ), ()->"TextHelper.toRoman() does not give proper output for %d".formatted( decimal ) );
+	}
+
+	@PrefixGameTestTemplate( false )
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void minPrecision( GameTestHelper helper ) {
+		assertThatMinPrecision( helper, "1", 1.0f );
+		assertThatMinPrecision( helper, "3.9",  3.900f );
+		assertThatMinPrecision( helper, "5.001",  5.001f );
+		assertThatMinPrecision( helper, "7",  7.00009f );
+		assertThatMinPrecision( helper, "9.909",  9.909f );
+		assertThatMinPrecision( helper, "11.11",  11.11f );
+
+		helper.succeed();
+	}
+
+	private static void assertThatMinPrecision( GameTestHelper helper, String text, float value ) {
+		assertThat( helper, text.equals( TextHelper.minPrecision( value ) ), ()->"TextHelper.minPrecision() does not give proper output for %f".formatted( value ) );
 	}
 
 	public TextHelperTests() {
