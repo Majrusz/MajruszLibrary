@@ -19,6 +19,7 @@ public class EffectConfig extends ConfigGroup {
 	final DoubleConfig duration;
 	final Optional< DoubleConfig > maxDuration;
 
+	@Deprecated
 	public EffectConfig( String groupName, Supplier< MobEffect > effect, int amplifier, double duration, Optional< Double > maxDuration ) {
 		super( groupName, "" );
 		this.effect = effect;

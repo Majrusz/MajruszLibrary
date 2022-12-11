@@ -18,6 +18,7 @@ public class ItemStackConfig extends ConfigGroup {
 	final DoubleConfig dropChance;
 	final Optional< DoubleConfig > enchantChance;
 
+	@Deprecated
 	public ItemStackConfig( String groupName, String groupComment, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance,
 		Optional< Double > enchantChance
 	) {
