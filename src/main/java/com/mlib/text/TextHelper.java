@@ -54,11 +54,11 @@ public class TextHelper {
 	}
 
 	public static String signedPercent( float number ) {
-		return "%s%s%%".formatted( number > 0.0f ? "+" : "", minPrecision( number * 100.0f ) );
+		return "%s%%".formatted( signed( number * 100.0f ) );
 	}
 
 	public static String signedPercent( int number ) {
-		return "%s%d%%".formatted( number > 0 ? "+" : "", number * 100 );
+		return "%s%%".formatted( signed( number * 100 ) );
 	}
 
 	public static String percent( float number ) {
