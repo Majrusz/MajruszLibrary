@@ -31,7 +31,7 @@ public class TextHelper {
 
 	public static String minPrecision( double number ) {
 		if( Math.abs( number - ( long )number ) < 0.001 ) {
-			return String.format( "%.0f", number );
+			return "%.0f".formatted( number );
 		} else {
 			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toPlainString();
 		}
@@ -39,34 +39,34 @@ public class TextHelper {
 
 	public static String minPrecision( float number ) {
 		if( Math.abs( number - ( int )number ) < 0.001f ) {
-			return String.format( "%.0f", number );
+			return "%.0f".formatted( number );
 		} else {
 			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toPlainString();
 		}
 	}
 
 	public static String signed( float number ) {
-		return String.format( "%s%s", number > 0.0f ? "+" : "", minPrecision( number ) );
+		return "%s%s".formatted( number > 0.0f ? "+" : "", minPrecision( number ) );
 	}
 
 	public static String signed( int number ) {
-		return String.format( "%s%d", number > 0 ? "+" : "", number );
+		return "%s%d".formatted( number > 0 ? "+" : "", number );
 	}
 
 	public static String signedPercent( float number ) {
-		return String.format( "%s%s%%", number > 0.0f ? "+" : "", minPrecision( number * 100.0f ) );
+		return "%s%s%%".formatted( number > 0.0f ? "+" : "", minPrecision( number * 100.0f ) );
 	}
 
 	public static String signedPercent( int number ) {
-		return String.format( "%s%d%%", number > 0 ? "+" : "", number * 100 );
+		return "%s%d%%".formatted( number > 0 ? "+" : "", number * 100 );
 	}
 
 	public static String percent( float number ) {
-		return String.format( "%s%%", minPrecision( number * 100.0f ) );
+		return "%s%%".formatted( minPrecision( number * 100.0f ) );
 	}
 
 	public static String percent( int number ) {
-		return String.format( "%d%%", number * 100 );
+		return "%d%%".formatted( number * 100 );
 	}
 
 	public static void addEmptyLine( List< Component > components ) {
