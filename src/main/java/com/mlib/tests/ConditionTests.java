@@ -13,14 +13,32 @@ public class ConditionTests extends BaseTest {
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void conditionPriority( GameTestHelper helper ) {
-		Contexts.getInstances().forEach( contexts->contexts.forEach( context->{
-			MutableInt max = new MutableInt( Integer.MIN_VALUE );
-			context.getConditions().forEach( condition->{
-				int priority = condition.getParams().getPriorityAsInt();
-				assertThat( helper, priority < max.getValue(), ()->String.format( "%s has invalid priority in %s", getClassName( condition ), getClassName( context ) ) );
-				max.setValue( priority );
-			} );
-		} ) );
+		Contexts.getInstances()
+			.forEach( contexts->contexts.getContexts()
+				.forEach( context->{
+					MutableInt max = new MutableInt( Integer.MIN_VALUE );
+					context.getConditions()
+						.forEach( condition->{
+							int priority = condition.getParams().getPriorityAsInt();
+							assertThat( helper, priority < max.getValue(), ()->String.format( "%s has invalid priority in %s", getClassName( condition ), getClassName( context ) ) );
+							max.setValue( priority );
+						} );
+				} )
+			);
+		helper.succeed();
+	}
+
+	@PrefixGameTestTemplate( false )
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void conditionValidParameters( GameTestHelper helper ) {
+		Contexts.getInstances()
+			.forEach( contexts->contexts.getContexts()
+				.forEach( context->context.getConditions()
+					.forEach( condition->{
+						boolean isConfigurable = condition.getParams().isConfigurable();
+						boolean doesNotHaveConfigs = condition.getConfigs().isEmpty();
+						assertThat( helper, !( isConfigurable && doesNotHaveConfigs ), ()->String.format( "%s is marked configurable even though it does not have any config", getClassName( condition ) ) );
+					} ) ) );
 		helper.succeed();
 	}
 

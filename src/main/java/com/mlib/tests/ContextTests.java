@@ -13,14 +13,16 @@ public class ContextTests extends BaseTest {
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void contextPriority( GameTestHelper helper ) {
-		Contexts.getInstances().forEach( contexts->{
-			MutableInt max = new MutableInt( Integer.MIN_VALUE );
-			contexts.forEach( context->{
-				int priority = context.getParams().getPriorityAsInt();
-				assertThat( helper, priority < max.getValue(), ()->String.format( "%s has invalid priority", getClassName( context ) ) );
-				max.setValue( priority );
+		Contexts.getInstances()
+			.forEach( contexts->{
+				MutableInt max = new MutableInt( Integer.MIN_VALUE );
+				contexts.getContexts()
+					.forEach( context->{
+						int priority = context.getParams().getPriorityAsInt();
+						assertThat( helper, priority < max.getValue(), ()->String.format( "%s has invalid priority", getClassName( context ) ) );
+						max.setValue( priority );
+					} );
 			} );
-		} );
 		helper.succeed();
 	}
 

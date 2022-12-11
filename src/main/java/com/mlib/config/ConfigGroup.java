@@ -4,6 +4,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /** Represents a group that contains many other configs and/or groups. */
@@ -52,5 +53,9 @@ public class ConfigGroup extends UserConfig {
 		Arrays.asList( configs ).forEach( this::addConfig );
 
 		return this;
+	}
+
+	public List< IConfigurable > getConfigs() {
+		return Collections.unmodifiableList( this.configs );
 	}
 }

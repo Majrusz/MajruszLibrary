@@ -5,14 +5,13 @@ import com.mlib.gamemodifiers.parameters.Parameters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class Contexts< DataType extends ContextData, ContextType extends ContextBase< DataType > > {
-	static List< Contexts< ?, ? > > INSTANCES = new ArrayList<>();
+	static List< Contexts< ? extends ContextData, ? extends ContextBase< ? > > > INSTANCES = new ArrayList<>();
 	final List< ContextType > contexts = Collections.synchronizedList( new ArrayList<>() );
 	boolean isSorted = false;
 
-	public static List< Contexts< ?, ? > > getInstances() {
+	public static List< Contexts< ? extends ContextData, ? extends ContextBase< ? > > > getInstances() {
 		return INSTANCES;
 	}
 
@@ -26,16 +25,16 @@ public class Contexts< DataType extends ContextData, ContextType extends Context
 	}
 
 	public void accept( DataType data ) {
-		this.forEach( context->{
+		this.tryToSort();
+		this.contexts.forEach( context->{
 			if( context.check( data ) ) {
 				context.consumer.accept( data );
 			}
 		} );
 	}
 
-	public void forEach( Consumer< ContextType > consumer ) {
-		this.tryToSort();
-		this.contexts.forEach( consumer );
+	public List< ContextType > getContexts() {
+		return Collections.unmodifiableList( this.contexts );
 	}
 
 	private void tryToSort() {
