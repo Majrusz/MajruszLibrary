@@ -23,7 +23,7 @@ public class ConditionTests extends BaseTest {
 					context.getConditions()
 						.forEach( condition->{
 							int priority = condition.getParams().getPriorityAsInt();
-							assertThat( helper, priority < max.getValue(), ()->String.format( "%s has invalid priority in %s", getClassName( condition ), getClassName( context ) ) );
+							assertThat( helper, priority < max.getValue(), ()->"%s has invalid priority in %s".formatted( getClassName( condition ), getClassName( context ) ) );
 							max.setValue( priority );
 						} );
 				} )
@@ -40,7 +40,7 @@ public class ConditionTests extends BaseTest {
 					.forEach( condition->{
 						boolean isConfigurable = condition.getParams().isConfigurable();
 						boolean doesNotHaveConfigs = condition.getConfigs().isEmpty();
-						assertThat( helper, !( isConfigurable && doesNotHaveConfigs ), ()->String.format( "%s is marked configurable even though it does not have any config", getClassName( condition ) ) );
+						assertThat( helper, !( isConfigurable && doesNotHaveConfigs ), ()->"%s is marked configurable even though it does not have any config".formatted( getClassName( condition ) ) );
 					} ) ) );
 
 		Condition< ? > condition = new Condition<>() {
@@ -49,10 +49,10 @@ public class ConditionTests extends BaseTest {
 				return true;
 			}
 		};
-		assertThat( helper, condition.isMet( null, null ), ()->String.format( "%s does not return expected result", getClassName( condition ) ) );
+		assertThat( helper, condition.isMet( null, null ), ()->"%s does not return expected result".formatted( getClassName( condition ) ) );
 
 		condition.negate();
-		assertThat( helper, !condition.isMet( null, null ), ()->String.format( "%s does not return expected negated result", getClassName( condition ) ) );
+		assertThat( helper, !condition.isMet( null, null ), ()->"%s does not return expected negated result".formatted( getClassName( condition ) ) );
 
 		helper.succeed();
 	}
