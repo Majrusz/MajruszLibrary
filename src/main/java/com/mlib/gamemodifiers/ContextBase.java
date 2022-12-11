@@ -71,8 +71,7 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 	}
 
 	public boolean check( DataType data ) {
-		return this.conditions.stream()
-			.allMatch( condition->condition.getParams().isNegated() ^ condition.check( this.gameModifier, data ) );
+		return this.conditions.stream().allMatch( condition->condition.isMet( this.gameModifier, data ) );
 	}
 
 	public List< Condition< DataType > > getConditions() {

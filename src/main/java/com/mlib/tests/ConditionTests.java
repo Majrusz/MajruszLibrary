@@ -1,7 +1,10 @@
 package com.mlib.tests;
 
 import com.mlib.MajruszLibrary;
+import com.mlib.gamemodifiers.Condition;
+import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.GameModifier;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;
@@ -39,6 +42,18 @@ public class ConditionTests extends BaseTest {
 						boolean doesNotHaveConfigs = condition.getConfigs().isEmpty();
 						assertThat( helper, !( isConfigurable && doesNotHaveConfigs ), ()->String.format( "%s is marked configurable even though it does not have any config", getClassName( condition ) ) );
 					} ) ) );
+
+		Condition< ? > condition = new Condition<>() {
+			@Override
+			public boolean check( GameModifier feature, ContextData data ) {
+				return true;
+			}
+		};
+		assertThat( helper, condition.isMet( null, null ), ()->String.format( "%s does not return expected result", getClassName( condition ) ) );
+
+		condition.negate();
+		assertThat( helper, !condition.isMet( null, null ), ()->String.format( "%s does not return expected negated result", getClassName( condition ) ) );
+
 		helper.succeed();
 	}
 

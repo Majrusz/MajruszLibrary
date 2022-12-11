@@ -34,7 +34,9 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		return this.params;
 	}
 
-	public abstract boolean check( GameModifier feature, DataType data );
+	public boolean isMet( GameModifier feature, DataType data ) {
+		return this.params.isNegated() ^ this.check( feature, data );
+	}
 
 	public Condition< DataType > apply( Consumer< ConditionParameters > consumer ) {
 		consumer.accept( this.params );
@@ -53,6 +55,8 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	public Condition< DataType > priority( Priority priority ) {
 		return this.apply( params->params.setPriority( priority ) );
 	}
+
+	protected abstract boolean check( GameModifier feature, DataType data );
 
 	public static class Excludable< DataType extends ContextData > extends Condition< DataType > {
 		final BooleanConfig availability;
@@ -73,7 +77,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		}
 
 		@Override
-		public boolean check( GameModifier gameModifier, DataType data ) {
+		protected boolean check( GameModifier gameModifier, DataType data ) {
 			return this.availability.getOrDefault();
 		}
 	}
@@ -97,14 +101,14 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		}
 
 		@Override
-		public boolean check( GameModifier gameModifier, DataType data ) {
+		protected boolean check( GameModifier gameModifier, DataType data ) {
 			return Random.tryChance( this.chance.getOrDefault() );
 		}
 	}
 
 	public static class IsLivingBeing< DataType extends ContextData > extends Condition< DataType > {
 		@Override
-		public boolean check( GameModifier feature, DataType data ) {
+		protected boolean check( GameModifier feature, DataType data ) {
 			return EntityHelper.isAnimal( data.entity ) || EntityHelper.isHuman( data.entity );
 		}
 	}
@@ -121,7 +125,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		}
 
 		@Override
-		public boolean check( GameModifier feature, DataType data ) {
+		protected boolean check( GameModifier feature, DataType data ) {
 			return Random.tryChance( this.getChance( data.entity ) );
 		}
 
@@ -146,7 +150,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		}
 
 		@Override
-		public boolean check( GameModifier gameModifier, DataType data ) {
+		protected boolean check( GameModifier gameModifier, DataType data ) {
 			return this.predicate.test( data );
 		}
 	}
@@ -172,7 +176,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		}
 
 		@Override
-		public boolean check( GameModifier feature, DataType data ) {
+		protected boolean check( GameModifier feature, DataType data ) {
 			return this.distribution.test( this.cooldown.getOrDefault() );
 		}
 	}
@@ -200,7 +204,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		}
 
 		@Override
-		public boolean check( GameModifier feature, DataType data ) {
+		protected boolean check( GameModifier feature, DataType data ) {
 			LivingEntity entity = this.entity.apply( data );
 
 			return entity != null && EnchantmentHelper.getEnchantmentLevel( this.enchantment.get(), entity ) > 0;
@@ -230,7 +234,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		}
 
 		@Override
-		public boolean check( GameModifier feature, DataType data ) {
+		protected boolean check( GameModifier feature, DataType data ) {
 			LivingEntity entity = this.entity.apply( data );
 
 			return entity != null && entity.hasEffect( this.effect.get() );
@@ -243,7 +247,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		}
 
 		@Override
-		public boolean check( GameModifier feature, DataType data ) {
+		protected boolean check( GameModifier feature, DataType data ) {
 			return data.level != null;
 		}
 	}
@@ -262,7 +266,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		}
 
 		@Override
-		public boolean check( GameModifier feature, DataType data ) {
+		protected boolean check( GameModifier feature, DataType data ) {
 			Player player = this.player.apply( data );
 
 			return player != null && player.isShiftKeyDown();
