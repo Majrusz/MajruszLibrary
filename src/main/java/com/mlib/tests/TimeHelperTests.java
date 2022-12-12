@@ -12,10 +12,12 @@ public class TimeHelperTests extends BaseTest {
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void timeHelperTicks( GameTestHelper helper ) {
+		long clientTicks = TimeHelper.getClientTicks();
 		long serverTicks = TimeHelper.getServerTicks();
-		long delay = 10;
+		long delay = 11;
 		helper.runAfterDelay( delay, ()->{
-			assertThat( helper, serverTicks, TimeHelper.getServerTicks() + delay, ()->"Server delay does count %d ticks delay properly".formatted( delay ) );
+			assertThat( helper, clientTicks + delay, TimeHelper.getClientTicks(), ()->"Client ticks do not handle %d ticks delay properly".formatted( delay ) );
+			assertThat( helper, serverTicks + delay, TimeHelper.getServerTicks(), ()->"Server ticks do not handle %d ticks delay properly".formatted( delay ) );
 			helper.succeed();
 		} );
 	}
