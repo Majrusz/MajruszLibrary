@@ -24,6 +24,12 @@ public class BaseTest extends GameModifier {
 		}
 	}
 
+	public static < Type > void assertThat( GameTestHelper helper, Type result, Type expected, Supplier< String > message ) {
+		if( !result.equals( expected ) ) {
+			helper.fail( "%s (result: %s, expected: %s)".formatted( message.get(), result, expected ) );
+		}
+	}
+
 	public BaseTest( Class< ? > clazz ) {
 		new OnTestsRegister.Context( data->data.event.register( clazz ) );
 	}
