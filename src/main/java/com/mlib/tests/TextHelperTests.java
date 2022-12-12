@@ -14,61 +14,74 @@ public class TextHelperTests extends BaseTest {
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void textHelperRomanLetters( GameTestHelper helper ) {
-		assertThatRomanLetter( helper, "I", 1 );
-		assertThatRomanLetter( helper, "IV", 4 );
-		assertThatRomanLetter( helper, "XI", 11 );
-		assertThatRomanLetter( helper, "XVIII", 18 );
-		assertThatRomanLetter( helper, "XCIX", 99 );
-		assertThatRomanLetter( helper, "CLV", 155 );
+		String name = "TextHelper.toRoman()";
+		assertThat( helper, "I", 1, TextHelper::toRoman, name );
+		assertThat( helper, "IV", 4, TextHelper::toRoman, name );
+		assertThat( helper, "XI", 11, TextHelper::toRoman, name );
+		assertThat( helper, "XVIII", 18, TextHelper::toRoman, name );
+		assertThat( helper, "XCIX", 99, TextHelper::toRoman, name );
+		assertThat( helper, "CLV", 155, TextHelper::toRoman, name );
 
 		helper.succeed();
-	}
-
-	private static void assertThatRomanLetter( GameTestHelper helper, String roman, int decimal ) {
-		assertThat( helper, roman.equals( TextHelper.toRoman( decimal ) ), ()->"TextHelper.toRoman() does not give proper output for %d".formatted( decimal ) );
 	}
 
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void textHelperMinPrecision( GameTestHelper helper ) {
-		assertThatMinPrecision( helper, "1", 1.0f );
-		assertThatMinPrecision( helper, "3.9",  3.900f );
-		assertThatMinPrecision( helper, "5",  5.001f );
-		assertThatMinPrecision( helper, "7",  7.00009f );
-		assertThatMinPrecision( helper, "9.91",  9.9099f );
-		assertThatMinPrecision( helper, "11.11",  11.11f );
+		String name = "TextHelper.minPrecision()";
+		assertThat( helper, "1", 1.0f, TextHelper::minPrecision, name );
+		assertThat( helper, "3.9", 3.900f, TextHelper::minPrecision, name );
+		assertThat( helper, "5", 5.001f, TextHelper::minPrecision, name );
+		assertThat( helper, "7", 7.00009f, TextHelper::minPrecision, name );
+		assertThat( helper, "9.91", 9.9099f, TextHelper::minPrecision, name );
+		assertThat( helper, "11.11", 11.11f, TextHelper::minPrecision, name );
 
 		helper.succeed();
-	}
-
-	private static void assertThatMinPrecision( GameTestHelper helper, String text, float value ) {
-		assertThat( helper, text.equals( TextHelper.minPrecision( value ) ), ()->"TextHelper.minPrecision() does not give proper output for %f".formatted( value ) );
 	}
 
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void textHelperSigned( GameTestHelper helper ) {
-		assertThatText( helper, "+1", 1.0f, TextHelper::signed );
-		assertThatText( helper, "0", 0.0f, TextHelper::signed );
-		assertThatText( helper, "-1.01", -1.01f, TextHelper::signed );
-		assertThatText( helper, "+1", 1, TextHelper::signed );
-		assertThatText( helper, "0", 0, TextHelper::signed );
-		assertThatText( helper, "-1", -1, TextHelper::signed );
-		assertThatText( helper, "+101%", 1.01f, TextHelper::signedPercent );
-		assertThatText( helper, "+1.1%", 0.011f, TextHelper::signedPercent );
-		assertThatText( helper, "-200%", -1.999999f, TextHelper::signedPercent );
-		assertThatText( helper, "+100%", 1, TextHelper::signedPercent );
-		assertThatText( helper, "0%", 0, TextHelper::signedPercent );
-		assertThatText( helper, "-100%", -1, TextHelper::signedPercent );
-		assertThatText( helper, "99%", 0.99f, TextHelper::percent );
-		assertThatText( helper, "0.01%", 0.0001f, TextHelper::percent );
-		assertThatText( helper, "-100%", -1, TextHelper::percent );
+		String name = "TextHelper.signed()";
+		assertThat( helper, "+1", 1.0f, TextHelper::signed, name );
+		assertThat( helper, "0", 0.0f, TextHelper::signed, name );
+		assertThat( helper, "-1.01", -1.01f, TextHelper::signed, name );
+		assertThat( helper, "+1", 1, TextHelper::signed, name );
+		assertThat( helper, "0", 0, TextHelper::signed, name );
+		assertThat( helper, "-1", -1, TextHelper::signed, name );
 
 		helper.succeed();
 	}
 
-	private static < Type extends Number > void assertThatText( GameTestHelper helper, String text, Type value, Function< Type, String > function ) {
-		assertThat( helper, text.equals( function.apply( value ) ), ()->"%s does not give proper output for %s".formatted( function, value.toString() ) );
+	@PrefixGameTestTemplate( false )
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void textHelperSignedPercent( GameTestHelper helper ) {
+		String name = "TextHelper.signedPercent()";
+		assertThat( helper, "+101%", 1.01f, TextHelper::signedPercent, name );
+		assertThat( helper, "+1.1%", 0.011f, TextHelper::signedPercent, name );
+		assertThat( helper, "-200%", -1.999999f, TextHelper::signedPercent, name );
+		assertThat( helper, "+100%", 1, TextHelper::signedPercent, name );
+		assertThat( helper, "0%", 0, TextHelper::signedPercent, name );
+		assertThat( helper, "-100%", -1, TextHelper::signedPercent, name );
+
+		helper.succeed();
+	}
+
+	@PrefixGameTestTemplate( false )
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void textHelperPercent( GameTestHelper helper ) {
+		String name = "TextHelper.percent()";
+		assertThat( helper, "99%", 0.99f, TextHelper::percent, name );
+		assertThat( helper, "0.01%", 0.0001f, TextHelper::percent, name );
+		assertThat( helper, "-100%", -1, TextHelper::percent, name );
+
+		helper.succeed();
+	}
+
+	private static < Type extends Number > void assertThat( GameTestHelper helper, String text, Type value,
+		Function< Type, String > function, String functionName
+	) {
+		assertThat( helper, text, function.apply( value ), ()->"%s does not give proper output".formatted( functionName ) );
 	}
 
 	public TextHelperTests() {
