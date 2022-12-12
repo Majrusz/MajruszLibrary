@@ -34,6 +34,8 @@ public class Contexts< DataType extends ContextData, ContextType extends Context
 	}
 
 	public List< ContextType > getContexts() {
+		this.tryToSort();
+
 		return Collections.unmodifiableList( this.contexts );
 	}
 
