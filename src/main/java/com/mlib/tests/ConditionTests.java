@@ -23,7 +23,7 @@ public class ConditionTests extends BaseTest {
 					context.getConditions()
 						.forEach( condition->{
 							int priority = condition.getParams().getPriorityAsInt();
-							assertThat( helper, priority < max.getValue(), ()->"%s has invalid priority in %s".formatted( getClassName( condition ), getClassName( context ) ) );
+							assertThat( helper, priority >= max.getValue(), ()->"%s has invalid priority in %s".formatted( getClassName( condition ), getClassName( context ) ) );
 							max.setValue( priority );
 						} );
 				} )

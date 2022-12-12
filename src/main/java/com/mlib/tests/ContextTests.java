@@ -19,7 +19,7 @@ public class ContextTests extends BaseTest {
 				contexts.getContexts()
 					.forEach( context->{
 						int priority = context.getParams().getPriorityAsInt();
-						assertThat( helper, priority < max.getValue(), ()->"%s has invalid priority".formatted( getClassName( context ) ) );
+						assertThat( helper, priority >= max.getValue(), ()->"%s has invalid priority".formatted( getClassName( context ) ) );
 						max.setValue( priority );
 					} );
 			} );

@@ -5,6 +5,7 @@ import com.mlib.config.DoubleConfig;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.contexts.OnClientTick;
 import com.mlib.gamemodifiers.contexts.OnServerTick;
+import com.mlib.gamemodifiers.parameters.Priority;
 import net.minecraftforge.event.TickEvent;
 
 import javax.annotation.Nonnegative;
@@ -15,9 +16,11 @@ public class TimeHelper {
 
 	static {
 		new OnClientTick.Context( data->++clientCounter )
+			.priority( Priority.HIGHEST )
 			.addCondition( TimeHelper::isEndPhase );
 
 		new OnServerTick.Context( data->++serverCounter )
+			.priority( Priority.HIGHEST )
 			.addCondition( TimeHelper::isEndPhase );
 	}
 

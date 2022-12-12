@@ -33,9 +33,9 @@ public class TextHelperTests extends BaseTest {
 	public static void textHelperMinPrecision( GameTestHelper helper ) {
 		assertThatMinPrecision( helper, "1", 1.0f );
 		assertThatMinPrecision( helper, "3.9",  3.900f );
-		assertThatMinPrecision( helper, "5.001",  5.001f );
+		assertThatMinPrecision( helper, "5",  5.001f );
 		assertThatMinPrecision( helper, "7",  7.00009f );
-		assertThatMinPrecision( helper, "9.909",  9.909f );
+		assertThatMinPrecision( helper, "9.91",  9.9099f );
 		assertThatMinPrecision( helper, "11.11",  11.11f );
 
 		helper.succeed();
@@ -55,8 +55,8 @@ public class TextHelperTests extends BaseTest {
 		assertThatText( helper, "0", 0, TextHelper::signed );
 		assertThatText( helper, "-1", -1, TextHelper::signed );
 		assertThatText( helper, "+101%", 1.01f, TextHelper::signedPercent );
-		assertThatText( helper, "1.1%", 0.011f, TextHelper::signedPercent );
-		assertThatText( helper, "-199.999%", -1.999999f, TextHelper::signedPercent );
+		assertThatText( helper, "+1.1%", 0.011f, TextHelper::signedPercent );
+		assertThatText( helper, "-200%", -1.999999f, TextHelper::signedPercent );
 		assertThatText( helper, "+100%", 1, TextHelper::signedPercent );
 		assertThatText( helper, "0%", 0, TextHelper::signedPercent );
 		assertThatText( helper, "-100%", -1, TextHelper::signedPercent );
