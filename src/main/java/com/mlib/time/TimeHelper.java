@@ -13,8 +13,8 @@ import net.minecraftforge.event.TickEvent;
 import javax.annotation.Nonnegative;
 
 public class TimeHelper {
-	private static long clientCounter = 1;
-	private static long serverCounter = 1;
+	static long clientCounter = 1;
+	static long serverCounter = 1;
 
 	public static boolean isEndPhase( TickEvent event ) {
 		return event.phase == TickEvent.Phase.END;
@@ -57,7 +57,7 @@ public class TimeHelper {
 	}
 
 	@AutoInstance
-	private static class Updater extends GameModifier {
+	public static class Updater extends GameModifier {
 		public Updater() {
 			new OnClientTick.Context( data->++clientCounter )
 				.priority( Priority.HIGHEST )

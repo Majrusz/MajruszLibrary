@@ -1,13 +1,11 @@
 package com.mlib.tests;
 
-import com.mlib.annotations.AutoInstance;
 import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnTestsRegister;
 import net.minecraft.gametest.framework.GameTestHelper;
 
 import java.util.function.Supplier;
 
-@AutoInstance
 public class BaseTest extends GameModifier {
 	public static String getClassName( Object object ) {
 		Class< ? > clazz = object.getClass();
