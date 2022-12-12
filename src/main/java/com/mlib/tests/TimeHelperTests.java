@@ -14,7 +14,7 @@ public class TimeHelperTests extends BaseTest {
 	public static void timeHelperTicks( GameTestHelper helper ) {
 		long ticks = TimeHelper.getServerTicks();
 		long delay = 11;
-		helper.runAtTickTime( delay, ()->{
+		helper.runAfterDelay( delay, ()->{
 			assertThat( helper, ticks + delay, TimeHelper.getServerTicks(), ()->"Server ticks do not handle %d ticks delay properly".formatted( delay ) );
 			helper.succeed();
 		} );
