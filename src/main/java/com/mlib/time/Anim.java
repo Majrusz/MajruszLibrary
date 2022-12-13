@@ -29,7 +29,6 @@ public class Anim {
 
 	public static < Type extends IAnimation > void setup( Type anim ) {
 		PENDING_ANIMS.add( anim );
-		anim.onStart();
 	}
 
 	@AutoInstance
@@ -42,6 +41,7 @@ public class Anim {
 
 		private void updateAnims( OnServerTick.Data data ) {
 			synchronized( PENDING_ANIMS ) {
+				PENDING_ANIMS.forEach( IAnimation::onStart );
 				ANIMS.addAll( PENDING_ANIMS );
 				PENDING_ANIMS.clear();
 			}
