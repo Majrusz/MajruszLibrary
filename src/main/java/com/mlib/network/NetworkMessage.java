@@ -11,6 +11,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class NetworkMessage {
@@ -96,5 +97,17 @@ public class NetworkMessage {
 
 	protected String readString( FriendlyByteBuf buffer ) {
 		return buffer.readUtf();
+	}
+
+	protected < Type extends NetworkMessage > List< Type > write( List< Type > list ) {
+		this.encoders.add( buffer->buffer.writeCollection( list, ( byteBuffer, element )->element.encode( byteBuffer ) ) );
+
+		return list;
+	}
+
+	protected < Type extends NetworkMessage > List< Type > readList( FriendlyByteBuf buffer,
+		Function< FriendlyByteBuf, Type > supplier
+	) {
+		return buffer.readList( supplier::apply );
 	}
 }
