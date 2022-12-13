@@ -85,7 +85,7 @@ public class AnimTests extends BaseTest {
 
 			int endTick = getTickCount( helper );
 			assertThat( helper, endTick - startTick, DELAY, ()->"Slider does not handle ticks properly" );
-			assertThat( helper, counter.get(), DELAY, ()->"Slider callback should be called as many times as the delay ticks" );
+			assertThat( helper, counter.get(), DELAY + 1, ()->"Slider callback should be called as many times as the delay ticks plus one" );
 			helper.succeed();
 		} );
 	}
