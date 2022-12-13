@@ -44,21 +44,47 @@ public class NetworkMessage {
 		return value;
 	}
 
+	protected boolean readBoolean( FriendlyByteBuf buffer ) {
+		return buffer.readBoolean();
+	}
+
 	protected float write( float value ) {
 		this.encoders.add( buffer->buffer.writeFloat( value ) );
 
 		return value;
 	}
 
-	protected float write( int value ) {
+	protected float readFloat( FriendlyByteBuf buffer ) {
+		return buffer.readFloat();
+	}
+
+	protected int write( int value ) {
 		this.encoders.add( buffer->buffer.writeVarInt( value ) );
 
 		return value;
+	}
+
+	protected int readInt( FriendlyByteBuf buffer ) {
+		return buffer.readInt();
 	}
 
 	protected int write( Entity entity ) {
 		this.encoders.add( buffer->buffer.writeVarInt( entity.getId() ) );
 
 		return entity.getId();
+	}
+
+	protected int readEntity( FriendlyByteBuf buffer ) {
+		return buffer.readVarInt();
+	}
+
+	protected < Type extends Enum< Type > > Type write( Type value ) {
+		this.encoders.add( buffer->buffer.writeEnum( value ) );
+
+		return value;
+	}
+
+	protected < Type extends Enum< Type > > Type readEnum( FriendlyByteBuf buffer, Class< Type > enumClass ) {
+		return buffer.readEnum( enumClass );
 	}
 }
