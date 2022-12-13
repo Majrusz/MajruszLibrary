@@ -3,6 +3,7 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
+import com.mlib.time.Anim;
 import com.mlib.time.Delay;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,7 +36,7 @@ public class OnSpawned {
 				return;
 
 			// it does not contain an event, and it is delayed on purpose because otherwise it could cause deadlocks on chunks with any incorrect access (see EntityJoinWorldEvent for more info)
-			Delay.onNextTick( ()->CONTEXTS.accept( new Data( entity, event.loadedFromDisk() ) ) );
+			Anim.nextTick( ()->CONTEXTS.accept( new Data( entity, event.loadedFromDisk() ) ) );
 		}
 	}
 
