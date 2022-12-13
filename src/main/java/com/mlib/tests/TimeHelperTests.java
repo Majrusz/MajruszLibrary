@@ -9,13 +9,14 @@ import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class TimeHelperTests extends BaseTest {
+	static final long DELAY = 6;
+
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void timeHelperTicks( GameTestHelper helper ) {
 		long ticks = TimeHelper.getServerTicks();
-		long delay = 11;
-		helper.runAfterDelay( delay, ()->{
-			assertThat( helper, ticks + delay, TimeHelper.getServerTicks(), ()->"Server ticks do not handle %d ticks delay properly".formatted( delay ) );
+		helper.runAfterDelay( DELAY, ()->{
+			assertThat( helper, ticks + DELAY, TimeHelper.getServerTicks(), ()->"Server ticks are not handled properly" );
 			helper.succeed();
 		} );
 	}
