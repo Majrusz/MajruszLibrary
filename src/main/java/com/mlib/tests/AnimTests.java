@@ -47,7 +47,7 @@ public class AnimTests extends BaseTest {
 		};
 		Anim.setup( anim );
 
-		helper.succeedWhen( ()->{
+		helper.failIfEver( ()->{
 			if( !anim.isFinished() )
 				return;
 
@@ -62,7 +62,7 @@ public class AnimTests extends BaseTest {
 		Delay delay = Anim.delay( _delay->{}, DELAY );
 		int startTick = getTickCount( helper );
 
-		helper.succeedWhen( ()->{
+		helper.failIfEver( ()->{
 			if( !delay.isFinished() )
 				return;
 
@@ -79,7 +79,7 @@ public class AnimTests extends BaseTest {
 		Slider slider = Anim.slider( _delay->counter.set( counter.get() + 1 ), DELAY );
 		int startTick = getTickCount( helper );
 
-		helper.succeedWhen( ()->{
+		helper.failIfEver( ()->{
 			if( !slider.isFinished() )
 				return;
 
