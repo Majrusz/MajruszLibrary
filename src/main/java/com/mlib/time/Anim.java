@@ -1,5 +1,6 @@
 package com.mlib.time;
 
+import com.mlib.Utility;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnServerTick;
@@ -15,16 +16,24 @@ public class Anim {
 	static final List< IAnimation > PENDING_ANIMS = Collections.synchronizedList( new ArrayList<>() );
 	static final List< IAnimation > ANIMS = Collections.synchronizedList( new ArrayList<>() );
 
-	public static Delay delay( Consumer< Delay > callback, int ticks ) {
+	public static Delay delay( int ticks, Consumer< Delay > callback ) {
 		return setup( new Delay( callback, ticks ) );
 	}
 
-	public static Delay nextTick( Runnable callback ) {
-		return setup( new Delay( delay->callback.run(), 1 ) );
+	public static Delay delay( double seconds, Consumer< Delay > callback ) {
+		return delay( Utility.secondsToTicks( seconds ), callback );
 	}
 
-	public static Slider slider( Consumer< Slider > callback, int ticks ) {
+	public static Delay nextTick( Runnable callback ) {
+		return delay( 1, delay->callback.run() );
+	}
+
+	public static Slider slider( int ticks, Consumer< Slider > callback ) {
 		return setup( new Slider( callback, ticks ) );
+	}
+
+	public static Slider slider( double seconds, Consumer< Slider > callback ) {
+		return slider( Utility.secondsToTicks( seconds ), callback );
 	}
 
 	public static < Type extends IAnimation > Type setup( Type anim ) {

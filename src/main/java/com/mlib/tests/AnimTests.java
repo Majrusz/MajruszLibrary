@@ -59,7 +59,7 @@ public class AnimTests extends BaseTest {
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void animDelay( GameTestHelper helper ) {
-		Delay delay = Anim.delay( _delay->{}, DELAY );
+		Delay delay = Anim.delay( DELAY, _delay->{} );
 		int startTick = getTickCount( helper );
 
 		helper.failIfEver( ()->{
@@ -76,7 +76,7 @@ public class AnimTests extends BaseTest {
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void animSlider( GameTestHelper helper ) {
 		AtomicInteger counter = new AtomicInteger( 0 );
-		Slider slider = Anim.slider( _delay->counter.set( counter.get() + 1 ), DELAY );
+		Slider slider = Anim.slider( DELAY, _delay->counter.set( counter.get() + 1 ) );
 		int startTick = getTickCount( helper );
 
 		helper.failIfEver( ()->{
