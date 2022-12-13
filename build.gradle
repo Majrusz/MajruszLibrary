@@ -16,7 +16,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 version = '3.0.0-unfinished'
 group = 'com.mlib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'majrusz-library-1.19.2'
+archivesBaseName = 'majrusz-library-1.19.3'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 compileJava {
@@ -24,7 +24,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'official', version: '1.19.2'
+    mappings channel: 'official', version: '1.19.3'
 
     accessTransformer = file( 'src/main/resources/META-INF/accesstransformer.cfg' ) // Currently, this location cannot be changed from the default.
 
@@ -90,7 +90,7 @@ mixin {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.0'
+    minecraft 'net.minecraftforge:forge:1.19.3-44.0.18'
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

@@ -5,8 +5,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.RegistryObject;
 
+@Deprecated
 public class ItemCreativeModeTab extends CreativeModeTab {
-	final RegistryObject< ? extends Item > item;
+	protected ItemCreativeModeTab( Builder builder ) {
+		super( builder );
+	}
+	/*final RegistryObject< ? extends Item > item;
 
 	public ItemCreativeModeTab( String label, RegistryObject< ? extends Item > item ) {
 		super( label );
@@ -14,7 +18,7 @@ public class ItemCreativeModeTab extends CreativeModeTab {
 	}
 
 	@Override
-	public ItemStack makeIcon() {
+	public ItemStack getIconItem() {
 		return new ItemStack( this.item.get() );
-	}
+	}*/
 }

@@ -57,8 +57,9 @@ public class ItemHelper {
 		return damageItem( enchantItem( itemStack, clampedRegionalDifficulty, isTreasureAllowed ), damageFactor );
 	}
 
+	@Deprecated
 	public static void addEnchantmentTypesToItemGroup( CreativeModeTab itemTab, EnchantmentCategory... categories ) {
-		EnchantmentCategory[] group = itemTab.getEnchantmentCategories();
+		/*EnchantmentCategory[] group = itemTab.getEnchantmentCategories();
 		if( group.length == 0 ) {
 			itemTab.setEnchantmentCategories( categories );
 		} else {
@@ -70,7 +71,7 @@ public class ItemHelper {
 				i++;
 			}
 			itemTab.setEnchantmentCategories( temporary );
-		}
+		}*/
 	}
 
 	public static void giveItemStackToPlayer( ItemStack itemStack, Player player, ServerLevel level ) {

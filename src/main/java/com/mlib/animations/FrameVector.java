@@ -1,7 +1,7 @@
 package com.mlib.animations;
 
 import com.mlib.math.VectorHelper;
-import com.mojang.math.Vector3f;
+import org.joml.Vector3f;
 
 public class FrameVector extends Frame< Vector3f > {
 	public FrameVector( float startDuration, Vector3f value, InterpolationType interpolationType ) {

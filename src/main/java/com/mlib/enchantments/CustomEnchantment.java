@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,7 +178,7 @@ public abstract class CustomEnchantment extends Enchantment {
 			CompoundTag enchantmentData = nbt.getCompound( i );
 			String enchantmentID = enchantmentData.getString( "id" );
 
-			if( enchantmentID.contains( Registry.ENCHANTMENT.getKey( this ).toString() ) ) {
+			if( enchantmentID.contains( ForgeRegistries.ENCHANTMENTS.getKey( this ).toString() ) ) {
 				enchantmentData.putInt( "lvl", level );
 				break;
 			}

@@ -1,6 +1,6 @@
 package com.mlib.animations;
 
-import com.mojang.math.Vector3f;
+import org.joml.Vector3f;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
 

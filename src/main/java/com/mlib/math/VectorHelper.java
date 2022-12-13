@@ -1,7 +1,7 @@
 package com.mlib.math;
 
-import com.mojang.math.Vector3d;
-import com.mojang.math.Vector3f;
+import org.joml.Vector3f;
+import org.joml.Vector3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -120,7 +120,7 @@ public class VectorHelper {
 	}
 
 	public static float length( Vector3f vector ) {
-		return distance( vector, Vector3f.ZERO );
+		return distance( vector, new Vector3f( 0.0f, 0.0f, 0.0f ) );
 	}
 
 	public static double distanceSquared( Vector3d vector1, Vector3d vector2 ) {

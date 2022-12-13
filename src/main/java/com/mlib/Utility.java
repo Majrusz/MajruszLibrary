@@ -1,6 +1,5 @@
 package com.mlib;
 
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,6 +10,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
@@ -40,7 +40,7 @@ public class Utility {
 	}
 
 	public static ResourceLocation getRegistryKey( Item item ) {
-		return Registry.ITEM.getKey( item );
+		return ForgeRegistries.ITEMS.getKey( item );
 	}
 
 	public static String getRegistryString( Item item ) {
@@ -72,7 +72,7 @@ public class Utility {
 	}
 
 	public static ResourceLocation getRegistryKey( Enchantment enchantment ) {
-		return Registry.ENCHANTMENT.getKey( enchantment );
+		return ForgeRegistries.ENCHANTMENTS.getKey( enchantment );
 	}
 
 	public static String getRegistryString( Enchantment enchantment ) {

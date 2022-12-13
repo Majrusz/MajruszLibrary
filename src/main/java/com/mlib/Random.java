@@ -2,7 +2,7 @@ package com.mlib;
 
 import com.mlib.config.DoubleConfig;
 import com.mlib.math.VectorHelper;
-import com.mojang.math.Vector3f;
+import org.joml.Vector3f;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
