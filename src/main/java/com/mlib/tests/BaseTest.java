@@ -16,6 +16,10 @@ public class BaseTest extends GameModifier {
 		return clazz.getSimpleName();
 	}
 
+	public static int getTickCount( GameTestHelper helper ) {
+		return helper.getLevel().getServer().getTickCount();
+	}
+
 	public static void assertThat( GameTestHelper helper, boolean condition, Supplier< String > message ) {
 		if( !condition ) {
 			helper.fail( message.get() );
