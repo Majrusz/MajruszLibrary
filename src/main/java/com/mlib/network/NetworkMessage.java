@@ -87,4 +87,14 @@ public class NetworkMessage {
 	protected < Type extends Enum< Type > > Type readEnum( FriendlyByteBuf buffer, Class< Type > enumClass ) {
 		return buffer.readEnum( enumClass );
 	}
+
+	protected String write( String text ) {
+		this.encoders.add( buffer->buffer.writeUtf( text ) );
+
+		return text;
+	}
+
+	protected String readString( FriendlyByteBuf buffer ) {
+		return buffer.readUtf();
+	}
 }
