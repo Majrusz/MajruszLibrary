@@ -15,20 +15,22 @@ public class Anim {
 	static final List< IAnimation > PENDING_ANIMS = Collections.synchronizedList( new ArrayList<>() );
 	static final List< IAnimation > ANIMS = Collections.synchronizedList( new ArrayList<>() );
 
-	public static void delay( Consumer< Delay > callback, int ticks ) {
-		setup( new Delay( callback, ticks ) );
+	public static Delay delay( Consumer< Delay > callback, int ticks ) {
+		return setup( new Delay( callback, ticks ) );
 	}
 
-	public static void nextTick( Runnable callback ) {
-		setup( new Delay( delay->callback.run(), 1 ) );
+	public static Delay nextTick( Runnable callback ) {
+		return setup( new Delay( delay->callback.run(), 1 ) );
 	}
 
-	public static void slider( Consumer< Slider > callback, int ticks ) {
-		setup( new Slider( callback, ticks ) );
+	public static Slider slider( Consumer< Slider > callback, int ticks ) {
+		return setup( new Slider( callback, ticks ) );
 	}
 
-	public static < Type extends IAnimation > void setup( Type anim ) {
+	public static < Type extends IAnimation > Type setup( Type anim ) {
 		PENDING_ANIMS.add( anim );
+
+		return anim;
 	}
 
 	@AutoInstance
