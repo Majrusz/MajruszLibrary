@@ -128,11 +128,11 @@ public class LevelHelper {
 		}
 	}
 
-	public static void freezeWater( LivingEntity entity, double radius, int minimumIceDuration, int maximumIceDuration ) {
+	public static void freezeWater( Entity entity, double radius, int minimumIceDuration, int maximumIceDuration ) {
 		freezeWater( entity, radius, minimumIceDuration, maximumIceDuration, true );
 	}
 
-	public static void freezeWater( LivingEntity entity, double radius, int minimumIceDuration, int maximumIceDuration,
+	public static void freezeWater( Entity entity, double radius, int minimumIceDuration, int maximumIceDuration,
 		boolean requireOnGround
 	) {
 		if( requireOnGround && !entity.isOnGround() )
@@ -156,7 +156,7 @@ public class LevelHelper {
 
 					if( isWater && isFull && canSurvive && isUnobstructed && !net.minecraftforge.event.ForgeEventFactory.onBlockPlace( entity, net.minecraftforge.common.util.BlockSnapshot.create( entity.level.dimension(), entity.level, blockPos ), net.minecraft.core.Direction.UP ) ) {
 						entity.level.setBlockAndUpdate( blockPos, iceBlockState );
-						entity.level.scheduleTick( blockPos, Blocks.FROSTED_ICE, Mth.nextInt( entity.getRandom(), 60, 120 ) );
+						entity.level.scheduleTick( blockPos, Blocks.FROSTED_ICE, Mth.nextInt( Random.getThreadSafe(), 60, 120 ) );
 					}
 				}
 			}
