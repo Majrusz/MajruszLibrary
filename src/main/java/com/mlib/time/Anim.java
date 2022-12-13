@@ -20,7 +20,11 @@ public class Anim {
 	}
 
 	public static void nextTick( Runnable callback ) {
-		delay( delay->callback.run(), 1 );
+		setup( new Delay( delay->callback.run(), 1 ) );
+	}
+
+	public static void slider( Consumer< Slider > callback, int ticks ) {
+		setup( new Slider( callback, ticks ) );
 	}
 
 	private static < Type extends IAnimation > Type setup( Type anim ) {

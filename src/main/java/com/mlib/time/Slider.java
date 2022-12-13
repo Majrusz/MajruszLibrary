@@ -1,38 +1,34 @@
 package com.mlib.time;
 
-import com.mlib.Utility;
-import com.mlib.gamemodifiers.contexts.OnServerTick;
 import net.minecraft.util.Mth;
-import net.minecraftforge.event.TickEvent;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.function.Consumer;
 
-@Deprecated
-public class Slider {
-	static final List< Slider > PENDING_SLIDERS = new ArrayList<>();
-	static final List< Slider > SLIDERS = new ArrayList<>();
-
-	static {
-		new OnServerTick.Context( Slider::update )
-			.addCondition( data->data.event.phase != TickEvent.Phase.START );
-	}
-
-	int ticksLeft;
+public class Slider implements IAnimation {
+	final Consumer< Slider > onTick;
 	final int ticksTotal;
-	final ICallable callable;
+	int ticksLeft;
 
-	public Slider( int ticks, ICallable callable ) {
-		this.ticksLeft = ticks;
+	Slider( Consumer< Slider > onTick, int ticks ) {
+		this.onTick = onTick;
 		this.ticksTotal = ticks;
-		this.callable = callable;
-
-		PENDING_SLIDERS.add( this );
+		this.ticksLeft = ticks;
 	}
 
-	public Slider( double seconds, ICallable callable ) {
-		this( Utility.secondsToTicks( seconds ), callable );
+	@Override
+	public void onStart() {
+		this.onTick.accept( this );
+	}
+
+	@Override
+	public void onTick() {
+		--this.ticksLeft;
+		this.onTick.accept( this );
+	}
+
+	@Override
+	public boolean isFinished() {
+		return this.ticksLeft == 0;
 	}
 
 	public float getRatio() {
@@ -49,31 +45,5 @@ public class Slider {
 
 	public int getTicksTotal() {
 		return this.ticksTotal;
-	}
-
-	public boolean isFinished() {
-		return this.ticksLeft <= 0;
-	}
-
-	private void call() {
-		this.callable.call( this );
-	}
-
-	private static void update( OnServerTick.Data data ) {
-		SLIDERS.addAll( PENDING_SLIDERS );
-		PENDING_SLIDERS.clear();
-		for( Iterator< Slider > iterator = SLIDERS.iterator(); iterator.hasNext(); ) {
-			Slider slider = iterator.next();
-			slider.call();
-			if( slider.isFinished() ) {
-				iterator.remove();
-			} else {
-				slider.ticksLeft = slider.ticksLeft - 1;
-			}
-		}
-	}
-
-	public interface ICallable {
-		void call( Slider slider );
 	}
 }
