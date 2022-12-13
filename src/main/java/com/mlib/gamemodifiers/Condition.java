@@ -59,7 +59,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	protected abstract boolean check( GameModifier feature, DataType data );
 
 	public static class Excludable< DataType extends ContextData > extends Condition< DataType > {
-		final BooleanConfig availability;
+		protected final BooleanConfig availability;
 
 		public Excludable( BooleanConfig config ) {
 			this.availability = config;
@@ -83,7 +83,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	}
 
 	public static class Chance< DataType extends ContextData > extends Condition< DataType > {
-		final DoubleConfig chance;
+		protected final DoubleConfig chance;
 
 		public Chance( DoubleConfig config ) {
 			this.chance = config;
@@ -114,8 +114,8 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	}
 
 	public static class ArmorDependentChance< DataType extends ContextData > extends Condition< DataType > {
-		static final Function< Integer, String > CONFIG_FORMAT = idx->String.format( "equipped_%d", idx );
-		final DoubleArrayConfig chances;
+		static protected final Function< Integer, String > CONFIG_FORMAT = idx->String.format( "equipped_%d", idx );
+		protected final DoubleArrayConfig chances;
 
 		public ArmorDependentChance() {
 			this.chances = new DoubleArrayConfig( "chances", "Chances which depend on amount of equipped armor pieces.", CONFIG_FORMAT, false, 0.0, 1.0, 1.0, 0.7, 0.49, 0.34, 0.24 );
@@ -141,7 +141,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	}
 
 	public static class Context< DataType extends ContextData > extends Condition< DataType > {
-		final Predicate< DataType > predicate;
+		protected final Predicate< DataType > predicate;
 
 		public Context( Predicate< DataType > predicate ) {
 			this.predicate = predicate;
@@ -156,8 +156,8 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	}
 
 	public static class Cooldown< DataType extends ContextData > extends Condition< DataType > {
-		final Predicate< Double > distribution;
-		final DoubleConfig cooldown;
+		protected final Predicate< Double > distribution;
+		protected final DoubleConfig cooldown;
 
 		public Cooldown( DoubleConfig cooldown, Dist distribution ) {
 			this.distribution = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
@@ -182,8 +182,8 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	}
 
 	public static class HasEnchantment< DataType extends ContextData > extends Condition< DataType > {
-		final Supplier< Enchantment > enchantment;
-		final Function< DataType, LivingEntity > entity;
+		protected final Supplier< Enchantment > enchantment;
+		protected final Function< DataType, LivingEntity > entity;
 
 		public HasEnchantment( RegistryObject< ? extends Enchantment > enchantment, Function< DataType, LivingEntity > entity ) {
 			this.enchantment = enchantment::get;
@@ -212,8 +212,8 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	}
 
 	public static class HasEffect< DataType extends ContextData > extends Condition< DataType > {
-		final Supplier< MobEffect > effect;
-		final Function< DataType, LivingEntity > entity;
+		protected final Supplier< MobEffect > effect;
+		protected final Function< DataType, LivingEntity > entity;
 
 		public HasEffect( RegistryObject< ? extends MobEffect > effect, Function< DataType, LivingEntity > entity ) {
 			this.effect = effect::get;
@@ -253,7 +253,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	}
 
 	public static class IsShiftKeyDown< DataType extends ContextData > extends Condition< DataType > {
-		final Function< DataType, Player > player;
+		protected final Function< DataType, Player > player;
 
 		public IsShiftKeyDown( Function< DataType, Player > player ) {
 			this.player = player;
