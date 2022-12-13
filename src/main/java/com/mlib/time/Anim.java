@@ -27,11 +27,9 @@ public class Anim {
 		setup( new Slider( callback, ticks ) );
 	}
 
-	private static < Type extends IAnimation > Type setup( Type anim ) {
+	public static < Type extends IAnimation > void setup( Type anim ) {
 		PENDING_ANIMS.add( anim );
 		anim.onStart();
-
-		return anim;
 	}
 
 	@AutoInstance
