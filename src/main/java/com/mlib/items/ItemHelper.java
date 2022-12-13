@@ -8,13 +8,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -40,38 +37,28 @@ public class ItemHelper {
 		return EnchantmentHelper.enchantItem( Random.getThreadSafe(), itemStack, getEnchantmentLevel( clampedRegionalDifficulty ), isTreasureAllowed );
 	}
 
-	public static ItemStack tryEnchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed, double chance ) {
+	public static ItemStack tryEnchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed,
+		double chance
+	) {
 		return Random.tryChance( chance ) ? enchantItem( itemStack, clampedRegionalDifficulty, isTreasureAllowed ) : itemStack;
 	}
 
-	public static ItemStack tryEnchantWeapon( ItemStack weaponItemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed ) {
+	public static ItemStack tryEnchantWeapon( ItemStack weaponItemStack, double clampedRegionalDifficulty,
+		boolean isTreasureAllowed
+	) {
 		return tryEnchantItem( weaponItemStack, clampedRegionalDifficulty, isTreasureAllowed, MINECRAFT_WEAPON_ENCHANT_CHANCE );
 	}
 
-	public static ItemStack tryEnchantArmor( ItemStack armorItemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed ) {
+	public static ItemStack tryEnchantArmor( ItemStack armorItemStack, double clampedRegionalDifficulty,
+		boolean isTreasureAllowed
+	) {
 		return tryEnchantItem( armorItemStack, clampedRegionalDifficulty, isTreasureAllowed, MINECRAFT_ARMOR_PIECE_ENCHANT_CHANCE );
 	}
 
-	public static ItemStack damageAndEnchantItem( ItemStack itemStack, double clampedRegionalDifficulty, boolean isTreasureAllowed, double damageFactor
+	public static ItemStack damageAndEnchantItem( ItemStack itemStack, double clampedRegionalDifficulty,
+		boolean isTreasureAllowed, double damageFactor
 	) {
 		return damageItem( enchantItem( itemStack, clampedRegionalDifficulty, isTreasureAllowed ), damageFactor );
-	}
-
-	@Deprecated
-	public static void addEnchantmentTypesToItemGroup( CreativeModeTab itemTab, EnchantmentCategory... categories ) {
-		/*EnchantmentCategory[] group = itemTab.getEnchantmentCategories();
-		if( group.length == 0 ) {
-			itemTab.setEnchantmentCategories( categories );
-		} else {
-			EnchantmentCategory[] temporary = new EnchantmentCategory[ group.length + categories.length ];
-			System.arraycopy( group, 0, temporary, 0, group.length );
-			int i = 1;
-			for( EnchantmentCategory category : categories ) {
-				temporary[ group.length - i ] = category;
-				i++;
-			}
-			itemTab.setEnchantmentCategories( temporary );
-		}*/
 	}
 
 	public static void giveItemStackToPlayer( ItemStack itemStack, Player player, ServerLevel level ) {
@@ -89,7 +76,9 @@ public class ItemHelper {
 	}
 
 	@SafeVarargs
-	public static boolean has( @Nullable LivingEntity entity, EquipmentSlot equipmentSlot, Class< ? extends Item >... itemClasses ) {
+	public static boolean has( @Nullable LivingEntity entity, EquipmentSlot equipmentSlot,
+		Class< ? extends Item >... itemClasses
+	) {
 		Item item = entity != null ? entity.getItemBySlot( equipmentSlot ).getItem() : null;
 
 		for( Class< ? extends Item > itemClass : itemClasses ) {
