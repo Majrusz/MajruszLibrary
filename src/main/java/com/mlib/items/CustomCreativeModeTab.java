@@ -1,12 +1,13 @@
 package com.mlib.items;
 
-import com.mlib.gamemodifiers.contexts.OnCreativeTabRegister;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +15,12 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class CustomCreativeModeTab {
-	final ResourceLocation location;
-	final List< Consumer< CreativeModeTab.Builder > > consumers = new ArrayList<>();
-	protected List< ItemStack > itemStacks = new ArrayList<>();
+	protected final List< Consumer< CreativeModeTab.Builder > > consumers = new ArrayList<>();
+	protected final List< ItemStack > itemStacks = new ArrayList<>();
+	protected ResourceLocation location;
 
-	public CustomCreativeModeTab( ResourceLocation location ) {
-		this.location = location;
-
-		new OnCreativeTabRegister.Context( this::register );
+	public CustomCreativeModeTab( FMLJavaModLoadingContext context ) {
+		context.getModEventBus().addListener( this::register );
 	}
 
 	public void add( ItemStack itemStack ) {
@@ -34,6 +33,12 @@ public class CustomCreativeModeTab {
 
 	public void apply( Consumer< CreativeModeTab.Builder > consumer ) {
 		this.consumers.add( consumer );
+	}
+
+	public CustomCreativeModeTab location( ResourceLocation location ) {
+		this.location = location;
+
+		return this;
 	}
 
 	public CustomCreativeModeTab title( String title ) {
@@ -58,7 +63,7 @@ public class CustomCreativeModeTab {
 		output.acceptAll( this.itemStacks );
 	}
 
-	private void register( OnCreativeTabRegister.Data data ) {
-		data.register( this.location, builder->this.consumers.forEach( consumer->consumer.accept( builder ) ) );
+	private void register( CreativeModeTabEvent.Register event ) {
+		event.registerCreativeModeTab( this.location, builder->this.consumers.forEach( consumer->consumer.accept( builder ) ) );
 	}
 }
