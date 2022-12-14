@@ -60,7 +60,7 @@ public class NetworkMessage {
 	}
 
 	protected int write( int value ) {
-		this.encoders.add( buffer->buffer.writeVarInt( value ) );
+		this.encoders.add( buffer->buffer.writeInt( value ) );
 
 		return value;
 	}
