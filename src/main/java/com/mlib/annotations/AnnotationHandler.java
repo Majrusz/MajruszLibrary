@@ -6,6 +6,7 @@ import java.io.File;
 import java.lang.annotation.Annotation;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -33,7 +34,11 @@ public class AnnotationHandler {
 	}
 
 	public List< Class< ? > > getClasses() {
-		return this.classes;
+		return Collections.unmodifiableList( this.classes );
+	}
+
+	public List< Object > getInstances() {
+		return Collections.unmodifiableList( this.instances );
 	}
 
 	public < ClassType > List< ClassType > getInstances( Class< ClassType > outputClass ) {
