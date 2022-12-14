@@ -2,10 +2,8 @@ package com.mlib.annotations;
 
 import com.mlib.MajruszLibrary;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -13,6 +11,7 @@ import java.util.List;
 
 public class AnnotationHandler {
 	final List< Class< ? > > classes = new ArrayList<>();
+	final List< Object > instances = new ArrayList<>();
 	final Class< ? extends Annotation > annotationClass;
 
 	public AnnotationHandler( String rootPackage, Class< ? extends Annotation > annotationClass ) {
@@ -23,6 +22,7 @@ public class AnnotationHandler {
 			while( resources.hasMoreElements() ) {
 				this.handle( new File( resources.nextElement().getPath() ) );
 			}
+			this.loadAllClasses();
 		} catch( AnnotationHandler.AnnotationException exception ) {
 			MajruszLibrary.logOnDev( "[AnnotationHandler] %s", exception.getMessage() );
 		}
@@ -38,20 +38,10 @@ public class AnnotationHandler {
 
 	public < ClassType > List< ClassType > getInstances( Class< ClassType > outputClass ) {
 		List< ClassType > instances = new ArrayList<>();
-		try {
-			for( Class< ? > _class : this.getClasses() ) {
-				if( outputClass.isAssignableFrom( _class ) ) {
-					try {
-						ClassType instance = ( ClassType )_class.getConstructor().newInstance();
-						instances.add( instance );
-						MajruszLibrary.logOnDev( "[AnnotationHandler] Class %s has been initialized.", _class.getCanonicalName() );
-					} catch( Throwable e ) {
-						throw new AnnotationException( "%s does not have empty constructor", _class.getName() );
-					}
-				}
+		for( Object instance : this.instances ) {
+			if( outputClass.isAssignableFrom( instance.getClass() ) ) {
+				instances.add( outputClass.cast( instance ) );
 			}
-		} catch( AnnotationHandler.AnnotationException exception ) {
-			MajruszLibrary.logOnDev( "[AnnotationHandler] %s", exception.getMessage() );
 		}
 
 		return instances;
@@ -89,6 +79,21 @@ public class AnnotationHandler {
 			} catch( Throwable ignored ) {
 				throw new AnnotationException( "Class %s has failed to load.", classPackage );
 			}
+		}
+	}
+
+	private void loadAllClasses() {
+		try {
+			for( Class< ? > _class : this.classes ) {
+				try {
+					this.instances.add( _class.getConstructor().newInstance() );
+					MajruszLibrary.logOnDev( "[AnnotationHandler] Class %s has been initialized.", _class.getCanonicalName() );
+				} catch( Throwable e ) {
+					throw new AnnotationException( "%s does not have an empty constructor", _class.getName() );
+				}
+			}
+		} catch( AnnotationHandler.AnnotationException exception ) {
+			MajruszLibrary.logOnDev( "[AnnotationHandler] %s", exception.getMessage() );
 		}
 	}
 
