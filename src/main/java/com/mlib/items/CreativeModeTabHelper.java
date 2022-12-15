@@ -27,13 +27,17 @@ public class CreativeModeTabHelper {
 		};
 	}
 
-	public static Supplier< ItemStack > buildMultiIcon( Stream< RegistryObject< ? extends Item > > items ) {
+	public static Supplier< ItemStack > buildMultiIcon( Stream< RegistryObject< ? extends Item > > items, double seconds ) {
 		Function< RegistryObject< ? extends Item >, Supplier< ItemStack > > toItemStackSupplier = item->()->new ItemStack( item.get() );
 		List< Supplier< ItemStack > > itemStacks = items.map( toItemStackSupplier ).toList();
 		return ()->{
-			int idx = ( int )( ( TimeHelper.getClientTicks() / Utility.secondsToTicks( 5.0 ) ) ) % itemStacks.size();
+			int idx = ( int )( ( TimeHelper.getClientTicks() / Utility.secondsToTicks( seconds ) ) ) % itemStacks.size();
 
 			return itemStacks.get( idx ).get();
 		};
+	}
+
+	public static Supplier< ItemStack > buildMultiIcon( Stream< RegistryObject< ? extends Item > > items ) {
+		return buildMultiIcon( items, 2.0 );
 	}
 }
