@@ -13,6 +13,7 @@ import java.util.function.Supplier;
 public class ParticleHandler {
 	public static final ParticleHandler AWARD = new ParticleHandler( ParticleTypes.HAPPY_VILLAGER, offset( 0.25f ), speed( 0.1f ) );
 	public static final ParticleHandler ENCHANTED_HIT = new ParticleHandler( ParticleTypes.ENCHANTED_HIT, offset( 0.25f ), speed( 0.1f ) );
+	public static final ParticleHandler ENCHANTED_GLYPH = new ParticleHandler( ParticleTypes.ENCHANT, offset( 0.25f ), speed( 0.1f ) );
 	public static final ParticleHandler PORTAL = new ParticleHandler( ParticleTypes.PORTAL, offset( 0.5f ), ()->Random.nextFloat( -1.0f, 0.0f ) );
 	public static final ParticleHandler SMELT = new ParticleHandler( ParticleTypes.FLAME, offset( 0.1f ), speed( 0.01f ) );
 	public static final ParticleHandler SMOKE = new ParticleHandler( ParticleTypes.SMOKE, offset( 0.25f ), speed( 0.01f ) );
