@@ -173,39 +173,29 @@ public class LevelHelper {
 		level.addFreshEntity( itemEntity );
 	}
 
-	public static void startRaining( Level level, int ticks, boolean withThunder, int transitionTicks ) {
+	public static void startRaining( Level level, int ticks, boolean withThunder ) {
 		if( !( level.getLevelData() instanceof ServerLevelData data ) )
 			return;
 
-		data.setClearWeatherTime( transitionTicks );
 		data.setRaining( true );
 		data.setRainTime( ticks );
-		level.setRainLevel( Math.max( 0.0f, level.getRainLevel( 0.5f ) ) );
 		if( withThunder ) {
 			data.setThundering( true );
 			data.setThunderTime( ticks );
-			level.setThunderLevel( Math.max( 0.0f, level.getThunderLevel( 0.5f ) ) );
 		}
 	}
 
 	public static void startRaining( Level level, int ticks ) {
-		startRaining( level, ticks, false, 0 );
-	}
-
-	public static void setClearWeather( Level level, int ticks, int transitionTicks ) {
-		if( !( level.getLevelData() instanceof ServerLevelData data ) )
-			return;
-
-		data.setClearWeatherTime( ticks );
-		data.setRaining( false );
-		data.setRainTime( transitionTicks );
-		level.setRainLevel( Math.min( 1.0f, level.getRainLevel( 0.5f ) ) );
-		data.setThundering( false );
-		data.setThunderTime( transitionTicks );
-		level.setThunderLevel( Math.min( 1.0f, level.getThunderLevel( 0.5f ) ) );
+		startRaining( level, ticks, false );
 	}
 
 	public static void setClearWeather( Level level, int ticks ) {
-		setClearWeather( level, ticks, 0 );
+		if( !( level.getLevelData() instanceof ServerLevelData data ) )
+			return;
+
+		data.setRaining( false );
+		data.setRainTime( ticks );
+		data.setThundering( false );
+		data.setThunderTime( ticks );
 	}
 }
