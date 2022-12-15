@@ -28,7 +28,7 @@ public class Registries {
 
 		LOOT_MODIFIERS.register( "any_situation", AnyModification.CODEC );
 
-		AnnotationHandler annotationHandler = new AnnotationHandler( "com.mlib" );
+		AnnotationHandler annotationHandler = new AnnotationHandler( MajruszLibrary.MOD_ID );
 		COMMANDS = annotationHandler.getInstances( Command.class );
 		GAME_MODIFIERS = annotationHandler.getInstances( GameModifier.class );
 

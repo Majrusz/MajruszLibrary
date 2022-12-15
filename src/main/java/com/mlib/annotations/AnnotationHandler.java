@@ -16,19 +16,19 @@ public class AnnotationHandler {
 	final List< ? extends Class< ? > > classes;
 	final List< ? > instances;
 
-	public AnnotationHandler( String packageName, Class< ? extends Annotation > annotationClass ) {
+	public AnnotationHandler( String modId, Class< ? extends Annotation > annotationClass ) {
 		this.annotationClass = annotationClass;
 		Type type = Type.getType( annotationClass );
 		this.classes = ModList.get()
 			.getAllScanData()
 			.stream()
+			.filter( modFileScanData->modFileScanData.getTargets().containsKey( modId ) )
 			.map( ModFileScanData::getAnnotations )
 			.flatMap( Collection::stream )
 			.filter( annotationData->type.equals( annotationData.annotationType() ) )
 			.map( data->{
 				try {
-					Class< ? > clazz = Class.forName( data.clazz().getClassName() );
-					return clazz.getPackageName().contains( packageName ) ? clazz : null;
+					return Class.forName( data.clazz().getClassName() );
 				} catch( ClassNotFoundException e ) {
 					return null;
 				}

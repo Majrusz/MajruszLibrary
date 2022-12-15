@@ -17,7 +17,7 @@ public class AnnotationHandlerTests extends BaseTest {
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void annotationHandler1( GameTestHelper helper ) {
-		AnnotationHandler handler = new AnnotationHandler( "com.mlib.tests", TestAnnotation1.class );
+		AnnotationHandler handler = new AnnotationHandler( MajruszLibrary.MOD_ID, TestAnnotation1.class );
 		assertThat( helper, handler.getInstances().size(), 1, ()->"AnnotationHandler does not load TestClass1 properly" );
 		helper.succeed();
 	}
@@ -25,7 +25,7 @@ public class AnnotationHandlerTests extends BaseTest {
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void annotationHandler2( GameTestHelper helper ) {
-		AnnotationHandler handler = new AnnotationHandler( "com.mlib.tests", TestAnnotation2.class );
+		AnnotationHandler handler = new AnnotationHandler( MajruszLibrary.MOD_ID, TestAnnotation2.class );
 		assertThat( helper, handler.getInstances().size(), 1, ()->"AnnotationHandler does not load TestClass2 because of missing explicit constructor" );
 		helper.succeed();
 	}
@@ -33,7 +33,7 @@ public class AnnotationHandlerTests extends BaseTest {
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void annotationHandler3( GameTestHelper helper ) {
-		AnnotationHandler handler = new AnnotationHandler( "com.mlib.tests", TestAnnotation3.class );
+		AnnotationHandler handler = new AnnotationHandler( MajruszLibrary.MOD_ID, TestAnnotation3.class );
 		assertThat( helper, handler.getInstances().size(), 2, ()->"AnnotationHandler does not TestClass3A and TestClass3B properly" );
 		assertThat( helper, handler.getInstances( TestClass3A.class ).size(), 2, ()->"AnnotationHandler does not return valid list of TestClass3A instances" );
 		assertThat( helper, handler.getInstances( TestClass3B.class ).size(), 1, ()->"AnnotationHandler does not return valid list of TestClass3B instances" );
@@ -43,7 +43,7 @@ public class AnnotationHandlerTests extends BaseTest {
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void annotationHandler4( GameTestHelper helper ) {
-		AnnotationHandler handler = new AnnotationHandler( "com.mlib.tests", TestAnnotation4.class );
+		AnnotationHandler handler = new AnnotationHandler( MajruszLibrary.MOD_ID, TestAnnotation4.class );
 		assertThat( helper, handler.getInstances().size(), 2, ()->"AnnotationHandler does not handle inner classes properly" );
 		helper.succeed();
 	}
