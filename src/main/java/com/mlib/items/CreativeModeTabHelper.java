@@ -38,6 +38,6 @@ public class CreativeModeTabHelper {
 	}
 
 	public static Supplier< ItemStack > buildMultiIcon( Stream< RegistryObject< ? extends Item > > items ) {
-		return buildMultiIcon( items, 2.0 );
+		return buildMultiIcon( items, 1.25 );
 	}
 }
