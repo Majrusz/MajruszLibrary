@@ -8,6 +8,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Random {
 	static final RandomSource CLIENT = RandomSource.create();
@@ -63,6 +65,14 @@ public class Random {
 
 	public static < Type > Type nextRandom( List< Type > elements ) {
 		return elements.get( nextInt( elements.size() ) );
+	}
+
+	public static < Type > Type nextRandom( Set< Type > elements ) {
+		return nextRandom( ( Type[] )elements.toArray() );
+	}
+
+	public static < Type1, Type2 > Type2 nextRandom( Map< Type1, Type2 > elements ) {
+		return elements.get( nextRandom( elements.entrySet() ) );
 	}
 
 	public static boolean tryChance( double chance ) {
