@@ -60,19 +60,19 @@ public class Random {
 	}
 
 	public static < Type > Type nextRandom( Type[] elements ) {
-		return elements[ nextInt( elements.length ) ];
+		return elements.length > 0 ? elements[ nextInt( elements.length ) ] : null;
 	}
 
 	public static < Type > Type nextRandom( List< Type > elements ) {
-		return elements.get( nextInt( elements.size() ) );
+		return elements.size() > 0 ? elements.get( nextInt( elements.size() ) ) : null;
 	}
 
 	public static < Type > Type nextRandom( Set< Type > elements ) {
-		return nextRandom( ( Type[] )elements.toArray() );
+		return ( Type )nextRandom( elements.toArray() );
 	}
 
-	public static < Type1, Type2 > Type2 nextRandom( Map< Type1, Type2 > elements ) {
-		return elements.get( nextRandom( elements.entrySet() ) );
+	public static < Type1, Type2 > Map.Entry< Type1, Type2 > nextRandom( Map< Type1, Type2 > elements ) {
+		return nextRandom( elements.entrySet() );
 	}
 
 	public static boolean tryChance( double chance ) {
