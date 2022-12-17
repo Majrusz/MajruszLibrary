@@ -1,6 +1,7 @@
 package com.mlib.tests;
 
 import com.mlib.MajruszLibrary;
+import com.mlib.config.IConfigurable;
 import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
@@ -53,6 +54,23 @@ public class ConditionTests extends BaseTest {
 
 		condition.negate();
 		assertThat( helper, !condition.isMet( null, null ), ()->"%s does not return expected negated result".formatted( getClassName( condition ) ) );
+
+		helper.succeed();
+	}
+
+
+	@PrefixGameTestTemplate( false )
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void conditionBuiltConfigs( GameTestHelper helper ) {
+		Contexts.getInstances()
+			.forEach( contexts->contexts.getContexts()
+				.forEach( context->context.getConditions()
+					.forEach( condition->{
+						boolean isConfigurable = condition.getParams().isConfigurable();
+						boolean isConditionBuilt = condition.isBuilt();
+						boolean areConditionConfigsBuilt = condition.getConfigs().stream().allMatch( IConfigurable::isBuilt );
+						assertThat( helper, !isConfigurable || isConditionBuilt && areConditionConfigsBuilt, ()->"Some of the configs in %s has not been built".formatted( getClassName( condition ) ) );
+					} ) ) );
 
 		helper.succeed();
 	}
