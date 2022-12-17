@@ -11,15 +11,16 @@ import java.util.function.Supplier;
 
 public class SoundHandler {
 	public static final Supplier< Float > DEFAULT_VOLUME = randomized( 0.7f );
-	public static final SoundHandler AWARD = new SoundHandler( SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.AMBIENT, DEFAULT_VOLUME );
-	public static final SoundHandler BONE_MEAL = new SoundHandler( SoundEvents.BONE_MEAL_USE, SoundSource.AMBIENT, DEFAULT_VOLUME );
-	public static final SoundHandler DRINK = new SoundHandler( SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, DEFAULT_VOLUME );
-	public static final SoundHandler ENCHANT = new SoundHandler( SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, DEFAULT_VOLUME );
-	public static final SoundHandler ENDERMAN_TELEPORT = new SoundHandler( SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, DEFAULT_VOLUME );
-	public static final SoundHandler FIRE_EXTINGUISH = new SoundHandler( SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.AMBIENT, DEFAULT_VOLUME );
-	public static final SoundHandler ITEM_BREAK = new SoundHandler( SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, DEFAULT_VOLUME );
-	public static final SoundHandler ITEM_PICKUP = new SoundHandler( SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, DEFAULT_VOLUME );
-	public static final SoundHandler SMELT = new SoundHandler( SoundEvents.FIRECHARGE_USE, SoundSource.AMBIENT, DEFAULT_VOLUME );
+	public static final Supplier< Float > DEFAULT_PITCH = randomized( 1.0f );
+	public static final SoundHandler AWARD = new SoundHandler( SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.AMBIENT );
+	public static final SoundHandler BONE_MEAL = new SoundHandler( SoundEvents.BONE_MEAL_USE, SoundSource.AMBIENT );
+	public static final SoundHandler DRINK = new SoundHandler( SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS );
+	public static final SoundHandler ENCHANT = new SoundHandler( SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS );
+	public static final SoundHandler ENDERMAN_TELEPORT = new SoundHandler( SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS );
+	public static final SoundHandler FIRE_EXTINGUISH = new SoundHandler( SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.AMBIENT );
+	public static final SoundHandler ITEM_BREAK = new SoundHandler( SoundEvents.ITEM_BREAK, SoundSource.PLAYERS );
+	public static final SoundHandler ITEM_PICKUP = new SoundHandler( SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS );
+	public static final SoundHandler SMELT = new SoundHandler( SoundEvents.FIRECHARGE_USE, SoundSource.AMBIENT );
 
 	final SoundEvent event;
 	final SoundSource source;
@@ -38,7 +39,11 @@ public class SoundHandler {
 	}
 
 	public SoundHandler( SoundEvent event, SoundSource source, Supplier< Float > volumeProvider ) {
-		this( event, source, volumeProvider, randomized( 1.0f ) );
+		this( event, source, volumeProvider, DEFAULT_PITCH );
+	}
+
+	public SoundHandler( SoundEvent event, SoundSource source ) {
+		this( event, source, DEFAULT_VOLUME, DEFAULT_PITCH );
 	}
 
 	public void play( ServerLevel level, Vec3 position ) {
