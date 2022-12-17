@@ -58,4 +58,9 @@ public class DoubleArrayConfig implements IConfigurable {
 	public void build( ForgeConfigSpec.Builder builder ) {
 		this.group.build( builder );
 	}
+
+	@Override
+	public boolean isBuilt() {
+		return this.group.isBuilt();
+	}
 }

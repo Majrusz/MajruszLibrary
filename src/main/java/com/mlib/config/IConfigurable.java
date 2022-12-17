@@ -11,6 +11,10 @@ public interface IConfigurable {
 		return false;
 	}
 
+	default boolean isBuilt() {
+		return false;
+	}
+
 	default void build( ForgeConfigSpec.Builder builder ) {
 		String comment = this.getComment();
 		if( !comment.equals( "" ) ) {

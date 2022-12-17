@@ -35,6 +35,11 @@ public class ConfigGroup extends UserConfig {
 		}
 	}
 
+	@Override
+	public boolean isBuilt() {
+		return this.configs.stream().allMatch( IConfigurable::isBuilt );
+	}
+
 	public ConfigGroup addGroup( ConfigGroup group ) {
 		return this.addConfig( group );
 	}

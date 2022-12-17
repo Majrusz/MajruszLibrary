@@ -20,6 +20,11 @@ public abstract class ValueConfig< Type > extends UserConfig implements Supplier
 		return this.config.get();
 	}
 
+	@Override
+	public boolean isBuilt() {
+		return this.config != null;
+	}
+
 	public Type getOrDefault() {
 		return this.config != null ? this.config.get() : this.defaultValue;
 	}
