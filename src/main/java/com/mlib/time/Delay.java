@@ -2,7 +2,7 @@ package com.mlib.time;
 
 import java.util.function.Consumer;
 
-public class Delay implements IAnimation {
+public class Delay implements ISuspendedExecution {
 	final Consumer< Delay > onEnd;
 	int ticksLeft;
 

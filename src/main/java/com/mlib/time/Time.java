@@ -12,9 +12,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class Anim {
-	static final List< IAnimation > PENDING_ANIMS = Collections.synchronizedList( new ArrayList<>() );
-	static final List< IAnimation > ANIMS = Collections.synchronizedList( new ArrayList<>() );
+public class Time {
+	static final List< ISuspendedExecution > PENDING_EXECUTIONS = Collections.synchronizedList( new ArrayList<>() );
+	static final List< ISuspendedExecution > EXECUTIONS = Collections.synchronizedList( new ArrayList<>() );
 
 	public static Delay delay( int ticks, Consumer< Delay > callback ) {
 		return setup( new Delay( callback, ticks ) );
@@ -36,31 +36,31 @@ public class Anim {
 		return slider( Utility.secondsToTicks( seconds ), callback );
 	}
 
-	public static < Type extends IAnimation > Type setup( Type anim ) {
-		PENDING_ANIMS.add( anim );
+	public static < Type extends ISuspendedExecution > Type setup( Type exec ) {
+		PENDING_EXECUTIONS.add( exec );
 
-		return anim;
+		return exec;
 	}
 
 	@AutoInstance
 	public static class Updater extends GameModifier {
 		public Updater() {
-			new OnServerTick.Context( this::updateAnims )
+			new OnServerTick.Context( this::updateExecs )
 				.priority( Priority.HIGHEST )
 				.addCondition( TimeHelper::isEndPhase );
 		}
 
-		private void updateAnims( OnServerTick.Data data ) {
-			synchronized( PENDING_ANIMS ) {
-				PENDING_ANIMS.forEach( IAnimation::onStart );
-				ANIMS.addAll( PENDING_ANIMS );
-				PENDING_ANIMS.clear();
+		private void updateExecs( OnServerTick.Data data ) {
+			synchronized( PENDING_EXECUTIONS ) {
+				PENDING_EXECUTIONS.forEach( ISuspendedExecution::onStart );
+				EXECUTIONS.addAll( PENDING_EXECUTIONS );
+				PENDING_EXECUTIONS.clear();
 			}
-			for( Iterator< IAnimation > iterator = ANIMS.iterator(); iterator.hasNext(); ) {
-				IAnimation anim = iterator.next();
-				anim.onTick();
-				if( anim.isFinished() ) {
-					anim.onEnd();
+			for( Iterator< ISuspendedExecution > iterator = EXECUTIONS.iterator(); iterator.hasNext(); ) {
+				ISuspendedExecution exec = iterator.next();
+				exec.onTick();
+				if( exec.isFinished() ) {
+					exec.onEnd();
 					iterator.remove();
 				}
 			}

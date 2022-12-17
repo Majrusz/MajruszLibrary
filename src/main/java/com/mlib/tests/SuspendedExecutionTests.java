@@ -1,26 +1,25 @@
 package com.mlib.tests;
 
 import com.mlib.MajruszLibrary;
-import com.mlib.time.Anim;
+import com.mlib.time.Time;
 import com.mlib.time.Delay;
-import com.mlib.time.IAnimation;
+import com.mlib.time.ISuspendedExecution;
 import com.mlib.time.Slider;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
-public class AnimTests extends BaseTest {
+public class SuspendedExecutionTests extends BaseTest {
 	static final int DELAY = 4;
 
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void animInterface( GameTestHelper helper ) {
-		var anim = new IAnimation() {
+	public static void suspendedExecutionInterface( GameTestHelper helper ) {
+		var exec = new ISuspendedExecution() {
 			public int startTick;
 			public int ticksLeft = DELAY;
 			public int endTick;
@@ -45,21 +44,21 @@ public class AnimTests extends BaseTest {
 				return this.ticksLeft == 0;
 			}
 		};
-		Anim.setup( anim );
+		Time.setup( exec );
 
 		helper.failIfEver( ()->{
-			if( !anim.isFinished() )
+			if( !exec.isFinished() )
 				return;
 
-			assertThat( helper, anim.endTick - anim.startTick + 1, DELAY, ()->"Anim does not handle ticks properly" );
+			assertThat( helper, exec.endTick - exec.startTick + 1, DELAY, ()->"Suspended execution does not handle ticks properly" );
 			helper.succeed();
 		} );
 	}
 
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void animDelay( GameTestHelper helper ) {
-		Delay delay = Anim.delay( DELAY, _delay->{} );
+	public static void suspendedExecutionDelay( GameTestHelper helper ) {
+		Delay delay = Time.delay( DELAY, _delay->{} );
 		int startTick = getTickCount( helper );
 
 		helper.failIfEver( ()->{
@@ -74,9 +73,9 @@ public class AnimTests extends BaseTest {
 
 	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void animSlider( GameTestHelper helper ) {
+	public static void suspendedExecutionSlider( GameTestHelper helper ) {
 		AtomicInteger counter = new AtomicInteger( 0 );
-		Slider slider = Anim.slider( DELAY, _delay->counter.set( counter.get() + 1 ) );
+		Slider slider = Time.slider( DELAY, _delay->counter.set( counter.get() + 1 ) );
 		int startTick = getTickCount( helper );
 
 		helper.failIfEver( ()->{
@@ -90,7 +89,7 @@ public class AnimTests extends BaseTest {
 		} );
 	}
 
-	public AnimTests() {
-		super( AnimTests.class );
+	public SuspendedExecutionTests() {
+		super( SuspendedExecutionTests.class );
 	}
 }

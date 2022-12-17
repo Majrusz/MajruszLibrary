@@ -1,6 +1,6 @@
 package com.mlib.time;
 
-public interface IAnimation {
+public interface ISuspendedExecution {
 	default void onStart() {}
 
 	default void onTick() {}

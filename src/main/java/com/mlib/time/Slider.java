@@ -4,7 +4,7 @@ import net.minecraft.util.Mth;
 
 import java.util.function.Consumer;
 
-public class Slider implements IAnimation {
+public class Slider implements ISuspendedExecution {
 	final Consumer< Slider > onTick;
 	final int ticksTotal;
 	int ticksLeft;
