@@ -25,6 +25,16 @@ public class Animation< Type > {
 		modelPart.setPos( value.x(), value.y(), value.z() );
 	}
 
+	public static void addPosition( Vector3f value, ModelPart modelPart ) {
+		modelPart.setPos( modelPart.x + value.x(), modelPart.y + value.y(), modelPart.z + value.z() );
+	}
+
+	public static void applyScale( float value, ModelPart modelPart ) {
+		modelPart.xScale = value;
+		modelPart.yScale = value;
+		modelPart.zScale = value;
+	}
+
 	public Animation< Type > addFrame( Frame< Type > frame ) {
 		this.frames.add( frame );
 

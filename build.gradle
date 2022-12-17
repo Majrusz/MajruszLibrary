@@ -33,7 +33,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            arg "-mixin.config=mixins.mlib.json"
+            args '--username', 'Majrusz'
             
             mods {
                 mlib {
@@ -46,7 +46,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             property 'forge.logging.console.level', 'debug'
-            arg "-mixin.config=mixins.mlib.json"
+            args '--username', 'Majrusz'
 
             mods {
                 mlib {
@@ -87,6 +87,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 mixin {
     add sourceSets.main, 'mixins.mlib.refmap.json'
+    config 'mixins.mlib.json'
 }
 
 dependencies {
