@@ -14,6 +14,7 @@ public class SoundHandler {
 	public static final SoundHandler AWARD = new SoundHandler( SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.AMBIENT, DEFAULT_VOLUME );
 	public static final SoundHandler BONE_MEAL = new SoundHandler( SoundEvents.BONE_MEAL_USE, SoundSource.AMBIENT, DEFAULT_VOLUME );
 	public static final SoundHandler DRINK = new SoundHandler( SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, DEFAULT_VOLUME );
+	public static final SoundHandler ENCHANT = new SoundHandler( SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, DEFAULT_VOLUME );
 	public static final SoundHandler ENDERMAN_TELEPORT = new SoundHandler( SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, DEFAULT_VOLUME );
 	public static final SoundHandler FIRE_EXTINGUISH = new SoundHandler( SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.AMBIENT, DEFAULT_VOLUME );
 	public static final SoundHandler ITEM_BREAK = new SoundHandler( SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, DEFAULT_VOLUME );
