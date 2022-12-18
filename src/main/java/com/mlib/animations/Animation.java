@@ -8,6 +8,7 @@ import org.joml.Vector3f;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 
 /** Class to handle animations and simulate frames between ticks (otherwise animations would have only 20 frames per second). */
 public class Animation< Type > {
@@ -65,6 +66,20 @@ public class Animation< Type > {
 			return current.getValue().interpolate( Math.min( ratio, 1.0f ), next.getValue() );
 		} else {
 			return next.getValue().getValue();
+		}
+	}
+
+	public record Applier( float duration, float ageInTicks ) {
+		public static Applier setup( float duration, float ageInTicks ) {
+			return new Applier( duration, ageInTicks );
+		}
+
+		public < Type > Applier apply( Animation< Type > animation, BiConsumer< Type, ModelPart[] > consumer,
+			ModelPart... modelParts
+		) {
+			consumer.accept( animation.apply( this.duration, this.ageInTicks ), modelParts );
+
+			return this;
 		}
 	}
 }
