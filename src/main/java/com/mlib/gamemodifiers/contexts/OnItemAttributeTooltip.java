@@ -43,7 +43,11 @@ public class OnItemAttributeTooltip {
 			super( ( Entity )null );
 			this.itemStack = itemStack;
 			this.item = itemStack.getItem();
-			Stream.of( EquipmentSlot.values() ).forEach( slot -> this.components.put( slot, new ArrayList<>() ) );
+			Stream.of( EquipmentSlot.values() ).forEach( slot->this.components.put( slot, new ArrayList<>() ) );
+		}
+
+		public void add( EquipmentSlot slot, Component component ) {
+			this.components.get( slot ).add( component );
 		}
 	}
 }
