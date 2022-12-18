@@ -10,9 +10,8 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class ContextTests extends BaseTest {
-	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void contextPriority( GameTestHelper helper ) {
+	public static void priority( GameTestHelper helper ) {
 		Contexts.getInstances()
 			.forEach( contexts->{
 				MutableInt max = new MutableInt( Integer.MIN_VALUE );

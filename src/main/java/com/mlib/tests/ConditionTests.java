@@ -14,9 +14,8 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class ConditionTests extends BaseTest {
-	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void conditionPriority( GameTestHelper helper ) {
+	public static void priority( GameTestHelper helper ) {
 		Contexts.getInstances()
 			.forEach( contexts->contexts.getContexts()
 				.forEach( context->{
@@ -32,9 +31,8 @@ public class ConditionTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void conditionValidParameters( GameTestHelper helper ) {
+	public static void validParameters( GameTestHelper helper ) {
 		Contexts.getInstances()
 			.forEach( contexts->contexts.getContexts()
 				.forEach( context->context.getConditions()
@@ -58,10 +56,8 @@ public class ConditionTests extends BaseTest {
 		helper.succeed();
 	}
 
-
-	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void conditionBuiltConfigs( GameTestHelper helper ) {
+	public static void builtConfigs( GameTestHelper helper ) {
 		Contexts.getInstances()
 			.forEach( contexts->contexts.getContexts()
 				.forEach( context->context.getConditions()

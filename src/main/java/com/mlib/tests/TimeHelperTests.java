@@ -11,9 +11,8 @@ import net.minecraftforge.gametest.PrefixGameTestTemplate;
 public class TimeHelperTests extends BaseTest {
 	static final long DELAY = 6;
 
-	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void timeHelperTicks( GameTestHelper helper ) {
+	public static void ticks( GameTestHelper helper ) {
 		long ticks = TimeHelper.getServerTicks();
 		helper.runAfterDelay( DELAY, ()->{
 			assertThat( helper, ticks + DELAY, TimeHelper.getServerTicks(), ()->"Server ticks are not handled properly" );

@@ -16,9 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SuspendedExecutionTests extends BaseTest {
 	static final int DELAY = 4;
 
-	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void suspendedExecutionInterface( GameTestHelper helper ) {
+	public static void interfacee( GameTestHelper helper ) {
 		var exec = new ISuspendedExecution() {
 			public int startTick;
 			public int ticksLeft = DELAY;
@@ -55,9 +54,8 @@ public class SuspendedExecutionTests extends BaseTest {
 		} );
 	}
 
-	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void suspendedExecutionDelay( GameTestHelper helper ) {
+	public static void delay( GameTestHelper helper ) {
 		Delay delay = Time.delay( DELAY, _delay->{} );
 		int startTick = getTickCount( helper );
 
@@ -71,9 +69,8 @@ public class SuspendedExecutionTests extends BaseTest {
 		} );
 	}
 
-	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void suspendedExecutionSlider( GameTestHelper helper ) {
+	public static void slider( GameTestHelper helper ) {
 		AtomicInteger counter = new AtomicInteger( 0 );
 		Slider slider = Time.slider( DELAY, _delay->counter.set( counter.get() + 1 ) );
 		int startTick = getTickCount( helper );

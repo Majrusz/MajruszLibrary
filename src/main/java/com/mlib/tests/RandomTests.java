@@ -14,9 +14,8 @@ import java.util.Set;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class RandomTests extends BaseTest {
-	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void randomList( GameTestHelper helper ) {
+	public static void list( GameTestHelper helper ) {
 		List< String > list1 = List.of( "a", "b", "c" );
 		for( int i = 0; i < list1.size() * 2; ++i ) {
 			assertThat( helper, list1, Random.nextRandom( list1 ) );
@@ -27,9 +26,8 @@ public class RandomTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void randomSet( GameTestHelper helper ) {
+	public static void set( GameTestHelper helper ) {
 		Set< String > set1 = Set.of( "a", "b", "c" );
 		for( int i = 0; i < set1.size() * 2; ++i ) {
 			assertThat( helper, set1, Random.nextRandom( set1 ) );
@@ -40,9 +38,8 @@ public class RandomTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@PrefixGameTestTemplate( false )
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
-	public static void randomMap( GameTestHelper helper ) {
+	public static void map( GameTestHelper helper ) {
 		Map< String, String > map1 = Map.of( "1", "a", "2", "b", "3", "c" );
 		for( int i = 0; i < map1.size() * 2; ++i ) {
 			assertThat( helper, map1, Random.nextRandom( map1 ) );
