@@ -22,23 +22,31 @@ public class Animation< Type > {
 		this( Utility.secondsToTicks( seconds ) );
 	}
 
-	public static void applyRotationInDegrees( Vector3f value, ModelPart modelPart ) {
-		value.mul( Mth.DEG_TO_RAD );
-		modelPart.setRotation( value.x(), value.y(), value.z() );
+	public static void applyRotationInDegrees( Vector3f value, ModelPart... modelParts ) {
+		for( ModelPart modelPart : modelParts ) {
+			value.mul( Mth.DEG_TO_RAD );
+			modelPart.setRotation( value.x(), value.y(), value.z() );
+		}
 	}
 
-	public static void applyPosition( Vector3f value, ModelPart modelPart ) {
-		modelPart.setPos( value.x(), value.y(), value.z() );
+	public static void applyPosition( Vector3f value, ModelPart... modelParts ) {
+		for( ModelPart modelPart : modelParts ) {
+			modelPart.setPos( value.x(), value.y(), value.z() );
+		}
 	}
 
-	public static void addPosition( Vector3f value, ModelPart modelPart ) {
-		modelPart.setPos( modelPart.x + value.x(), modelPart.y + value.y(), modelPart.z + value.z() );
+	public static void addPosition( Vector3f value, ModelPart... modelParts ) {
+		for( ModelPart modelPart : modelParts ) {
+			modelPart.setPos( modelPart.x + value.x(), modelPart.y + value.y(), modelPart.z + value.z() );
+		}
 	}
 
-	public static void applyScale( float value, ModelPart modelPart ) {
-		modelPart.xScale = value;
-		modelPart.yScale = value;
-		modelPart.zScale = value;
+	public static void applyScale( float value, ModelPart... modelParts ) {
+		for( ModelPart modelPart : modelParts ) {
+			modelPart.xScale = value;
+			modelPart.yScale = value;
+			modelPart.zScale = value;
+		}
 	}
 
 	public Animation< Type > add( float duration, Frame< Type > frame ) {
