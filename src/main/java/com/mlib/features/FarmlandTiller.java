@@ -54,7 +54,7 @@ public class FarmlandTiller extends GameModifier {
 	private FarmlandTillCheckEvent dispatchEvent( OnPlayerInteract.Data data ) {
 		FarmlandTillCheckEvent event = new FarmlandTillCheckEvent( data.level, data.player, data.itemStack );
 
-		return MinecraftForge.EVENT_BUS.post( event ) && event.area > 0 ? event : null;
+		return !MinecraftForge.EVENT_BUS.post( event ) && event.area > 0 ? event : null;
 	}
 
 	private BlockInfo getInfo( ServerLevel level, Player player, BlockPos position, InteractionHand hand, Direction direction ) {
