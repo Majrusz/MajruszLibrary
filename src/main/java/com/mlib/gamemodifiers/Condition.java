@@ -76,6 +76,10 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 			this( true, "is_enabled", "Specifies whether this is enabled." );
 		}
 
+		public BooleanConfig getConfig() {
+			return this.availability;
+		}
+
 		@Override
 		protected boolean check( GameModifier gameModifier, DataType data ) {
 			return this.availability.getOrDefault();
@@ -100,6 +104,10 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 			this( chance, "chance", "Chance for this to happen." );
 		}
 
+		public DoubleConfig getConfig() {
+			return this.chance;
+		}
+
 		@Override
 		protected boolean check( GameModifier gameModifier, DataType data ) {
 			return Random.tryChance( this.chance.getOrDefault() );
@@ -122,6 +130,10 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 
 			this.addConfig( this.chances );
 			this.apply( params->params.setConfigurable( true ) );
+		}
+
+		public DoubleArrayConfig getConfig() {
+			return this.chances;
 		}
 
 		@Override
@@ -173,6 +185,10 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 
 		public Cooldown( int ticks, Dist distribution ) {
 			this( Utility.ticksToSeconds( ticks ), distribution );
+		}
+
+		public DoubleConfig getConfig() {
+			return this.cooldown;
 		}
 
 		@Override
