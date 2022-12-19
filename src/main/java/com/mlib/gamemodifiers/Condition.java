@@ -140,7 +140,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	public static class ArmorDependentChance< DataType extends ContextData > extends Condition< DataType > {
 		static final Function< EquipmentSlot, String > SLOT_FORMAT = slot->String.format( "%s_multiplier", slot.getName() );
 		final Map< EquipmentSlot, DoubleConfig > multipliers = new HashMap<>();
-		final ConfigGroup group = new ConfigGroup( "ArmorChanceMultipliers", "Chance multipliers for each armor piece which affect the final chance." );
+		final ConfigGroup group = new ConfigGroup( "ArmorChanceMultipliers", "Chance multipliers for each armor piece.\nFor an instance 'head_multiplier = 0.7' makes the final chance 30% lower if the mob has any helmet." );
 
 		public ArmorDependentChance( double chanceMultiplier ) {
 			for( EquipmentSlot slot : EquipmentSlots.ARMOR ) {
