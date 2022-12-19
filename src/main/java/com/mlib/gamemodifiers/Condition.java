@@ -142,14 +142,27 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		final Map< EquipmentSlot, DoubleConfig > multipliers = new HashMap<>();
 		final ConfigGroup group = new ConfigGroup( "ArmorChanceMultipliers", "Chance multipliers for each armor piece.\nFor an instance 'head_multiplier = 0.7' makes the final chance 30% lower if the mob has any helmet." );
 
-		public ArmorDependentChance( double chanceMultiplier ) {
+		public ArmorDependentChance( Map< EquipmentSlot, Double > chances ) {
 			for( EquipmentSlot slot : EquipmentSlots.ARMOR ) {
-				this.multipliers.put( slot, new DoubleConfig( SLOT_FORMAT.apply( slot ), "", false, chanceMultiplier, 0.0, 1.0 ) );
+				this.multipliers.put( slot, new DoubleConfig( SLOT_FORMAT.apply( slot ), "", false, chances.get( slot ), 0.0, 1.0 ) );
 			}
 
 			this.multipliers.forEach( ( slot, config )->this.group.addConfig( config ) );
 			this.addConfig( group );
 			this.apply( params->params.setConfigurable( true ) );
+		}
+
+		public ArmorDependentChance( double headChance, double chestChance, double legChance, double feetChance ) {
+			this( Map.of(
+				EquipmentSlot.HEAD, headChance,
+				EquipmentSlot.CHEST, chestChance,
+				EquipmentSlot.LEGS, legChance,
+				EquipmentSlot.FEET, feetChance
+			) );
+		}
+
+		public ArmorDependentChance( double chance ) {
+			this( chance, chance, chance, chance );
 		}
 
 		public ArmorDependentChance() {
