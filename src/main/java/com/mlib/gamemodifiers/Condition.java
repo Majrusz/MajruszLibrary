@@ -56,7 +56,21 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		return this.apply( params->params.setPriority( priority ) );
 	}
 
+	public < ConditionType extends Condition< ? > > Condition< DataType > save( Ref< ConditionType > ref ) {
+		ref.condition = ( ConditionType )this;
+
+		return this;
+	}
+
 	protected abstract boolean check( GameModifier feature, DataType data );
+
+	public static class Ref< ConditionType extends Condition< ? > > {
+		ConditionType condition = null;
+
+		public ConditionType get() {
+			return this.condition;
+		}
+	}
 
 	public static class Excludable< DataType extends ContextData > extends Condition< DataType > {
 		protected final BooleanConfig availability;
