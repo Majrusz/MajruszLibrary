@@ -1,30 +1,32 @@
 package com.mlib.gamemodifiers;
 
+import com.mlib.EquipmentSlots;
 import com.mlib.Random;
 import com.mlib.Utility;
 import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
-import com.mlib.config.DoubleArrayConfig;
 import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.parameters.ConditionParameters;
 import com.mlib.gamemodifiers.parameters.Priority;
 import com.mlib.time.TimeHelper;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.StreamSupport;
 
 public abstract class Condition< DataType extends ContextData > extends ConfigGroup implements IParameterizable< ConditionParameters > {
 	protected final ConditionParameters params = new ConditionParameters();
@@ -136,33 +138,38 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	}
 
 	public static class ArmorDependentChance< DataType extends ContextData > extends Condition< DataType > {
-		static protected final Function< Integer, String > CONFIG_FORMAT = idx->String.format( "equipped_%d", idx );
-		protected final DoubleArrayConfig chances;
+		static final Function< EquipmentSlot, String > SLOT_FORMAT = slot->String.format( "%s_multiplier", slot.getName() );
+		final Map< EquipmentSlot, DoubleConfig > multipliers = new HashMap<>();
+		final ConfigGroup group = new ConfigGroup( "ArmorChanceMultipliers", "Chance multipliers for each armor piece which affect the final chance." );
 
 		public ArmorDependentChance() {
-			this.chances = new DoubleArrayConfig( "chances", "Chances which depend on amount of equipped armor pieces.", CONFIG_FORMAT, false, 0.0, 1.0, 1.0, 0.7, 0.49, 0.34, 0.24 );
+			for( EquipmentSlot slot : EquipmentSlots.ARMOR ) {
+				this.multipliers.put( slot, new DoubleConfig( SLOT_FORMAT.apply( slot ), "", false, 0.7, 0.0, 1.0 ) );
+			}
 
-			this.addConfig( this.chances );
+			this.multipliers.forEach( ( slot, config )->this.group.addConfig( config ) );
+			this.addConfig( group );
 			this.apply( params->params.setConfigurable( true ) );
 		}
 
-		public DoubleArrayConfig getConfig() {
-			return this.chances;
+		public DoubleConfig getConfig( EquipmentSlot slot ) {
+			return this.multipliers.get( slot );
 		}
 
 		@Override
 		protected boolean check( GameModifier feature, DataType data ) {
-			return Random.tryChance( this.getChance( data.entity ) );
-		}
+			double chance = 1.0;
+			if( data.entity instanceof LivingEntity entity ) {
+				for( EquipmentSlot slot : this.multipliers.keySet() ) {
+					DoubleConfig config = this.multipliers.get( slot );
+					ItemStack itemStack = entity.getItemBySlot( slot );
+					if( !itemStack.isEmpty() && itemStack.getAttributeModifiers( slot ).containsKey( Attributes.ARMOR ) ) {
+						chance *= config.getOrDefault();
+					}
+				}
+			}
 
-		private double getChance( @Nullable Entity entity ) {
-			if( entity == null )
-				return this.chances.getOrDefault( 0 );
-
-			int equippedArmorPieces = ( int )StreamSupport.stream( entity.getArmorSlots().spliterator(), false )
-				.filter( itemStack->!itemStack.isEmpty() )
-				.count();
-			return this.chances.getOrDefault( equippedArmorPieces );
+			return Random.tryChance( chance );
 		}
 	}
 
