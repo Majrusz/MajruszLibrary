@@ -142,14 +142,18 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		final Map< EquipmentSlot, DoubleConfig > multipliers = new HashMap<>();
 		final ConfigGroup group = new ConfigGroup( "ArmorChanceMultipliers", "Chance multipliers for each armor piece which affect the final chance." );
 
-		public ArmorDependentChance() {
+		public ArmorDependentChance( double chanceMultiplier ) {
 			for( EquipmentSlot slot : EquipmentSlots.ARMOR ) {
-				this.multipliers.put( slot, new DoubleConfig( SLOT_FORMAT.apply( slot ), "", false, 0.7, 0.0, 1.0 ) );
+				this.multipliers.put( slot, new DoubleConfig( SLOT_FORMAT.apply( slot ), "", false, chanceMultiplier, 0.0, 1.0 ) );
 			}
 
 			this.multipliers.forEach( ( slot, config )->this.group.addConfig( config ) );
 			this.addConfig( group );
 			this.apply( params->params.setConfigurable( true ) );
+		}
+
+		public ArmorDependentChance() {
+			this( 0.7 );
 		}
 
 		public DoubleConfig getConfig( EquipmentSlot slot ) {
