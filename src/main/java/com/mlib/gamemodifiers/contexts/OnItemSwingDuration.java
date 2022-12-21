@@ -4,6 +4,7 @@ import com.mlib.events.ItemSwingDurationEvent;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -30,8 +31,11 @@ public class OnItemSwingDuration {
 	}
 
 	public static class Data extends ContextData.Event< ItemSwingDurationEvent > {
+		public final LivingEntity entity;
+
 		public Data( ItemSwingDurationEvent event ) {
 			super( event.entity, event );
+			this.entity = event.entity;
 		}
 	}
 }
