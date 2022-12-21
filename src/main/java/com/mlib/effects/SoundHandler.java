@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Supplier;
@@ -46,15 +47,15 @@ public class SoundHandler {
 		this( event, source, DEFAULT_VOLUME, DEFAULT_PITCH );
 	}
 
-	public void play( ServerLevel level, Vec3 position ) {
+	public void play( Level level, Vec3 position ) {
 		this.play( level, position, this.volumeProvider, this.pitchProvider );
 	}
 
-	public void play( ServerLevel level, Vec3 position, Supplier< Float > volumeProvider ) {
+	public void play( Level level, Vec3 position, Supplier< Float > volumeProvider ) {
 		this.play( level, position, volumeProvider, this.pitchProvider );
 	}
 
-	public void play( ServerLevel level, Vec3 position, Supplier< Float > volumeProvider, Supplier< Float > pitchProvider ) {
+	public void play( Level level, Vec3 position, Supplier< Float > volumeProvider, Supplier< Float > pitchProvider ) {
 		level.playSound( null, position.x, position.y, position.z, this.event, this.source, volumeProvider.get(), pitchProvider.get() );
 	}
 }
