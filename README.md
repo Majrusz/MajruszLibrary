@@ -1,7 +1,7 @@
 ## What is Majrusz Library? [![](http://cf.way2muchnoise.eu/full_majrusz-library_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/majrusz-library)
 **Majrusz Library** is a Minecraft Forge modification which shares common code for some of my modifications.
 
-## Where is Majrusz Library available?
+## Where is Majrusz Library officially available?
 - [Curse Forge](https://www.curseforge.com/minecraft/mc-mods/majrusz-library)
 - [Planet Minecraft](https://www.planetminecraft.com/mod/majrusz-library/)
 - [Modrinth](https://modrinth.com/mod/majrusz-library)
