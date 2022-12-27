@@ -49,27 +49,27 @@ public abstract class CustomEnchantment extends Enchantment {
 
 	@Override
 	public boolean canEnchant( ItemStack itemStack ) {
-		return isEnabled() && super.canEnchant( itemStack );
+		return this.isEnabled() && super.canEnchant( itemStack );
 	}
 
 	@Override
 	public boolean isTradeable() {
-		return isEnabled() && super.isTradeable();
+		return this.isEnabled() && super.isTradeable();
 	}
 
 	@Override
 	public boolean isDiscoverable() {
-		return isEnabled() && super.isDiscoverable();
+		return this.isEnabled() && super.isDiscoverable();
 	}
 
 	@Override
 	public boolean canApplyAtEnchantingTable( ItemStack itemStack ) {
-		return isEnabled() && super.canApplyAtEnchantingTable( itemStack );
+		return this.isEnabled() && super.canApplyAtEnchantingTable( itemStack );
 	}
 
 	@Override
 	public boolean isAllowedOnBooks() {
-		return isEnabled() && super.isAllowedOnBooks();
+		return this.isEnabled() && super.isAllowedOnBooks();
 	}
 
 	@Override
@@ -207,7 +207,7 @@ public abstract class CustomEnchantment extends Enchantment {
 	}
 
 	protected boolean isDisabled() {
-		return !isEnabled();
+		return !this.isEnabled();
 	}
 
 	private void enchantItem( ItemStack itemStack, int level ) {
