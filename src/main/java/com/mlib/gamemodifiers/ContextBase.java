@@ -1,6 +1,7 @@
 package com.mlib.gamemodifiers;
 
 import com.mlib.config.ConfigGroup;
+import com.mlib.config.IConfigurable;
 import com.mlib.gamemodifiers.parameters.Parameters;
 import com.mlib.gamemodifiers.parameters.Priority;
 
@@ -28,6 +29,20 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 	@Override
 	public Parameters getParams() {
 		return this.params;
+	}
+
+	@Override
+	public ContextBase< DataType > addConfig( IConfigurable config ) {
+		super.addConfig( config );
+
+		return this;
+	}
+
+	@Override
+	public ContextBase< DataType > addConfigs( IConfigurable... configs ) {
+		super.addConfigs( configs );
+
+		return this;
 	}
 
 	public ContextBase< DataType > priority( Priority priority ) {
@@ -70,10 +85,8 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 		return this;
 	}
 
-	public ContextBase< DataType > insertTo( GameModifier modifier ) {
+	public void insertTo( GameModifier modifier ) {
 		modifier.addContext( this );
-
-		return this;
 	}
 
 	public boolean check( DataType data ) {
