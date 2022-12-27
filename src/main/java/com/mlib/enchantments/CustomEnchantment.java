@@ -2,6 +2,8 @@ package com.mlib.enchantments;
 
 import com.mlib.ObfuscationGetter;
 import com.mlib.Utility;
+import com.mlib.gamemodifiers.GameModifiersHolder;
+import com.mlib.gamemodifiers.IRegistrable;
 import com.mlib.items.ItemHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -18,7 +20,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public abstract class CustomEnchantment extends Enchantment {
+public abstract class CustomEnchantment extends Enchantment implements IRegistrable {
 	static final ObfuscationGetter.Field< Enchantment, EquipmentSlot[] > SLOTS = new ObfuscationGetter.Field<>( Enchantment.class, "f_44671_" );
 	static final ObfuscationGetter.Field< Enchantment, Rarity > RARITY = new ObfuscationGetter.Field<>( Enchantment.class, "f_44674_" );
 	static final ObfuscationGetter.Field< Enchantment, EnchantmentCategory > CATEGORY = new ObfuscationGetter.Field<>( Enchantment.class, "f_44672_" );
@@ -27,6 +29,7 @@ public abstract class CustomEnchantment extends Enchantment {
 	protected int maxLevel = 1;
 	protected CostFormula minLevelCost = level->10;
 	protected CostFormula maxLevelCost = level->50;
+	GameModifiersHolder< ? > holder = null;
 
 	protected CustomEnchantment() {
 		super( null, null, null );
@@ -80,6 +83,16 @@ public abstract class CustomEnchantment extends Enchantment {
 	@Override
 	public boolean isCurse() {
 		return this.isCurse;
+	}
+
+	@Override
+	public void setHolder( GameModifiersHolder< ? > holder ) {
+		this.holder = holder;
+	}
+
+	@Override
+	public GameModifiersHolder< ? > getHolder() {
+		return this.holder;
 	}
 
 	public CustomEnchantment slots( EquipmentSlot[] slots ) {
