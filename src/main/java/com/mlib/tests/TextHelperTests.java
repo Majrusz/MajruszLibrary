@@ -41,10 +41,10 @@ public class TextHelperTests extends BaseTest {
 	public static void signed( GameTestHelper helper ) {
 		String name = "TextHelper.signed()";
 		assertThat( helper, "+1", 1.0f, TextHelper::signed, name );
-		assertThat( helper, "0", 0.0f, TextHelper::signed, name );
+		assertThat( helper, "+0", 0.0f, TextHelper::signed, name );
 		assertThat( helper, "-1.01", -1.01f, TextHelper::signed, name );
 		assertThat( helper, "+1", 1, TextHelper::signed, name );
-		assertThat( helper, "0", 0, TextHelper::signed, name );
+		assertThat( helper, "+0", 0, TextHelper::signed, name );
 		assertThat( helper, "-1", -1, TextHelper::signed, name );
 
 		helper.succeed();
@@ -57,7 +57,7 @@ public class TextHelperTests extends BaseTest {
 		assertThat( helper, "+1.1%", 0.011f, TextHelper::signedPercent, name );
 		assertThat( helper, "-200%", -1.999999f, TextHelper::signedPercent, name );
 		assertThat( helper, "+100%", 1, TextHelper::signedPercent, name );
-		assertThat( helper, "0%", 0, TextHelper::signedPercent, name );
+		assertThat( helper, "+0%", 0, TextHelper::signedPercent, name );
 		assertThat( helper, "-100%", -1, TextHelper::signedPercent, name );
 
 		helper.succeed();

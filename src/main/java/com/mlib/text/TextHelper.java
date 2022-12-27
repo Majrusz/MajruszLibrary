@@ -46,11 +46,11 @@ public class TextHelper {
 	}
 
 	public static String signed( float number ) {
-		return "%s%s".formatted( number > 0.0f ? "+" : "", minPrecision( number ) );
+		return "%s%s".formatted( number >= 0.0f ? "+" : "", minPrecision( number ) );
 	}
 
 	public static String signed( int number ) {
-		return "%s%d".formatted( number > 0 ? "+" : "", number );
+		return "%s%d".formatted( number >= 0 ? "+" : "", number );
 	}
 
 	public static String signedPercent( float number ) {
