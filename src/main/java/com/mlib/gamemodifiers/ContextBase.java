@@ -70,6 +70,12 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 		return this;
 	}
 
+	public ContextBase< DataType > insertTo( GameModifier modifier ) {
+		modifier.addContext( this );
+
+		return this;
+	}
+
 	public boolean check( DataType data ) {
 		return this.conditions.stream().allMatch( condition->condition.isMet( this.gameModifier, data ) );
 	}
