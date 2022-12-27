@@ -1,8 +1,8 @@
 package com.mlib.enchantments;
 
+import com.mlib.ObfuscationGetter;
 import com.mlib.Utility;
 import com.mlib.items.ItemHelper;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -19,28 +19,32 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public abstract class CustomEnchantment extends Enchantment {
+	static final ObfuscationGetter.Field< Enchantment, EquipmentSlot[] > SLOTS = new ObfuscationGetter.Field<>( Enchantment.class, "f_44671_" );
+	static final ObfuscationGetter.Field< Enchantment, Rarity > RARITY = new ObfuscationGetter.Field<>( Enchantment.class, "f_44674_" );
+	static final ObfuscationGetter.Field< Enchantment, EnchantmentCategory > CATEGORY = new ObfuscationGetter.Field<>( Enchantment.class, "f_44672_" );
 	protected Supplier< Boolean > availability = ()->true;
-	protected final Parameters params;
+	protected boolean isCurse = false;
+	protected int maxLevel = 1;
+	protected CostFormula minLevelCost = level->10;
+	protected CostFormula maxLevelCost = level->50;
 
-	protected CustomEnchantment( Parameters params ) {
-		super( params.rarity, params.category, params.slots );
-
-		this.params = params;
+	protected CustomEnchantment() {
+		super( null, null, null );
 	}
 
 	@Override
 	public int getMaxLevel() {
-		return this.params.maxLevel;
+		return this.maxLevel;
 	}
 
 	@Override
 	public int getMinCost( int enchantmentLevel ) {
-		return this.params.minLevelFormula.getPlayerLevel( enchantmentLevel );
+		return this.minLevelCost.getCostLevel( enchantmentLevel );
 	}
 
 	@Override
 	public int getMaxCost( int enchantmentLevel ) {
-		return this.params.maxLevelFormula.getPlayerLevel( enchantmentLevel );
+		return this.maxLevelCost.getCostLevel( enchantmentLevel );
 	}
 
 	@Override
@@ -70,12 +74,54 @@ public abstract class CustomEnchantment extends Enchantment {
 
 	@Override
 	public boolean isTreasureOnly() {
-		return this.params.isCurse;
+		return this.isCurse;
 	}
 
 	@Override
 	public boolean isCurse() {
-		return this.params.isCurse;
+		return this.isCurse;
+	}
+
+	public CustomEnchantment slots( EquipmentSlot[] slots ) {
+		SLOTS.set( this, slots );
+
+		return this;
+	}
+
+	public CustomEnchantment rarity( Rarity rarity ) {
+		RARITY.set( this, rarity );
+
+		return this;
+	}
+
+	public CustomEnchantment category( EnchantmentCategory category ) {
+		CATEGORY.set( this, category );
+
+		return this;
+	}
+
+	public CustomEnchantment curse() {
+		this.isCurse = true;
+
+		return this;
+	}
+
+	public CustomEnchantment maxLevel( int level ) {
+		this.maxLevel = level;
+
+		return this;
+	}
+
+	public CustomEnchantment minLevelCost( CostFormula formula ) {
+		this.minLevelCost = formula;
+
+		return this;
+	}
+
+	public CustomEnchantment maxLevelCost( CostFormula formula ) {
+		this.maxLevelCost = formula;
+
+		return this;
 	}
 
 	public int getEnchantmentLevel( ItemStack itemStack ) {
@@ -145,7 +191,7 @@ public abstract class CustomEnchantment extends Enchantment {
 	}
 
 	public ItemStack deduceUsedHandItem( LivingEntity entity ) {
-		return ItemHelper.getMatchingHandItem( entity, itemStack->this.params.category.canEnchant( itemStack.getItem() ) );
+		return ItemHelper.getMatchingHandItem( entity, itemStack->this.category.canEnchant( itemStack.getItem() ) );
 	}
 
 	public int getDeducedHandEnchantmentLevel( LivingEntity entity ) {
@@ -154,10 +200,6 @@ public abstract class CustomEnchantment extends Enchantment {
 
 	public void setEnabledSupplier( Supplier< Boolean > availability ) {
 		this.availability = availability;
-	}
-
-	public Parameters getParams() {
-		return this.params;
 	}
 
 	protected boolean isEnabled() {
@@ -187,12 +229,8 @@ public abstract class CustomEnchantment extends Enchantment {
 		itemStack.addTagElement( "Enchantments", nbt );
 	}
 
-	public record Parameters( Rarity rarity, EnchantmentCategory category, EquipmentSlot[] slots, boolean isCurse, int maxLevel,
-							  LevelFormula minLevelFormula, LevelFormula maxLevelFormula
-	) {}
-
 	@FunctionalInterface
-	protected interface LevelFormula {
-		int getPlayerLevel( int enchantmentLevel );
+	protected interface CostFormula {
+		int getCostLevel( int enchantmentLevel );
 	}
 }
