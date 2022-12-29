@@ -11,13 +11,8 @@ import java.util.List;
 public class ConfigGroup extends UserConfig {
 	final List< IConfigurable > configs = new ArrayList<>();
 
-	public ConfigGroup( String name, String comment, IConfigurable... configs ) {
-		super( name, comment, false );
-		this.addConfigs( configs );
-	}
-
 	public ConfigGroup( IConfigurable... configs ) {
-		this( "", "", configs );
+		this.addConfigs( configs );
 	}
 
 	@Override

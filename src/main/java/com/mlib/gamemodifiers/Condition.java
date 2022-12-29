@@ -9,6 +9,7 @@ import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.parameters.ConditionParameters;
 import com.mlib.gamemodifiers.parameters.Priority;
+import com.mlib.math.Range;
 import com.mlib.time.TimeHelper;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -47,15 +48,15 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	}
 
 	public Condition< DataType > negate() {
-		return this.apply( params->params.setNegated( !params.isNegated() ) );
+		return this.apply( params->params.negated( !params.isNegated() ) );
 	}
 
 	public Condition< DataType > setConfigurable( boolean isConfigurable ) {
-		return this.apply( params->params.setConfigurable( isConfigurable ) );
+		return this.apply( params->params.configurable( isConfigurable ) );
 	}
 
 	public Condition< DataType > priority( Priority priority ) {
-		return this.apply( params->params.setPriority( priority ) );
+		return this.apply( params->params.priority( priority ) );
 	}
 
 	public < ConditionType extends Condition< ? > > Condition< DataType > save( Ref< ConditionType > ref ) {
@@ -77,19 +78,15 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	public static class Excludable< DataType extends ContextData > extends Condition< DataType > {
 		protected final BooleanConfig availability;
 
-		public Excludable( BooleanConfig config ) {
-			this.availability = config;
+		public Excludable( boolean defaultValue ) {
+			this.availability = new BooleanConfig( defaultValue );
 
-			this.addConfig( this.availability );
-			this.apply( params->params.setConfigurable( true ).setPriority( Priority.HIGHEST ) );
-		}
-
-		public Excludable( boolean defaultValue, String name, String comment ) {
-			this( new BooleanConfig( name, comment, false, defaultValue ) );
+			this.addConfig( this.availability.name( "is_enabled" ).comment( "Specifies whether this is enabled." ) );
+			this.apply( params->params.configurable( true ).priority( Priority.HIGHEST ) );
 		}
 
 		public Excludable() {
-			this( true, "is_enabled", "Specifies whether this is enabled." );
+			this( true );
 		}
 
 		public BooleanConfig getConfig() {
@@ -105,19 +102,11 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	public static class Chance< DataType extends ContextData > extends Condition< DataType > {
 		protected final DoubleConfig chance;
 
-		public Chance( DoubleConfig config ) {
-			this.chance = config;
-
-			this.addConfig( this.chance );
-			this.apply( params->params.setConfigurable( true ).setPriority( Priority.HIGH ) );
-		}
-
-		public Chance( double chance, String name, String comment ) {
-			this( new DoubleConfig( name, comment, false, chance, 0.0, 1.0 ) );
-		}
-
 		public Chance( double chance ) {
-			this( chance, "chance", "Chance for this to happen." );
+			this.chance = new DoubleConfig( chance, Range.CHANCE );
+
+			this.addConfig( this.chance.name( "chance" ).comment( "Chance for this to happen." ) );
+			this.apply( params->params.configurable( true ).priority( Priority.HIGH ) );
 		}
 
 		public DoubleConfig getConfig() {
@@ -140,16 +129,18 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	public static class ArmorDependentChance< DataType extends ContextData > extends Condition< DataType > {
 		static final Function< EquipmentSlot, String > SLOT_FORMAT = slot->String.format( "%s_multiplier", slot.getName() );
 		final Map< EquipmentSlot, DoubleConfig > multipliers = new HashMap<>();
-		final ConfigGroup group = new ConfigGroup( "ArmorChanceMultipliers", "Chance multipliers for each armor piece.\nFor instance 'head_multiplier = 0.8' makes the final chance 30% lower if the mob has any helmet." );
+		final ConfigGroup group = new ConfigGroup();
 
 		public ArmorDependentChance( Map< EquipmentSlot, Double > chances ) {
 			for( EquipmentSlot slot : EquipmentSlots.ARMOR ) {
-				this.multipliers.put( slot, new DoubleConfig( SLOT_FORMAT.apply( slot ), "", false, chances.get( slot ), 0.0, 1.0 ) );
+				DoubleConfig config = new DoubleConfig( chances.get( slot ), Range.CHANCE );
+				this.multipliers.put( slot, config );
+				this.group.addConfig( config.name( SLOT_FORMAT.apply( slot ) ) );
 			}
 
-			this.multipliers.forEach( ( slot, config )->this.group.addConfig( config ) );
-			this.addConfig( group );
-			this.apply( params->params.setConfigurable( true ) );
+			this.addConfig( this.group.name( "ArmorChanceMultipliers" )
+				.comment( "Chance multipliers for each armor piece.\nFor instance 'head_multiplier = 0.8' makes the final chance 30% lower if the mob has any helmet." ) );
+			this.apply( params->params.configurable( true ) );
 		}
 
 		public ArmorDependentChance( double headChance, double chestChance, double legChance, double feetChance ) {
@@ -196,7 +187,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		public Context( Predicate< DataType > predicate ) {
 			this.predicate = predicate;
 
-			this.apply( params->params.setPriority( Priority.LOW ) );
+			this.apply( params->params.priority( Priority.LOW ) );
 		}
 
 		@Override
@@ -209,16 +200,12 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		protected final Predicate< Double > distribution;
 		protected final DoubleConfig cooldown;
 
-		public Cooldown( DoubleConfig cooldown, Dist distribution ) {
-			this.distribution = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
-			this.cooldown = cooldown;
-
-			this.addConfig( cooldown );
-			this.apply( params->params.setConfigurable( true ).setPriority( Priority.HIGH ) );
-		}
-
 		public Cooldown( double seconds, Dist distribution ) {
-			this( new DoubleConfig( "cooldown", "Cooldown in seconds before it happens.", false, seconds, 0.1, 300.0 ), distribution );
+			this.distribution = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
+			this.cooldown = new DoubleConfig( seconds, new Range<>( 0.1, 300.0 ) );
+
+			this.addConfig( this.cooldown.name( "cooldown" ).comment( "Cooldown in seconds before it happens." ) );
+			this.apply( params->params.configurable( true ).priority( Priority.HIGH ) );
 		}
 
 		public Cooldown( int ticks, Dist distribution ) {
@@ -297,7 +284,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 
 	public static class IsServer< DataType extends ContextData > extends Condition< DataType > {
 		public IsServer() {
-			this.apply( params->params.setPriority( Priority.HIGH ) );
+			this.apply( params->params.priority( Priority.HIGH ) );
 		}
 
 		@Override
@@ -312,7 +299,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		public IsShiftKeyDown( Function< DataType, Player > player ) {
 			this.player = player;
 
-			this.apply( params->params.setPriority( Priority.HIGH ) );
+			this.apply( params->params.priority( Priority.HIGH ) );
 		}
 
 		public IsShiftKeyDown() {

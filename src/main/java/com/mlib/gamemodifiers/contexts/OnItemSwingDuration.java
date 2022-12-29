@@ -15,13 +15,10 @@ public class OnItemSwingDuration {
 	public static class Context extends ContextBase< Data > {
 		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
 
-		public Context( Consumer< Data > consumer, String name, String comment ) {
-			super( consumer, name, comment );
-			CONTEXTS.add( this );
-		}
-
 		public Context( Consumer< Data > consumer ) {
-			this( consumer, "", "" );
+			super( consumer );
+
+			CONTEXTS.add( this );
 		}
 
 		@SubscribeEvent

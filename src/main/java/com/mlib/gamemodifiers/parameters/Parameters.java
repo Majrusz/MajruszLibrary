@@ -9,7 +9,7 @@ public class Parameters {
 	public static final Comparator< IParameterizable< ? > > COMPARATOR = ( left, right )->Mth.sign( getPriorityAsInt( left ) - getPriorityAsInt( right ) );
 	Priority priority = Priority.NORMAL;
 
-	public Parameters setPriority( Priority priority ) {
+	public Parameters priority( Priority priority ) {
 		this.priority = priority;
 
 		return this;

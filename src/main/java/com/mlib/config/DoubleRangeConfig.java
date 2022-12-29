@@ -5,10 +5,8 @@ import net.minecraft.util.Mth;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class DoubleRangeConfig extends RangeConfig< Double > {
-	public DoubleRangeConfig( String name, String comment, boolean worldRestartRequired, Range< Double > defaultValue, double min,
-		double max
-	) {
-		super( name, comment, worldRestartRequired, defaultValue, min, max );
+	public DoubleRangeConfig( Range< Double > defaultValue, Range< Double > range ) {
+		super( defaultValue, range );
 	}
 
 	@Override

@@ -1,66 +1,44 @@
 package com.mlib.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import com.mlib.math.Range;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class DoubleArrayConfig implements IConfigurable {
+public class DoubleArrayConfig extends ConfigGroup {
 	static final Function< Integer, String > DEFAULT_FORMAT = idx->String.format( "%d", idx + 1 );
-	final ConfigGroup group;
 	final List< DoubleConfig > values = new ArrayList<>();
 
-	public DoubleArrayConfig( String name, String comment, Function< Integer, String > format, boolean worldRestartRequired, double min, double max, double... defaultValues ) {
-		this.group = new ConfigGroup( name, comment );
+	public DoubleArrayConfig( Function< Integer, String > format, Range< Double > range, double... defaultValues ) {
 		for( int idx = 0; idx < defaultValues.length; ++idx ) {
-			DoubleConfig config = new DoubleConfig( format.apply( idx ), "", worldRestartRequired, defaultValues[ idx ], min, max );
+			DoubleConfig config = new DoubleConfig( defaultValues[ idx ], range );
 			this.values.add( config );
-			this.group.addConfig( config );
+			this.addConfig( config.name( format.apply( idx ) ) );
 		}
 	}
 
-	public DoubleArrayConfig( String name, String comment, boolean worldRestartRequired, double min, double max, double... defaultValues ) {
-		this( name, comment, DEFAULT_FORMAT, worldRestartRequired, min, max, defaultValues );
+	public DoubleArrayConfig( Range< Double > range, double... defaultValues ) {
+		this( DEFAULT_FORMAT, range, defaultValues );
 	}
 
 	public int asTicks( int idx ) {
-		return getConfig( idx ).asTicks();
+		return this.getConfig( idx ).asTicks();
 	}
 
 	public float asFloat( int idx ) {
-		return getConfig( idx ).asFloat();
+		return this.getConfig( idx ).asFloat();
 	}
 
 	public Double get( int idx ) {
-		return getConfig( idx ).get();
+		return this.getConfig( idx ).get();
 	}
 
 	public Double getOrDefault( int idx ) {
-		return getConfig( idx ).getOrDefault();
+		return this.getConfig( idx ).getOrDefault();
 	}
 
-	public DoubleConfig getConfig( int idx ) {
+	private DoubleConfig getConfig( int idx ) {
 		return this.values.get( Math.min( idx, this.values.size() - 1 ) );
-	}
-
-	@Override
-	public String getName() {
-		return this.group.getName();
-	}
-
-	@Override
-	public String getComment() {
-		return this.group.getComment();
-	}
-
-	@Override
-	public void build( ForgeConfigSpec.Builder builder ) {
-		this.group.build( builder );
-	}
-
-	@Override
-	public boolean isBuilt() {
-		return this.group.isBuilt();
 	}
 }

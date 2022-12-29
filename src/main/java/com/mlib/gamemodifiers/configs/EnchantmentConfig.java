@@ -4,12 +4,10 @@ import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
 
 public class EnchantmentConfig extends ConfigGroup {
-	final BooleanConfig availability;
+	final BooleanConfig availability = new BooleanConfig( true );
 
-	public EnchantmentConfig( String groupName ) {
-		super( groupName, "" );
-		this.availability = new BooleanConfig( "is_enabled", "Makes this enchantment obtainable in survival mode.", false, true );
-		this.addConfigs( this.availability );
+	public EnchantmentConfig() {
+		this.addConfig( this.availability.name( "is_enabled" ).comment( "Makes this enchantment obtainable in survival mode." ) );
 	}
 
 	public boolean isEnabled() {

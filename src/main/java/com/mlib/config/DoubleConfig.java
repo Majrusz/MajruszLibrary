@@ -1,18 +1,19 @@
 package com.mlib.config;
 
 import com.mlib.Utility;
+import com.mlib.math.Range;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class DoubleConfig extends NumberConfig< Double > {
-	public DoubleConfig( String name, String comment, boolean worldRestartRequired, double defaultValue, double min, double max ) {
-		super( name, comment, worldRestartRequired, defaultValue, min, max );
+	public DoubleConfig( double defaultValue, Range< Double > range ) {
+		super( defaultValue, range );
 	}
 
 	@Override
 	public void build( ForgeConfigSpec.Builder builder ) {
 		super.build( builder );
 
-		this.config = builder.defineInRange( this.name, this.defaultValue, this.min, this.max );
+		this.config = builder.defineInRange( this.name, this.defaultValue, this.range.from, this.range.to );
 	}
 
 	public int asTicks() {

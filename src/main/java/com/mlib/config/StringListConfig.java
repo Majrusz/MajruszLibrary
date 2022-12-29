@@ -2,18 +2,16 @@ package com.mlib.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class StringListConfig extends ValueConfig< List< ? extends String > > {
-	public StringListConfig( String name, String comment, boolean worldRestartRequired, List< ? extends String > defaultValue ) {
-		super( name, comment, worldRestartRequired, defaultValue );
+	public StringListConfig( List< ? extends String > defaultValue ) {
+		super( defaultValue );
 	}
 
-	public StringListConfig( String name, String comment, boolean worldRestartRequired, String... values ) {
-		super( name, comment, worldRestartRequired, Arrays.asList( values ) );
+	public StringListConfig( String... values ) {
+		super( Arrays.asList( values ) );
 	}
 
 	@Override

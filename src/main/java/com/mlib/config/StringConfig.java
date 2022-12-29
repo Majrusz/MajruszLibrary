@@ -4,8 +4,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class StringConfig extends ValueConfig< String > {
-	public StringConfig( String name, String comment, boolean worldRestartRequired, String defaultValue ) {
-		super( name, comment, worldRestartRequired, defaultValue );
+	public StringConfig( String defaultValue ) {
+		super( defaultValue );
 	}
 
 	@Override
@@ -19,7 +19,7 @@ public class StringConfig extends ValueConfig< String > {
 		return Component.literal( this.getOrDefault() );
 	}
 
-	public Component asTranslatable() {
-		return Component.translatable( this.getOrDefault() );
+	public Component asTranslatable( Object... params ) {
+		return Component.translatable( this.getOrDefault(), params );
 	}
 }

@@ -24,7 +24,7 @@ public class Registries {
 	static final List< GameModifier > GAME_MODIFIERS;
 
 	static {
-		CONFIG_HANDLER.addGroup( GameModifier.addNewGroup( GameModifier.DEFAULT_KEY, "", "" ) );
+		GameModifier.addNewGroup( CONFIG_HANDLER, GameModifier.DEFAULT_KEY );
 
 		LOOT_MODIFIERS.register( "any_situation", AnyModification.CODEC );
 

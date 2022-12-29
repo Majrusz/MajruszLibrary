@@ -8,8 +8,7 @@ public abstract class ValueConfig< Type > extends UserConfig implements Supplier
 	protected final Type defaultValue;
 	protected ForgeConfigSpec.ConfigValue< Type > config = null;
 
-	public ValueConfig( String name, String comment, boolean worldRestartRequired, Type defaultValue ) {
-		super( name, comment, worldRestartRequired );
+	public ValueConfig( Type defaultValue ) {
 		this.defaultValue = defaultValue;
 	}
 

@@ -16,12 +16,25 @@ public interface IConfigurable {
 	}
 
 	default void build( ForgeConfigSpec.Builder builder ) {
-		String comment = this.getComment();
+		String comment = this.buildComment();
 		if( !comment.equals( "" ) ) {
 			builder.comment( comment );
 		}
 		if( this.requiresWorldRestart() ) {
 			builder.worldRestart();
 		}
+	}
+
+	private String buildComment() {
+		String comment = this.getComment();
+		if( !comment.isEmpty() && this.requiresWorldRestart() ) {
+			if( comment.endsWith( "." ) ) {
+				return comment.substring( 0, comment.length() - 1 ) + " (requires world/game restart).";
+			} else {
+				return comment + " (requires world/game restart)";
+			}
+		}
+
+		return comment;
 	}
 }

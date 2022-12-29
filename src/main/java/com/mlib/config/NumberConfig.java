@@ -1,12 +1,12 @@
 package com.mlib.config;
 
-public abstract class NumberConfig< Type extends Number > extends ValueConfig< Type > {
-	protected final Type min;
-	protected final Type max;
+import com.mlib.math.Range;
 
-	public NumberConfig( String name, String comment, boolean worldRestartRequired, Type defaultValue, Type min, Type max ) {
-		super( name, comment, worldRestartRequired, defaultValue );
-		this.min = min;
-		this.max = max;
+public abstract class NumberConfig< Type extends Number & Comparable< Type > > extends ValueConfig< Type > {
+	protected final Range< Type > range;
+
+	public NumberConfig( Type defaultValue, Range< Type > range ) {
+		super( defaultValue );
+		this.range = range;
 	}
 }

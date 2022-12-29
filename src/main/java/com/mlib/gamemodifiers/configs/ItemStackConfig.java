@@ -4,64 +4,47 @@ import com.mlib.Random;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
 import com.mlib.items.ItemHelper;
+import com.mlib.math.Range;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public class ItemStackConfig extends ConfigGroup {
-	final Supplier< Item > item;
+	final Supplier< ? extends Item > item;
 	final EquipmentSlot equipmentSlot;
 	final DoubleConfig chance;
 	final DoubleConfig dropChance;
-	final Optional< DoubleConfig > enchantChance;
 
-	@Deprecated
-	public ItemStackConfig( String groupName, String groupComment, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance,
-		Optional< Double > enchantChance
-	) {
-		super( groupName, groupComment );
+	public ItemStackConfig( Supplier< ? extends Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance ) {
 		this.item = item;
 		this.equipmentSlot = equipmentSlot;
-		this.chance = new DoubleConfig( "chance", "Chance that a mob will get the item.", false, chance, 0.0, 1.0 );
-		this.dropChance = new DoubleConfig( "drop_chance", "Chance for item to drop.", false, dropChance, 0.0, 1.0 );
-		this.enchantChance = enchantChance.map( value->new DoubleConfig( "enchant_chance", "Chance for item to be randomly enchanted (enchants depend on Clamped Regional Difficulty).", false, value, 0.0, 1.0 ) );
-		this.addConfigs( this.chance, this.dropChance );
-		this.enchantChance.ifPresent( this::addConfig );
+		this.chance = new DoubleConfig( chance, Range.CHANCE );
+		this.dropChance = new DoubleConfig( dropChance, Range.CHANCE );
+
+		this.addConfig( this.chance.name( "chance" ).comment( "Chance that a mob will get the item." ) )
+			.addConfig( this.dropChance.name( "drop_chance" ).comment( "Chance for item to drop." ) );
 	}
 
-	public ItemStackConfig( String groupName, String groupComment, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance,
-		double enchantChance
+	public ItemStackConfig( Item item, EquipmentSlot equipmentSlot, double chance, double dropChance ) {
+		this( ()->item, equipmentSlot, chance, dropChance );
+	}
+
+	public ItemStackConfig( RegistryObject< ? extends Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance
 	) {
-		this( groupName, groupComment, item, equipmentSlot, chance, dropChance, Optional.of( enchantChance ) );
-	}
-
-	public ItemStackConfig( String groupName, String groupComment, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance ) {
-		this( groupName, groupComment, item, equipmentSlot, chance, dropChance, Optional.empty() );
-	}
-
-	public ItemStackConfig( String groupName, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance, double enchantChance
-	) {
-		this( groupName, "", item, equipmentSlot, chance, dropChance, enchantChance );
-	}
-
-	public ItemStackConfig( String groupName, Supplier< Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance ) {
-		this( groupName, "", item, equipmentSlot, chance, dropChance );
+		this( item::get, equipmentSlot, chance, dropChance );
 	}
 
 	public void tryToEquip( PathfinderMob mob, double clampedRegionalDifficulty ) {
-		if( !Random.tryChance( getChance() ) )
+		if( !Random.tryChance( this.getChance() ) )
 			return;
 
-		net.minecraft.world.item.ItemStack itemStack = new net.minecraft.world.item.ItemStack( getItem() );
-		if( itemStack.isDamageableItem() )
-			itemStack = ItemHelper.damageItem( new net.minecraft.world.item.ItemStack( getItem() ), 0.5 );
-		if( this.enchantChance.isPresent() && Random.tryChance( getEnchantChance() ) )
-			itemStack = ItemHelper.enchantItem( itemStack, clampedRegionalDifficulty, true );
+		ItemStack itemStack = this.buildItemStack( clampedRegionalDifficulty );
 		mob.setItemSlot( this.equipmentSlot, itemStack );
-		mob.setDropChance( this.equipmentSlot, ( float )getDropChance() );
+		mob.setDropChance( this.equipmentSlot, ( float )this.getDropChance() );
 	}
 
 	public Item getItem() {
@@ -76,9 +59,12 @@ public class ItemStackConfig extends ConfigGroup {
 		return this.dropChance.get();
 	}
 
-	public double getEnchantChance() {
-		assert this.enchantChance.isPresent();
-
-		return this.enchantChance.get().get();
+	protected ItemStack buildItemStack( double clampedRegionalDifficulty ) {
+		ItemStack itemStack = new ItemStack( this.getItem() );
+		if( itemStack.isDamageableItem() ) {
+			return ItemHelper.damageItem( itemStack, 0.5 );
+		} else {
+			return itemStack;
+		}
 	}
 }

@@ -4,7 +4,7 @@ public class ConditionParameters extends Parameters {
 	boolean isNegated = false;
 	boolean isConfigurable = false;
 
-	public ConditionParameters setNegated( boolean isNegated ) {
+	public ConditionParameters negated( boolean isNegated ) {
 		this.isNegated = isNegated;
 
 		return this;
@@ -14,7 +14,7 @@ public class ConditionParameters extends Parameters {
 		return this.isNegated;
 	}
 
-	public ConditionParameters setConfigurable( boolean isConfigurable ) {
+	public ConditionParameters configurable( boolean isConfigurable ) {
 		this.isConfigurable = isConfigurable;
 
 		return this;

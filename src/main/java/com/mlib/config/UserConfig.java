@@ -1,14 +1,40 @@
 package com.mlib.config;
 
 public abstract class UserConfig implements IConfigurable {
-	protected final String name;
-	protected final String comment;
-	protected final boolean worldRestartRequired;
+	protected String name;
+	protected String comment;
+	protected boolean worldRestartRequired;
 
 	public UserConfig( String name, String comment, boolean worldRestartRequired ) {
 		this.name = name;
-		this.comment = validateComment( comment, worldRestartRequired );
+		this.comment = comment;
 		this.worldRestartRequired = worldRestartRequired;
+	}
+
+	public UserConfig( String name, String comment ) {
+		this( name, comment, false );
+	}
+
+	public UserConfig() {
+		this( "", "" );
+	}
+
+	public UserConfig name( String name ) {
+		this.name = name;
+
+		return this;
+	}
+
+	public UserConfig comment( String comment ) {
+		this.comment = comment;
+
+		return this;
+	}
+
+	public UserConfig requiresWorldRestart( boolean worldRestartRequired ) {
+		this.worldRestartRequired = worldRestartRequired;
+
+		return this;
 	}
 
 	@Override
@@ -24,17 +50,5 @@ public abstract class UserConfig implements IConfigurable {
 	@Override
 	public boolean requiresWorldRestart() {
 		return this.worldRestartRequired;
-	}
-
-	private static String validateComment( String comment, boolean requiresWorldRestart ) {
-		if( !comment.isEmpty() && requiresWorldRestart ) {
-			if( comment.endsWith( "." ) ) {
-				return comment.substring( 0, comment.length() - 1 ) + " (requires world/game restart).";
-			} else {
-				return comment + " (requires world/game restart)";
-			}
-		}
-
-		return comment;
 	}
 }

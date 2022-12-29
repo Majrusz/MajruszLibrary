@@ -17,13 +17,8 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 	final Parameters params = new Parameters();
 	protected GameModifier gameModifier = null;
 
-	public ContextBase( Consumer< DataType > consumer, String name, String comment ) {
-		super( name, comment );
-		this.consumer = consumer;
-	}
-
 	public ContextBase( Consumer< DataType > consumer ) {
-		this( consumer, "", "" );
+		this.consumer = consumer;
 	}
 
 	@Override
@@ -45,8 +40,26 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 		return this;
 	}
 
+	public ContextBase< DataType > name( String name ) {
+		super.name( name );
+
+		return this;
+	}
+
+	public ContextBase< DataType > comment( String comment ) {
+		super.comment( comment );
+
+		return this;
+	}
+
+	public ContextBase< DataType > requiresWorldRestart( boolean worldRestartRequired ) {
+		super.requiresWorldRestart( worldRestartRequired );
+
+		return this;
+	}
+
 	public ContextBase< DataType > priority( Priority priority ) {
-		this.params.setPriority( priority );
+		this.params.priority( priority );
 
 		return this;
 	}

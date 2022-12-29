@@ -23,43 +23,30 @@ public abstract class GameModifier extends ConfigGroup {
 	final List< ContextBase< ? extends ContextData > > contexts = new ArrayList<>();
 	final String configKey;
 
-	public static ConfigGroup addNewGroup( String key, String name, String comment ) {
-		ConfigGroup group = new ConfigGroup( name, comment );
+	public static ConfigGroup addNewGroup( String key ) {
+		ConfigGroup group = new ConfigGroup();
 		MOD_CONFIGS.setup( key, group );
 		return group;
 	}
 
-	public static ConfigGroup addNewGroup( String key ) {
-		return addNewGroup( key, "GameModifiers", "" );
-	}
-
-	public static ConfigGroup addNewGroup( ConfigGroup parent, String key, String name, String comment ) {
-		ConfigGroup group = addNewGroup( key, name, comment );
+	public static ConfigGroup addNewGroup( ConfigGroup parent, String key ) {
+		ConfigGroup group = addNewGroup( key );
 		parent.addGroup( group );
 
 		return group;
 	}
 
-	public static ConfigGroup addNewGroup( ConfigGroup parent, String key ) {
-		return addNewGroup( parent, key, "GameModifiers", "" );
+	public static ConfigGroup addNewGroup( String parentKey, String key ) {
+		return addNewGroup( MOD_CONFIGS.get( parentKey ), key );
 	}
 
-	public static ConfigGroup addNewGroup( String parentKey, String key, String name, String comment ) {
-		return addNewGroup( MOD_CONFIGS.get( parentKey ), key, name, comment );
-	}
-
-	public GameModifier( String configKey, String name, String comment ) {
-		super( name, comment );
+	public GameModifier( String configKey ) {
 		this.configKey = configKey;
 		MOD_CONFIGS.insert( configKey, this );
 	}
 
-	public GameModifier( String name, String comment ) {
-		this( DEFAULT_KEY, name, comment );
-	}
-
 	public GameModifier() {
-		this( DEFAULT_KEY, "", "" );
+		this( DEFAULT_KEY );
 	}
 
 	public < DataType extends ContextData > void addContext( ContextBase< DataType > context ) {
