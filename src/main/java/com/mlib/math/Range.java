@@ -10,7 +10,7 @@ public class Range< Type extends Number & Comparable< Type > > {
 		this.to = to;
 	}
 
-	public boolean inRange( Type value ) {
-		return this.from.compareTo( value ) >= 0 && this.to.compareTo( value ) <= 0;
+	public boolean within( Type value ) {
+		return this.from.compareTo( value ) <= 0 && this.to.compareTo( value ) >= 0;
 	}
 }
