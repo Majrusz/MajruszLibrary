@@ -3,8 +3,8 @@ package com.mlib.features;
 import com.mlib.Random;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.effects.ParticleHandler;
-import com.mlib.events.BlockSmeltCheckEvent;
 import com.mlib.gamemodifiers.GameModifier;
+import com.mlib.gamemodifiers.contexts.OnBlockSmeltCheck;
 import com.mlib.gamemodifiers.contexts.OnLoot;
 import com.mlib.gamemodifiers.parameters.Priority;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -17,7 +17,6 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
@@ -26,24 +25,23 @@ import java.util.Optional;
 @AutoInstance
 public class BlockSmelter extends GameModifier {
 	public BlockSmelter() {
-		OnLoot.Context onLoot = new OnLoot.Context( this::replaceWithSmeltedLoot );
-		onLoot.priority( Priority.HIGH )
+		new OnLoot.Context( this::replaceWithSmeltedLoot )
+			.priority( Priority.HIGH )
 			.addCondition( data->data.blockState != null )
 			.addCondition( data->data.level != null )
 			.addCondition( data->data.entity instanceof Player player && !player.isCrouching() )
-			.addCondition( this::checkEventListeners );
-
-		this.addContext( onLoot );
+			.insertTo( this );
 	}
 
-	private boolean checkEventListeners( OnLoot.Data data ) {
-		BlockSmeltCheckEvent event = new BlockSmeltCheckEvent( data.event );
-		MinecraftForge.EVENT_BUS.post( event );
-
-		return event.shouldSmelt;
+	private OnBlockSmeltCheck.Data dispatchContext( OnLoot.Data data ) {
+		return OnBlockSmeltCheck.Context.accept( new OnBlockSmeltCheck.Data( data ) );
 	}
 
 	private void replaceWithSmeltedLoot( OnLoot.Data data ) {
+		OnBlockSmeltCheck.Data extraData = this.dispatchContext( data );
+		if( !extraData.shouldSmelt )
+			return;
+
 		List< ItemStack > generatedLoot = data.generatedLoot;
 		ServerLevel level = data.level;
 		Vec3 position = data.origin;
@@ -65,8 +63,9 @@ public class BlockSmelter extends GameModifier {
 			amountOfSmeltedItems = amountOfSmeltedItems + itemStack.getCount();
 		}
 
-		if( amountOfSmeltedItems > 0 )
+		if( amountOfSmeltedItems > 0 ) {
 			ParticleHandler.SMELT.spawn( level, position, amountOfSmeltedItems + Random.nextInt( 4, 7 ) );
+		}
 
 		generatedLoot.clear();
 		generatedLoot.addAll( smeltedLoot );
