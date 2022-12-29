@@ -2,6 +2,7 @@ package com.mlib.features;
 
 import com.mlib.Random;
 import com.mlib.annotations.AutoInstance;
+import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnExtraFishingLootCheck;
@@ -11,7 +12,6 @@ import com.mlib.math.VectorHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -57,8 +57,7 @@ public class FishingLootIncreaser extends GameModifier {
 
 	private void spawnExperience( OnItemFished.Data data, int experience ) {
 		if( experience > 0 ) {
-			Vec3 position = VectorHelper.add( data.player.position(), 0.5 );
-			data.level.addFreshEntity( new ExperienceOrb( data.level, position.x, position.y, position.z, experience ) );
+			EntityHelper.spawnExperience( data.level, VectorHelper.add( data.player.position(), 0.5 ), experience );
 		}
 	}
 

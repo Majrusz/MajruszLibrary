@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Pillager;
@@ -65,6 +66,10 @@ public class EntityHelper {
 		player.getCooldowns().addCooldown( player.getUseItem().getItem(), Utility.secondsToTicks( seconds ) );
 		player.stopUsingItem();
 		player.level.broadcastEntityEvent( player, ( byte )30 );
+	}
+
+	public static boolean spawnExperience( Level level, Vec3 position, int experience ) {
+		return level.addFreshEntity( new ExperienceOrb( level, position.x, position.y, position.z, experience ) );
 	}
 
 	@Nullable

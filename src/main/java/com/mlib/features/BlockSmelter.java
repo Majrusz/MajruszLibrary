@@ -3,6 +3,7 @@ package com.mlib.features;
 import com.mlib.Random;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.effects.ParticleHandler;
+import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnBlockSmeltCheck;
 import com.mlib.gamemodifiers.contexts.OnLoot;
@@ -10,7 +11,6 @@ import com.mlib.gamemodifiers.parameters.Priority;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -57,7 +57,7 @@ public class BlockSmelter extends GameModifier {
 
 			int experience = Random.roundRandomly( recipe.get().getExperience() * itemStack.getCount() );
 			if( experience > 0 ) {
-				level.addFreshEntity( new ExperienceOrb( level, position.x, position.y, position.z, experience ) );
+				EntityHelper.spawnExperience( data.level, position, experience );
 			}
 
 			amountOfSmeltedItems = amountOfSmeltedItems + itemStack.getCount();
