@@ -41,7 +41,7 @@ public class AnnotationHandler {
 					MajruszLibrary.logOnDev( "[AnnotationHandler] Class %s has been initialized.", clazz.getCanonicalName() );
 					return instance;
 				} catch( Exception exception ) {
-					MajruszLibrary.logOnDev( "[AnnotationHandler] %s", exception.getMessage() );
+					MajruszLibrary.logOnDev( "[AnnotationHandler] (%s) %s", clazz.getCanonicalName(), exception.getMessage() );
 					return null;
 				}
 			} )
