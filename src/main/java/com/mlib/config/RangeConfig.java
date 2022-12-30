@@ -58,7 +58,7 @@ public abstract class RangeConfig< Type extends Number & Comparable< Type > > ex
 
 		@Override
 		public String toString() {
-			return String.format( "Range: %s ~ %s (from < to)", this.range.from, this.range.to );
+			return String.format( "Range: %s ~ %s", this.range.from, this.range.to );
 		}
 	}
 
