@@ -40,6 +40,8 @@ public class OnPreDamaged {
 		public final float damage;
 		public float extraDamage = 0;
 		public boolean isCancelled = false;
+		public boolean spawnCriticalParticles = false;
+		public boolean spawnMagicParticles = false;
 
 		public Data( DamageSource source, LivingEntity target, float damage ) {
 			super( target );

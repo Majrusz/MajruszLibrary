@@ -5,6 +5,9 @@ import com.mlib.gamemodifiers.contexts.OnPreDamaged;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,12 +31,6 @@ public abstract class MixinLivingEntity {
 	}
 
 	@Shadow( aliases = { "this$0" } )
-	@ModifyVariable( method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At( value = "HEAD", shift = At.Shift.AFTER ), ordinal = 0 )
-	private float addExtraDamage( float damage ) {
-		return damage + this.mlibLastExtraDamage;
-	}
-
-	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At( "HEAD" ), cancellable = true )
 	private void hurt( DamageSource source, float damage, CallbackInfoReturnable< Boolean > callback ) {
 		this.mlibLastExtraDamage = 0.0f;
@@ -46,6 +43,28 @@ public abstract class MixinLivingEntity {
 			callback.setReturnValue( false );
 		} else {
 			this.mlibLastExtraDamage = data.extraDamage;
+			this.tryToAddMagicParticles( data );
+		}
+	}
+
+	@Shadow( aliases = { "this$0" } )
+	@ModifyVariable( method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At( value = "HEAD", shift = At.Shift.AFTER ), ordinal = 0 )
+	private float addExtraDamage( float damage ) {
+		return damage + this.mlibLastExtraDamage;
+	}
+
+	private void tryToAddMagicParticles( OnPreDamaged.Data data ) {
+		if( data.attacker instanceof Player player ) {
+			MobType type = data.source.getEntity() instanceof LivingEntity entity ? entity.getMobType() : MobType.UNDEFINED;
+			if( EnchantmentHelper.getDamageBonus( player.getMainHandItem(), type ) > 0.0f )
+				return;
+
+			if( data.spawnCriticalParticles ) {
+				player.crit( data.target );
+			}
+			if( data.spawnMagicParticles ) {
+				player.magicCrit( data.target );
+			}
 		}
 	}
 
