@@ -48,8 +48,8 @@ public class AnnotationHandler {
 			.toList();
 	}
 
-	public AnnotationHandler( String packageName ) {
-		this( packageName, AutoInstance.class );
+	public AnnotationHandler( String modId ) {
+		this( modId, AutoInstance.class );
 	}
 
 	public List< Class< ? > > getClasses() {
