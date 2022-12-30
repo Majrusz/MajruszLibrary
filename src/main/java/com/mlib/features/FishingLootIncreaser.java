@@ -122,7 +122,7 @@ public class FishingLootIncreaser extends GameModifier {
 				.getName( this.itemStack )
 				.copy()
 				.withStyle( this.itemFormatting )
-				.append( Component.literal( String.format( " x%d", this.count ) ).withStyle( this.countFormatting ) );
+				.append( Component.literal( this.count > 1 ? String.format( " x%d", this.count ) : "" ).withStyle( this.countFormatting ) );
 		}
 
 		public void increase( ItemStack itemStack, boolean isExtra ) {
