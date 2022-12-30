@@ -21,8 +21,6 @@ public class EquipmentSlots {
 		EquipmentSlot.MAINHAND,
 		EquipmentSlot.OFFHAND
 	};
-	@Deprecated
-	public static EquipmentSlot[] ARMOR_AND_HANDS = ALL;
 	// below are default values wrapped into arrays
 	public static EquipmentSlot[] MAINHAND = new EquipmentSlot[]{ EquipmentSlot.MAINHAND };
 	public static EquipmentSlot[] OFFHAND = new EquipmentSlot[]{ EquipmentSlot.OFFHAND };
