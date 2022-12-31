@@ -19,6 +19,7 @@ public class SoundHandler {
 	public static final SoundHandler ENCHANT = new SoundHandler( SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS );
 	public static final SoundHandler ENDERMAN_TELEPORT = new SoundHandler( SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS );
 	public static final SoundHandler FIRE_EXTINGUISH = new SoundHandler( SoundEvents.GENERIC_EXTINGUISH_FIRE, SoundSource.AMBIENT );
+	public static final SoundHandler HEARTBEAT = new SoundHandler( SoundEvents.WARDEN_HEARTBEAT, SoundSource.PLAYERS );
 	public static final SoundHandler ITEM_BREAK = new SoundHandler( SoundEvents.ITEM_BREAK, SoundSource.PLAYERS );
 	public static final SoundHandler ITEM_PICKUP = new SoundHandler( SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS );
 	public static final SoundHandler SMELT = new SoundHandler( SoundEvents.FIRECHARGE_USE, SoundSource.AMBIENT );
