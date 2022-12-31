@@ -12,6 +12,7 @@ import com.mlib.gamemodifiers.parameters.Priority;
 import com.mlib.math.Range;
 import com.mlib.time.TimeHelper;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -311,6 +312,27 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 			Player player = this.player.apply( data );
 
 			return player != null && player.isShiftKeyDown();
+		}
+	}
+
+	public static class IsOnGround< DataType extends ContextData > extends Condition< DataType > {
+		protected final Function< DataType, Entity > entity;
+
+		public IsOnGround( Function< DataType, Entity > entity ) {
+			this.entity = entity;
+
+			this.apply( params->params.priority( Priority.HIGH ) );
+		}
+
+		public IsOnGround() {
+			this( data->data.entity );
+		}
+
+		@Override
+		protected boolean check( GameModifier feature, DataType data ) {
+			Entity entity = this.entity.apply( data );
+
+			return entity != null && entity.isOnGround();
 		}
 	}
 }
