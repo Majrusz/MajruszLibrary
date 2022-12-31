@@ -8,10 +8,9 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemCooldowns;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
@@ -117,5 +116,37 @@ public class ItemHelper {
 		}
 
 		return false;
+	}
+
+	public static boolean isShield( Item item ) {
+		return item.canPerformAction( ItemStack.EMPTY, ToolActions.SHIELD_BLOCK );
+	}
+
+	public static boolean isRangedWeapon( Item item ) {
+		return item instanceof BowItem
+			|| item instanceof CrossbowItem;
+	}
+
+	public static boolean isMeleeWeapon( Item item ) {
+		return item instanceof SwordItem
+			|| item instanceof TridentItem
+			|| item instanceof AxeItem;
+	}
+
+	public static boolean isGoldenTool( Item item ) {
+		return item instanceof SwordItem swordItem && swordItem.getTier() == Tiers.GOLD
+			|| item instanceof DiggerItem diggerItem && diggerItem.getTier() == Tiers.GOLD;
+	}
+
+	public static boolean isGoldenArmor( Item item ) {
+		return item instanceof ArmorItem armorItem && armorItem.getMaterial() == ArmorMaterials.GOLD;
+	}
+
+	public static boolean isAnyTool( Item item ) {
+		return item instanceof SwordItem
+			|| item instanceof TridentItem
+			|| item instanceof DiggerItem
+			|| item instanceof BowItem
+			|| item instanceof CrossbowItem;
 	}
 }
