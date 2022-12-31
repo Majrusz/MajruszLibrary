@@ -43,7 +43,7 @@ public abstract class MixinLivingEntity {
 			callback.setReturnValue( false );
 		} else {
 			this.mlibLastExtraDamage = data.extraDamage;
-			this.tryToAddMagicParticles( data );
+			tryToAddMagicParticles( data );
 		}
 	}
 
@@ -53,7 +53,7 @@ public abstract class MixinLivingEntity {
 		return damage + this.mlibLastExtraDamage;
 	}
 
-	private void tryToAddMagicParticles( OnPreDamaged.Data data ) {
+	private static void tryToAddMagicParticles( OnPreDamaged.Data data ) {
 		if( data.attacker instanceof Player player ) {
 			MobType type = data.source.getEntity() instanceof LivingEntity entity ? entity.getMobType() : MobType.UNDEFINED;
 			if( EnchantmentHelper.getDamageBonus( player.getMainHandItem(), type ) > 0.0f )
