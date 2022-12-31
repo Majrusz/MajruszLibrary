@@ -1,11 +1,13 @@
 package com.mlib.entities;
 
+import com.mlib.NetworkHandler;
 import com.mlib.Utility;
 import com.mlib.math.AABBHelper;
 import com.mlib.math.VectorHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -22,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
@@ -129,5 +132,9 @@ public class EntityHelper {
 		ServerLevel level, Entity entity, double radius, Predicate< EntityType > extraPredicate
 	) {
 		return getEntitiesInSphere( entityClass, level, entity.position(), radius, extraPredicate );
+	}
+
+	public static void sendExtraClientGlowTicks( ServerPlayer player, Entity target, int ticks ) {
+		NetworkHandler.CHANNEL.send( PacketDistributor.PLAYER.with( ()->player ), new NetworkHandler.GlowEntityMessage( target, ticks ) );
 	}
 }

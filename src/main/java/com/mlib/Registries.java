@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -33,6 +34,7 @@ public class Registries {
 		GAME_MODIFIERS = annotationHandler.getInstances( GameModifier.class );
 
 		MinecraftForge.EVENT_BUS.addListener( Command::registerAll );
+		FMLJavaModLoadingContext.get().getModEventBus().addListener( NetworkHandler::register );
 	}
 
 	public static void initialize() {
