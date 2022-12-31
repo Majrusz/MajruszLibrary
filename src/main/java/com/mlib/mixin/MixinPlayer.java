@@ -1,6 +1,7 @@
 package com.mlib.mixin;
 
-import com.mlib.MajruszLibrary;
+import com.mlib.gamemodifiers.contexts.OnEntitySignalCheck;
+import com.mlib.gamemodifiers.contexts.OnEntitySignalReceived;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -25,31 +26,14 @@ import java.util.function.BiConsumer;
 
 @Mixin( Player.class )
 public abstract class MixinPlayer extends MixinEntity {
-	VibrationListener.VibrationListenerConfig mlibVibrationListenerConfig = new VibrationListener.VibrationListenerConfig() {
-		@Override
-		public TagKey< GameEvent > getListenableEvents() {
-			return GameEventTags.WARDEN_CAN_LISTEN;
-		}
-
-		@Override
-		public boolean shouldListen( ServerLevel p_223872_, GameEventListener p_223873_, BlockPos p_223874_, GameEvent p_223875_, GameEvent.Context p_223876_
-		) {
-			return true;
-		}
-
-		@Override
-		public void onSignalReceive( ServerLevel p_223865_, GameEventListener p_223866_, BlockPos p_223867_, GameEvent p_223868_, @Nullable Entity p_223869_,
-			@Nullable Entity p_223870_, float p_223871_
-		) {
-			MajruszLibrary.logOnDev( "dupa :D %s %f", p_223867_, p_223871_ );
-		}
-	};
+	VibrationListener.VibrationListenerConfig mlibVibrationListenerConfig;
 	DynamicGameEventListener< VibrationListener > mlibVibrationListener;
 
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "<init> (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;FLcom/mojang/authlib/GameProfile;)V", at = @At( "TAIL" ) )
 	private void constructor( Level level, BlockPos position, float rot, GameProfile profile, CallbackInfo callback ) {
 		Player player = ( Player )( Object )this;
+		this.mlibVibrationListenerConfig = new Config( player );
 		this.mlibVibrationListener = new DynamicGameEventListener<>( new VibrationListener( new EntityPositionSource( player, player.getEyeHeight() ), 16, this.mlibVibrationListenerConfig ) );
 	}
 
@@ -67,6 +51,31 @@ public abstract class MixinPlayer extends MixinEntity {
 		Player player = ( Player )( Object )this;
 		if( player.level instanceof ServerLevel level ) {
 			consumer.accept( this.mlibVibrationListener, level );
+		}
+	}
+
+	public static class Config implements VibrationListener.VibrationListenerConfig {
+		final Player player;
+
+		Config( Player player ) {
+			this.player = player;
+		}
+
+		@Override
+		public TagKey< GameEvent > getListenableEvents() {
+			return GameEventTags.WARDEN_CAN_LISTEN;
+		}
+
+		@Override
+		public boolean shouldListen( ServerLevel level, GameEventListener listener, BlockPos position, GameEvent event, GameEvent.Context eventContext ) {
+			return OnEntitySignalCheck.Context.accept( new OnEntitySignalCheck.Data( level, position, this.player ) ).shouldListen();
+		}
+
+		@Override
+		public void onSignalReceive( ServerLevel level, GameEventListener listener, BlockPos position, GameEvent event, @Nullable Entity owner,
+			@Nullable Entity ownersProjectile, float distance
+		) {
+			OnEntitySignalReceived.Context.accept( new OnEntitySignalReceived.Data( level, position, this.player, owner, ownersProjectile, distance ) );
 		}
 	}
 }
