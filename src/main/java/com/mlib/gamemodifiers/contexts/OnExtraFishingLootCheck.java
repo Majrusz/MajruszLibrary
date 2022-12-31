@@ -23,9 +23,7 @@ public class OnExtraFishingLootCheck {
 		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
 
 		public static Data accept( Data data ) {
-			CONTEXTS.accept( data );
-
-			return data;
+			return CONTEXTS.accept( data );
 		}
 
 		public Context( Consumer< Data > consumer ) {

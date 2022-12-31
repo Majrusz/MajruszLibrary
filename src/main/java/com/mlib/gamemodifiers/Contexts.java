@@ -24,13 +24,15 @@ public class Contexts< DataType extends ContextData, ContextType extends Context
 		this.isSorted = false;
 	}
 
-	public void accept( DataType data ) {
+	public DataType accept( DataType data ) {
 		this.tryToSort();
 		this.contexts.forEach( context->{
 			if( context.check( data ) ) {
 				context.consumer.accept( data );
 			}
 		} );
+
+		return data;
 	}
 
 	public List< ContextType > getContexts() {
