@@ -75,6 +75,18 @@ public class OnLoot {
 			this.tool = event.tool;
 			this.origin = event.origin;
 		}
+
+		public void addAsChestLoot( ResourceLocation id ) {
+			List< ItemStack > itemStacks = ServerLifecycleHooks.getCurrentServer()
+				.getLootTables()
+				.get( id )
+				.getRandomItems( new LootContext.Builder( this.level )
+					.withParameter( LootContextParams.ORIGIN, this.origin )
+					.create( LootContextParamSets.CHEST )
+				);
+
+			this.generatedLoot.addAll( itemStacks );
+		}
 	}
 
 	public static class Is extends Condition< Data > {
@@ -94,25 +106,6 @@ public class OnLoot {
 		@Override
 		protected boolean check( GameModifier feature, Data data ) {
 			return this.ids.contains( data.context.getQueriedLootTableId().toString() );
-		}
-	}
-
-	public static class AddToChest extends Context {
-		public AddToChest( ResourceLocation id ) {
-			super( data->{
-				List< ItemStack > itemStacks = ServerLifecycleHooks.getCurrentServer()
-					.getLootTables()
-					.get( id )
-					.getRandomItems( new LootContext.Builder( data.level )
-						.withParameter( LootContextParams.ORIGIN, data.origin )
-						.create( LootContextParamSets.CHEST )
-					);
-
-				data.generatedLoot.addAll( itemStacks );
-			} );
-
-			this.addCondition( new Condition.IsServer<>() )
-				.addCondition( OnLoot.HAS_ORIGIN );
 		}
 	}
 }
