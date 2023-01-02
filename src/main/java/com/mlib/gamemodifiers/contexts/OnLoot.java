@@ -1,10 +1,11 @@
 package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.Utility;
+import com.mlib.config.StringListConfig;
 import com.mlib.events.AnyLootModificationEvent;
-import com.mlib.gamemodifiers.ContextBase;
-import com.mlib.gamemodifiers.ContextData;
-import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.*;
+import com.mlib.gamemodifiers.parameters.Priority;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,6 +22,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class OnLoot {
 	public static final Predicate< Data > HAS_BLOCK_STATE = data->data.blockState != null;
@@ -69,6 +71,26 @@ public class OnLoot {
 			this.lastDamagePlayer = event.lastDamagePlayer;
 			this.tool = event.tool;
 			this.origin = event.origin;
+		}
+	}
+
+	public static class Is extends Condition< Data > {
+		final StringListConfig ids;
+
+		public Is( String... ids ) {
+			this.ids = new StringListConfig( ids );
+
+			this.addConfig( this.ids.name( "loot_table_ids" ) );
+			this.apply( params->params.configurable( true ).priority( Priority.HIGH ) );
+		}
+
+		public Is( ResourceLocation... ids ) {
+			this( ( String[] )Stream.of( ids ).map( ResourceLocation::toString ).toArray() );
+		}
+
+		@Override
+		protected boolean check( GameModifier feature, Data data ) {
+			return this.ids.contains( data.context.getQueriedLootTableId().toString() );
 		}
 	}
 }
