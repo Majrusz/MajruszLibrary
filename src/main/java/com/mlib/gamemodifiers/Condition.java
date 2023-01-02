@@ -90,10 +90,6 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 			this( true );
 		}
 
-		public BooleanConfig getConfig() {
-			return this.availability;
-		}
-
 		@Override
 		protected boolean check( GameModifier gameModifier, DataType data ) {
 			return this.availability.getOrDefault();
@@ -110,10 +106,6 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 			this.apply( params->params.configurable( true ).priority( Priority.HIGH ) );
 		}
 
-		public DoubleConfig getConfig() {
-			return this.chance;
-		}
-
 		@Override
 		protected boolean check( GameModifier gameModifier, DataType data ) {
 			return Random.tryChance( this.chance.getOrDefault() );
@@ -128,9 +120,9 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 	}
 
 	public static class ArmorDependentChance< DataType extends ContextData > extends Condition< DataType > {
-		static final Function< EquipmentSlot, String > SLOT_FORMAT = slot->String.format( "%s_multiplier", slot.getName() );
-		final Map< EquipmentSlot, DoubleConfig > multipliers = new HashMap<>();
-		final ConfigGroup group = new ConfigGroup();
+		static protected final Function< EquipmentSlot, String > SLOT_FORMAT = slot->String.format( "%s_multiplier", slot.getName() );
+		protected final Map< EquipmentSlot, DoubleConfig > multipliers = new HashMap<>();
+		protected final ConfigGroup group = new ConfigGroup();
 
 		public ArmorDependentChance( Map< EquipmentSlot, Double > chances ) {
 			for( EquipmentSlot slot : EquipmentSlots.ARMOR ) {
@@ -159,10 +151,6 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 
 		public ArmorDependentChance() {
 			this( 0.7 );
-		}
-
-		public DoubleConfig getConfig( EquipmentSlot slot ) {
-			return this.multipliers.get( slot );
 		}
 
 		@Override
@@ -211,10 +199,6 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 
 		public Cooldown( int ticks, Dist distribution ) {
 			this( Utility.ticksToSeconds( ticks ), distribution );
-		}
-
-		public DoubleConfig getConfig() {
-			return this.cooldown;
 		}
 
 		@Override
