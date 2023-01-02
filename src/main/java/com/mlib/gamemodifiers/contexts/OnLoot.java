@@ -88,6 +88,12 @@ public class OnLoot {
 			this( ( String[] )Stream.of( ids ).map( ResourceLocation::toString ).toArray() );
 		}
 
+		public Is idsComment( String comment ) {
+			this.ids.comment( comment );
+
+			return this;
+		}
+
 		@Override
 		protected boolean check( GameModifier feature, Data data ) {
 			return this.ids.contains( data.context.getQueriedLootTableId().toString() );
