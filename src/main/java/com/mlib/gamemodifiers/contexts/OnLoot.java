@@ -13,10 +13,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -91,6 +94,27 @@ public class OnLoot {
 		@Override
 		protected boolean check( GameModifier feature, Data data ) {
 			return this.ids.contains( data.context.getQueriedLootTableId().toString() );
+		}
+	}
+
+	public static class AddToChest implements Consumer< Data > {
+		final ResourceLocation id;
+
+		public AddToChest( ResourceLocation id ) {
+			this.id = id;
+		}
+
+		@Override
+		public void accept( Data data ) {
+			List< ItemStack > itemStacks = ServerLifecycleHooks.getCurrentServer()
+				.getLootTables()
+				.get( this.id )
+				.getRandomItems( new LootContext.Builder( data.level )
+					.withParameter( LootContextParams.ORIGIN, data.origin )
+					.create( LootContextParamSets.CHEST )
+				);
+
+			data.generatedLoot.addAll( itemStacks );
 		}
 	}
 }
