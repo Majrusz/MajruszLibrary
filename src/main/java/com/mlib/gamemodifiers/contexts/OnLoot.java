@@ -78,17 +78,17 @@ public class OnLoot {
 	}
 
 	public static class Is extends Condition< Data > {
-		final StringListConfig ids;
+		protected final StringListConfig ids;
 
 		public Is( String... ids ) {
 			this.ids = new StringListConfig( ids );
 
-			this.addConfig( this.ids.name( "loot_table_ids" ).comment( "Determines where it can be found/to which loot tables it is applicable." ) );
+			this.addConfig( this.ids.name( "loot_table_ids" ).comment( "Determines to which loot tables it is applicable." ) );
 			this.apply( params->params.configurable( true ).priority( Priority.HIGH ) );
 		}
 
 		public Is( ResourceLocation... ids ) {
-			this( ( String[] )Stream.of( ids ).map( ResourceLocation::toString ).toArray() );
+			this( Stream.of( ids ).map( ResourceLocation::toString ).toArray( String[]::new ) );
 		}
 
 		@Override
@@ -97,24 +97,22 @@ public class OnLoot {
 		}
 	}
 
-	public static class AddToChest implements Consumer< Data > {
-		final ResourceLocation id;
-
+	public static class AddToChest extends Context {
 		public AddToChest( ResourceLocation id ) {
-			this.id = id;
-		}
+			super( data->{
+				List< ItemStack > itemStacks = ServerLifecycleHooks.getCurrentServer()
+					.getLootTables()
+					.get( id )
+					.getRandomItems( new LootContext.Builder( data.level )
+						.withParameter( LootContextParams.ORIGIN, data.origin )
+						.create( LootContextParamSets.CHEST )
+					);
 
-		@Override
-		public void accept( Data data ) {
-			List< ItemStack > itemStacks = ServerLifecycleHooks.getCurrentServer()
-				.getLootTables()
-				.get( this.id )
-				.getRandomItems( new LootContext.Builder( data.level )
-					.withParameter( LootContextParams.ORIGIN, data.origin )
-					.create( LootContextParamSets.CHEST )
-				);
+				data.generatedLoot.addAll( itemStacks );
+			} );
 
-			data.generatedLoot.addAll( itemStacks );
+			this.addCondition( new Condition.IsServer<>() )
+				.addCondition( OnLoot.HAS_ORIGIN );
 		}
 	}
 }
