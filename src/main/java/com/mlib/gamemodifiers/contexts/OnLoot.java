@@ -80,7 +80,7 @@ public class OnLoot {
 		public Is( String... ids ) {
 			this.ids = new StringListConfig( ids );
 
-			this.addConfig( this.ids.name( "loot_table_ids" ) );
+			this.addConfig( this.ids.name( "loot_table_ids" ).comment( "Determines which loot tables it should affect." ) );
 			this.apply( params->params.configurable( true ).priority( Priority.HIGH ) );
 		}
 
