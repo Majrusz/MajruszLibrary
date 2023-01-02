@@ -80,18 +80,12 @@ public class OnLoot {
 		public Is( String... ids ) {
 			this.ids = new StringListConfig( ids );
 
-			this.addConfig( this.ids.name( "loot_table_ids" ).comment( "Determines which loot tables it should affect." ) );
+			this.addConfig( this.ids.name( "loot_table_ids" ).comment( "Determines where it can be found/to which loot tables it is applicable." ) );
 			this.apply( params->params.configurable( true ).priority( Priority.HIGH ) );
 		}
 
 		public Is( ResourceLocation... ids ) {
 			this( ( String[] )Stream.of( ids ).map( ResourceLocation::toString ).toArray() );
-		}
-
-		public Is idsComment( String comment ) {
-			this.ids.comment( comment );
-
-			return this;
 		}
 
 		@Override
