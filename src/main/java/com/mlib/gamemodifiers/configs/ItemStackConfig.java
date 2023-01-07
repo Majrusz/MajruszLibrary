@@ -18,6 +18,7 @@ public class ItemStackConfig extends ConfigGroup {
 	final EquipmentSlot equipmentSlot;
 	final DoubleConfig chance;
 	final DoubleConfig dropChance;
+	DoubleConfig enchantChance = null;
 
 	public ItemStackConfig( Supplier< ? extends Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance ) {
 		this.item = item;
@@ -36,6 +37,15 @@ public class ItemStackConfig extends ConfigGroup {
 	public ItemStackConfig( RegistryObject< ? extends Item > item, EquipmentSlot equipmentSlot, double chance, double dropChance
 	) {
 		this( item::get, equipmentSlot, chance, dropChance );
+	}
+
+	public ItemStackConfig enchantable( double enchantChance ) {
+		this.enchantChance = new DoubleConfig( enchantChance, Range.CHANCE );
+
+		this.addConfig( this.chance.name( "enchant_chance" )
+			.name( "Chance for item to be randomly enchanted (enchants depend on Clamped Regional Difficulty)." ) );
+
+		return this;
 	}
 
 	public void tryToEquip( PathfinderMob mob, double clampedRegionalDifficulty ) {
@@ -59,10 +69,25 @@ public class ItemStackConfig extends ConfigGroup {
 		return this.dropChance.get();
 	}
 
+	public double getEnchantChance() {
+		return this.enchantChance != null ? this.enchantChance.get() : 0.0;
+	}
+
 	protected ItemStack buildItemStack( double clampedRegionalDifficulty ) {
-		ItemStack itemStack = new ItemStack( this.getItem() );
+		return this.tryToEnchant( this.tryToDamage( new ItemStack( this.getItem() ) ), clampedRegionalDifficulty );
+	}
+
+	private ItemStack tryToDamage( ItemStack itemStack ) {
 		if( itemStack.isDamageableItem() ) {
 			return ItemHelper.damageItem( itemStack, 0.5 );
+		} else {
+			return itemStack;
+		}
+	}
+
+	private ItemStack tryToEnchant( ItemStack itemStack, double clampedRegionalDifficulty ) {
+		if( itemStack.isEnchantable() && Random.tryChance( this.getEnchantChance() ) ) {
+			return ItemHelper.enchantItem( itemStack, clampedRegionalDifficulty, true );
 		} else {
 			return itemStack;
 		}

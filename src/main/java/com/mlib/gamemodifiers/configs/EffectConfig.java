@@ -14,9 +14,11 @@ import java.util.function.Supplier;
 public class EffectConfig extends ConfigGroup {
 	static final Range< Integer > AMPLIFIER = new Range<>( 1, 10 );
 	static final Range< Double > DURATION = new Range<>( 1.0, 999.0 );
+	static final Range< Double > MAX_DURATION = new Range<>( 5.0, 9999.0 );
 	final Supplier< ? extends MobEffect > effect;
 	final IntegerConfig amplifier;
 	final DoubleConfig duration;
+	DoubleConfig maxDuration = null;
 
 	public EffectConfig( Supplier< ? extends MobEffect > effect, int amplifier, double duration ) {
 		this.effect = effect;
@@ -35,8 +37,20 @@ public class EffectConfig extends ConfigGroup {
 		this( ()->effect, amplifier, duration );
 	}
 
+	public EffectConfig stackable( double maxDuration ) {
+		this.maxDuration = new DoubleConfig( maxDuration, MAX_DURATION );
+
+		this.addConfig( this.maxDuration.name( "maximum_duration" ).comment( "Maximum duration in seconds it can reach." ) );
+
+		return this;
+	}
+
 	public void apply( LivingEntity entity, int extraAmplifier, int extraDuration ) {
-		MobEffectHelper.tryToApply( entity, this.getEffect(), this.getDuration() + extraDuration, this.getAmplifier() + extraAmplifier );
+		if( this.isStackable() ) {
+			MobEffectHelper.tryToStack( entity, this.getEffect(), this.getDuration() + extraDuration, this.getAmplifier() + extraAmplifier, this.getMaxDuration() );
+		} else {
+			MobEffectHelper.tryToApply( entity, this.getEffect(), this.getDuration() + extraDuration, this.getAmplifier() + extraAmplifier );
+		}
 	}
 
 	public void apply( LivingEntity entity ) {
@@ -53,5 +67,13 @@ public class EffectConfig extends ConfigGroup {
 
 	public int getDuration() {
 		return this.duration.asTicks();
+	}
+
+	public boolean isStackable() {
+		return this.maxDuration != null;
+	}
+
+	public int getMaxDuration() {
+		return this.isStackable() ? this.maxDuration.asTicks() : 0;
 	}
 }
