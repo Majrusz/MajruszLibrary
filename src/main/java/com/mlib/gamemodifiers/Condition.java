@@ -156,10 +156,10 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		}
 	}
 
-	public static class Context< DataType extends ContextData > extends Condition< DataType > {
+	public static class Custom< DataType extends ContextData > extends Condition< DataType > {
 		protected final Predicate< DataType > predicate;
 
-		public Context( Predicate< DataType > predicate ) {
+		public Custom( Predicate< DataType > predicate ) {
 			this.predicate = predicate;
 
 			this.apply( params->params.priority( Priority.LOW ) );

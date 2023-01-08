@@ -82,11 +82,11 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 	}
 
 	public ContextBase< DataType > addCondition( Predicate< DataType > predicate ) {
-		return this.addCondition( new Condition.Context<>( predicate ) );
+		return this.addCondition( new Condition.Custom<>( predicate ) );
 	}
 
 	public ContextBase< DataType > addCondition( Supplier< Boolean > check ) {
-		return this.addCondition( new Condition.Context<>( data->check.get() ) );
+		return this.addCondition( new Condition.Custom<>( data->check.get() ) );
 	}
 
 	@SafeVarargs
