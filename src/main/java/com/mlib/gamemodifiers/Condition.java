@@ -52,7 +52,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		return this.apply( params->params.negated( !params.isNegated() ) );
 	}
 
-	public Condition< DataType > setConfigurable( boolean isConfigurable ) {
+	public Condition< DataType > configurable( boolean isConfigurable ) {
 		return this.apply( params->params.configurable( isConfigurable ) );
 	}
 
@@ -68,8 +68,9 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		public Excludable( boolean defaultValue ) {
 			this.availability = new BooleanConfig( defaultValue );
 
-			this.addConfig( this.availability.name( "is_enabled" ).comment( "Specifies whether this is enabled." ) );
-			this.apply( params->params.configurable( true ).priority( Priority.HIGHEST ) );
+			this.priority( Priority.HIGHEST )
+				.configurable( true )
+				.addConfig( this.availability.name( "is_enabled" ).comment( "Specifies whether this is enabled." ) );
 		}
 
 		public Excludable() {
@@ -88,8 +89,9 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		public Chance( double chance ) {
 			this.chance = new DoubleConfig( chance, Range.CHANCE );
 
-			this.addConfig( this.chance.name( "chance" ).comment( "Chance for this to happen." ) );
-			this.apply( params->params.configurable( true ).priority( Priority.HIGH ) );
+			this.priority( Priority.HIGH )
+				.configurable( true )
+				.addConfig( this.chance.name( "chance" ).comment( "Chance for this to happen." ) );
 		}
 
 		@Override
@@ -117,9 +119,11 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 				this.group.addConfig( config.name( SLOT_FORMAT.apply( slot ) ) );
 			}
 
-			this.addConfig( this.group.name( "ArmorChanceMultipliers" )
-				.comment( "Chance multipliers for each armor piece.\nFor instance 'head_multiplier = 0.8' makes the final chance 30% lower if the mob has any helmet." ) );
-			this.apply( params->params.configurable( true ) );
+			this.configurable( true )
+				.addConfig( this.group
+					.name( "ArmorChanceMultipliers" )
+					.comment( "Chance multipliers for each armor piece.\nFor instance 'head_multiplier = 0.8' makes the final chance 30% lower if the mob has any helmet." )
+				);
 		}
 
 		public ArmorDependentChance( double headChance, double chestChance, double legChance, double feetChance ) {
@@ -162,7 +166,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		public Custom( Predicate< DataType > predicate ) {
 			this.predicate = predicate;
 
-			this.apply( params->params.priority( Priority.LOW ) );
+			this.priority( Priority.LOW );
 		}
 
 		@Override
@@ -179,8 +183,9 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 			this.distribution = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
 			this.cooldown = new DoubleConfig( seconds, new Range<>( 0.1, 300.0 ) );
 
-			this.addConfig( this.cooldown.name( "cooldown" ).comment( "Cooldown in seconds before it happens." ) );
-			this.apply( params->params.configurable( true ).priority( Priority.HIGH ) );
+			this.priority( Priority.HIGH )
+				.configurable( true )
+				.addConfig( this.cooldown.name( "cooldown" ).comment( "Cooldown in seconds before it happens." ) );
 		}
 
 		public Cooldown( int ticks, Dist distribution ) {
@@ -255,7 +260,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 
 	public static class IsServer< DataType extends ContextData > extends Condition< DataType > {
 		public IsServer() {
-			this.apply( params->params.priority( Priority.HIGH ) );
+			this.priority( Priority.HIGH );
 		}
 
 		@Override
@@ -270,7 +275,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		public IsShiftKeyDown( Function< DataType, Player > player ) {
 			this.player = player;
 
-			this.apply( params->params.priority( Priority.HIGH ) );
+			this.priority( Priority.HIGH );
 		}
 
 		public IsShiftKeyDown() {
@@ -291,7 +296,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 		public IsOnGround( Function< DataType, Entity > entity ) {
 			this.entity = entity;
 
-			this.apply( params->params.priority( Priority.HIGH ) );
+			this.priority( Priority.HIGH );
 		}
 
 		public IsOnGround() {
