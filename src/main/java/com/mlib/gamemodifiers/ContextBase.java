@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public abstract class ContextBase< DataType extends ContextData > extends ConfigGroup implements IParameterizable< Parameters > {
@@ -81,7 +82,11 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 	}
 
 	public ContextBase< DataType > addCondition( Predicate< DataType > predicate ) {
-		return addCondition( new Condition.Context<>( predicate ) );
+		return this.addCondition( new Condition.Context<>( predicate ) );
+	}
+
+	public ContextBase< DataType > addCondition( Supplier< Boolean > check ) {
+		return this.addCondition( new Condition.Context<>( data->check.get() ) );
 	}
 
 	@SafeVarargs
@@ -94,6 +99,13 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 	@SafeVarargs
 	public final ContextBase< DataType > addConditions( Predicate< DataType >... predicates ) {
 		Stream.of( predicates ).forEach( this::addCondition );
+
+		return this;
+	}
+
+	@SafeVarargs
+	public final ContextBase< DataType > addConditions( Supplier< Boolean >... checks ) {
+		Stream.of( checks ).forEach( this::addCondition );
 
 		return this;
 	}
