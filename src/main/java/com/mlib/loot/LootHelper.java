@@ -11,7 +11,9 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class LootHelper {
 	public static LootTable getLootTable( ResourceLocation location ) {
-		return ServerLifecycleHooks.getCurrentServer().getLootTables().get( location );
+		return ServerLifecycleHooks.getCurrentServer()
+			.getLootTables()
+			.get( location );
 	}
 
 	public static LootContext toGiftContext( Entity entity ) {
