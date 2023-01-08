@@ -15,10 +15,10 @@ public class BooleanConfig extends ValueConfig< Boolean > {
 	}
 
 	public boolean isEnabled() {
-		return get();
+		return this.getOrDefault();
 	}
 
 	public boolean isDisabled() {
-		return !get();
+		return !this.getOrDefault();
 	}
 }
