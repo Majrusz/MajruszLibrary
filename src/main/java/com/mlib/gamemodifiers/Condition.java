@@ -126,11 +126,11 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 				);
 		}
 
-		public ArmorDependentChance( double headChance, double chestChance, double legChance, double feetChance ) {
+		public ArmorDependentChance( double headChance, double chestChance, double legsChance, double feetChance ) {
 			this( Map.of(
 				EquipmentSlot.HEAD, headChance,
 				EquipmentSlot.CHEST, chestChance,
-				EquipmentSlot.LEGS, legChance,
+				EquipmentSlot.LEGS, legsChance,
 				EquipmentSlot.FEET, feetChance
 			) );
 		}
