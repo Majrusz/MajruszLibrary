@@ -41,7 +41,8 @@ public class HarvestCropEvent extends PlayerEvent implements IModBusEvent {
 				.addCondition( OnLoot.HAS_BLOCK_STATE.and( data->data.blockState.getBlock() instanceof CropBlock ) )
 				.addCondition( OnLoot.HAS_ENTITY.and( data->data.entity instanceof Player ) )
 				.addCondition( OnLoot.HAS_TOOL )
-				.addCondition( OnLoot.HAS_ORIGIN );
+				.addCondition( OnLoot.HAS_ORIGIN )
+				.insertTo( this );
 		}
 
 		private void dispatchCropEvent( OnLoot.Data data ) {

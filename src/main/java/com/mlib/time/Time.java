@@ -47,7 +47,8 @@ public class Time {
 		public Updater() {
 			new OnServerTick.Context( this::updateExecs )
 				.priority( Priority.HIGHEST )
-				.addCondition( TimeHelper::isEndPhase );
+				.addCondition( TimeHelper::isEndPhase )
+				.insertTo( this );
 		}
 
 		private void updateExecs( OnServerTick.Data data ) {

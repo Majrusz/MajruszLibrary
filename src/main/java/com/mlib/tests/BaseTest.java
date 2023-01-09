@@ -33,6 +33,7 @@ public class BaseTest extends GameModifier {
 	}
 
 	public BaseTest( Class< ? > clazz ) {
-		new OnTestsRegister.Context( data->data.event.register( clazz ) );
+		new OnTestsRegister.Context( data->data.event.register( clazz ) )
+			.insertTo( this );
 	}
 }
