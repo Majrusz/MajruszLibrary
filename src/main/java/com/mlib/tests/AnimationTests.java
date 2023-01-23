@@ -8,7 +8,7 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.util.Mth;
 import net.minecraftforge.gametest.GameTestHolder;
-import org.joml.Vector3f;
+import com.mojang.math.Vector3f;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class AnimationTests extends BaseTest {
@@ -117,7 +117,7 @@ public class AnimationTests extends BaseTest {
 	}
 
 	private static void assertThat( GameTestHelper helper, Vector3f result, Vector3f expected ) {
-		if( !result.equals( expected, 1e-3f ) ) {
+		if( !( Math.abs( result.x() - expected.x() ) + Math.abs( result.y() - expected.y() ) + Math.abs( result.z() - expected.z() ) < 1e-3f ) ) {
 			helper.fail( "Animation< Vector > returns invalid value (result: %s, expected: %s)".formatted( result, expected ) );
 		}
 	}

@@ -1,7 +1,7 @@
 package com.mlib.math;
 
-import org.joml.Vector3f;
-import org.joml.Vector3d;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;

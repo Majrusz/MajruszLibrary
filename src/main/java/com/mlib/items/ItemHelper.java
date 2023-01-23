@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
@@ -148,5 +149,33 @@ public class ItemHelper {
 			|| item instanceof DiggerItem
 			|| item instanceof BowItem
 			|| item instanceof CrossbowItem;
+	}
+
+	public static void addEnchantmentTypeToItemGroup( CreativeModeTab itemTab, EnchantmentCategory category ) {
+		EnchantmentCategory[] group = itemTab.getEnchantmentCategories();
+		if( group.length == 0 ) {
+			itemTab.setEnchantmentCategories( category );
+			return;
+		}
+		EnchantmentCategory[] temporary = new EnchantmentCategory[ group.length + 1 ];
+		System.arraycopy( group, 0, temporary, 0, group.length );
+		temporary[ group.length - 1 ] = category;
+		itemTab.setEnchantmentCategories( temporary );
+	}
+
+	public static void addEnchantmentTypesToItemGroup( CreativeModeTab itemTab, EnchantmentCategory... categories ) {
+		EnchantmentCategory[] group = itemTab.getEnchantmentCategories();
+		if( group.length == 0 ) {
+			itemTab.setEnchantmentCategories( categories );
+		} else {
+			EnchantmentCategory[] temporary = new EnchantmentCategory[ group.length + categories.length ];
+			System.arraycopy( group, 0, temporary, 0, group.length );
+			int i = 1;
+			for( EnchantmentCategory category : categories ) {
+				temporary[ group.length - i ] = category;
+				i++;
+			}
+			itemTab.setEnchantmentCategories( temporary );
+		}
 	}
 }

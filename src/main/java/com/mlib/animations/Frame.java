@@ -2,7 +2,7 @@ package com.mlib.animations;
 
 import com.mlib.math.VectorHelper;
 import net.minecraft.util.Mth;
-import org.joml.Vector3f;
+import com.mojang.math.Vector3f;
 
 public abstract class Frame< Type > {
 	final Type value;

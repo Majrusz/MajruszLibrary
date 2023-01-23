@@ -9,6 +9,7 @@ import net.minecraft.tags.GameEventTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.ProfilePublicKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.DynamicGameEventListener;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
@@ -30,11 +31,11 @@ public abstract class MixinPlayer extends MixinEntity {
 	DynamicGameEventListener< VibrationListener > mlibVibrationListener;
 
 	@Shadow( aliases = { "this$0" } )
-	@Inject( method = "<init> (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;FLcom/mojang/authlib/GameProfile;)V", at = @At( "TAIL" ) )
-	private void constructor( Level level, BlockPos position, float rot, GameProfile profile, CallbackInfo callback ) {
+	@Inject( method = "<init> (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;FLcom/mojang/authlib/GameProfile;Lnet/minecraft/world/entity/player/ProfilePublicKey;)V", at = @At( "TAIL" ) )
+	private void constructor( Level level, BlockPos position, float rot, GameProfile profile, @Nullable ProfilePublicKey publicKey, CallbackInfo callback ) {
 		Player player = ( Player )( Object )this;
 		this.mlibVibrationListenerConfig = new Config( player );
-		this.mlibVibrationListener = new DynamicGameEventListener<>( new VibrationListener( new EntityPositionSource( player, player.getEyeHeight() ), 16, this.mlibVibrationListenerConfig ) );
+		this.mlibVibrationListener = new DynamicGameEventListener<>( new VibrationListener( new EntityPositionSource( player, player.getEyeHeight() ), 16, this.mlibVibrationListenerConfig, null, 0.0f, 0 ) );
 	}
 
 	@Shadow( aliases = { "this$0" } )

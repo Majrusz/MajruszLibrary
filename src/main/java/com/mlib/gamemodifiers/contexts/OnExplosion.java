@@ -66,7 +66,7 @@ public class OnExplosion {
 		public Data( ExplosionEvent event ) {
 			super( Utility.castIfPossible( ServerLevel.class, event.getLevel() ), event );
 			this.explosion = event.getExplosion();
-			this.sourceMob = this.explosion.getIndirectSourceEntity();
+			this.sourceMob = this.explosion.getSourceMob();
 			this.radius = new MutableFloat( this.explosion.radius );
 			this.causesFire = new MutableBoolean( this.explosion.fire );
 		}
