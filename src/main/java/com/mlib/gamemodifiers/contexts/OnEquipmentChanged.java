@@ -32,7 +32,7 @@ public class OnEquipmentChanged {
 
 		public Data( LivingEquipmentChangeEvent event ) {
 			super( event.getEntity(), event );
-			this.entity = event.getEntity();
+			this.entity = event.getEntityLiving();
 		}
 	}
 }

@@ -4,7 +4,7 @@ import com.mlib.client.ClientHelper;
 import com.mlib.text.FormattedTranslatable;
 import com.mlib.text.TextHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +29,7 @@ public class ItemSetTooltip {
 
 	@SubscribeEvent
 	public static void onItemTooltip( ItemTooltipEvent event ) {
-		@Nullable Player player = event.getEntity();
+		@Nullable Player player = event.getPlayer();
 		ItemStack itemStack = event.getItemStack();
 		List< Component > tooltip = event.getToolTip();
 		if( player == null || isNotPartOfAnySet( itemStack ) )
@@ -58,17 +58,17 @@ public class ItemSetTooltip {
 	}
 
 	private static void addItemList( List< Component > tooltip, ItemSet itemSet, Player player ) {
-		MutableComponent title = Component.translatable( ITEM_TITLE_KEY, itemSet.getTranslatedName(), itemSet.countEquippedItems( player ), itemSet.getTotalItemsCount() );
+		MutableComponent title = new TranslatableComponent( ITEM_TITLE_KEY, itemSet.getTranslatedName(), itemSet.countEquippedItems( player ), itemSet.getTotalItemsCount() );
 		tooltip.add( title.withStyle( HINT_FORMAT ) );
 		itemSet.getItems().forEach( item->{
 			ChatFormatting chatFormatting = item.isEquipped( player ) ? itemSet.getChatFormatting() : DISABLED_FORMAT;
 
-			tooltip.add( Component.translatable( ITEM_KEY, item.getTranslatedName() ).withStyle( chatFormatting ) );
+			tooltip.add( new TranslatableComponent( ITEM_KEY, item.getTranslatedName() ).withStyle( chatFormatting ) );
 		} );
 	}
 
 	private static void addBonusList( List< Component > tooltip, ItemSet itemSet, Player player ) {
-		MutableComponent title = Component.translatable( BONUS_TITLE_KEY, itemSet.getTranslatedName() );
+		MutableComponent title = new TranslatableComponent( BONUS_TITLE_KEY, itemSet.getTranslatedName() );
 		tooltip.add( title.withStyle( HINT_FORMAT ) );
 		itemSet.getBonuses().forEach( bonus->{
 			boolean isConditionMet = bonus.isConditionMet( itemSet, player );

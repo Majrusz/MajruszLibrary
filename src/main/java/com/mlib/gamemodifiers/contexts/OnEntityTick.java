@@ -22,17 +22,17 @@ public class OnEntityTick {
 		}
 
 		@SubscribeEvent
-		public static void onEntityTick( LivingEvent.LivingTickEvent event ) {
+		public static void onEntityTick( LivingEvent.LivingUpdateEvent event ) {
 			CONTEXTS.accept( new Data( event ) );
 		}
 	}
 
-	public static class Data extends ContextData.Event< LivingEvent.LivingTickEvent > {
+	public static class Data extends ContextData.Event< LivingEvent.LivingUpdateEvent > {
 		public final LivingEntity entity;
 
-		public Data( LivingEvent.LivingTickEvent event ) {
+		public Data( LivingEvent.LivingUpdateEvent event ) {
 			super( event.getEntity(), event );
-			this.entity = event.getEntity();
+			this.entity = event.getEntityLiving();
 		}
 	}
 }

@@ -34,7 +34,7 @@ public class OnPotionBrewed {
 
 		public Data( PlayerBrewedPotionEvent event ) {
 			super( event.getEntity(), event );
-			this.player = event.getEntity();
+			this.player = event.getPlayer();
 			this.itemStack = event.getStack();
 		}
 	}

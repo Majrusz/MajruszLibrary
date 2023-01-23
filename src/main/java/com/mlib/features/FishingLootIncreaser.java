@@ -10,7 +10,7 @@ import com.mlib.gamemodifiers.contexts.OnItemFished;
 import com.mlib.gamemodifiers.parameters.Priority;
 import com.mlib.math.VectorHelper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -92,7 +92,7 @@ public class FishingLootIncreaser extends GameModifier {
 	}
 
 	private MutableComponent buildMessage( List< FishedItem > fishedItems ) {
-		MutableComponent message = Component.literal( "(" ).withStyle( ChatFormatting.WHITE );
+		MutableComponent message = new TextComponent( "(" ).withStyle( ChatFormatting.WHITE );
 		for( int idx = 0; idx < fishedItems.size(); ++idx ) {
 			if( idx > 0 ) {
 				message.append( ", " );
@@ -100,7 +100,7 @@ public class FishingLootIncreaser extends GameModifier {
 			message.append( fishedItems.get( idx ).build() );
 		}
 
-		return message.append( Component.literal( ")" ) );
+		return message.append( new TextComponent( ")" ) );
 	}
 
 	private static class FishedItem {
@@ -122,7 +122,7 @@ public class FishingLootIncreaser extends GameModifier {
 				.getName( this.itemStack )
 				.copy()
 				.withStyle( this.itemFormatting )
-				.append( Component.literal( this.count > 1 ? String.format( " x%d", this.count ) : "" ).withStyle( this.countFormatting ) );
+				.append( new TextComponent( this.count > 1 ? String.format( " x%d", this.count ) : "" ).withStyle( this.countFormatting ) );
 		}
 
 		public void increase( ItemStack itemStack, boolean isExtra ) {

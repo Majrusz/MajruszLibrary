@@ -1,7 +1,7 @@
 package com.mlib.text;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -70,10 +70,10 @@ public class TextHelper {
 	}
 
 	public static void addEmptyLine( List< Component > components ) {
-		components.add( Component.literal( " " ) );
+		components.add( new TextComponent( " " ) );
 	}
 
 	public static void addMoreDetailsText( List< Component > components ) {
-		components.add( Component.translatable( "mlib.items.advanced_hint" ).withStyle( ChatFormatting.GRAY ) );
+		components.add( new TranslatableComponent( "mlib.items.advanced_hint" ).withStyle( ChatFormatting.GRAY ) );
 	}
 }

@@ -3,7 +3,7 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;

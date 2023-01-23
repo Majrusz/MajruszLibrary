@@ -36,7 +36,7 @@ public class OnItemCrafted {
 
 		public Data( PlayerEvent.ItemCraftedEvent event ) {
 			super( event.getEntity(), event );
-			this.player = event.getEntity();
+			this.player = event.getPlayer();
 			this.itemStack = event.getCrafting();
 			this.container = event.getInventory();
 		}

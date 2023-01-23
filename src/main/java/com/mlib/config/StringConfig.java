@@ -1,6 +1,6 @@
 package com.mlib.config;
 
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class StringConfig extends ValueConfig< String > {
@@ -16,10 +16,10 @@ public class StringConfig extends ValueConfig< String > {
 	}
 
 	public Component asLiteral() {
-		return Component.literal( this.getOrDefault() );
+		return new TextComponent( this.getOrDefault() );
 	}
 
 	public Component asTranslatable( Object... params ) {
-		return Component.translatable( this.getOrDefault(), params );
+		return new TranslatableComponent( this.getOrDefault(), params );
 	}
 }

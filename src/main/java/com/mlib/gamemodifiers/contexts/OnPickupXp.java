@@ -32,7 +32,7 @@ public class OnPickupXp {
 
 		public Data( PlayerXpEvent.PickupXp event ) {
 			super( event.getEntity(), event );
-			this.player = event.getEntity();
+			this.player = event.getPlayer();
 		}
 	}
 }

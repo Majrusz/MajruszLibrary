@@ -133,8 +133,4 @@ public class EntityHelper {
 	) {
 		return getEntitiesInSphere( entityClass, level, entity.position(), radius, extraPredicate );
 	}
-
-	public static void sendExtraClientGlowTicks( ServerPlayer player, Entity target, int ticks ) {
-		NetworkHandler.CHANNEL.send( PacketDistributor.PLAYER.with( ()->player ), new NetworkHandler.GlowEntityMessage( target, ticks ) );
-	}
 }

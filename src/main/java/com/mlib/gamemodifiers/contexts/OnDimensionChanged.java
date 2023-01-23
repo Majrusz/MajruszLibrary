@@ -36,7 +36,7 @@ public class OnDimensionChanged {
 
 		public Data( PlayerEvent.PlayerChangedDimensionEvent event ) {
 			super( event.getEntity(), event );
-			this.entity = event.getEntity();
+			this.entity = event.getEntityLiving();
 			this.from = event.getFrom();
 			this.to = event.getTo();
 		}

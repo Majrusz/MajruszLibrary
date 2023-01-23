@@ -4,7 +4,6 @@ import com.mlib.config.DoubleConfig;
 import com.mlib.math.VectorHelper;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.Vec3i;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -12,14 +11,14 @@ import java.util.Map;
 import java.util.Set;
 
 public class Random {
-	static final RandomSource CLIENT = RandomSource.create();
-	static final RandomSource SERVER = RandomSource.create();
+	static final java.util.Random CLIENT = new java.util.Random();
+	static final java.util.Random SERVER = new java.util.Random();
 
 	/**
 	 Returns random source which depends on current thread, to make sure all functions are
 	 thread safe and can be accessed on both server and client at the same time.
 	 */
-	public static RandomSource getThreadSafe() {
+	public static java.util.Random getThreadSafe() {
 		return Utility.isServerSide() ? SERVER : CLIENT;
 	}
 

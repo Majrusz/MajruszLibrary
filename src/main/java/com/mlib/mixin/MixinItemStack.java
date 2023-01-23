@@ -4,9 +4,8 @@ import com.mlib.events.ItemHurtEvent;
 import com.mlib.gamemodifiers.contexts.OnItemAttributeTooltip;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,8 +22,8 @@ import java.util.List;
 @Mixin( ItemStack.class )
 public abstract class MixinItemStack {
 	@Shadow( aliases = { "this$0" } )
-	@Inject( method = "hurt(ILnet/minecraft/util/RandomSource;Lnet/minecraft/server/level/ServerPlayer;)Z", at = @At( "RETURN" ), cancellable = true )
-	private void hurt( int damage, RandomSource source, @Nullable ServerPlayer player,
+	@Inject( method = "hurt(ILjava/util/Random;Lnet/minecraft/server/level/ServerPlayer;)Z", at = @At( "RETURN" ), cancellable = true )
+	private void hurt( int damage, java.util.Random source, @Nullable ServerPlayer player,
 		CallbackInfoReturnable< Boolean > callback
 	) {
 		ItemStack itemStack = ( ItemStack )( Object )this;
@@ -49,8 +48,8 @@ public abstract class MixinItemStack {
 
 			int insertIdx = this.getInsertIdx( components, slot );
 			if( insertIdx == -1 ) {
-				components.add( CommonComponents.EMPTY );
-				components.add( Component.translatable( this.getModifierId( slot ) ).withStyle( ChatFormatting.GRAY ) );
+				components.add( new TextComponent( "" ) );
+				components.add( new TranslatableComponent( this.getModifierId( slot ) ).withStyle( ChatFormatting.GRAY ) );
 				components.addAll( slotComponents );
 			} else {
 				components.addAll( insertIdx, slotComponents );

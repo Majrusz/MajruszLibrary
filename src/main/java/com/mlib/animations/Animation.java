@@ -42,11 +42,11 @@ public class Animation< Type > {
 	}
 
 	public static void applyScale( float value, ModelPart... modelParts ) {
-		for( ModelPart modelPart : modelParts ) {
+		/*for( ModelPart modelPart : modelParts ) {
 			modelPart.xScale = value;
 			modelPart.yScale = value;
 			modelPart.zScale = value;
-		}
+		}*/
 	}
 
 	public Animation< Type > add( float duration, Frame< Type > frame ) {

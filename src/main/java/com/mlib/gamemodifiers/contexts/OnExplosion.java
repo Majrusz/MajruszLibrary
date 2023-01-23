@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
-import net.minecraftforge.event.level.ExplosionEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.mutable.MutableBoolean;
@@ -64,7 +64,7 @@ public class OnExplosion {
 		public final MutableBoolean causesFire;
 
 		public Data( ExplosionEvent event ) {
-			super( Utility.castIfPossible( ServerLevel.class, event.getLevel() ), event );
+			super( Utility.castIfPossible( ServerLevel.class, event.getWorld() ), event );
 			this.explosion = event.getExplosion();
 			this.sourceMob = this.explosion.getSourceMob();
 			this.radius = new MutableFloat( this.explosion.radius );

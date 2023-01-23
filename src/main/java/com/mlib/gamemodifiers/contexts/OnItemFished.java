@@ -37,7 +37,7 @@ public class OnItemFished {
 
 		public Data( ItemFishedEvent event ) {
 			super( event.getEntity(), event );
-			this.player = event.getEntity();
+			this.player = event.getPlayer();
 			this.hook = event.getHookEntity();
 			this.drops = event.getDrops();
 		}

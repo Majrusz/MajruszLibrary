@@ -10,6 +10,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.server.command.EnumArgument;
 
 import java.util.ArrayList;
@@ -123,7 +124,7 @@ public class CommandBuilder {
 	}
 
 	public CommandBuilder isPlayer() {
-		return this.add( CommandSourceStack::isPlayer );
+		return this.add( ( CommandSourceStack stack )->stack.getEntity() instanceof Player );
 	}
 
 	public CommandBuilder isDevelopmentBuild() {

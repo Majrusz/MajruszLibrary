@@ -32,7 +32,7 @@ public class OnPlayerLogged {
 
 		public Data( PlayerEvent.PlayerLoggedInEvent event ) {
 			super( event.getEntity(), event );
-			this.player = event.getEntity();
+			this.player = event.getPlayer();
 		}
 	}
 }

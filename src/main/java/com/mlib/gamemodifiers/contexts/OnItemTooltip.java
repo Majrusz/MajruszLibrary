@@ -3,7 +3,7 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -43,7 +43,7 @@ public class OnItemTooltip {
 			this.itemStack = event.getItemStack();
 			this.tooltip = event.getToolTip();
 			this.flags = event.getFlags();
-			this.player = event.getEntity();
+			this.player = event.getPlayer();
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package com.mlib.itemsets;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -54,6 +54,6 @@ public abstract class ItemSet {
 	}
 
 	public MutableComponent getTranslatedName() {
-		return Component.translatable( this.keyId );
+		return new TranslatableComponent( this.keyId );
 	}
 }

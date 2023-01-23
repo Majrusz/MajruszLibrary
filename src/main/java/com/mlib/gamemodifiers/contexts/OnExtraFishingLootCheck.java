@@ -7,6 +7,7 @@ import com.mlib.gamemodifiers.Contexts;
 import com.mlib.items.ItemHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -63,7 +64,7 @@ public class OnExtraFishingLootCheck {
 		}
 
 		private static boolean isFishingRod( ItemStack itemStack ) {
-			return itemStack.getItem().canPerformAction( itemStack, ToolActions.FISHING_ROD_CAST );
+			return itemStack.getItem() instanceof FishingRodItem;
 		}
 	}
 }

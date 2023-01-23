@@ -2,7 +2,7 @@ package com.mlib.itemsets;
 
 import com.mlib.text.FormattedTranslatable;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -21,7 +21,7 @@ public class BonusData {
 	}
 
 	public static IRequirementFormat requiredItemsFormat( int count ) {
-		return ( itemSet, entity )->Component.translatable( "%1$s/%2$s", count, itemSet.getTotalItemsCount() );
+		return ( itemSet, entity )->new TranslatableComponent( "%1$s/%2$s", count, itemSet.getTotalItemsCount() );
 	}
 
 	public BonusData( ICondition condition, String keyId, IRequirementFormat requirementFormat, Object... parameters ) {

@@ -32,7 +32,7 @@ public class OnBreakSpeed {
 
 		public Data( PlayerEvent.BreakSpeed event ) {
 			super( event.getEntity(), event );
-			this.player = event.getEntity();
+			this.player = event.getPlayer();
 		}
 	}
 }

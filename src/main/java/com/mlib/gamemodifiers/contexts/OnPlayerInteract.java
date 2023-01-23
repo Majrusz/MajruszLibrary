@@ -41,12 +41,12 @@ public class OnPlayerInteract {
 
 		@SubscribeEvent
 		public static void onRightClickBlock( PlayerInteractEvent.RightClickBlock event ) {
-			CONTEXTS.accept( new Data( event, event.getEntity() ) );
+			CONTEXTS.accept( new Data( event, event.getEntityLiving() ) );
 		}
 
 		@SubscribeEvent
 		public static void onRightClickItem( PlayerInteractEvent.RightClickItem event ) {
-			CONTEXTS.accept( new Data( event, event.getEntity() ) );
+			CONTEXTS.accept( new Data( event, event.getEntityLiving() ) );
 		}
 	}
 
@@ -61,7 +61,7 @@ public class OnPlayerInteract {
 		public Data( PlayerInteractEvent event, @Nullable LivingEntity target ) {
 			super( event.getEntity(), event );
 			this.itemStack = event.getItemStack();
-			this.player = event.getEntity();
+			this.player = event.getPlayer();
 			this.target = target;
 			this.hand = event.getHand();
 			this.face = event.getFace();
