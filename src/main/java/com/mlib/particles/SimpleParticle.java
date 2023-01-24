@@ -14,7 +14,8 @@ import com.mojang.math.Vector3f;
 
 @OnlyIn( Dist.CLIENT )
 public class SimpleParticle extends TextureSheetParticle {
-	protected final double yOffset;
+	protected float yOffset = 0.0f;
+	protected boolean renderUpwardsWhenOnGround = false;
 	protected IFormula< Double > xdFormula = xd->xd * 0.95;
 	protected IFormula< Double > ydFormula = yd->yd - 0.0375;
 	protected IFormula< Double > zdFormula = zd->zd * 0.95;
@@ -24,11 +25,16 @@ public class SimpleParticle extends TextureSheetParticle {
 	protected IFormula< Float > alphaFormula = alpha->alpha;
 	protected IFormula< Float > scaleFormula = lifeRatio->1.0f - 0.5f * lifeRatio;
 
+	@Deprecated
 	public SimpleParticle( ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet,
 		double yOffset
 	) {
 		super( level, x, y, z, xSpeed, ySpeed, zSpeed );
-		this.yOffset = yOffset;
+		this.yOffset = ( float )yOffset;
+	}
+
+	public SimpleParticle( ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed ) {
+		super( level, x, y, z, xSpeed, ySpeed, zSpeed );
 	}
 
 	@Override
@@ -60,14 +66,18 @@ public class SimpleParticle extends TextureSheetParticle {
 
 	@Override
 	public void render( VertexConsumer vertexConsumer, Camera camera, float scaleFactor ) {
-		// copied from SingleQuadParticle and only f1 is higher to render slightly over surface
+		// copied from SingleQuadParticle with few modifiable variables:
+		// - f1 to render slightly over surface
+		// - quaternion to render upwards instead towards the camera
+		// TODO: use mixin
+
 		Vec3 vec3 = camera.getPosition();
-		float f = ( float )( Mth.lerp( ( double )scaleFactor, this.xo, this.x ) - vec3.x() );
-		float f1 = ( float )( Mth.lerp( ( double )scaleFactor, this.yo + this.yOffset, this.y + this.yOffset ) - vec3.y() );
-		float f2 = ( float )( Mth.lerp( ( double )scaleFactor, this.zo, this.z ) - vec3.z() );
+		float f = ( float )( Mth.lerp( scaleFactor, this.xo, this.x ) - vec3.x() );
+		float f1 = ( float )( Mth.lerp( scaleFactor, this.yo + this.yOffset, this.y + this.yOffset ) - vec3.y() );
+		float f2 = ( float )( Mth.lerp( scaleFactor, this.zo, this.z ) - vec3.z() );
 		Quaternion quaternion;
 		if( this.roll == 0.0F ) {
-			quaternion = camera.rotation();
+			quaternion = this.renderUpwardsWhenOnGround && this.onGround ? Vector3f.XP.rotation( Mth.HALF_PI ) : camera.rotation();
 		} else {
 			quaternion = new Quaternion( camera.rotation() );
 			quaternion.mul( Vector3f.ZP.rotation( Mth.lerp( scaleFactor, this.oRoll, this.roll ) ) );
