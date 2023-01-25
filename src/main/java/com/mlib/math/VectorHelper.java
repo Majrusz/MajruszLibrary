@@ -119,6 +119,10 @@ public class VectorHelper {
 		return ( float )Math.sqrt( distanceSquared( vector1, vector2 ) );
 	}
 
+	public static float distanceHorizontal( Vector3f vector1, Vector3f vector2 ) {
+		return distance( new Vector3f( vector1.x, 0.0f, vector1.z ), new Vector3f( vector2.x, 0.0f, vector2.z ) );
+	}
+
 	public static float length( Vector3f vector ) {
 		return distance( vector, new Vector3f( 0.0f, 0.0f, 0.0f ) );
 	}
@@ -131,6 +135,10 @@ public class VectorHelper {
 		return Math.sqrt( distanceSquared( vector1, vector2 ) );
 	}
 
+	public static double distanceHorizontal( Vector3d vector1, Vector3d vector2 ) {
+		return distance( new Vector3d( vector1.x, 0.0, vector1.z ), new Vector3d( vector2.x, 0.0, vector2.z ) );
+	}
+
 	public static double length( Vector3d vector ) {
 		return distance( vector, new Vector3d( 0.0, 0.0, 0.0 ) );
 	}
@@ -141,6 +149,10 @@ public class VectorHelper {
 
 	public static double distance( Vec3 vector1, Vec3 vector2 ) {
 		return Math.sqrt( distanceSquared( vector1, vector2 ) );
+	}
+
+	public static double distanceHorizontal( Vec3 vector1, Vec3 vector2 ) {
+		return distance( new Vec3( vector1.x, 0.0, vector1.z ), new Vec3( vector2.x, 0.0, vector2.z ) );
 	}
 
 	public static double length( Vec3 vector ) {
