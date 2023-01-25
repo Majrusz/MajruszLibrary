@@ -70,4 +70,16 @@ public class AnnotationHandler {
 
 		return instances;
 	}
+
+	public < ClassType > ClassType getInstance( Class< ClassType > outputClass ) {
+		List< ClassType > instances = new ArrayList<>();
+		for( Object instance : this.instances ) {
+			if( outputClass.isAssignableFrom( instance.getClass() ) ) {
+				instances.add( outputClass.cast( instance ) );
+			}
+		}
+		assert instances.size() == 1;
+
+		return instances.get( 0 );
+	}
 }
