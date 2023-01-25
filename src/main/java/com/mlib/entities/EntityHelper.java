@@ -65,6 +65,10 @@ public class EntityHelper {
 		return 1.0 - getHealthRatio( entity );
 	}
 
+	public static float getWalkDistanceDelta( LivingEntity entity ) {
+		return entity.walkDist - entity.walkDistO; // these values are usually different on client and server sides!
+	}
+
 	public static void disableCurrentItem( Player player, double seconds ) {
 		player.getCooldowns().addCooldown( player.getUseItem().getItem(), Utility.secondsToTicks( seconds ) );
 		player.stopUsingItem();
