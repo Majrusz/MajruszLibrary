@@ -1,6 +1,8 @@
 package com.mlib.particles;
 
+import com.mlib.Random;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
@@ -9,31 +11,27 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
-@Deprecated
 @OnlyIn( Dist.CLIENT )
-public class SimpleParticle extends TextureSheetParticle {
-	protected float yOffset = 0.0f;
-	protected boolean renderUpwardsWhenOnGround = false;
-	protected IFormula< Double > xdFormula = xd->xd * 0.95;
-	protected IFormula< Double > ydFormula = yd->yd - 0.0375;
-	protected IFormula< Double > zdFormula = zd->zd * 0.95;
-	protected IFormula< Double > xdOnGroundFormula = xd->xd * 0.5;
-	protected IFormula< Double > ydOnGroundFormula = yd->yd;
-	protected IFormula< Double > zdOnGroundFormula = zd->zd * 0.5;
+public abstract class ConfigurableParticle extends TextureSheetParticle {
+	protected IFormula< Double > xdFormula = xd->xd * ( this.onGround ? 0.5 : 0.95 );
+	protected IFormula< Double > ydFormula = yd->yd - ( this.onGround ? 0.0 : 0.0375 );
+	protected IFormula< Double > zdFormula = zd->zd * ( this.onGround ? 0.5 : 0.95 );
 	protected IFormula< Float > alphaFormula = alpha->alpha;
 	protected IFormula< Float > scaleFormula = lifeRatio->1.0f - 0.5f * lifeRatio;
+	protected RotationFormula rotationFormula = ( camera, scaleFactor )->{
+		if( this.roll == 0.0F ) {
+			return camera.rotation();
+		} else {
+			return new Quaternionf( camera.rotation() ).rotateZ( Mth.lerp( scaleFactor, this.oRoll, this.roll ) );
+		}
+	};
+	protected boolean renderUpwardsWhenOnGround = false;
+	protected float yOffset = 0.0f;
 
-	public SimpleParticle( ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet,
-		double yOffset
-	) {
-		super( level, x, y, z, xSpeed, ySpeed, zSpeed );
-		this.yOffset = ( float )yOffset;
-	}
-
-	public SimpleParticle( ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed ) {
+	public ConfigurableParticle( ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed ) {
 		super( level, x, y, z, xSpeed, ySpeed, zSpeed );
 	}
 
@@ -44,17 +42,12 @@ public class SimpleParticle extends TextureSheetParticle {
 		this.zo = this.z;
 
 		if( ++this.age >= this.lifetime ) {
-			remove();
+			this.remove();
 		} else {
 			this.move( this.xd, this.yd, this.zd );
 			this.xd = this.xdFormula.apply( this.xd );
 			this.yd = this.ydFormula.apply( this.yd );
 			this.zd = this.zdFormula.apply( this.zd );
-			if( this.onGround ) {
-				this.xd = this.xdOnGroundFormula.apply( this.xd );
-				this.yd = this.ydOnGroundFormula.apply( this.yd );
-				this.zd = this.zdOnGroundFormula.apply( this.zd );
-			}
 			this.alpha = this.alphaFormula.apply( this.alpha );
 		}
 	}
@@ -75,16 +68,10 @@ public class SimpleParticle extends TextureSheetParticle {
 		float f = ( float )( Mth.lerp( scaleFactor, this.xo, this.x ) - vec3.x() );
 		float f1 = ( float )( Mth.lerp( scaleFactor, this.yo + this.yOffset, this.y + this.yOffset ) - vec3.y() );
 		float f2 = ( float )( Mth.lerp( scaleFactor, this.zo, this.z ) - vec3.z() );
-		Quaternion quaternion;
-		if( this.roll == 0.0F ) {
-			quaternion = this.renderUpwardsWhenOnGround && this.onGround ? Vector3f.XP.rotation( Mth.HALF_PI ) : camera.rotation();
-		} else {
-			quaternion = new Quaternion( camera.rotation() );
-			quaternion.mul( Vector3f.ZP.rotation( Mth.lerp( scaleFactor, this.oRoll, this.roll ) ) );
-		}
+		Quaternionf quaternion = this.rotationFormula.apply( camera, scaleFactor );
 
 		Vector3f vector3f1 = new Vector3f( -1.0F, -1.0F, 0.0F );
-		vector3f1.transform( quaternion );
+		vector3f1.rotate( quaternion );
 		Vector3f[] avector3f = new Vector3f[]{
 			new Vector3f( -1.0F, -1.0F, 0.0F ), new Vector3f( -1.0F, 1.0F, 0.0F ), new Vector3f( 1.0F, 1.0F, 0.0F ), new Vector3f( 1.0F, -1.0F, 0.0F )
 		};
@@ -92,7 +79,7 @@ public class SimpleParticle extends TextureSheetParticle {
 
 		for( int i = 0; i < 4; ++i ) {
 			Vector3f vector3f = avector3f[ i ];
-			vector3f.transform( quaternion );
+			vector3f.rotate( quaternion );
 			vector3f.mul( f4 );
 			vector3f.add( f, f1, f2 );
 		}
@@ -129,6 +116,13 @@ public class SimpleParticle extends TextureSheetParticle {
 		return this.quadSize * this.scaleFormula.apply( ( ( float )this.age + scaleFactor ) / ( float )this.lifetime );
 	}
 
+	public void setRenderUpwardsWhenOnGround() {
+		Quaternionf groundRotation = Axis.XP.rotation( Mth.HALF_PI ).rotateZ( Random.nextInt( 0, 3 ) * Mth.HALF_PI );
+		RotationFormula defaultFormula = this.rotationFormula;
+		this.renderUpwardsWhenOnGround = true;
+		this.rotationFormula = ( camera, scaleFactor )->this.renderUpwardsWhenOnGround && this.onGround ? groundRotation : defaultFormula.apply( camera, scaleFactor );
+	}
+
 	@OnlyIn( Dist.CLIENT )
 	public static abstract class SimpleFactory implements ParticleProvider< SimpleParticleType > {
 		private final SpriteSet spriteSet;
@@ -148,7 +142,7 @@ public class SimpleParticle extends TextureSheetParticle {
 
 		@FunctionalInterface
 		public interface IInstanceFactory {
-			SimpleParticle createInstance( ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed,
+			ConfigurableParticle createInstance( ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed,
 				SpriteSet spriteSet
 			);
 		}
@@ -157,5 +151,10 @@ public class SimpleParticle extends TextureSheetParticle {
 	@FunctionalInterface
 	public interface IFormula< Type > {
 		Type apply( Type type );
+	}
+
+	@FunctionalInterface
+	public interface RotationFormula {
+		Quaternionf apply( Camera camera, float scaleFactor );
 	}
 }
