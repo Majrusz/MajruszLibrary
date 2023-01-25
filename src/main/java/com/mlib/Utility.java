@@ -87,6 +87,30 @@ public class Utility {
 		return getRegistryKey( level ).toString();
 	}
 
+	public static Item getItem( ResourceLocation location ) {
+		return ForgeRegistries.ITEMS.getValue( location );
+	}
+
+	public static Item getItem( String location ) {
+		return getItem( new ResourceLocation( location ) );
+	}
+
+	public static EntityType< ? > getEntity( ResourceLocation location ) {
+		return ForgeRegistries.ENTITY_TYPES.getValue( location );
+	}
+
+	public static EntityType< ? > getEntity( String location ) {
+		return getEntity( new ResourceLocation( location ) );
+	}
+
+	public static Enchantment getEnchantment( ResourceLocation location ) {
+		return ForgeRegistries.ENCHANTMENTS.getValue( location );
+	}
+
+	public static Enchantment getEnchantment( String location ) {
+		return getEnchantment( new ResourceLocation( location ) );
+	}
+
 	public static String getPlayerUUID( Player player ) {
 		return String.valueOf( player.getUUID() );
 	}
