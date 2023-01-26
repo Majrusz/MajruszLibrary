@@ -102,6 +102,10 @@ public abstract class SerializableStructure implements ISerializable {
 		return this.add( DataEntityType::new );
 	}
 
+	protected < EnumType extends Enum< ? > > Data< EnumType > addEnum( Supplier< EnumType[] > supplier ) {
+		return this.add( ()->new DataEnum<>( supplier ) );
+	}
+
 	protected Data< Float > addFloat() {
 		return this.add( DataFloat::new );
 	}
