@@ -13,7 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-@Deprecated
+@Deprecated( since = "3.2.0 (use ConfigurableParticle instead)", forRemoval = true )
 @OnlyIn( Dist.CLIENT )
 public class SimpleParticle extends TextureSheetParticle {
 	protected float yOffset = 0.0f;

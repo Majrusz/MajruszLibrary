@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 
+@Deprecated( since = "3.2.0 (use SerializableStructure instead)", forRemoval = true )
 public class NBTHelper {
 	public static void saveBlockPos( CompoundTag tag, String key, BlockPos position ) {
 		tag.putInt( key + "X", position.getX() );
