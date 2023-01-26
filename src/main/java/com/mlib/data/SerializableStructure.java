@@ -1,6 +1,7 @@
 package com.mlib.data;
 
 import com.google.gson.JsonElement;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -87,6 +88,10 @@ public abstract class SerializableStructure implements ISerializable {
 
 	protected Data< Boolean > addBoolean() {
 		return this.add( DataBoolean::new );
+	}
+
+	protected Data< BlockPos > addBlockPos() {
+		return this.add( DataBlockPos::new );
 	}
 
 	protected Data< Enchantment > addEnchantment() {
