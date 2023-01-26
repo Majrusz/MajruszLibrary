@@ -12,7 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 
-@Deprecated
+@Deprecated( since = "3.2.0 (use ConfigurableParticle instead)", forRemoval = true )
 @OnlyIn( Dist.CLIENT )
 public class SimpleParticle extends TextureSheetParticle {
 	protected float yOffset = 0.0f;
