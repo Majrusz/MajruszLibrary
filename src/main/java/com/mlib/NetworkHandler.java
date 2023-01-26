@@ -1,9 +1,9 @@
 package com.mlib;
 
+import com.mlib.data.Data;
+import com.mlib.data.SerializableStructure;
 import com.mlib.mixininterfaces.IMixinEntity;
-import com.mlib.network.NetworkMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,31 +19,28 @@ public class NetworkHandler {
 
 	static void register( final FMLCommonSetupEvent event ) {
 		CHANNEL = NetworkRegistry.newSimpleChannel( Registries.getLocation( "main" ), ()->PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals );
-		CHANNEL.registerMessage( 0, GlowEntityMessage.class, GlowEntityMessage::encode, GlowEntityMessage::new, GlowEntityMessage::handle );
+		SerializableStructure.register( CHANNEL, 0, EntityGlow.class, EntityGlow::new );
 	}
 
-	public static class GlowEntityMessage extends NetworkMessage {
-		final int entityId;
-		final int ticks;
+	public static class EntityGlow extends SerializableStructure {
+		final Data< Integer > entityId = this.addInteger();
+		final Data< Integer > ticks = this.addInteger();
 
-		public GlowEntityMessage( Entity entity, int ticks ) {
-			this.entityId = this.write( entity );
-			this.ticks = this.write( ticks );
+		public EntityGlow( Entity entity, int ticks ) {
+			this.entityId.set( entity.getId() );
+			this.ticks.set( ticks );
 		}
 
-		public GlowEntityMessage( FriendlyByteBuf buffer ) {
-			this.entityId = this.readEntity( buffer );
-			this.ticks = this.readInt( buffer );
-		}
+		public EntityGlow() {}
 
 		@Override
 		@OnlyIn( Dist.CLIENT )
-		public void receiveMessage( NetworkEvent.Context context ) {
+		public void onClient( NetworkEvent.Context context ) {
 			Level level = Minecraft.getInstance().level;
 			if( level == null )
 				return;
 
-			IMixinEntity.addGlowTicks( level.getEntity( this.entityId ), this.ticks );
+			IMixinEntity.addGlowTicks( level.getEntity( this.entityId.get() ), this.ticks.get() );
 		}
 	}
 }

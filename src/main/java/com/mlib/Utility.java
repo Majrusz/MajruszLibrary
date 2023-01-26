@@ -95,12 +95,12 @@ public class Utility {
 		return getItem( new ResourceLocation( location ) );
 	}
 
-	public static EntityType< ? > getEntity( ResourceLocation location ) {
+	public static EntityType< ? > getEntityType( ResourceLocation location ) {
 		return ForgeRegistries.ENTITY_TYPES.getValue( location );
 	}
 
-	public static EntityType< ? > getEntity( String location ) {
-		return getEntity( new ResourceLocation( location ) );
+	public static EntityType< ? > getEntityType( String location ) {
+		return getEntityType( new ResourceLocation( location ) );
 	}
 
 	public static Enchantment getEnchantment( ResourceLocation location ) {
