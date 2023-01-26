@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@Deprecated( since = "3.2.0 (use SerializableStructure instead)", forRemoval = true )
 public class NetworkMessage {
 	protected final List< Consumer< FriendlyByteBuf > > encoders = new ArrayList<>();
 
