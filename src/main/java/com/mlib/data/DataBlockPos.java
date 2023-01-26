@@ -32,11 +32,11 @@ class DataBlockPos extends Data< BlockPos > {
 	}
 
 	private static BlockPos fromString( String position ) {
-		Pattern pattern = Pattern.compile( "(.*),(.*),(.*)" );
+		Pattern pattern = Pattern.compile( "(-?\\d+),(-?\\d+),(-?\\d+)" );
 		Matcher matcher = pattern.matcher( position );
 
 		return matcher.find()
-			? new BlockPos( Integer.parseInt( matcher.group( 0 ) ), Integer.parseInt( matcher.group( 1 ) ), Integer.parseInt( matcher.group( 2 ) ) )
+			? new BlockPos( Integer.parseInt( matcher.group( 1 ) ), Integer.parseInt( matcher.group( 2 ) ), Integer.parseInt( matcher.group( 3 ) ) )
 			: BlockPos.ZERO;
 	}
 
