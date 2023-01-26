@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 
+import java.util.function.Function;
+
 public abstract class Data< Type > implements ISerializable {
 	String key = null;
 	Type value = null;
@@ -59,6 +61,12 @@ public abstract class Data< Type > implements ISerializable {
 
 	public Data< Type > set( Type value ) {
 		this.value = value;
+
+		return this;
+	}
+
+	public Data< Type > set( Function< Type, Type > formula ) {
+		this.value = formula.apply( this.value );
 
 		return this;
 	}
