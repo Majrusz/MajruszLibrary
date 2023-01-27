@@ -1,14 +1,10 @@
 package com.mlib.tests;
 
 import com.mlib.MajruszLibrary;
-import com.mlib.time.Time;
-import com.mlib.time.Delay;
-import com.mlib.time.ISuspendedExecution;
-import com.mlib.time.Slider;
+import com.mlib.time.*;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -82,6 +78,22 @@ public class SuspendedExecutionTests extends BaseTest {
 			int endTick = getTickCount( helper );
 			assertThat( helper, endTick - startTick, DELAY, ()->"Slider does not handle ticks properly" );
 			assertThat( helper, counter.get(), DELAY + 1, ()->"Slider callback should be called as many times as the delay ticks plus one" );
+			helper.succeed();
+		} );
+	}
+
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void until( GameTestHelper helper ) {
+		AtomicInteger counter = new AtomicInteger( 0 );
+		Until until = Time.until( ()->counter.updateAndGet( x->x + 1 ) >= 2 * DELAY, _delay->{} );
+		int startTick = getTickCount( helper );
+
+		helper.failIfEver( ()->{
+			if( !until.isFinished() )
+				return;
+
+			int endTick = getTickCount( helper );
+			assertThat( helper, endTick - startTick, DELAY, ()->"Until does not handle ticks properly" );
 			helper.succeed();
 		} );
 	}

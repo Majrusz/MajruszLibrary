@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class Time {
 	static final List< ISuspendedExecution > PENDING_EXECUTIONS = Collections.synchronizedList( new ArrayList<>() );
@@ -34,6 +35,10 @@ public class Time {
 
 	public static Slider slider( double seconds, Consumer< Slider > callback ) {
 		return slider( Utility.secondsToTicks( seconds ), callback );
+	}
+
+	public static Until until( Supplier< Boolean > isReady, Consumer< Until > callback ) {
+		return setup( new Until( callback, isReady ) );
 	}
 
 	public static < Type extends ISuspendedExecution > Type setup( Type exec ) {
