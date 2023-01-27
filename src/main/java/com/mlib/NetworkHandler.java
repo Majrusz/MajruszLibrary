@@ -1,6 +1,5 @@
 package com.mlib;
 
-import com.mlib.data.Data;
 import com.mlib.data.SerializableStructure;
 import com.mlib.mixininterfaces.IMixinEntity;
 import net.minecraft.client.Minecraft;
@@ -23,15 +22,20 @@ public class NetworkHandler {
 	}
 
 	public static class EntityGlow extends SerializableStructure {
-		final Data< Integer > entityId = this.addInteger();
-		final Data< Integer > ticks = this.addInteger();
+		int entityId = 0;
+		int ticks = 0;
 
 		public EntityGlow( Entity entity, int ticks ) {
-			this.entityId.set( entity.getId() );
-			this.ticks.set( ticks );
+			this();
+
+			this.entityId = entity.getId();
+			this.ticks = ticks;
 		}
 
-		public EntityGlow() {}
+		public EntityGlow() {
+			this.define( null, ()->this.entityId, x->this.entityId = x );
+			this.define( null, ()->this.ticks, x->this.ticks = x );
+		}
 
 		@Override
 		@OnlyIn( Dist.CLIENT )
@@ -40,7 +44,7 @@ public class NetworkHandler {
 			if( level == null )
 				return;
 
-			IMixinEntity.addGlowTicks( level.getEntity( this.entityId.get() ), this.ticks.get() );
+			IMixinEntity.addGlowTicks( level.getEntity( this.entityId ), this.ticks );
 		}
 	}
 }

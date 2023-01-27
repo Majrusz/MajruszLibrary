@@ -5,13 +5,14 @@ import net.minecraft.nbt.ListTag;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
-class DataList< Type extends ISerializable > extends Data< List< Type > > {
-	final Supplier< Type > supplier;
+class DataList< Type extends SerializableStructure > extends Data< List< Type > > {
+	final java.util.function.Supplier< Type > instanceProvider;
 
-	public DataList( Supplier< Type > supplier ) {
-		this.supplier = supplier;
+	public DataList( String key, Supplier< Type > getter, Consumer< Type > setter, java.util.function.Supplier< Type > instanceProvider ) {
+		super( key, getter, setter );
+
+		this.instanceProvider = instanceProvider;
 	}
 
 	@Override
@@ -20,7 +21,7 @@ class DataList< Type extends ISerializable > extends Data< List< Type > > {
 			List< Type > value = new ArrayList<>();
 			element.getAsJsonArray()
 				.forEach( subelement->{
-					Type subvalue = this.supplier.get();
+					Type subvalue = this.instanceProvider.get();
 					subvalue.read( subelement );
 
 					value.add( subvalue );
@@ -38,7 +39,7 @@ class DataList< Type extends ISerializable > extends Data< List< Type > > {
 	@Override
 	protected BufferReader< List< Type > > getBufferReader() {
 		return buffer->buffer.readList( subbuffer->{
-			Type subvalue = this.supplier.get();
+			Type subvalue = this.instanceProvider.get();
 			subvalue.read( subbuffer );
 
 			return subvalue;
@@ -66,7 +67,7 @@ class DataList< Type extends ISerializable > extends Data< List< Type > > {
 			List< Type > value = new ArrayList<>();
 			tag.getList( key, 10 )
 				.forEach( subtag->{
-					Type subvalue = this.supplier.get();
+					Type subvalue = this.instanceProvider.get();
 					subvalue.read( ( CompoundTag )subtag );
 
 					value.add( subvalue );
@@ -75,4 +76,10 @@ class DataList< Type extends ISerializable > extends Data< List< Type > > {
 			return value;
 		};
 	}
+
+	@FunctionalInterface
+	public interface Supplier< Type extends SerializableStructure > extends java.util.function.Supplier< List< Type > > {}
+
+	@FunctionalInterface
+	public interface Consumer< Type extends SerializableStructure > extends java.util.function.Consumer< List< Type > > {}
 }

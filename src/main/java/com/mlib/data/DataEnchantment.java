@@ -4,6 +4,10 @@ import com.mlib.Utility;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 class DataEnchantment extends Data< Enchantment > {
+	public DataEnchantment( String key, Supplier getter, Consumer setter ) {
+		super( key, getter, setter );
+	}
+
 	@Override
 	protected JsonReader< Enchantment > getJsonReader() {
 		return element->Utility.getEnchantment( element.getAsString() );
@@ -28,4 +32,10 @@ class DataEnchantment extends Data< Enchantment > {
 	protected TagReader< Enchantment > getTagReader() {
 		return ( tag, key )->Utility.getEnchantment( tag.getString( key ) );
 	}
+
+	@FunctionalInterface
+	public interface Supplier extends java.util.function.Supplier< Enchantment > {}
+
+	@FunctionalInterface
+	public interface Consumer extends java.util.function.Consumer< Enchantment > {}
 }

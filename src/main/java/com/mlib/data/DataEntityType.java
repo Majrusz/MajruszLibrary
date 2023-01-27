@@ -4,6 +4,10 @@ import com.mlib.Utility;
 import net.minecraft.world.entity.EntityType;
 
 class DataEntityType extends Data< EntityType< ? > > {
+	public DataEntityType( String key, Supplier getter, Consumer setter ) {
+		super( key, getter, setter );
+	}
+
 	@Override
 	protected JsonReader< EntityType< ? > > getJsonReader() {
 		return element->Utility.getEntityType( element.getAsString() );
@@ -28,4 +32,10 @@ class DataEntityType extends Data< EntityType< ? > > {
 	protected TagReader< EntityType< ? > > getTagReader() {
 		return ( tag, key )->Utility.getEntityType( tag.getString( key ) );
 	}
+
+	@FunctionalInterface
+	public interface Supplier extends java.util.function.Supplier< EntityType< ? > > {}
+
+	@FunctionalInterface
+	public interface Consumer extends java.util.function.Consumer< EntityType< ? > > {}
 }
