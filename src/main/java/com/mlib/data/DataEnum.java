@@ -1,12 +1,12 @@
 package com.mlib.data;
 
-import java.util.function.Supplier;
-
 class DataEnum< Type extends Enum< ? > > extends Data< Type > {
-	final Supplier< Type[] > supplier;
+	final java.util.function.Supplier< Type[] > values;
 
-	public DataEnum( Supplier< Type[] > supplier ) {
-		this.supplier = supplier;
+	public DataEnum( String key, Supplier< Type > getter, Consumer< Type > setter, java.util.function.Supplier< Type[] > values ) {
+		super( key, getter, setter );
+
+		this.values = values;
 	}
 
 	@Override
@@ -35,7 +35,7 @@ class DataEnum< Type extends Enum< ? > > extends Data< Type > {
 	}
 
 	private Type toEnum( String name ) {
-		Type[] values = this.supplier.get();
+		Type[] values = this.values.get();
 		for( Type value : values ) {
 			if( name.equalsIgnoreCase( value.toString() ) ) {
 				return value;
@@ -48,4 +48,10 @@ class DataEnum< Type extends Enum< ? > > extends Data< Type > {
 	private String toString( Type value ) {
 		return value.toString();
 	}
+
+	@FunctionalInterface
+	public interface Supplier< Type extends Enum< ? > > extends java.util.function.Supplier< Type > {}
+
+	@FunctionalInterface
+	public interface Consumer< Type extends Enum< ? > > extends java.util.function.Consumer< Type > {}
 }

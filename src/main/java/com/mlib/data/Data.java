@@ -5,40 +5,48 @@ import com.google.gson.JsonObject;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 
-import java.util.function.Function;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public abstract class Data< Type > implements ISerializable {
-	String key = null;
-	Type value = null;
+abstract class Data< Type > implements ISerializable {
+	final String key;
+	final Supplier< Type > getter;
+	final Consumer< Type > setter;
+
+	protected Data( String key, Supplier< Type > getter, Consumer< Type > setter ) {
+		this.key = key;
+		this.getter = getter;
+		this.setter = setter;
+	}
 
 	@Override
 	public void read( JsonElement element ) {
 		if( this.key != null ) {
 			JsonObject object = element.getAsJsonObject();
 			if( object.has( this.key ) ) {
-				this.value = this.getJsonReader().read( object.get( this.key ) );
+				this.set( this.getJsonReader().read( object.get( this.key ) ) );
 			}
 		} else {
-			this.value = this.getJsonReader().read( element );
+			this.set( this.getJsonReader().read( element ) );
 		}
 	}
 
 	@Override
 	public void write( FriendlyByteBuf buffer ) {
-		this.getBufferWriter().write( buffer, this.value );
+		this.getBufferWriter().write( buffer, this.get() );
 	}
 
 	@Override
 	public void read( FriendlyByteBuf buffer ) {
-		this.value = this.getBufferReader().read( buffer );
+		this.set( this.getBufferReader().read( buffer ) );
 	}
 
 	@Override
 	public void write( CompoundTag tag ) {
-		if( this.key == null || this.value == null )
+		if( this.key == null || this.get() == null )
 			return;
 
-		this.getTagWriter().write( tag, this.key, this.value );
+		this.getTagWriter().write( tag, this.key, this.get() );
 	}
 
 	@Override
@@ -46,35 +54,15 @@ public abstract class Data< Type > implements ISerializable {
 		if( this.key == null || !tag.contains( this.key ) )
 			return;
 
-		this.value = this.getTagReader().read( tag, this.key );
+		this.set( this.getTagReader().read( tag, this.key ) );
+	}
+
+	public void set( Type value ) {
+		this.setter.accept( value );
 	}
 
 	public Type get() {
-		return this.value;
-	}
-
-	public Data< Type > key( String key ) {
-		this.key = key;
-
-		return this;
-	}
-
-	public Data< Type > set( Type value ) {
-		this.value = value;
-
-		return this;
-	}
-
-	public Data< Type > set( Function< Type, Type > formula ) {
-		this.value = formula.apply( this.value );
-
-		return this;
-	}
-
-	public Data< Type > or( Type defaultValue ) {
-		this.value = defaultValue;
-
-		return this;
+		return this.getter.get();
 	}
 
 	protected abstract JsonReader< Type > getJsonReader();

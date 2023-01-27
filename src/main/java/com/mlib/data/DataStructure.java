@@ -1,18 +1,18 @@
 package com.mlib.data;
 
-import java.util.function.Supplier;
-
 class DataStructure< Type extends SerializableStructure > extends Data< Type > {
-	final Supplier< Type > supplier;
+	final java.util.function.Supplier< Type > instanceProvider;
 
-	public DataStructure( Supplier< Type > supplier ) {
-		this.supplier = supplier;
+	public DataStructure( String key, Supplier< Type > getter, Consumer< Type > setter, java.util.function.Supplier< Type > instanceProvider ) {
+		super( key, getter, setter );
+
+		this.instanceProvider = instanceProvider;
 	}
 
 	@Override
 	protected JsonReader< Type > getJsonReader() {
 		return element->{
-			Type structure = this.supplier.get();
+			Type structure = this.instanceProvider.get();
 			structure.read( element );
 
 			return structure;
@@ -27,7 +27,7 @@ class DataStructure< Type extends SerializableStructure > extends Data< Type > {
 	@Override
 	protected BufferReader< Type > getBufferReader() {
 		return buffer->{
-			Type structure = this.supplier.get();
+			Type structure = this.instanceProvider.get();
 			structure.read( buffer );
 
 			return structure;
@@ -42,10 +42,16 @@ class DataStructure< Type extends SerializableStructure > extends Data< Type > {
 	@Override
 	protected TagReader< Type > getTagReader() {
 		return ( tag, key )->{
-			Type structure = this.supplier.get();
+			Type structure = this.instanceProvider.get();
 			structure.read( tag.getCompound( key ) );
 
 			return structure;
 		};
 	}
+
+	@FunctionalInterface
+	public interface Supplier< Type extends SerializableStructure > extends java.util.function.Supplier< Type > {}
+
+	@FunctionalInterface
+	public interface Consumer< Type extends SerializableStructure > extends java.util.function.Consumer< Type > {}
 }

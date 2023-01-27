@@ -5,6 +5,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 
 class DataInteger extends Data< Integer > {
+	public DataInteger( String key, Supplier getter, Consumer setter ) {
+		super( key, getter, setter );
+	}
+
 	@Override
 	protected JsonReader< Integer > getJsonReader() {
 		return JsonElement::getAsInt;
@@ -29,4 +33,10 @@ class DataInteger extends Data< Integer > {
 	protected TagReader< Integer > getTagReader() {
 		return CompoundTag::getInt;
 	}
+
+	@FunctionalInterface
+	public interface Supplier extends java.util.function.Supplier< Integer > {}
+
+	@FunctionalInterface
+	public interface Consumer extends java.util.function.Consumer< Integer > {}
 }

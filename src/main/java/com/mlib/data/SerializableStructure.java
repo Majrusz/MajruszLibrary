@@ -1,13 +1,9 @@
 package com.mlib.data;
 
 import com.google.gson.JsonElement;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
@@ -24,6 +20,10 @@ import java.util.function.Supplier;
  - write operation to .json files
  - write and read operations to NBT structure
  - send and receive operations between the client and the server
+ .
+ DataXYZ.Supplier and DataXYZ.Consumer are only defined because
+ Javas Virtual Machine does not allow using generics for almost
+ identical methods.
  */
 public abstract class SerializableStructure implements ISerializable {
 	final List< ISerializable > serializableList = new ArrayList<>();
@@ -86,54 +86,53 @@ public abstract class SerializableStructure implements ISerializable {
 	@OnlyIn( Dist.CLIENT )
 	public void onClient( NetworkEvent.Context context ) {}
 
-	protected Data< Boolean > addBoolean() {
-		return this.add( DataBoolean::new );
+	protected void define( String key, DataBlockPos.Supplier getter, DataBlockPos.Consumer setter ) {
+		this.serializableList.add( new DataBlockPos( key, getter, setter ) );
 	}
 
-	protected Data< BlockPos > addBlockPos() {
-		return this.add( DataBlockPos::new );
+	protected void define( String key, DataBoolean.Supplier getter, DataBoolean.Consumer setter ) {
+		this.serializableList.add( new DataBoolean( key, getter, setter ) );
 	}
 
-	protected Data< Enchantment > addEnchantment() {
-		return this.add( DataEnchantment::new );
+	protected void define( String key, DataEnchantment.Supplier getter, DataEnchantment.Consumer setter ) {
+		this.serializableList.add( new DataEnchantment( key, getter, setter ) );
 	}
 
-	protected Data< EntityType< ? > > addEntityType() {
-		return this.add( DataEntityType::new );
+	protected void define( String key, DataEntityType.Supplier getter, DataEntityType.Consumer setter ) {
+		this.serializableList.add( new DataEntityType( key, getter, setter ) );
 	}
 
-	protected < EnumType extends Enum< ? > > Data< EnumType > addEnum( Supplier< EnumType[] > supplier ) {
-		return this.add( ()->new DataEnum<>( supplier ) );
+	protected < Type extends Enum< ? > > void define( String key, DataEnum.Supplier< Type > getter, DataEnum.Consumer< Type > setter,
+		Supplier< Type[] > values
+	) {
+		this.serializableList.add( new DataEnum<>( key, getter, setter, values ) );
 	}
 
-	protected Data< Float > addFloat() {
-		return this.add( DataFloat::new );
+	protected void define( String key, DataFloat.Supplier getter, DataFloat.Consumer setter ) {
+		this.serializableList.add( new DataFloat( key, getter, setter ) );
 	}
 
-	protected Data< Integer > addInteger() {
-		return this.add( DataInteger::new );
+	protected void define( String key, DataInteger.Supplier getter, DataInteger.Consumer setter ) {
+		this.serializableList.add( new DataInteger( key, getter, setter ) );
 	}
 
-	protected < SerializableType extends ISerializable > Data< List< SerializableType > > addList( Supplier< SerializableType > supplier ) {
-		return this.add( ()->new DataList<>( supplier ) );
+	protected < Type extends SerializableStructure > void define( String key, DataList.Supplier< Type > getter, DataList.Consumer< Type > setter,
+		Supplier< Type > instanceProvider
+	) {
+		this.serializableList.add( new DataList<>( key, getter, setter, instanceProvider ) );
 	}
 
-	protected Data< ResourceLocation > addResourceLocation() {
-		return this.add( DataResourceLocation::new );
+	protected void define( String key, DataResourceLocation.Supplier getter, DataResourceLocation.Consumer setter ) {
+		this.serializableList.add( new DataResourceLocation( key, getter, setter ) );
 	}
 
-	protected Data< String > addString() {
-		return this.add( DataString::new );
+	protected void define( String key, DataString.Supplier getter, DataString.Consumer setter ) {
+		this.serializableList.add( new DataString( key, getter, setter ) );
 	}
 
-	protected < StructureType extends SerializableStructure > Data< StructureType > addStructure( Supplier< StructureType > supplier ) {
-		return this.add( ()->new DataStructure<>( supplier ) );
-	}
-
-	private < SerializableType extends ISerializable > SerializableType add( Supplier< SerializableType > supplier ) {
-		SerializableType serializable = supplier.get();
-		this.serializableList.add( serializable );
-
-		return serializable;
+	protected < Type extends SerializableStructure > void define( String key, DataStructure.Supplier< Type > getter, DataStructure.Consumer< Type > setter,
+		Supplier< Type > instanceProvider
+	) {
+		this.serializableList.add( new DataStructure<>( key, getter, setter, instanceProvider ) );
 	}
 }
