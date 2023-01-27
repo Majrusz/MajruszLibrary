@@ -5,6 +5,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 
 class DataBoolean extends Data< Boolean > {
+	public DataBoolean( String key, Supplier getter, Consumer setter ) {
+		super( key, getter, setter );
+	}
+
 	@Override
 	protected JsonReader< Boolean > getJsonReader() {
 		return JsonElement::getAsBoolean;
@@ -29,4 +33,10 @@ class DataBoolean extends Data< Boolean > {
 	protected TagReader< Boolean > getTagReader() {
 		return CompoundTag::getBoolean;
 	}
+
+	@FunctionalInterface
+	public interface Supplier extends java.util.function.Supplier< Boolean > {}
+
+	@FunctionalInterface
+	public interface Consumer extends java.util.function.Consumer< Boolean > {}
 }

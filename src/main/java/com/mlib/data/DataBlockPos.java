@@ -6,6 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class DataBlockPos extends Data< BlockPos > {
+	public DataBlockPos( String key, Supplier getter, Consumer setter ) {
+		super( key, getter, setter );
+	}
+
 	@Override
 	protected JsonReader< BlockPos > getJsonReader() {
 		return element->fromString( element.getAsString() );
@@ -43,4 +47,10 @@ class DataBlockPos extends Data< BlockPos > {
 	private static String toString( BlockPos position ) {
 		return String.format( "%d,%d,%d", position.getX(), position.getY(), position.getZ() );
 	}
+
+	@FunctionalInterface
+	public interface Supplier extends java.util.function.Supplier< BlockPos > {}
+
+	@FunctionalInterface
+	public interface Consumer extends java.util.function.Consumer< BlockPos > {}
 }
