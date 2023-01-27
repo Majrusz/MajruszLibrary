@@ -52,6 +52,12 @@ public class Random {
 	}
 
 	public static int nextInt( int min, int max ) {
+		if( min == max ) {
+			return min;
+		} else if( min > max ) {
+			return max + nextInt( min - max );
+		}
+
 		return min + nextInt( max - min );
 	}
 
@@ -104,7 +110,7 @@ public class Random {
 	}
 
 	public static Vec3i getRandomVector3i( int minX, int maxX, int minY, int maxY, int minZ, int maxZ ) {
-		return new Vec3i( nextInt( minX, maxX + 1 ), nextInt( minY, maxY + 1 ), nextInt( minZ, maxZ + 1 ) );
+		return new Vec3i( nextInt( minX, maxX ), nextInt( minY, maxY ), nextInt( minZ, maxZ ) );
 	}
 
 	public static Vec3 getRandomNormalizedVector() {
