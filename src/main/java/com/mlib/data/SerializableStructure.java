@@ -135,4 +135,8 @@ public abstract class SerializableStructure implements ISerializable {
 	) {
 		this.serializableList.add( new DataStructure<>( key, getter, setter, instanceProvider ) );
 	}
+
+	protected void define( String key, DataUUID.Supplier getter, DataUUID.Consumer setter ) {
+		this.serializableList.add( new DataUUID( key, getter, setter ) );
+	}
 }
