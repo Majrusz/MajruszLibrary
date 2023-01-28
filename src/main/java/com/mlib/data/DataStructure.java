@@ -1,5 +1,7 @@
 package com.mlib.data;
 
+import net.minecraft.nbt.CompoundTag;
+
 class DataStructure< Type extends SerializableStructure > extends Data< Type > {
 	final java.util.function.Supplier< Type > instanceProvider;
 
@@ -36,7 +38,12 @@ class DataStructure< Type extends SerializableStructure > extends Data< Type > {
 
 	@Override
 	protected TagWriter< Type > getTagWriter() {
-		return ( tag, key, value )->value.write( tag.getCompound( key ) );
+		return ( tag, key, value )->{
+			CompoundTag subtag = new CompoundTag();
+			value.write( subtag );
+
+			tag.put( key, subtag );
+		};
 	}
 
 	@Override
