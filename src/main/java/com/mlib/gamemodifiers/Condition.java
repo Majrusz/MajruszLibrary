@@ -122,7 +122,7 @@ public abstract class Condition< DataType extends ContextData > extends ConfigGr
 			this.configurable( true )
 				.addConfig( this.group
 					.name( "ArmorChanceMultipliers" )
-					.comment( "Chance multipliers for each armor piece.\nFor instance 'head_multiplier = 0.8' makes the final chance 30% lower if the mob has any helmet." )
+					.comment( "Chance multipliers for each armor piece.\nFor instance 'head_multiplier = 0.8' makes the final chance 20% lower if mob has any helmet." )
 				);
 		}
 
