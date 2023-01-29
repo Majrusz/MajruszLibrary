@@ -1,5 +1,8 @@
 package com.mlib.data;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+
 import java.util.UUID;
 
 class DataUUID extends Data< UUID > {
@@ -14,22 +17,22 @@ class DataUUID extends Data< UUID > {
 
 	@Override
 	protected BufferWriter< UUID > getBufferWriter() {
-		return ( buffer, value )->buffer.writeUtf( value.toString() );
+		return FriendlyByteBuf::writeUUID;
 	}
 
 	@Override
 	protected BufferReader< UUID > getBufferReader() {
-		return buffer->UUID.fromString( buffer.readUtf() );
+		return FriendlyByteBuf::readUUID;
 	}
 
 	@Override
 	protected TagWriter< UUID > getTagWriter() {
-		return ( tag, key, value )->tag.putString( key, value.toString() );
+		return CompoundTag::putUUID;
 	}
 
 	@Override
 	protected TagReader< UUID > getTagReader() {
-		return ( tag, key )->UUID.fromString( tag.getString( key ) );
+		return CompoundTag::getUUID;
 	}
 
 	@FunctionalInterface
