@@ -1,6 +1,7 @@
 package com.mlib.entities;
 
 import com.mlib.NetworkHandler;
+import com.mlib.ObfuscationGetter;
 import com.mlib.Utility;
 import com.mlib.math.AABBHelper;
 import com.mlib.math.VectorHelper;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
@@ -29,9 +31,12 @@ import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class EntityHelper {
+	static final ObfuscationGetter.Field< ServerLevel, PersistentEntitySectionManager< Entity > > ENTITY_MANAGER = new ObfuscationGetter.Field<>( ServerLevel.class, "f_143244_" );
+
 	public static void cheatDeath( LivingEntity entity, float healthRatio, boolean shouldPlayEffects ) {
 		entity.setHealth( entity.getMaxHealth() * healthRatio );
 
@@ -55,6 +60,10 @@ public class EntityHelper {
 
 	public static boolean isHuman( Entity entity ) {
 		return ( entity instanceof Villager || entity instanceof WanderingTrader || entity instanceof Player || entity instanceof Witch || entity instanceof Pillager );
+	}
+
+	public static boolean isLoaded( ServerLevel level, UUID uuid ) {
+		return ENTITY_MANAGER.get( level ).isLoaded( uuid );
 	}
 
 	public static double getHealthRatio( LivingEntity entity ) {
