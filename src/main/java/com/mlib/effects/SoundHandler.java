@@ -1,11 +1,15 @@
 package com.mlib.effects;
 
 import com.mlib.Random;
+import net.minecraft.core.Holder;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
@@ -29,8 +33,12 @@ public class SoundHandler {
 	final Supplier< Float > volumeProvider;
 	final Supplier< Float > pitchProvider;
 
+	public static Supplier< Float > randomized( float value, float minRange, float maxRange ) {
+		return ()->value * Random.nextFloat( minRange, maxRange );
+	}
+
 	public static Supplier< Float > randomized( float value ) {
-		return ()->value * Random.nextFloat( 0.8f, 1.2f );
+		return randomized( value, 0.8f, 1.2f );
 	}
 
 	public SoundHandler( RegistryObject< SoundEvent > event, SoundSource source, Supplier< Float > volumeProvider,
@@ -76,5 +84,21 @@ public class SoundHandler {
 
 	public void play( Level level, Vec3 position, Supplier< Float > volumeProvider, Supplier< Float > pitchProvider ) {
 		level.playSound( null, position.x, position.y, position.z, this.event.get(), this.source, volumeProvider.get(), pitchProvider.get() );
+	}
+
+	public void send( ServerPlayer player, Vec3 position, Supplier< Float > volumeProvider, Supplier< Float > pitchProvider ) {
+		Holder< SoundEvent > holder = ForgeRegistries.SOUND_EVENTS.getHolder( this.event.get() ).orElse( null );
+		if( holder == null )
+			return;
+
+		player.connection.send( new ClientboundSoundPacket( holder, this.source, position.x, position.y, position.z, volumeProvider.get(), pitchProvider.get(), Random.nextInt() ) );
+	}
+
+	public void send( ServerPlayer player, Vec3 position, Supplier< Float > volumeProvider ) {
+		this.send( player, position, volumeProvider, this.pitchProvider );
+	}
+
+	public void send( ServerPlayer player, Vec3 position ) {
+		this.send( player, position, this.volumeProvider, this.pitchProvider );
 	}
 }
