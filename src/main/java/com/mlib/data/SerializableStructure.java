@@ -59,32 +59,46 @@ public abstract class SerializableStructure implements ISerializable {
 	@Override
 	public void read( JsonElement element ) {
 		this.serializableList.forEach( serializable->serializable.read( element ) );
+
+		this.onRead();
 	}
 
 	@Override
 	public void write( FriendlyByteBuf buffer ) {
 		this.serializableList.forEach( serializable->serializable.write( buffer ) );
+
+		this.onWrite();
 	}
 
 	@Override
 	public void read( FriendlyByteBuf buffer ) {
 		this.serializableList.forEach( serializable->serializable.read( buffer ) );
+
+		this.onRead();
 	}
 
 	@Override
 	public void write( CompoundTag tag ) {
 		this.serializableList.forEach( serializable->serializable.write( tag ) );
+
+		this.onWrite();
 	}
 
 	@Override
 	public void read( CompoundTag tag ) {
 		this.serializableList.forEach( serializable->serializable.read( tag ) );
+
+		this.onRead();
 	}
 
-	public void onServer( ServerPlayer sender, NetworkEvent.Context context ) {}
+	protected void onServer( ServerPlayer sender, NetworkEvent.Context context ) {}
 
 	@OnlyIn( Dist.CLIENT )
-	public void onClient( NetworkEvent.Context context ) {}
+	protected void onClient( NetworkEvent.Context context ) {}
+
+	protected void onWrite() {}
+
+	protected void onRead() {}
 
 	protected void define( String key, DataBlockPos.Supplier getter, DataBlockPos.Consumer setter ) {
 		this.serializableList.add( new DataBlockPos( key, getter, setter ) );
