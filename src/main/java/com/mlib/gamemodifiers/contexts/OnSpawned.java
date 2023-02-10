@@ -6,6 +6,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -107,6 +108,20 @@ public class OnSpawned {
 		@Override
 		protected boolean check( GameModifier feature, Type data ) {
 			return !data.loadedFromDisk;
+		}
+	}
+
+	public static class Is< Type extends Data > extends Condition< Type > {
+		final Class< ? >[] classes;
+
+		public Is( Class< ? >... classes ) {
+			this.classes = classes;
+		}
+
+		@Override
+		protected boolean check( GameModifier feature, Type data ) {
+			return Arrays.stream( this.classes )
+				.anyMatch( clazz->data.target.getClass().equals( clazz ) );
 		}
 	}
 }
