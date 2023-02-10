@@ -32,6 +32,7 @@ import net.minecraftforge.registries.RegistryObject;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class EntityHelper {
@@ -89,15 +90,25 @@ public class EntityHelper {
 	}
 
 	@Nullable
-	public static < Type extends Entity > Type spawn( EntityType< Type > entityType, Level level, Vec3 position ) {
+	public static < Type extends Entity > Type spawn( EntityType< Type > entityType, Level level, Consumer< Type > beforeEvent ) {
 		Type entity = entityType.create( level );
 		if( entity != null ) {
-			entity.moveTo( position );
+			beforeEvent.accept( entity );
 			if( !level.addFreshEntity( entity ) )
 				return null;
 		}
 
 		return entity;
+	}
+
+	@Nullable
+	public static < Type extends Entity > Type spawn( RegistryObject< EntityType< Type > > entityType, Level level, Consumer< Type > beforeEvent ) {
+		return spawn( entityType.get(), level, beforeEvent );
+	}
+
+	@Nullable
+	public static < Type extends Entity > Type spawn( EntityType< Type > entityType, Level level, Vec3 position ) {
+		return spawn( entityType, level, entity->entity.moveTo( position ) );
 	}
 
 	@Nullable
