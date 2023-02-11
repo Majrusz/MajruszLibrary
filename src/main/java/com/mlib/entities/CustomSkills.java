@@ -124,7 +124,11 @@ public abstract class CustomSkills< SkillType extends Enum< ? > > {
 			if( level == null )
 				return;
 
-			CustomSkills< SkillType > skills = Utility.castIfPossible( ICustomSkillProvider.class, level.getEntity( this.entityId ) ).getCustomSkills();
+			ICustomSkillProvider< ? > skillProvider = Utility.castIfPossible( ICustomSkillProvider.class, level.getEntity( this.entityId ) );
+			if( skillProvider == null )
+				return;
+
+			CustomSkills< SkillType > skills = ( CustomSkills< SkillType > )skillProvider.getCustomSkills();
 			if( skills != null ) {
 				skills.start( this.skillType, this.ticks );
 			}
