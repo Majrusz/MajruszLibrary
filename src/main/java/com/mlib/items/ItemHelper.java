@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -65,6 +66,20 @@ public class ItemHelper {
 			double x = player.getX(), y = player.getY() + 1.0, z = player.getZ();
 			level.addFreshEntity( new ItemEntity( level, x, y, z, itemStack ) );
 		}
+	}
+
+	/** Required because Mob::equipItemIfPossible makes item a guaranteed drop and enables persistence for mob. */
+	public static @Nullable EquipmentSlot equip( Mob mob, ItemStack itemStack ) {
+		if( mob.canHoldItem( itemStack ) ) {
+			EquipmentSlot equipmentSlot = Mob.getEquipmentSlotForItem( itemStack );
+			boolean canEquipArmorPiece = equipmentSlot.isArmor() && mob.getItemBySlot( equipmentSlot ).isEmpty();
+			equipmentSlot = canEquipArmorPiece ? equipmentSlot : EquipmentSlot.MAINHAND;
+			mob.setItemSlot( equipmentSlot, itemStack );
+
+			return equipmentSlot;
+		}
+
+		return null;
 	}
 
 	public static void consumeItemOnUse( ItemStack itemStack, Player player ) {
