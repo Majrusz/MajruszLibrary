@@ -52,7 +52,17 @@ public abstract class CustomSkills< SkillType extends Enum< ? > > {
 	}
 
 	public CustomSkills< SkillType > onLastTick( Runnable callback ) {
-		this.onTick( 1, callback );
+		this.onTick( 0, callback );
+
+		return this;
+	}
+
+	public CustomSkills< SkillType > onceEveryFewTicks( int tickDelay, Runnable callback ) {
+		int tickCounter = 0;
+		while( tickCounter < this.ticksTotal ) {
+			this.onTick( tickCounter, callback );
+			tickCounter += tickDelay;
+		}
 
 		return this;
 	}
