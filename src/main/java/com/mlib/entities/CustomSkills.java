@@ -39,7 +39,7 @@ public abstract class CustomSkills< SkillType extends Enum< ? > > {
 		return false;
 	}
 
-	public void onTick( int tick, Runnable callback ) {
+	public CustomSkills< SkillType > onTick( int tick, Runnable callback ) {
 		if( this.callbacks.containsKey( tick ) ) {
 			this.callbacks.get( tick ).add( callback );
 		} else {
@@ -47,14 +47,20 @@ public abstract class CustomSkills< SkillType extends Enum< ? > > {
 			callbacks.add( callback );
 			this.callbacks.put( tick, callbacks );
 		}
+
+		return this;
 	}
 
-	public void onLastTick( Runnable callback ) {
+	public CustomSkills< SkillType > onLastTick( Runnable callback ) {
 		this.onTick( 1, callback );
+
+		return this;
 	}
 
-	public void onRatio( float ratio, Runnable callback ) {
+	public CustomSkills< SkillType > onRatio( float ratio, Runnable callback ) {
 		this.onTick( Math.round( this.ticksTotal * ( 1.0f - ratio ) ), callback );
+
+		return this;
 	}
 
 	public void tick() {
@@ -82,12 +88,14 @@ public abstract class CustomSkills< SkillType extends Enum< ? > > {
 		return this.isUsing( skillType ) ? this.getRatio() : 0.0f;
 	}
 
-	protected void start( SkillType skillType, int ticks ) {
+	protected CustomSkills< SkillType > start( SkillType skillType, int ticks ) {
 		this.skillType = skillType;
 		this.ticksLeft = this.ticksTotal = ticks;
 		if( this.mob.level instanceof ServerLevel level ) {
 			this.channel.send( PacketDistributor.DIMENSION.with( level::dimension ), this.messageConstructor.construct( this.mob, ticks, skillType ) );
 		}
+
+		return this;
 	}
 
 	public static class Message< SkillType extends Enum< ? > > extends SerializableStructure {
