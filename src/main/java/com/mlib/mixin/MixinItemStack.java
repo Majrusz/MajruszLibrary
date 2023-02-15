@@ -1,6 +1,8 @@
 package com.mlib.mixin;
 
+import com.mlib.MajruszLibrary;
 import com.mlib.events.ItemHurtEvent;
+import com.mlib.gamemodifiers.contexts.OnFoodPropertiesGet;
 import com.mlib.gamemodifiers.contexts.OnItemAttributeTooltip;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
@@ -8,8 +10,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityProvider;
+import net.minecraftforge.common.extensions.IForgeItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,12 +27,22 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 @Mixin( ItemStack.class )
-public abstract class MixinItemStack {
+public abstract class MixinItemStack extends CapabilityProvider< ItemStack > implements IForgeItemStack {
+	protected MixinItemStack( Class< ItemStack > baseClass, boolean isLazy ) {
+		super( baseClass, isLazy );
+	}
+
+	@Override
+	public FoodProperties getFoodProperties( @Nullable LivingEntity entity ) {
+		OnFoodPropertiesGet.Data data = new OnFoodPropertiesGet.Data( IForgeItemStack.super.getFoodProperties( entity ), ( ItemStack )( Object )this, entity );
+		OnFoodPropertiesGet.broadcast( data );
+
+		return data.properties;
+	}
+
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "hurt(ILnet/minecraft/util/RandomSource;Lnet/minecraft/server/level/ServerPlayer;)Z", at = @At( "RETURN" ), cancellable = true )
-	private void hurt( int damage, RandomSource source, @Nullable ServerPlayer player,
-		CallbackInfoReturnable< Boolean > callback
-	) {
+	private void hurt( int damage, RandomSource source, @Nullable ServerPlayer player, CallbackInfoReturnable< Boolean > callback ) {
 		ItemStack itemStack = ( ItemStack )( Object )this;
 		ItemHurtEvent itemHurtEvent = new ItemHurtEvent( player, itemStack, damage );
 		MinecraftForge.EVENT_BUS.post( itemHurtEvent );
