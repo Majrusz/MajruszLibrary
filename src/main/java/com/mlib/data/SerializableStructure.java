@@ -27,6 +27,7 @@ import java.util.function.Supplier;
  */
 public abstract class SerializableStructure implements ISerializable {
 	final List< ISerializable > serializableList = new ArrayList<>();
+	final String key;
 
 	public static < Type extends SerializableStructure > void register( SimpleChannel channel, int index, Class< Type > classType,
 		Supplier< Type > supplier
@@ -56,9 +57,22 @@ public abstract class SerializableStructure implements ISerializable {
 		);
 	}
 
+	public SerializableStructure( String key ) {
+		this.key = key;
+	}
+
+	public SerializableStructure() {
+		this( null );
+	}
+
 	@Override
 	public void read( JsonElement element ) {
-		this.serializableList.forEach( serializable->serializable.read( element ) );
+		if( this.key != null ) {
+			JsonElement subelement = element.getAsJsonObject().get( this.key );
+			this.serializableList.forEach( serializable->serializable.read( subelement ) );
+		} else {
+			this.serializableList.forEach( serializable->serializable.read( element ) );
+		}
 
 		this.onRead();
 	}
@@ -79,14 +93,25 @@ public abstract class SerializableStructure implements ISerializable {
 
 	@Override
 	public void write( CompoundTag tag ) {
-		this.serializableList.forEach( serializable->serializable.write( tag ) );
+		if( this.key != null ) {
+			CompoundTag subtag = new CompoundTag();
+			this.serializableList.forEach( serializable->serializable.write( subtag ) );
+			tag.put( this.key, subtag );
+		} else {
+			this.serializableList.forEach( serializable->serializable.write( tag ) );
+		}
 
 		this.onWrite();
 	}
 
 	@Override
 	public void read( CompoundTag tag ) {
-		this.serializableList.forEach( serializable->serializable.read( tag ) );
+		if( this.key != null )  {
+			CompoundTag subtag = tag.getCompound( this.key );
+			this.serializableList.forEach( serializable->serializable.read( subtag ) );
+		} else {
+			this.serializableList.forEach( serializable->serializable.read( tag ) );
+		}
 
 		this.onRead();
 	}
