@@ -3,6 +3,7 @@ package com.mlib;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 /** Class for easier getting private and protected members and methods from Minecraft/Minecraft Forge classes. */
 public class ObfuscationGetter {
@@ -29,6 +30,10 @@ public class ObfuscationGetter {
 			} catch( Exception ignored ) {}
 
 			return null;
+		}
+
+		public ReturnType getOr( Type instance, ReturnType defaultValue ) {
+			return Optional.ofNullable( this.get( instance ) ).orElse( defaultValue );
 		}
 
 		public void set( Type instance, ReturnType value ) {
