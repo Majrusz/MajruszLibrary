@@ -161,6 +161,12 @@ public abstract class SerializableStructure implements ISerializable {
 		this.serializableList.add( new DataList<>( key, getter, setter, instanceProvider ) );
 	}
 
+	protected < Type extends SerializableStructure > void define( String key, DataMap.Supplier< Type > getter, DataMap.Consumer< Type > setter,
+		Supplier< Type > instanceProvider
+	) {
+		this.serializableList.add( new DataMap<>( key, getter, setter, instanceProvider ) );
+	}
+
 	protected void define( String key, DataResourceLocation.Supplier getter, DataResourceLocation.Consumer setter ) {
 		this.serializableList.add( new DataResourceLocation( key, getter, setter ) );
 	}
