@@ -37,6 +37,7 @@ public class AnnotationHandler {
 		this.instances = this.classes.stream()
 			.map( clazz->{
 				try {
+					MajruszLibrary.logOnDev( "[AnnotationHandler] Class %s initialization initiated...", clazz.getCanonicalName() );
 					Object instance = clazz.getConstructor().newInstance();
 					MajruszLibrary.logOnDev( "[AnnotationHandler] Class %s has been initialized.", clazz.getCanonicalName() );
 					return instance;
