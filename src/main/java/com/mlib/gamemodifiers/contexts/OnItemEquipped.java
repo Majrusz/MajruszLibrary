@@ -4,6 +4,7 @@ import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,12 +30,15 @@ public class OnItemEquipped {
 	}
 
 	public static class Data extends ContextData.Event< LivingEquipmentChangeEvent > {
+		public final LivingEntity entity;
 		public final EquipmentSlot slot;
 		public final ItemStack from;
 		public final ItemStack to;
 
 		public Data( LivingEquipmentChangeEvent event ) {
 			super( event.getEntity(), event );
+
+			this.entity = event.getEntity();
 			this.slot = event.getSlot();
 			this.from = event.getFrom();
 			this.to = event.getTo();
