@@ -2,7 +2,8 @@ package com.mlib.particles;
 
 import com.mlib.Random;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
@@ -11,8 +12,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 
 @OnlyIn( Dist.CLIENT )
 public abstract class ConfigurableParticle extends TextureSheetParticle {
@@ -25,7 +24,10 @@ public abstract class ConfigurableParticle extends TextureSheetParticle {
 		if( this.roll == 0.0F ) {
 			return camera.rotation();
 		} else {
-			return new Quaternionf( camera.rotation() ).rotateZ( Mth.lerp( scaleFactor, this.oRoll, this.roll ) );
+			var quaternion = new Quaternion( camera.rotation() );
+			quaternion.mul( Vector3f.ZP.rotation( Mth.lerp( scaleFactor, this.oRoll, this.roll ) ) );
+
+			return quaternion;
 		}
 	};
 	protected boolean renderUpwardsWhenOnGround = false;
@@ -68,10 +70,10 @@ public abstract class ConfigurableParticle extends TextureSheetParticle {
 		float f = ( float )( Mth.lerp( scaleFactor, this.xo, this.x ) - vec3.x() );
 		float f1 = ( float )( Mth.lerp( scaleFactor, this.yo + this.yOffset, this.y + this.yOffset ) - vec3.y() );
 		float f2 = ( float )( Mth.lerp( scaleFactor, this.zo, this.z ) - vec3.z() );
-		Quaternionf quaternion = this.rotationFormula.apply( camera, scaleFactor );
+		Quaternion quaternion = this.rotationFormula.apply( camera, scaleFactor );
 
 		Vector3f vector3f1 = new Vector3f( -1.0F, -1.0F, 0.0F );
-		vector3f1.rotate( quaternion );
+		vector3f1.transform( quaternion );
 		Vector3f[] avector3f = new Vector3f[]{
 			new Vector3f( -1.0F, -1.0F, 0.0F ), new Vector3f( -1.0F, 1.0F, 0.0F ), new Vector3f( 1.0F, 1.0F, 0.0F ), new Vector3f( 1.0F, -1.0F, 0.0F )
 		};
@@ -79,7 +81,7 @@ public abstract class ConfigurableParticle extends TextureSheetParticle {
 
 		for( int i = 0; i < 4; ++i ) {
 			Vector3f vector3f = avector3f[ i ];
-			vector3f.rotate( quaternion );
+			vector3f.transform( quaternion );
 			vector3f.mul( f4 );
 			vector3f.add( f, f1, f2 );
 		}
@@ -117,7 +119,8 @@ public abstract class ConfigurableParticle extends TextureSheetParticle {
 	}
 
 	public void setRenderUpwardsWhenOnGround() {
-		Quaternionf groundRotation = Axis.XP.rotation( Mth.HALF_PI ).rotateZ( Random.nextInt( 0, 3 ) * Mth.HALF_PI );
+		Quaternion groundRotation = Vector3f.XP.rotation( Mth.HALF_PI );
+		groundRotation.mul( Vector3f.ZP.rotation( Random.nextInt( 0, 3 ) * Mth.HALF_PI ) );
 		RotationFormula defaultFormula = this.rotationFormula;
 		this.renderUpwardsWhenOnGround = true;
 		this.rotationFormula = ( camera, scaleFactor )->this.renderUpwardsWhenOnGround && this.onGround ? groundRotation : defaultFormula.apply( camera, scaleFactor );
@@ -155,6 +158,6 @@ public abstract class ConfigurableParticle extends TextureSheetParticle {
 
 	@FunctionalInterface
 	public interface RotationFormula {
-		Quaternionf apply( Camera camera, float scaleFactor );
+		Quaternion apply( Camera camera, float scaleFactor );
 	}
 }

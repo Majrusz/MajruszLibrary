@@ -38,7 +38,7 @@ public class OnItemEquipped {
 		public Data( LivingEquipmentChangeEvent event ) {
 			super( event.getEntity(), event );
 
-			this.entity = event.getEntity();
+			this.entity = event.getEntityLiving();
 			this.slot = event.getSlot();
 			this.from = event.getFrom();
 			this.to = event.getTo();

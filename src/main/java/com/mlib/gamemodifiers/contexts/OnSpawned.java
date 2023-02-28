@@ -2,6 +2,8 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.*;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -54,7 +56,7 @@ public class OnSpawned {
 		}
 
 		@SubscribeEvent
-		public static void onSpawn( EntityJoinLevelEvent event ) {
+		public static void onSpawn( EntityJoinWorldEvent event ) {
 			if( !( event.getEntity() instanceof LivingEntity entity ) )
 				return;
 

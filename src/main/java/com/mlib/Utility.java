@@ -96,7 +96,7 @@ public class Utility {
 	}
 
 	public static EntityType< ? > getEntityType( ResourceLocation location ) {
-		return ForgeRegistries.ENTITY_TYPES.getValue( location );
+		return ForgeRegistries.ENTITIES.getValue( location );
 	}
 
 	public static EntityType< ? > getEntityType( String location ) {
