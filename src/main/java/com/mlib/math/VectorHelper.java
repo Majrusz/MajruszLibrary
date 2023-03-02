@@ -120,7 +120,7 @@ public class VectorHelper {
 	}
 
 	public static float distanceHorizontal( Vector3f vector1, Vector3f vector2 ) {
-		return distance( new Vector3f( vector1.x, 0.0f, vector1.z ), new Vector3f( vector2.x, 0.0f, vector2.z ) );
+		return distance( new Vector3f( vector1.x(), 0.0f, vector1.z() ), new Vector3f( vector2.x(), 0.0f, vector2.z() ) );
 	}
 
 	public static float length( Vector3f vector ) {

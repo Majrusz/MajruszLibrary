@@ -91,7 +91,7 @@ public class SoundHandler {
 		if( holder == null )
 			return;
 
-		player.connection.send( new ClientboundSoundPacket( holder, this.source, position.x, position.y, position.z, volumeProvider.get(), pitchProvider.get(), Random.nextInt() ) );
+		player.connection.send( new ClientboundSoundPacket( holder.get(), this.source, position.x, position.y, position.z, volumeProvider.get(), pitchProvider.get(), Random.nextInt() ) );
 	}
 
 	public void send( ServerPlayer player, Vec3 position, Supplier< Float > volumeProvider ) {

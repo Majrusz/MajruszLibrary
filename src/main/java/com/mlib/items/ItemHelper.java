@@ -73,7 +73,7 @@ public class ItemHelper {
 	public static @Nullable EquipmentSlot equip( Mob mob, ItemStack itemStack ) {
 		if( mob.canHoldItem( itemStack ) ) {
 			EquipmentSlot equipmentSlot = Mob.getEquipmentSlotForItem( itemStack );
-			boolean canEquipArmorPiece = equipmentSlot.isArmor() && mob.getItemBySlot( equipmentSlot ).isEmpty();
+			boolean canEquipArmorPiece = mob.getItemBySlot( equipmentSlot ).isEmpty();
 			equipmentSlot = canEquipArmorPiece ? equipmentSlot : EquipmentSlot.MAINHAND;
 			mob.setItemSlot( equipmentSlot, itemStack );
 
