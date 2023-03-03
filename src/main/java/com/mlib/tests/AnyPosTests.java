@@ -85,6 +85,19 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void dot( GameTestHelper helper ) {
+		Supplier< String > testMessage = ()->"AnyPos does not calculate scalar product properly";
+
+		assertThat( helper, AnyPos.from( 0.0, 0.1, 0.2 ).dot( new Vec3( 0.2, 0.1, -0.1 ) ), 0.0 + 0.01 - 0.02, testMessage );
+		assertThat( helper, AnyPos.from( 1.0f, -0.5f, -1.0f ).dot( new Vector3f( -1.0f, 0.5f, 1.0f ) ), -1.0f - 0.25f - 1.0f, testMessage );
+		assertThat( helper, AnyPos.from( 0, 1, 0 ).dot( new Vec3i( 1, 2, 3 ) ), 0 + 2 + 0, testMessage );
+		assertThat( helper, AnyPos.from( -1, 0, 1 ).dot( new BlockPos( -1, 1, 1 ) ), 1 + 0 + 1, testMessage );
+		assertThat( helper, AnyPos.from( 1, 2, 3 ).dot( 1, 2, 3 ), 1 + 4 + 9, testMessage );
+
+		helper.succeed();
+	}
+
 	public static void assertThat( GameTestHelper helper, AnyPos result, Vec3 expected, Supplier< String > message ) {
 		Vec3 vec3 = result.vec3();
 		boolean condition = Math.abs( vec3.x - expected.x ) < ERROR && Math.abs( vec3.y - expected.y ) < ERROR && Math.abs( vec3.z - expected.z ) < ERROR;
@@ -111,6 +124,10 @@ public class AnyPosTests extends BaseTest {
 		boolean condition = Math.abs( blockPos.getX() - expected.getX() ) < ERROR && Math.abs( blockPos.getY() - expected.getY() ) < ERROR && Math.abs( blockPos.getY() - expected.getY() ) < ERROR;
 
 		assertThat( helper, condition, message );
+	}
+
+	public static void assertThat( GameTestHelper helper, Number result, Number expected, Supplier< String > message ) {
+		assertThat( helper, Math.abs( result.doubleValue() - expected.doubleValue() ) < ERROR, message );
 	}
 
 	public AnyPosTests() {

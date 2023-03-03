@@ -130,6 +130,26 @@ public class AnyPos {
 		return div( this, from( x, y, z ) );
 	}
 
+	public Number dot( Vec3 vec3 ) {
+		return dot( this, from( vec3 ) );
+	}
+
+	public Number dot( Vector3f vec3f ) {
+		return dot( this, from( vec3f ) );
+	}
+
+	public Number dot( Vec3i vec3i ) {
+		return dot( this, from( vec3i ) );
+	}
+
+	public Number dot( BlockPos blockPos ) {
+		return dot( this, from( blockPos ) );
+	}
+
+	public Number dot( Number x, Number y, Number z ) {
+		return dot( this, from( x, y, z ) );
+	}
+
 	public Vec3 vec3() {
 		return new Vec3( this.x, this.y, this.z );
 	}
@@ -160,5 +180,9 @@ public class AnyPos {
 
 	private static AnyPos div( AnyPos pos1, AnyPos pos2 ) {
 		return new AnyPos( pos1.x / pos2.x, pos1.y / pos2.y, pos1.z / pos2.z );
+	}
+
+	private static Number dot( AnyPos pos1, AnyPos pos2 ) {
+		return pos1.x * pos2.x + pos1.y * pos2.y + pos1.z * pos2.z;
 	}
 }
