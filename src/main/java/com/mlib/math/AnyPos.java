@@ -82,6 +82,30 @@ public class AnyPos {
 		return sub( this, from( x, y, z ) );
 	}
 
+	public AnyPos mul( Vec3 vec3 ) {
+		return mul( this, from( vec3 ) );
+	}
+
+	public AnyPos mul( Vector3f vec3f ) {
+		return mul( this, from( vec3f ) );
+	}
+
+	public AnyPos mul( Vec3i vec3i ) {
+		return mul( this, from( vec3i ) );
+	}
+
+	public AnyPos mul( BlockPos blockPos ) {
+		return mul( this, from( blockPos ) );
+	}
+
+	public AnyPos mul( Number value ) {
+		return mul( this, from( value, value, value ) );
+	}
+
+	public AnyPos mul( Number x, Number y, Number z ) {
+		return mul( this, from( x, y, z ) );
+	}
+
 	public Vec3 vec3() {
 		return new Vec3( this.x, this.y, this.z );
 	}
@@ -104,5 +128,9 @@ public class AnyPos {
 
 	private static AnyPos sub( AnyPos pos1, AnyPos pos2 ) {
 		return new AnyPos( pos1.x - pos2.x, pos1.y - pos2.y, pos1.z - pos2.z );
+	}
+
+	private static AnyPos mul( AnyPos pos1, AnyPos pos2 ) {
+		return new AnyPos( pos1.x * pos2.x, pos1.y * pos2.y, pos1.z * pos2.z );
 	}
 }

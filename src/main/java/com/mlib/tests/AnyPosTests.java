@@ -14,6 +14,8 @@ import java.util.function.Supplier;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class AnyPosTests extends BaseTest {
+	static final double ERROR = 1e-7;
+
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void canonicity( GameTestHelper helper ) {
 		Supplier< String > testMessage = ()->"AnyPos is not canonical (values passed to AnyPos are different from those returned)";
@@ -55,20 +57,46 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void mul( GameTestHelper helper ) {
+		Supplier< String > testMessage = ()->"AnyPos does not multiply objects properly";
+
+		assertThat( helper, AnyPos.from( 0.0, 0.1, 0.2 ).mul( new Vec3( 0.2, 0.1, 0.0 ) ), new Vec3( 0.0, 0.01, 0.0 ), testMessage );
+		assertThat( helper, AnyPos.from( 1.0f, -0.5f, -1.0f ).mul( new Vector3f( -1.0f, 0.5f, 1.0f ) ), new Vector3f( -1.0f, -0.25f, -1.0f ), testMessage );
+		assertThat( helper, AnyPos.from( 0, 1, 0 ).mul( new Vec3i( 1, 2, 3 ) ), new Vec3i( 0, 2, 0 ), testMessage );
+		assertThat( helper, AnyPos.from( -1, 0, 1 ).mul( new BlockPos( -1, 0, 1 ) ), new BlockPos( 1, 0, 1 ), testMessage );
+		assertThat( helper, AnyPos.from( 0, 0, 0 ).mul( 1 ), new Vec3( 0, 0, 0 ), testMessage );
+		assertThat( helper, AnyPos.from( 0, 0, 0 ).mul( 1, 2, 3 ), new Vec3( 0, 0, 0 ), testMessage );
+
+		helper.succeed();
+	}
+
 	public static void assertThat( GameTestHelper helper, AnyPos result, Vec3 expected, Supplier< String > message ) {
-		assertThat( helper, result.vec3(), expected, message );
+		Vec3 vec3 = result.vec3();
+		boolean condition = Math.abs( vec3.x - expected.x ) < ERROR && Math.abs( vec3.y - expected.y ) < ERROR && Math.abs( vec3.z - expected.z ) < ERROR;
+
+		assertThat( helper, condition, message );
 	}
 
 	public static void assertThat( GameTestHelper helper, AnyPos result, Vector3f expected, Supplier< String > message ) {
-		assertThat( helper, result.vec3f(), expected, message );
+		Vector3f vec3f = result.vec3f();
+		boolean condition = Math.abs( vec3f.x - expected.x ) < ERROR && Math.abs( vec3f.y - expected.y ) < ERROR && Math.abs( vec3f.z - expected.z ) < ERROR;
+
+		assertThat( helper, condition, message );
 	}
 
 	public static void assertThat( GameTestHelper helper, AnyPos result, Vec3i expected, Supplier< String > message ) {
-		assertThat( helper, result.vec3i(), expected, message );
+		Vec3i vec3i = result.vec3i();
+		boolean condition = Math.abs( vec3i.getX() - expected.getX() ) < ERROR && Math.abs( vec3i.getY() - expected.getY() ) < ERROR && Math.abs( vec3i.getY() - expected.getY() ) < ERROR;
+
+		assertThat( helper, condition, message );
 	}
 
 	public static void assertThat( GameTestHelper helper, AnyPos result, BlockPos expected, Supplier< String > message ) {
-		assertThat( helper, result.block(), expected, message );
+		BlockPos blockPos = result.block();
+		boolean condition = Math.abs( blockPos.getX() - expected.getX() ) < ERROR && Math.abs( blockPos.getY() - expected.getY() ) < ERROR && Math.abs( blockPos.getY() - expected.getY() ) < ERROR;
+
+		assertThat( helper, condition, message );
 	}
 
 	public AnyPosTests() {
