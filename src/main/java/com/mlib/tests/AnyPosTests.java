@@ -65,8 +65,22 @@ public class AnyPosTests extends BaseTest {
 		assertThat( helper, AnyPos.from( 1.0f, -0.5f, -1.0f ).mul( new Vector3f( -1.0f, 0.5f, 1.0f ) ), new Vector3f( -1.0f, -0.25f, -1.0f ), testMessage );
 		assertThat( helper, AnyPos.from( 0, 1, 0 ).mul( new Vec3i( 1, 2, 3 ) ), new Vec3i( 0, 2, 0 ), testMessage );
 		assertThat( helper, AnyPos.from( -1, 0, 1 ).mul( new BlockPos( -1, 0, 1 ) ), new BlockPos( 1, 0, 1 ), testMessage );
-		assertThat( helper, AnyPos.from( 0, 0, 0 ).mul( 1 ), new Vec3( 0, 0, 0 ), testMessage );
-		assertThat( helper, AnyPos.from( 0, 0, 0 ).mul( 1, 2, 3 ), new Vec3( 0, 0, 0 ), testMessage );
+		assertThat( helper, AnyPos.from( 0, 2, 0 ).mul( 1 ), new Vec3( 0, 2, 0 ), testMessage );
+		assertThat( helper, AnyPos.from( 1, 1, 1 ).mul( 1, 2, 3 ), new Vec3( 1, 2, 3 ), testMessage );
+
+		helper.succeed();
+	}
+
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void div( GameTestHelper helper ) {
+		Supplier< String > testMessage = ()->"AnyPos does not divide objects properly";
+
+		assertThat( helper, AnyPos.from( 0.0, 0.1, 0.2 ).div( new Vec3( 0.2, 0.1, -0.1 ) ), new Vec3( 0.0, 1.0, -2.0 ), testMessage );
+		assertThat( helper, AnyPos.from( 1.0f, -0.5f, -1.0f ).div( new Vector3f( -1.0f, 0.5f, 1.0f ) ), new Vector3f( -1.0f, -1.0f, -1.0f ), testMessage );
+		assertThat( helper, AnyPos.from( 0, 1, 0 ).div( new Vec3i( 1, 2, 3 ) ), new Vec3i( 0, 0, 0 ), testMessage );
+		assertThat( helper, AnyPos.from( -1, 0, 1 ).div( new BlockPos( -1, 1, 1 ) ), new BlockPos( 1, 0, 1 ), testMessage );
+		assertThat( helper, AnyPos.from( 1, 2, 3 ).div( 1 ), new Vec3( 1, 2, 3 ), testMessage );
+		assertThat( helper, AnyPos.from( 1, 2, 3 ).div( 1, 2, 3 ), new Vec3( 1, 1, 1 ), testMessage );
 
 		helper.succeed();
 	}
