@@ -24,6 +24,16 @@ public class AnyPos {
 		return new AnyPos( blockPos.getX(), blockPos.getY(), blockPos.getZ() );
 	}
 
+	public static AnyPos from( Number x, Number y, Number z ) {
+		return new AnyPos( x.doubleValue(), y.doubleValue(), z.doubleValue() );
+	}
+
+	private AnyPos( double x, double y, double z ) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+
 	public Vec3 vec3() {
 		return new Vec3( this.x, this.y, this.z );
 	}
@@ -38,11 +48,5 @@ public class AnyPos {
 
 	public BlockPos block() {
 		return new BlockPos( ( int )this.x, ( int )this.y, ( int )this.z );
-	}
-
-	private AnyPos( double x, double y, double z ) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
 	}
 }

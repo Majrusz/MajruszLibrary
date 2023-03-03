@@ -21,11 +21,15 @@ public class AnyPosTests extends BaseTest {
 		Vector3f vec3f = new Vector3f( -0.1f, 0.2f, -0.3f );
 		Vec3i vec3i = new Vec3i( 0, 3, 4 );
 		BlockPos blockPos = new BlockPos( -1, 4, 23 );
+		double x = 1.0;
+		float y = 0.4f;
+		int z = 3;
 
 		assertThat( helper, AnyPos.from( vec3 ).vec3(), vec3, testMessage );
 		assertThat( helper, AnyPos.from( vec3f ).vec3f(), vec3f, testMessage );
 		assertThat( helper, AnyPos.from( vec3i ).vec3i(), vec3i, testMessage );
 		assertThat( helper, AnyPos.from( blockPos ).block(), blockPos, testMessage );
+		assertThat( helper, AnyPos.from( x, y, z ).vec3(), new Vec3( x, y, z ), testMessage );
 
 		helper.succeed();
 	}
