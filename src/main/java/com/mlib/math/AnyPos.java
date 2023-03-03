@@ -58,6 +58,30 @@ public class AnyPos {
 		return add( this, from( x, y, z ) );
 	}
 
+	public AnyPos sub( Vec3 vec3 ) {
+		return sub( this, from( vec3 ) );
+	}
+
+	public AnyPos sub( Vector3f vec3f ) {
+		return sub( this, from( vec3f ) );
+	}
+
+	public AnyPos sub( Vec3i vec3i ) {
+		return sub( this, from( vec3i ) );
+	}
+
+	public AnyPos sub( BlockPos blockPos ) {
+		return sub( this, from( blockPos ) );
+	}
+
+	public AnyPos sub( Number value ) {
+		return sub( this, from( value, value, value ) );
+	}
+
+	public AnyPos sub( Number x, Number y, Number z ) {
+		return sub( this, from( x, y, z ) );
+	}
+
 	public Vec3 vec3() {
 		return new Vec3( this.x, this.y, this.z );
 	}
@@ -76,5 +100,9 @@ public class AnyPos {
 
 	private static AnyPos add( AnyPos pos1, AnyPos pos2 ) {
 		return new AnyPos( pos1.x + pos2.x, pos1.y + pos2.y, pos1.z + pos2.z );
+	}
+
+	private static AnyPos sub( AnyPos pos1, AnyPos pos2 ) {
+		return new AnyPos( pos1.x - pos2.x, pos1.y - pos2.y, pos1.z - pos2.z );
 	}
 }

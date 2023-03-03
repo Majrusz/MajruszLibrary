@@ -41,6 +41,20 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void sub( GameTestHelper helper ) {
+		Supplier< String > testMessage = ()->"AnyPos does not subtract objects properly";
+
+		assertThat( helper, AnyPos.from( 0.0, 0.1, 0.2 ).sub( new Vec3( 0.2, 0.1, 0.0 ) ), new Vec3( -0.2, 0.0, 0.2 ), testMessage );
+		assertThat( helper, AnyPos.from( 1.0f, -0.5f, -1.0f ).sub( new Vector3f( -1.0f, 0.5f, 1.0f ) ), new Vector3f( 2.0f, -1.0f, -2.0f ), testMessage );
+		assertThat( helper, AnyPos.from( 0, 1, 0 ).sub( new Vec3i( 1, 2, 3 ) ), new Vec3i( -1, -1, -3 ), testMessage );
+		assertThat( helper, AnyPos.from( -1, 0, 1 ).sub( new BlockPos( -1, 0, 1 ) ), new BlockPos( 0, 0, 0 ), testMessage );
+		assertThat( helper, AnyPos.from( 0, 0, 0 ).sub( 1 ), new Vec3( -1, -1, -1 ), testMessage );
+		assertThat( helper, AnyPos.from( 0, 0, 0 ).sub( 1, 2, 3 ), new Vec3( -1, -2, -3 ), testMessage );
+
+		helper.succeed();
+	}
+
 	public static void assertThat( GameTestHelper helper, AnyPos result, Vec3 expected, Supplier< String > message ) {
 		assertThat( helper, result.vec3(), expected, message );
 	}
