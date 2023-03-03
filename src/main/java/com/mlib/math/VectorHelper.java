@@ -10,6 +10,7 @@ import net.minecraft.world.phys.Vec3;
  Class with few functions for common vector operations.
  Added because there were not enough functions in Minecraft 1.17.1.
  */
+@Deprecated( forRemoval = true )
 public class VectorHelper {
 	public static Vector3f add( Vector3f vector1, Vector3f vector2 ) {
 		return new Vector3f( vector1.x() + vector2.x(), vector1.y() + vector2.y(), vector1.z() + vector2.z() );
