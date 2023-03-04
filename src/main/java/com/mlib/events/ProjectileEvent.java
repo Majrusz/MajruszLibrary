@@ -39,13 +39,17 @@ public class ProjectileEvent extends Event implements IModBusEvent {
 		@Nullable public final EntityHitResult entityHitResult;
 		@Nullable public final BlockHitResult blockHitResult;
 
-		public Hit( Projectile projectile, @Nullable ItemStack weapon, @Nullable ItemStack arrow, CompoundTag customTag, @Nullable EntityHitResult entityHitResult ) {
+		public Hit( Projectile projectile, @Nullable ItemStack weapon, @Nullable ItemStack arrow, CompoundTag customTag,
+			@Nullable EntityHitResult entityHitResult
+		) {
 			super( projectile, weapon, arrow, customTag );
 			this.entityHitResult = entityHitResult;
 			this.blockHitResult = null;
 		}
 
-		public Hit( Projectile projectile, @Nullable ItemStack weapon, @Nullable ItemStack arrow, CompoundTag customTag, @Nullable BlockHitResult blockHitResult ) {
+		public Hit( Projectile projectile, @Nullable ItemStack weapon, @Nullable ItemStack arrow, CompoundTag customTag,
+			@Nullable BlockHitResult blockHitResult
+		) {
 			super( projectile, weapon, arrow, customTag );
 			this.entityHitResult = null;
 			this.blockHitResult = blockHitResult;

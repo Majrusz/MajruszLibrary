@@ -5,7 +5,6 @@ import com.mlib.gamemodifiers.Contexts;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )

@@ -5,7 +5,6 @@ import com.mlib.ObfuscationGetter;
 import com.mlib.Utility;
 import com.mlib.math.AABBHelper;
 import com.mlib.math.AnyPos;
-import com.mlib.math.VectorHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;

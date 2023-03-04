@@ -8,8 +8,6 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.function.Supplier;
-
 /** Trigger that is called only with custom id. */
 public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance > {
 	private final ResourceLocation triggerID;

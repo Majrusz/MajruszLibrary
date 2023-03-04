@@ -2,11 +2,7 @@ package com.mlib;
 
 import com.mlib.config.DoubleConfig;
 import com.mlib.math.AnyPos;
-import com.mlib.math.VectorHelper;
-import org.joml.Vector3f;
-import net.minecraft.core.Vec3i;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Map;

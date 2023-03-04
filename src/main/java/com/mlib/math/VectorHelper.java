@@ -1,10 +1,10 @@
 package com.mlib.math;
 
-import org.joml.Vector3f;
-import org.joml.Vector3d;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
+import org.joml.Vector3f;
 
 /**
  Class with few functions for common vector operations.

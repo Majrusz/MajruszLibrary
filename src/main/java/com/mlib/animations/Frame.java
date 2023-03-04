@@ -1,7 +1,6 @@
 package com.mlib.animations;
 
 import com.mlib.math.AnyPos;
-import com.mlib.math.VectorHelper;
 import net.minecraft.util.Mth;
 import org.joml.Vector3f;
 

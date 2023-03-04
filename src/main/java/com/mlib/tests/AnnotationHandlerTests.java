@@ -5,7 +5,6 @@ import com.mlib.annotations.AnnotationHandler;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

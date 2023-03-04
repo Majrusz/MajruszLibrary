@@ -1,6 +1,5 @@
 package com.mlib.mixin;
 
-import com.mlib.MajruszLibrary;
 import com.mlib.events.ItemHurtEvent;
 import com.mlib.gamemodifiers.contexts.OnFoodPropertiesGet;
 import com.mlib.gamemodifiers.contexts.OnItemAttributeTooltip;

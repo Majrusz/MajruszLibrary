@@ -36,12 +36,14 @@ public abstract class MixinProjectile implements IMixinProjectile {
 	}
 
 	@Override
-	public @Nullable ItemStack getWeapon() {
+	@Nullable
+	public ItemStack getWeapon() {
 		return this.mlibWeapon;
 	}
 
 	@Override
-	public @Nullable ItemStack getArrow() {
+	@Nullable
+	public ItemStack getArrow() {
 		return this.mlibArrow;
 	}
 

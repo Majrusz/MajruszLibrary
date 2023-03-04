@@ -2,7 +2,6 @@ package com.mlib.effects;
 
 import com.mlib.Random;
 import com.mlib.math.AnyPos;
-import com.mlib.math.VectorHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
