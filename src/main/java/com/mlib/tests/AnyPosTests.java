@@ -137,6 +137,16 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void utility( GameTestHelper helper ) {
+		assertThat( helper, AnyPos.from( 0.0, 0.1, 0.2 ).len(), Math.sqrt( 0.01 + 0.04 ), ()->"AnyPos does not calculate length properly" );
+		assertThat( helper, AnyPos.from( 1.0f, -0.5f, -1.0f ).norm(), new Vector3f( 2.0f / 3.0f, -1.0f / 3.0f, -2.0f / 3.0f ), ()->"AnyPos does not calculate normalized vector properly" );
+		assertThat( helper, AnyPos.from( 1, 2, 3 ).norm().len(), 1, ()->"AnyPos does not calculate normalized vector properly" );
+		assertThat( helper, AnyPos.from( -1, 0, 1 ).center(), new Vec3( -0.5f, 0.5f, 1.5f ), ()->"AnyPos does not centered vector properly" );
+
+		helper.succeed();
+	}
+
 	public static void assertThat( GameTestHelper helper, AnyPos result, Vec3 expected, Supplier< String > message ) {
 		Vec3 vec3 = result.vec3();
 		boolean condition = Math.abs( vec3.x - expected.x ) < ERROR && Math.abs( vec3.y - expected.y ) < ERROR && Math.abs( vec3.z - expected.z ) < ERROR;

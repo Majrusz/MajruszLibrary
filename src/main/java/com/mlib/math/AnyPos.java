@@ -210,6 +210,20 @@ public class AnyPos {
 		return dist2d( this, from( x, y, z ) );
 	}
 
+	public Number len() {
+		return Math.sqrt( Math.pow( this.x, 2 ) + Math.pow( this.y, 2 ) + Math.pow( this.z, 2 ) );
+	}
+
+	public AnyPos norm() {
+		double length = this.len().doubleValue();
+
+		return length > 1e-5 ? this.div( length ) : this;
+	}
+
+	public AnyPos center() {
+		return new AnyPos( Math.floor( this.x ) + 0.5, Math.floor( this.y ) + 0.5, Math.floor( this.z ) + 0.5 );
+	}
+
 	public Vec3 vec3() {
 		return new Vec3( this.x, this.y, this.z );
 	}
