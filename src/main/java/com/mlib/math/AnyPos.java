@@ -2,6 +2,7 @@ package com.mlib.math;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
@@ -93,7 +94,7 @@ public class AnyPos {
 	public AnyPos mul( AnyPos pos ) {
 		return new AnyPos( this.x * pos.x, this.y * pos.y, this.z * pos.z );
 	}
-	
+
 	public AnyPos mul( Vec3 vec3 ) {
 		return this.mul( from( vec3 ) );
 	}
@@ -240,6 +241,30 @@ public class AnyPos {
 
 	public Number dist2d( Number x, Number y, Number z ) {
 		return this.dist2d( from( x, y, z ) );
+	}
+
+	public AnyPos lerp( float ratio, AnyPos pos ) {
+		return new AnyPos( Mth.lerp( ratio, this.x, pos.x ), Mth.lerp( ratio, this.y, pos.y ), Mth.lerp( ratio, this.z, pos.z ) );
+	}
+
+	public AnyPos lerp( float ratio, Vec3 vec3 ) {
+		return this.lerp( ratio, from( vec3 ) );
+	}
+
+	public AnyPos lerp( float ratio, Vector3f vec3f ) {
+		return this.lerp( ratio, from( vec3f ) );
+	}
+
+	public AnyPos lerp( float ratio, Vec3i vec3i ) {
+		return this.lerp( ratio, from( vec3i ) );
+	}
+
+	public AnyPos lerp( float ratio, BlockPos blockPos ) {
+		return this.lerp( ratio, from( blockPos ) );
+	}
+
+	public AnyPos lerp( float ratio, Number x, Number y, Number z ) {
+		return this.lerp( ratio, from( x, y, z ) );
 	}
 
 	public Number len() {

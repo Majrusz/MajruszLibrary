@@ -138,6 +138,19 @@ public class AnyPosTests extends BaseTest {
 	}
 
 	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void lerp( GameTestHelper helper ) {
+		Supplier< String > testMessage = ()->"AnyPos does not calculate linear interpolation properly";
+
+		assertThat( helper, AnyPos.from( 0.0, 0.1, 0.2 ).lerp( 0.5f, new Vec3( 0.2, 0.1, -0.1 ) ), new Vec3( 0.1, 0.1, 0.05 ), testMessage );
+		assertThat( helper, AnyPos.from( 1.0f, -0.5f, -1.0f ).lerp( 0.0f, new Vector3f( -1.0f, 0.5f, 1.0f ) ), new Vector3f( 1.0f, -0.5f, -1.0f ), testMessage );
+		assertThat( helper, AnyPos.from( 0, 1, 0 ).lerp( 1.0f, new Vec3i( 1, 2, 3 ) ), new Vec3i( 1, 2, 3 ), testMessage );
+		assertThat( helper, AnyPos.from( -1, 0, 1 ).lerp( 0.5f, new BlockPos( -1, 1, 1 ) ), new BlockPos( -1, 0, 1 ), testMessage );
+		assertThat( helper, AnyPos.from( 1, 2, 3 ).lerp( 0.75f, 1, 2, 3 ), new Vec3i( 1, 2, 3 ), testMessage );
+
+		helper.succeed();
+	}
+
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
 	public static void utility( GameTestHelper helper ) {
 		assertThat( helper, AnyPos.from( 0.0, 0.1, 0.2 ).len(), Math.sqrt( 0.01 + 0.04 ), ()->"AnyPos does not calculate length properly" );
 		assertThat( helper, AnyPos.from( 1.0f, -0.5f, -1.0f ).norm(), new Vector3f( 2.0f / 3.0f, -1.0f / 3.0f, -2.0f / 3.0f ), ()->"AnyPos does not calculate normalized vector properly" );
