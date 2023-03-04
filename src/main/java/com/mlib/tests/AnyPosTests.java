@@ -111,6 +111,19 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
+	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	public static void distSqr( GameTestHelper helper ) {
+		Supplier< String > testMessage = ()->"AnyPos does not calculate squared distance properly";
+
+		assertThat( helper, AnyPos.from( 0.0, 0.1, 0.2 ).distSqr( new Vec3( 0.2, 0.1, -0.1 ) ), 0.04 + 0.0 + 0.09, testMessage );
+		assertThat( helper, AnyPos.from( 1.0f, -0.5f, -1.0f ).distSqr( new Vector3f( -1.0f, 0.5f, 1.0f ) ), 4.0f + 1.0f + 4.0f, testMessage );
+		assertThat( helper, AnyPos.from( 0, 1, 0 ).distSqr( new Vec3i( 1, 2, 3 ) ), 1 + 1 + 9, testMessage );
+		assertThat( helper, AnyPos.from( -1, 0, 1 ).distSqr( new BlockPos( -1, 1, 1 ) ), 0 + 1 + 0, testMessage );
+		assertThat( helper, AnyPos.from( 1, 2, 3 ).distSqr( 1, 2, 3 ), 0 + 0 + 0, testMessage );
+
+		helper.succeed();
+	}
+
 	public static void assertThat( GameTestHelper helper, AnyPos result, Vec3 expected, Supplier< String > message ) {
 		Vec3 vec3 = result.vec3();
 		boolean condition = Math.abs( vec3.x - expected.x ) < ERROR && Math.abs( vec3.y - expected.y ) < ERROR && Math.abs( vec3.z - expected.z ) < ERROR;
