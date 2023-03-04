@@ -190,6 +190,26 @@ public class AnyPos {
 		return distSqr( this, from( x, y, z ) );
 	}
 
+	public Number dist2d( Vec3 vec3 ) {
+		return dist2d( this, from( vec3 ) );
+	}
+
+	public Number dist2d( Vector3f vec3f ) {
+		return dist2d( this, from( vec3f ) );
+	}
+
+	public Number dist2d( Vec3i vec3i ) {
+		return dist2d( this, from( vec3i ) );
+	}
+
+	public Number dist2d( BlockPos blockPos ) {
+		return dist2d( this, from( blockPos ) );
+	}
+
+	public Number dist2d( Number x, Number y, Number z ) {
+		return dist2d( this, from( x, y, z ) );
+	}
+
 	public Vec3 vec3() {
 		return new Vec3( this.x, this.y, this.z );
 	}
@@ -232,5 +252,9 @@ public class AnyPos {
 
 	private static Number distSqr( AnyPos pos1, AnyPos pos2 ) {
 		return Math.pow( pos1.x - pos2.x, 2 ) + Math.pow( pos1.y - pos2.y, 2 ) + Math.pow( pos1.z - pos2.z, 2 );
+	}
+
+	private static Number dist2d( AnyPos pos1, AnyPos pos2 ) {
+		return Math.sqrt( Math.pow( pos1.x - pos2.x, 2 ) + Math.pow( pos1.z - pos2.z, 2 ) );
 	}
 }
