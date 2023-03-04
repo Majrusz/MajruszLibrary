@@ -34,180 +34,212 @@ public class AnyPos {
 		this.z = z;
 	}
 
+	public AnyPos add( AnyPos pos ) {
+		return new AnyPos( this.x + pos.x, this.y + pos.y, this.z + pos.z );
+	}
+
 	public AnyPos add( Vec3 vec3 ) {
-		return add( this, from( vec3 ) );
+		return this.add( from( vec3 ) );
 	}
 
 	public AnyPos add( Vector3f vec3f ) {
-		return add( this, from( vec3f ) );
+		return this.add( from( vec3f ) );
 	}
 
 	public AnyPos add( Vec3i vec3i ) {
-		return add( this, from( vec3i ) );
+		return this.add( from( vec3i ) );
 	}
 
 	public AnyPos add( BlockPos blockPos ) {
-		return add( this, from( blockPos ) );
+		return this.add( from( blockPos ) );
 	}
 
 	public AnyPos add( Number value ) {
-		return add( this, from( value, value, value ) );
+		return this.add( from( value, value, value ) );
 	}
 
 	public AnyPos add( Number x, Number y, Number z ) {
-		return add( this, from( x, y, z ) );
+		return this.add( from( x, y, z ) );
+	}
+
+	public AnyPos sub( AnyPos pos ) {
+		return new AnyPos( this.x - pos.x, this.y - pos.y, this.z - pos.z );
 	}
 
 	public AnyPos sub( Vec3 vec3 ) {
-		return sub( this, from( vec3 ) );
+		return this.sub( from( vec3 ) );
 	}
 
 	public AnyPos sub( Vector3f vec3f ) {
-		return sub( this, from( vec3f ) );
+		return this.sub( from( vec3f ) );
 	}
 
 	public AnyPos sub( Vec3i vec3i ) {
-		return sub( this, from( vec3i ) );
+		return this.sub( from( vec3i ) );
 	}
 
 	public AnyPos sub( BlockPos blockPos ) {
-		return sub( this, from( blockPos ) );
+		return this.sub( from( blockPos ) );
 	}
 
 	public AnyPos sub( Number value ) {
-		return sub( this, from( value, value, value ) );
+		return this.sub( from( value, value, value ) );
 	}
 
 	public AnyPos sub( Number x, Number y, Number z ) {
-		return sub( this, from( x, y, z ) );
+		return this.sub( from( x, y, z ) );
 	}
 
+	public AnyPos mul( AnyPos pos ) {
+		return new AnyPos( this.x * pos.x, this.y * pos.y, this.z * pos.z );
+	}
+	
 	public AnyPos mul( Vec3 vec3 ) {
-		return mul( this, from( vec3 ) );
+		return this.mul( from( vec3 ) );
 	}
 
 	public AnyPos mul( Vector3f vec3f ) {
-		return mul( this, from( vec3f ) );
+		return this.mul( from( vec3f ) );
 	}
 
 	public AnyPos mul( Vec3i vec3i ) {
-		return mul( this, from( vec3i ) );
+		return this.mul( from( vec3i ) );
 	}
 
 	public AnyPos mul( BlockPos blockPos ) {
-		return mul( this, from( blockPos ) );
+		return this.mul( from( blockPos ) );
 	}
 
 	public AnyPos mul( Number value ) {
-		return mul( this, from( value, value, value ) );
+		return this.mul( from( value, value, value ) );
 	}
 
 	public AnyPos mul( Number x, Number y, Number z ) {
-		return mul( this, from( x, y, z ) );
+		return this.mul( from( x, y, z ) );
+	}
+
+	public AnyPos div( AnyPos pos ) {
+		return new AnyPos( this.x / pos.x, this.y / pos.y, this.z / pos.z );
 	}
 
 	public AnyPos div( Vec3 vec3 ) {
-		return div( this, from( vec3 ) );
+		return this.div( from( vec3 ) );
 	}
 
 	public AnyPos div( Vector3f vec3f ) {
-		return div( this, from( vec3f ) );
+		return this.div( from( vec3f ) );
 	}
 
 	public AnyPos div( Vec3i vec3i ) {
-		return div( this, from( vec3i ) );
+		return this.div( from( vec3i ) );
 	}
 
 	public AnyPos div( BlockPos blockPos ) {
-		return div( this, from( blockPos ) );
+		return this.div( from( blockPos ) );
 	}
 
 	public AnyPos div( Number value ) {
-		return div( this, from( value, value, value ) );
+		return this.div( from( value, value, value ) );
 	}
 
 	public AnyPos div( Number x, Number y, Number z ) {
-		return div( this, from( x, y, z ) );
+		return this.div( from( x, y, z ) );
+	}
+
+	public Number dot( AnyPos pos ) {
+		return this.x * pos.x + this.y * pos.y + this.z * pos.z;
 	}
 
 	public Number dot( Vec3 vec3 ) {
-		return dot( this, from( vec3 ) );
+		return this.dot( from( vec3 ) );
 	}
 
 	public Number dot( Vector3f vec3f ) {
-		return dot( this, from( vec3f ) );
+		return this.dot( from( vec3f ) );
 	}
 
 	public Number dot( Vec3i vec3i ) {
-		return dot( this, from( vec3i ) );
+		return this.dot( from( vec3i ) );
 	}
 
 	public Number dot( BlockPos blockPos ) {
-		return dot( this, from( blockPos ) );
+		return this.dot( from( blockPos ) );
 	}
 
 	public Number dot( Number x, Number y, Number z ) {
-		return dot( this, from( x, y, z ) );
+		return this.dot( from( x, y, z ) );
+	}
+
+	public Number dist( AnyPos pos ) {
+		return Math.sqrt( Math.pow( this.x - pos.x, 2 ) + Math.pow( this.y - pos.y, 2 ) + Math.pow( this.z - pos.z, 2 ) );
 	}
 
 	public Number dist( Vec3 vec3 ) {
-		return dist( this, from( vec3 ) );
+		return this.dist( from( vec3 ) );
 	}
 
 	public Number dist( Vector3f vec3f ) {
-		return dist( this, from( vec3f ) );
+		return this.dist( from( vec3f ) );
 	}
 
 	public Number dist( Vec3i vec3i ) {
-		return dist( this, from( vec3i ) );
+		return this.dist( from( vec3i ) );
 	}
 
 	public Number dist( BlockPos blockPos ) {
-		return dist( this, from( blockPos ) );
+		return this.dist( from( blockPos ) );
 	}
 
 	public Number dist( Number x, Number y, Number z ) {
-		return dist( this, from( x, y, z ) );
+		return this.dist( from( x, y, z ) );
+	}
+
+	public Number distSqr( AnyPos pos ) {
+		return Math.pow( this.x - pos.x, 2 ) + Math.pow( this.y - pos.y, 2 ) + Math.pow( this.z - pos.z, 2 );
 	}
 
 	public Number distSqr( Vec3 vec3 ) {
-		return distSqr( this, from( vec3 ) );
+		return this.distSqr( from( vec3 ) );
 	}
 
 	public Number distSqr( Vector3f vec3f ) {
-		return distSqr( this, from( vec3f ) );
+		return this.distSqr( from( vec3f ) );
 	}
 
 	public Number distSqr( Vec3i vec3i ) {
-		return distSqr( this, from( vec3i ) );
+		return this.distSqr( from( vec3i ) );
 	}
 
 	public Number distSqr( BlockPos blockPos ) {
-		return distSqr( this, from( blockPos ) );
+		return this.distSqr( from( blockPos ) );
 	}
 
 	public Number distSqr( Number x, Number y, Number z ) {
-		return distSqr( this, from( x, y, z ) );
+		return this.distSqr( from( x, y, z ) );
+	}
+
+	public Number dist2d( AnyPos pos ) {
+		return Math.sqrt( Math.pow( this.x - pos.x, 2 ) + Math.pow( this.z - pos.z, 2 ) );
 	}
 
 	public Number dist2d( Vec3 vec3 ) {
-		return dist2d( this, from( vec3 ) );
+		return this.dist2d( from( vec3 ) );
 	}
 
 	public Number dist2d( Vector3f vec3f ) {
-		return dist2d( this, from( vec3f ) );
+		return this.dist2d( from( vec3f ) );
 	}
 
 	public Number dist2d( Vec3i vec3i ) {
-		return dist2d( this, from( vec3i ) );
+		return this.dist2d( from( vec3i ) );
 	}
 
 	public Number dist2d( BlockPos blockPos ) {
-		return dist2d( this, from( blockPos ) );
+		return this.dist2d( from( blockPos ) );
 	}
 
 	public Number dist2d( Number x, Number y, Number z ) {
-		return dist2d( this, from( x, y, z ) );
+		return this.dist2d( from( x, y, z ) );
 	}
 
 	public Number len() {
@@ -238,37 +270,5 @@ public class AnyPos {
 
 	public BlockPos block() {
 		return new BlockPos( ( int )this.x, ( int )this.y, ( int )this.z );
-	}
-
-	private static AnyPos add( AnyPos pos1, AnyPos pos2 ) {
-		return new AnyPos( pos1.x + pos2.x, pos1.y + pos2.y, pos1.z + pos2.z );
-	}
-
-	private static AnyPos sub( AnyPos pos1, AnyPos pos2 ) {
-		return new AnyPos( pos1.x - pos2.x, pos1.y - pos2.y, pos1.z - pos2.z );
-	}
-
-	private static AnyPos mul( AnyPos pos1, AnyPos pos2 ) {
-		return new AnyPos( pos1.x * pos2.x, pos1.y * pos2.y, pos1.z * pos2.z );
-	}
-
-	private static AnyPos div( AnyPos pos1, AnyPos pos2 ) {
-		return new AnyPos( pos1.x / pos2.x, pos1.y / pos2.y, pos1.z / pos2.z );
-	}
-
-	private static Number dot( AnyPos pos1, AnyPos pos2 ) {
-		return pos1.x * pos2.x + pos1.y * pos2.y + pos1.z * pos2.z;
-	}
-
-	private static Number dist( AnyPos pos1, AnyPos pos2 ) {
-		return Math.sqrt( Math.pow( pos1.x - pos2.x, 2 ) + Math.pow( pos1.y - pos2.y, 2 ) + Math.pow( pos1.z - pos2.z, 2 ) );
-	}
-
-	private static Number distSqr( AnyPos pos1, AnyPos pos2 ) {
-		return Math.pow( pos1.x - pos2.x, 2 ) + Math.pow( pos1.y - pos2.y, 2 ) + Math.pow( pos1.z - pos2.z, 2 );
-	}
-
-	private static Number dist2d( AnyPos pos1, AnyPos pos2 ) {
-		return Math.sqrt( Math.pow( pos1.x - pos2.x, 2 ) + Math.pow( pos1.z - pos2.z, 2 ) );
 	}
 }
