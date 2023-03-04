@@ -6,7 +6,16 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+/**
+ This class is an adapter for most position-related operations in the game. It has been
+ created because the interface for vector-like classes in Minecraft has changed too many
+ times and it is much easier to backport such new class.
+ */
 public class AnyPos {
+	// At the moment it always converts positions to double values. In order to improve
+	// the performance in the future it is possible to define subclasses like
+	// AnyPosDouble or AnyPosInteger (AnyPos could become an interface), because all
+	// methods always return AnyPos and Number types
 	double x, y, z;
 
 	public static AnyPos from( Vec3 vec3 ) {
