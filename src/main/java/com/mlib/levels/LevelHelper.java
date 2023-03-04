@@ -3,6 +3,7 @@ package com.mlib.levels;
 import com.mlib.Random;
 import com.mlib.effects.ParticleHandler;
 import com.mlib.effects.SoundHandler;
+import com.mlib.math.AnyPos;
 import com.mlib.math.VectorHelper;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
@@ -97,7 +98,7 @@ public class LevelHelper {
 		if( exactSpawnPosition == null ) {
 			serverLevel = player.server.getLevel( Level.OVERWORLD );
 			assert serverLevel != null;
-			exactSpawnPosition = VectorHelper.vec3( serverLevel.getSharedSpawnPos() );
+			exactSpawnPosition = AnyPos.from( serverLevel.getSharedSpawnPos() ).vec3();
 		}
 
 		return new Pair<>( exactSpawnPosition, serverLevel );
@@ -116,7 +117,7 @@ public class LevelHelper {
 		if( isEntityInside )
 			offset /= 2;
 
-		Vec3 newPosition = Random.getRandomVector3d( -offset, offset, -1.0, 1.0, -offset, offset ).add( target.position() );
+		Vec3 newPosition = Random.getRandomVector( -offset, offset, -1.0, 1.0, -offset, offset ).add( target.position() ).vec3();
 		double y = level.getHeight( Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ( int )newPosition.x, ( int )newPosition.z ) + 1;
 		if( !( y < level.getMinBuildHeight() + 1 ) && target.randomTeleport( newPosition.x, target.yOld + 8 > y ? y : newPosition.y, newPosition.z, true ) ) {
 			Vec3 position = new Vec3( target.xo, target.getY( 0.5 ), target.zo );
@@ -164,11 +165,11 @@ public class LevelHelper {
 	}
 
 	public static void spawnItemEntityFlyingTowardsDirection( ItemStack itemStack, Level level, Vec3 from, Vec3 to ) {
-		Vec3 spawnPosition = VectorHelper.add( from, Random.getRandomVector3d( -0.25, 0.25, 0.125, 0.5, -0.25, 0.25 ) );
-		Vec3 motion = VectorHelper.multiply( VectorHelper.subtract( to, spawnPosition ), 0.1 );
+		Vec3 spawnPosition = AnyPos.from( from ).add( Random.getRandomVector( -0.25, 0.25, 0.125, 0.5, -0.25, 0.25 ) ).vec3();
+		Vec3 motion = AnyPos.from( to ).sub( spawnPosition ).mul( 0.1 ).vec3();
 
 		ItemEntity itemEntity = new ItemEntity( level, spawnPosition.x, spawnPosition.y, spawnPosition.z, itemStack );
-		itemEntity.setDeltaMovement( VectorHelper.add( motion, new Vec3( 0.0, Math.pow( VectorHelper.length( motion ), 0.5 ) * 0.25, 0.0 ) ) );
+		itemEntity.setDeltaMovement( AnyPos.from( motion ).add(0.0, Math.pow( AnyPos.from( motion ).len().doubleValue(), 0.5 ) * 0.25, 0.0 ).vec3() );
 
 		level.addFreshEntity( itemEntity );
 	}

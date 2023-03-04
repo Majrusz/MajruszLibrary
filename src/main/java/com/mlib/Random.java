@@ -1,6 +1,7 @@
 package com.mlib;
 
 import com.mlib.config.DoubleConfig;
+import com.mlib.math.AnyPos;
 import com.mlib.math.VectorHelper;
 import org.joml.Vector3f;
 import net.minecraft.core.Vec3i;
@@ -101,23 +102,23 @@ public class Random {
 		return outputExperience + ( tryChance( experience - outputExperience ) ? 1 : 0 );
 	}
 
-	public static Vector3f getRandomVector3f( float minX, float maxX, float minY, float maxY, float minZ, float maxZ ) {
-		return new Vector3f( nextFloat( minX, maxX ), nextFloat( minY, maxY ), nextFloat( minZ, maxZ ) );
+	public static AnyPos getRandomVector( float minX, float maxX, float minY, float maxY, float minZ, float maxZ ) {
+		return AnyPos.from( nextFloat( minX, maxX ), nextFloat( minY, maxY ), nextFloat( minZ, maxZ ) );
 	}
 
-	public static Vec3 getRandomVector3d( double minX, double maxX, double minY, double maxY, double minZ, double maxZ ) {
-		return new Vec3( nextDouble( minX, maxX ), nextDouble( minY, maxY ), nextDouble( minZ, maxZ ) );
+	public static AnyPos getRandomVector( double minX, double maxX, double minY, double maxY, double minZ, double maxZ ) {
+		return AnyPos.from( nextDouble( minX, maxX ), nextDouble( minY, maxY ), nextDouble( minZ, maxZ ) );
 	}
 
-	public static Vec3i getRandomVector3i( int minX, int maxX, int minY, int maxY, int minZ, int maxZ ) {
-		return new Vec3i( nextInt( minX, maxX ), nextInt( minY, maxY ), nextInt( minZ, maxZ ) );
+	public static AnyPos getRandomVector( int minX, int maxX, int minY, int maxY, int minZ, int maxZ ) {
+		return AnyPos.from( nextInt( minX, maxX ), nextInt( minY, maxY ), nextInt( minZ, maxZ ) );
 	}
 
-	public static Vec3 getRandomNormalizedVector() {
-		Vec3 vector = getRandomVector3d( -1.0, 1.0, -1.0, 1.0, -1.0, 1.0 );
-		if( VectorHelper.length( vector ) < 1e-5 ) // to avoid dividing by zero (or very small number) and throwing exception
-			return getRandomNormalizedVector();
+	public static AnyPos getRandomUnitVector() {
+		AnyPos pos = getRandomVector( -1.0, 1.0, -1.0, 1.0, -1.0, 1.0 );
+		if( pos.len().doubleValue() < 1e-5 ) // to avoid dividing by zero (or very small number) and throwing exception
+			return getRandomUnitVector();
 
-		return VectorHelper.normalize( vector );
+		return pos.norm();
 	}
 }

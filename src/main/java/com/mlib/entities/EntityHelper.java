@@ -4,6 +4,7 @@ import com.mlib.NetworkHandler;
 import com.mlib.ObfuscationGetter;
 import com.mlib.Utility;
 import com.mlib.math.AABBHelper;
+import com.mlib.math.AnyPos;
 import com.mlib.math.VectorHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -129,7 +130,7 @@ public class EntityHelper {
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass,
 		ServerLevel level, BlockPos blockPosition, double sideLength, Predicate< EntityType > extraPredicate
 	) {
-		return getEntitiesInBox( entityClass, level, VectorHelper.vec3( blockPosition ), sideLength, extraPredicate );
+		return getEntitiesInBox( entityClass, level, AnyPos.from( blockPosition ).vec3(), sideLength, extraPredicate );
 	}
 
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass,
@@ -141,7 +142,7 @@ public class EntityHelper {
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass,
 		ServerLevel level, Vec3 position, double radius, Predicate< EntityType > extraPredicate
 	) {
-		Predicate< EntityType > distancePredicate = entity->VectorHelper.distance( position, entity.position() ) <= radius;
+		Predicate< EntityType > distancePredicate = entity->AnyPos.from( position ).dist( entity.position() ).doubleValue() <= radius;
 
 		return getEntitiesInBox( entityClass, level, position, radius * 2.0, distancePredicate.and( extraPredicate ) );
 	}
@@ -149,7 +150,7 @@ public class EntityHelper {
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass,
 		ServerLevel level, BlockPos blockPosition, double radius, Predicate< EntityType > extraPredicate
 	) {
-		return getEntitiesInSphere( entityClass, level, VectorHelper.vec3( blockPosition ), radius, extraPredicate );
+		return getEntitiesInSphere( entityClass, level, AnyPos.from( blockPosition ).vec3(), radius, extraPredicate );
 	}
 
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInSphere( Class< EntityType > entityClass,

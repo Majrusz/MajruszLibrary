@@ -8,6 +8,7 @@ import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnExtraFishingLootCheck;
 import com.mlib.gamemodifiers.contexts.OnItemFished;
 import com.mlib.gamemodifiers.parameters.Priority;
+import com.mlib.math.AnyPos;
 import com.mlib.math.VectorHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -46,18 +47,17 @@ public class FishingLootIncreaser extends GameModifier {
 
 	private void spawnLoot( OnItemFished.Data data, List< ItemStack > extraLoot ) {
 		extraLoot.forEach( itemStack->{
-			Vec3 offset = Random.getRandomVector3d( -0.25, 0.25, 0.125, 0.5, -0.25, 0.25 );
-			Vec3 spawnPosition = data.hook.position().add( offset );
+			Vec3 spawnPosition = AnyPos.from( data.hook.position() ).add( Random.getRandomVector( -0.25, 0.25, 0.125, 0.5, -0.25, 0.25 ) ).vec3();
 			ItemEntity itemEntity = new ItemEntity( data.level, spawnPosition.x, spawnPosition.y, spawnPosition.z, itemStack );
 			Vec3 motion = data.player.position().subtract( itemEntity.position() ).multiply( 0.1, 0.1, 0.1 );
-			itemEntity.setDeltaMovement( motion.add( 0.0, Math.pow( VectorHelper.length( motion ), 0.5 ) * 0.25, 0.0 ) );
+			itemEntity.setDeltaMovement( motion.add( 0.0, Math.pow( AnyPos.from( motion ).len().doubleValue(), 0.5 ) * 0.25, 0.0 ) );
 			data.level.addFreshEntity( itemEntity );
 		} );
 	}
 
 	private void spawnExperience( OnItemFished.Data data, int experience ) {
 		if( experience > 0 ) {
-			EntityHelper.spawnExperience( data.level, VectorHelper.add( data.player.position(), 0.5 ), experience );
+			EntityHelper.spawnExperience( data.level, AnyPos.from( data.player.position() ).add( 0.5 ).vec3(), experience );
 		}
 	}
 
