@@ -150,6 +150,26 @@ public class AnyPos {
 		return dot( this, from( x, y, z ) );
 	}
 
+	public Number dist( Vec3 vec3 ) {
+		return dist( this, from( vec3 ) );
+	}
+
+	public Number dist( Vector3f vec3f ) {
+		return dist( this, from( vec3f ) );
+	}
+
+	public Number dist( Vec3i vec3i ) {
+		return dist( this, from( vec3i ) );
+	}
+
+	public Number dist( BlockPos blockPos ) {
+		return dist( this, from( blockPos ) );
+	}
+
+	public Number dist( Number x, Number y, Number z ) {
+		return dist( this, from( x, y, z ) );
+	}
+
 	public Vec3 vec3() {
 		return new Vec3( this.x, this.y, this.z );
 	}
@@ -184,5 +204,9 @@ public class AnyPos {
 
 	private static Number dot( AnyPos pos1, AnyPos pos2 ) {
 		return pos1.x * pos2.x + pos1.y * pos2.y + pos1.z * pos2.z;
+	}
+
+	private static Number dist( AnyPos pos1, AnyPos pos2 ) {
+		return Math.sqrt( Math.pow( pos1.x - pos2.x, 2 ) + Math.pow( pos1.y - pos2.y, 2 ) + Math.pow( pos1.z - pos2.z, 2 ) );
 	}
 }
