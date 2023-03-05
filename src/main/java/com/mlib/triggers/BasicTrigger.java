@@ -6,7 +6,6 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-/** Trigger that is called only with custom id. */
 public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance > {
 	final ResourceLocation triggerId;
 
