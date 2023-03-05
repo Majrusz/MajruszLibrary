@@ -1,4 +1,4 @@
-package com.mlib.gamemodifiers.configs;
+package com.mlib.config;
 
 import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;

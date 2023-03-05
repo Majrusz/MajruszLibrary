@@ -1,8 +1,6 @@
-package com.mlib.gamemodifiers.configs;
+package com.mlib.config;
 
 import com.mlib.Random;
-import com.mlib.config.ConfigGroup;
-import com.mlib.config.DoubleConfig;
 import com.mlib.items.ItemHelper;
 import com.mlib.math.Range;
 import net.minecraft.world.entity.EquipmentSlot;
