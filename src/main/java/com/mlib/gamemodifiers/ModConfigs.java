@@ -20,7 +20,7 @@ public class ModConfigs {
 		this.map.get( key ).addConfig( modifier );
 
 		String name = modifier.getName();
-		String message = name.isEmpty() ? "Unnamed game modifier" : String.format( "Game modifier '%s'", name );
+		String message = name.isEmpty() ? String.format( "Unnamed game modifier '%s'", modifier ) : String.format( "Game modifier '%s'", name );
 		MajruszLibrary.logOnDev( "[ModConfigs] %s has been inserted to '%s'.", message, key );
 	}
 
