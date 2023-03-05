@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 public class AnyPosTests extends BaseTest {
 	static final double ERROR = 1e-7;
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void canonicity( GameTestHelper helper ) {
 		Supplier< String > testMessage = ()->"AnyPos is not canonical (values passed to AnyPos are different from those returned)";
 
@@ -29,7 +29,7 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void add( GameTestHelper helper ) {
 		Supplier< String > testMessage = ()->"AnyPos does not add objects properly";
 
@@ -43,7 +43,7 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void sub( GameTestHelper helper ) {
 		Supplier< String > testMessage = ()->"AnyPos does not subtract objects properly";
 
@@ -57,7 +57,7 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void mul( GameTestHelper helper ) {
 		Supplier< String > testMessage = ()->"AnyPos does not multiply objects properly";
 
@@ -71,7 +71,7 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void div( GameTestHelper helper ) {
 		Supplier< String > testMessage = ()->"AnyPos does not divide objects properly";
 
@@ -85,7 +85,7 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void dot( GameTestHelper helper ) {
 		Supplier< String > testMessage = ()->"AnyPos does not calculate scalar product properly";
 
@@ -98,7 +98,7 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void dist( GameTestHelper helper ) {
 		Supplier< String > testMessage = ()->"AnyPos does not calculate distance properly";
 
@@ -111,7 +111,7 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void distSqr( GameTestHelper helper ) {
 		Supplier< String > testMessage = ()->"AnyPos does not calculate squared distance properly";
 
@@ -124,7 +124,7 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void dist2d( GameTestHelper helper ) {
 		Supplier< String > testMessage = ()->"AnyPos does not calculate distance properly";
 
@@ -137,7 +137,7 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void lerp( GameTestHelper helper ) {
 		Supplier< String > testMessage = ()->"AnyPos does not calculate linear interpolation properly";
 
@@ -150,7 +150,7 @@ public class AnyPosTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void utility( GameTestHelper helper ) {
 		assertThat( helper, AnyPos.from( 0.0, 0.1, 0.2 ).len(), Math.sqrt( 0.01 + 0.04 ), ()->"AnyPos does not calculate length properly" );
 		assertThat( helper, AnyPos.from( 1.0f, -0.5f, -1.0f ).norm(), new Vector3f( 2.0f / 3.0f, -1.0f / 3.0f, -2.0f / 3.0f ), ()->"AnyPos does not calculate normalized vector properly" );

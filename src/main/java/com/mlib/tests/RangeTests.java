@@ -8,7 +8,7 @@ import net.minecraftforge.gametest.GameTestHolder;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class RangeTests extends BaseTest {
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void within( GameTestHelper helper ) {
 		assertThat( helper, new Range<>( 1.0f, 1.2f ), 0.9999f, false );
 		assertThat( helper, new Range<>( 0.9f, 1.0f ), 0.9999f, true );

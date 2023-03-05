@@ -12,7 +12,7 @@ import org.joml.Vector3f;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class AnimationTests extends BaseTest {
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void applyFloat( GameTestHelper helper ) {
 		Animation< Float > anim = new Animation<>( 2.0f );
 		anim.add( 0.0f, new Frame.Value( 0.0f ) )
@@ -33,7 +33,7 @@ public class AnimationTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void applyDegrees( GameTestHelper helper ) {
 		Animation< Float > anim = new Animation<>( 3.0f );
 		anim.add( 0.0f, new Frame.Degrees( 0.0f ) )
@@ -51,7 +51,7 @@ public class AnimationTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void applyVector( GameTestHelper helper ) {
 		Animation< Vector3f > anim = new Animation<>( 3.0f );
 		anim.add( 0.0f, new Frame.Vector( 0.0f, 0.0f, 0.0f ) )
@@ -69,7 +69,7 @@ public class AnimationTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void interpolate( GameTestHelper helper ) {
 		assertThat( helper, 0.0f, 0.0f, InterpolationType.LINEAR );
 		assertThat( helper, 0.25f, 0.25f, InterpolationType.LINEAR );

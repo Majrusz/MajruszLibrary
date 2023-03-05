@@ -10,7 +10,7 @@ import net.minecraftforge.gametest.GameTestHolder;
 public class TimeHelperTests extends BaseTest {
 	static final long DELAY = 6;
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = "mlib", template = "empty" )
 	public static void ticks( GameTestHelper helper ) {
 		long ticks = TimeHelper.getServerTicks();
 		helper.runAfterDelay( DELAY, ()->{
