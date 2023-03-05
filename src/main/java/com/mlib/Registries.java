@@ -22,12 +22,13 @@ import static com.mlib.MajruszLibrary.CONFIG_HANDLER;
 public class Registries {
 	static final RegistryHelper HELPER = new RegistryHelper( MajruszLibrary.MOD_ID );
 	static final DeferredRegister< Codec< ? extends IGlobalLootModifier > > LOOT_MODIFIERS = HELPER.create( ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS );
-	static final AnnotationHandler ANNOTATION_HANDLER = new AnnotationHandler( MajruszLibrary.MOD_ID );
 
 	static {
 		GameModifier.addNewGroup( CONFIG_HANDLER, GameModifier.DEFAULT_KEY );
 
 		LOOT_MODIFIERS.register( "any_situation", AnyModification.CODEC );
+
+		new AnnotationHandler( MajruszLibrary.MOD_ID );
 
 		MinecraftForge.EVENT_BUS.addListener( Command::registerAll );
 		FMLJavaModLoadingContext.get().getModEventBus().addListener( NetworkHandler::register );
