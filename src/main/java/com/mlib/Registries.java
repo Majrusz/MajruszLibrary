@@ -13,6 +13,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.List;
 
@@ -21,17 +22,12 @@ import static com.mlib.MajruszLibrary.CONFIG_HANDLER;
 public class Registries {
 	static final RegistryHelper HELPER = new RegistryHelper( MajruszLibrary.MOD_ID );
 	static final DeferredRegister< Codec< ? extends IGlobalLootModifier > > LOOT_MODIFIERS = HELPER.create( ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS );
-	static final List< Command > COMMANDS;
-	static final List< GameModifier > GAME_MODIFIERS;
+	static final AnnotationHandler ANNOTATION_HANDLER = new AnnotationHandler( MajruszLibrary.MOD_ID );
 
 	static {
 		GameModifier.addNewGroup( CONFIG_HANDLER, GameModifier.DEFAULT_KEY );
 
 		LOOT_MODIFIERS.register( "any_situation", AnyModification.CODEC );
-
-		AnnotationHandler annotationHandler = new AnnotationHandler( MajruszLibrary.MOD_ID );
-		COMMANDS = annotationHandler.getInstances( Command.class );
-		GAME_MODIFIERS = annotationHandler.getInstances( GameModifier.class );
 
 		MinecraftForge.EVENT_BUS.addListener( Command::registerAll );
 		FMLJavaModLoadingContext.get().getModEventBus().addListener( NetworkHandler::register );

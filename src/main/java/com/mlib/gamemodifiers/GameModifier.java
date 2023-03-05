@@ -42,6 +42,7 @@ public abstract class GameModifier extends ConfigGroup {
 
 	public GameModifier( String configKey ) {
 		this.configKey = configKey;
+
 		MOD_CONFIGS.insert( configKey, this );
 	}
 
