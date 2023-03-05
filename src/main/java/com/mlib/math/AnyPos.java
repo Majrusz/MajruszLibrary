@@ -286,6 +286,10 @@ public class AnyPos {
 		return length > 1e-5 ? this.div( length ) : this;
 	}
 
+	public AnyPos neg() {
+		return new AnyPos( -this.x, -this.y, -this.z );
+	}
+
 	public AnyPos center() {
 		return new AnyPos( Math.floor( this.x ) + 0.5, Math.floor( this.y ) + 0.5, Math.floor( this.z ) + 0.5 );
 	}
