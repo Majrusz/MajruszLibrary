@@ -13,21 +13,21 @@ import java.lang.annotation.Target;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class AnnotationHandlerTests extends BaseTest {
-	@GameTest( templateNamespace = "mlib", template = "empty" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void constructor( GameTestHelper helper ) {
 		AnnotationHandler handler = new AnnotationHandler( MajruszLibrary.MOD_ID, TestAnnotation1.class );
 		assertThat( helper, handler.getInstances().size(), 1, ()->"AnnotationHandler does not load TestClass1 properly" );
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void missingConstructor( GameTestHelper helper ) {
 		AnnotationHandler handler = new AnnotationHandler( MajruszLibrary.MOD_ID, TestAnnotation2.class );
 		assertThat( helper, handler.getInstances().size(), 1, ()->"AnnotationHandler does not load TestClass2 because of missing explicit constructor" );
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void inheritance( GameTestHelper helper ) {
 		AnnotationHandler handler = new AnnotationHandler( MajruszLibrary.MOD_ID, TestAnnotation3.class );
 		assertThat( helper, handler.getInstances().size(), 2, ()->"AnnotationHandler does not TestClass3A and TestClass3B properly" );
@@ -36,7 +36,7 @@ public class AnnotationHandlerTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void innerClass( GameTestHelper helper ) {
 		AnnotationHandler handler = new AnnotationHandler( MajruszLibrary.MOD_ID, TestAnnotation4.class );
 		assertThat( helper, handler.getInstances().size(), 2, ()->"AnnotationHandler does not handle inner classes properly" );

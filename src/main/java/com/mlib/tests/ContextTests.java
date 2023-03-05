@@ -9,7 +9,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class ContextTests extends BaseTest {
-	@GameTest( templateNamespace = "mlib", template = "empty" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void priority( GameTestHelper helper ) {
 		Contexts.getInstances()
 			.forEach( contexts->{
