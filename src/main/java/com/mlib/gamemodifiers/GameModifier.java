@@ -4,6 +4,7 @@ import com.mlib.Registries;
 import com.mlib.config.ConfigGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -60,7 +61,7 @@ public abstract class GameModifier extends ConfigGroup {
 	}
 
 	public List< ContextBase< ? extends ContextData > > getContexts() {
-		return this.contexts;
+		return Collections.unmodifiableList( this.contexts );
 	}
 
 	public String getConfigKey() {
