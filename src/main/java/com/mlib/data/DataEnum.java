@@ -37,7 +37,7 @@ class DataEnum< Type extends Enum< ? > > extends Data< Type > {
 	private Type toEnum( String name ) {
 		Type[] values = this.values.get();
 		for( Type value : values ) {
-			if( name.equalsIgnoreCase( value.toString() ) ) {
+			if( name.equalsIgnoreCase( value.name() ) ) {
 				return value;
 			}
 		}
@@ -46,7 +46,7 @@ class DataEnum< Type extends Enum< ? > > extends Data< Type > {
 	}
 
 	private String toString( Type value ) {
-		return value.toString();
+		return value.name();
 	}
 
 	@FunctionalInterface
