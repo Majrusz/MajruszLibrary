@@ -1,7 +1,5 @@
 package com.mlib.gamemodifiers;
 
-import com.mlib.gamemodifiers.parameters.Parameters;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +41,7 @@ public class Contexts< DataType extends ContextData, ContextType extends Context
 
 	private void tryToSort() {
 		if( !this.isSorted ) {
-			this.contexts.sort( Parameters.COMPARATOR );
+			this.contexts.sort( ( left, right )->Priority.COMPARATOR.compare( left.priority, right.priority ) );
 			this.isSorted = true;
 		}
 	}

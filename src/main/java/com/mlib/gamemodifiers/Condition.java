@@ -8,7 +8,6 @@ import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
 import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.parameters.ConditionParameters;
-import com.mlib.gamemodifiers.parameters.Priority;
 import com.mlib.math.Range;
 import com.mlib.time.TimeHelper;
 import net.minecraft.world.effect.MobEffect;

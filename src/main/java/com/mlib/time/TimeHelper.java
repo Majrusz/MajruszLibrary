@@ -6,7 +6,7 @@ import com.mlib.config.DoubleConfig;
 import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.contexts.OnClientTick;
 import com.mlib.gamemodifiers.contexts.OnServerTick;
-import com.mlib.gamemodifiers.parameters.Priority;
+import com.mlib.gamemodifiers.Priority;
 import net.minecraftforge.event.TickEvent;
 
 import javax.annotation.Nonnegative;

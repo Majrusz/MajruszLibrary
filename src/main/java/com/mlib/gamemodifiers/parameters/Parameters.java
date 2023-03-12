@@ -1,6 +1,7 @@
 package com.mlib.gamemodifiers.parameters;
 
 import com.mlib.gamemodifiers.IParameterizable;
+import com.mlib.gamemodifiers.Priority;
 import net.minecraft.util.Mth;
 
 import java.util.Comparator;

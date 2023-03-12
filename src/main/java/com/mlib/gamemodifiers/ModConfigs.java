@@ -6,7 +6,7 @@ import com.mlib.config.ConfigGroup;
 import java.util.HashMap;
 
 public class ModConfigs {
-	private final HashMap< String, ConfigGroup > map = new HashMap<>();
+	final HashMap< String, ConfigGroup > map = new HashMap<>();
 
 	public synchronized void setup( String key, ConfigGroup group ) {
 		assert !this.map.containsKey( key ) : "Config for " + key + " has been initialized already!";
@@ -25,7 +25,7 @@ public class ModConfigs {
 	}
 
 	public synchronized void insert( GameModifier modifier ) {
-		insert( GameModifier.DEFAULT_KEY, modifier );
+		this.insert( GameModifier.DEFAULT_KEY, modifier );
 	}
 
 	public synchronized boolean has( String key ) {

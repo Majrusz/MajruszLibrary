@@ -7,7 +7,7 @@ import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnExtraFishingLootCheck;
 import com.mlib.gamemodifiers.contexts.OnItemFished;
-import com.mlib.gamemodifiers.parameters.Priority;
+import com.mlib.gamemodifiers.Priority;
 import com.mlib.math.AnyPos;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

@@ -7,7 +7,7 @@ import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnBlockSmeltCheck;
 import com.mlib.gamemodifiers.contexts.OnLoot;
-import com.mlib.gamemodifiers.parameters.Priority;
+import com.mlib.gamemodifiers.Priority;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;

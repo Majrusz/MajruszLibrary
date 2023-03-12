@@ -3,28 +3,21 @@ package com.mlib.gamemodifiers;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.IConfigurable;
 import com.mlib.gamemodifiers.parameters.Parameters;
-import com.mlib.gamemodifiers.parameters.Priority;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
-public abstract class ContextBase< DataType extends ContextData > extends ConfigGroup implements IParameterizable< Parameters > {
+public class ContextBase< DataType extends ContextData > extends ConfigGroup {
 	final Consumer< DataType > consumer;
 	final List< Condition< DataType > > conditions = new ArrayList<>();
-	final Parameters params = new Parameters();
+	protected Priority priority = Priority.NORMAL;
 	protected GameModifier gameModifier = null;
 
 	public ContextBase( Consumer< DataType > consumer ) {
 		this.consumer = consumer;
-	}
-
-	@Override
-	public Parameters getParams() {
-		return this.params;
 	}
 
 	@Override
@@ -41,18 +34,21 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 		return this;
 	}
 
+	@Override
 	public ContextBase< DataType > name( String name ) {
 		super.name( name );
 
 		return this;
 	}
 
+	@Override
 	public ContextBase< DataType > comment( String comment ) {
 		super.comment( comment );
 
 		return this;
 	}
 
+	@Override
 	public ContextBase< DataType > requiresWorldRestart( boolean worldRestartRequired ) {
 		super.requiresWorldRestart( worldRestartRequired );
 
@@ -60,7 +56,7 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 	}
 
 	public ContextBase< DataType > priority( Priority priority ) {
-		this.params.priority( priority );
+		this.priority = priority;
 
 		return this;
 	}
@@ -87,27 +83,6 @@ public abstract class ContextBase< DataType extends ContextData > extends Config
 
 	public ContextBase< DataType > addCondition( Supplier< Boolean > check ) {
 		return this.addCondition( new Condition.Custom<>( data->check.get() ) );
-	}
-
-	@SafeVarargs
-	public final ContextBase< DataType > addConditions( Condition< DataType >... conditions ) {
-		Stream.of( conditions ).forEach( this::addCondition );
-
-		return this;
-	}
-
-	@SafeVarargs
-	public final ContextBase< DataType > addConditions( Predicate< DataType >... predicates ) {
-		Stream.of( predicates ).forEach( this::addCondition );
-
-		return this;
-	}
-
-	@SafeVarargs
-	public final ContextBase< DataType > addConditions( Supplier< Boolean >... checks ) {
-		Stream.of( checks ).forEach( this::addCondition );
-
-		return this;
 	}
 
 	public void insertTo( GameModifier modifier ) {

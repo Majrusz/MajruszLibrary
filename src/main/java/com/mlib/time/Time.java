@@ -4,7 +4,7 @@ import com.mlib.Utility;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnServerTick;
-import com.mlib.gamemodifiers.parameters.Priority;
+import com.mlib.gamemodifiers.Priority;
 
 import java.util.ArrayList;
 import java.util.Collections;

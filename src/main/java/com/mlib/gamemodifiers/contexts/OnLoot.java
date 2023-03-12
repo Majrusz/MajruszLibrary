@@ -4,7 +4,7 @@ import com.mlib.Utility;
 import com.mlib.config.StringListConfig;
 import com.mlib.events.AnyLootModificationEvent;
 import com.mlib.gamemodifiers.*;
-import com.mlib.gamemodifiers.parameters.Priority;
+import com.mlib.gamemodifiers.Priority;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
