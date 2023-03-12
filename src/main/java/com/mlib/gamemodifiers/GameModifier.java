@@ -6,7 +6,6 @@ import com.mlib.config.ConfigGroup;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static com.mlib.MajruszLibrary.MOD_CONFIGS;
 
@@ -20,26 +19,9 @@ import static com.mlib.MajruszLibrary.MOD_CONFIGS;
  mods much easier.
  */
 public abstract class GameModifier extends ConfigGroup {
-	public static final String DEFAULT_KEY = Registries.getLocationString( "default" );
+	public static final String DEFAULT_ID = Registries.getLocationString( "default" );
 	final List< ContextBase< ? extends ContextData > > contexts = new ArrayList<>();
 	final String configKey;
-
-	public static ConfigGroup addNewGroup( String key ) {
-		ConfigGroup group = new ConfigGroup();
-		MOD_CONFIGS.setup( key, group );
-		return group;
-	}
-
-	public static ConfigGroup addNewGroup( ConfigGroup parent, String key ) {
-		ConfigGroup group = addNewGroup( key );
-		parent.addGroup( group );
-
-		return group;
-	}
-
-	public static ConfigGroup addNewGroup( String parentKey, String key ) {
-		return addNewGroup( MOD_CONFIGS.get( parentKey ), key );
-	}
 
 	public GameModifier( String configKey ) {
 		this.configKey = configKey;
@@ -48,16 +30,12 @@ public abstract class GameModifier extends ConfigGroup {
 	}
 
 	public GameModifier() {
-		this( DEFAULT_KEY );
+		this( DEFAULT_ID );
 	}
 
 	public < DataType extends ContextData > void addContext( ContextBase< DataType > context ) {
 		context.setup( this );
 		this.addConfig( context );
-	}
-
-	public void addContexts( ContextBase< ? >... contexts ) {
-		Stream.of( contexts ).forEach( this::addContext );
 	}
 
 	public List< ContextBase< ? extends ContextData > > getContexts() {

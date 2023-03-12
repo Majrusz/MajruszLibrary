@@ -4,6 +4,7 @@ import com.mlib.annotations.AnnotationHandler;
 import com.mlib.commands.Command;
 import com.mlib.features.AnyModification;
 import com.mlib.gamemodifiers.GameModifier;
+import com.mlib.gamemodifiers.ModConfigs;
 import com.mlib.registries.RegistryHelper;
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
@@ -13,9 +14,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.checkerframework.checker.units.qual.A;
-
-import java.util.List;
 
 import static com.mlib.MajruszLibrary.CONFIG_HANDLER;
 
@@ -24,7 +22,7 @@ public class Registries {
 	static final DeferredRegister< Codec< ? extends IGlobalLootModifier > > LOOT_MODIFIERS = HELPER.create( ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS );
 
 	static {
-		GameModifier.addNewGroup( CONFIG_HANDLER, GameModifier.DEFAULT_KEY );
+		ModConfigs.setup( GameModifier.DEFAULT_ID );
 
 		LOOT_MODIFIERS.register( "any_situation", AnyModification.CODEC );
 

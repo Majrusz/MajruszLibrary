@@ -5,36 +5,56 @@ import com.mlib.config.ConfigGroup;
 
 import java.util.HashMap;
 
+import static com.mlib.MajruszLibrary.MOD_CONFIGS;
+
 public class ModConfigs {
 	final HashMap< String, ConfigGroup > map = new HashMap<>();
 
-	public synchronized void setup( String key, ConfigGroup group ) {
-		assert !this.map.containsKey( key ) : "Config for " + key + " has been initialized already!";
-		this.map.put( key, group );
+	public static ConfigGroup setup( String id ) {
+		ConfigGroup group = new ConfigGroup();
+		MOD_CONFIGS.init( id, group );
 
-		MajruszLibrary.logOnDev( "[ModConfigs] Game modifier group '%s' has been initialized.", key );
+		return group;
 	}
 
-	public synchronized void insert( String key, GameModifier modifier ) {
-		assert this.map.containsKey( key ) : "Config for " + key + " has not been initialized yet!";
-		this.map.get( key ).addConfig( modifier );
+	public static ConfigGroup setup( ConfigGroup parent, String id ) {
+		ConfigGroup group = setup( id );
+		parent.addGroup( group );
+
+		return group;
+	}
+
+	public static ConfigGroup setup( String parentId, String id ) {
+		return setup( MOD_CONFIGS.get( parentId ), id );
+	}
+
+	public synchronized void init( String id, ConfigGroup group ) {
+		assert !this.map.containsKey( id ) : "Config for " + id + " has been initialized already!";
+		this.map.put( id, group );
+
+		MajruszLibrary.logOnDev( "[ModConfigs] Game modifier group '%s' has been initialized.", id );
+	}
+
+	public synchronized void insert( String id, GameModifier modifier ) {
+		assert this.map.containsKey( id ) : "Config for " + id + " has not been initialized yet!";
+		this.map.get( id ).addConfig( modifier );
 
 		String name = modifier.getName();
 		String message = name.isEmpty() ? String.format( "Unnamed game modifier '%s'", modifier ) : String.format( "Game modifier '%s'", name );
-		MajruszLibrary.logOnDev( "[ModConfigs] %s has been inserted to '%s'.", message, key );
+		MajruszLibrary.logOnDev( "[ModConfigs] %s has been inserted to '%s'.", message, id );
 	}
 
 	public synchronized void insert( GameModifier modifier ) {
-		this.insert( GameModifier.DEFAULT_KEY, modifier );
+		this.insert( GameModifier.DEFAULT_ID, modifier );
 	}
 
-	public synchronized boolean has( String key ) {
-		return this.map.containsKey( key );
+	public synchronized boolean has( String id ) {
+		return this.map.containsKey( id );
 	}
 
-	public synchronized ConfigGroup get( String key ) {
-		assert this.map.containsKey( key ) : "Config for " + key + " has not been initialized yet!";
+	public synchronized ConfigGroup get( String id ) {
+		assert this.map.containsKey( id ) : "Config for " + id + " has not been initialized yet!";
 
-		return this.map.get( key );
+		return this.map.get( id );
 	}
 }
