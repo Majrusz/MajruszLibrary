@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 
 import javax.annotation.Nullable;
 
+@Deprecated( forRemoval = true )
 public abstract class ContextData {
 	@Nullable public final Entity entity;
 	@Nullable public final ServerLevel level;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Deprecated( forRemoval = true )
 public class Contexts< DataType extends ContextData, ContextType extends ContextBase< DataType > > {
 	static List< Contexts< ? extends ContextData, ? extends ContextBase< ? > > > INSTANCES = new ArrayList<>();
 	final List< ContextType > contexts = Collections.synchronizedList( new ArrayList<>() );

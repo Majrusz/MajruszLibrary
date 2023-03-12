@@ -1,5 +1,6 @@
 package com.mlib.gamemodifiers.parameters;
 
+@Deprecated( forRemoval = true )
 public class ConditionParameters extends Parameters {
 	boolean isNegated = false;
 	boolean isConfigurable = false;

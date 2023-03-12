@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+// TODO: rename to Context<>
 public class ContextBase< DataType extends ContextData > extends ConfigGroup {
 	final Consumer< DataType > consumer;
 	final List< Condition< DataType > > conditions = new ArrayList<>();

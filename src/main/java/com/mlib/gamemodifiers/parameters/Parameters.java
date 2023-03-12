@@ -6,6 +6,7 @@ import net.minecraft.util.Mth;
 
 import java.util.Comparator;
 
+@Deprecated( forRemoval = true )
 public class Parameters {
 	public static final Comparator< IParameterizable< ? > > COMPARATOR = ( left, right )->Mth.sign( getPriorityAsInt( left ) - getPriorityAsInt( right ) );
 	Priority priority = Priority.NORMAL;
