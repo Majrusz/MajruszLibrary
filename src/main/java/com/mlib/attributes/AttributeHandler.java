@@ -43,20 +43,12 @@ public class AttributeHandler {
 
 	public AttributeHandler apply( LivingEntity target ) {
 		AttributeInstance attributeInstance = target.getAttribute( this.attribute );
-
 		if( attributeInstance != null && this.hasValueChanged( attributeInstance ) ) {
 			attributeInstance.removeModifier( this.uuid );
-			AttributeModifier modifier = createAttribute();
-			attributeInstance.addPermanentModifier( modifier );
+			attributeInstance.addPermanentModifier( this.createAttribute() );
 		}
 
 		return this;
-	}
-
-	public AttributeHandler setValueAndApply( LivingEntity target, double value ) {
-		setValue( value );
-
-		return apply( target );
 	}
 
 	public AttributeModifier createAttribute() {
