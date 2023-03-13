@@ -11,12 +11,12 @@ import org.apache.commons.lang3.mutable.MutableInt;
 public class ContextTests extends BaseTest {
 	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void priority( GameTestHelper helper ) {
-		Contexts.getInstances()
+		Contexts.streamAll()
 			.forEach( contexts->{
 				MutableInt max = new MutableInt( Integer.MIN_VALUE );
-				contexts.getContexts()
+				contexts.stream()
 					.forEach( context->{
-						int priority = context.getParams().getPriorityAsInt();
+						int priority = context.getPriority().ordinal();
 						assertThat( helper, priority >= max.getValue(), ()->"%s has invalid priority".formatted( getClassName( context ) ) );
 						max.setValue( priority );
 					} );

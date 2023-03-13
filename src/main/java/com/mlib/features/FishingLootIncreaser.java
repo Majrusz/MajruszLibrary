@@ -5,9 +5,9 @@ import com.mlib.annotations.AutoInstance;
 import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.GameModifier;
+import com.mlib.gamemodifiers.Priority;
 import com.mlib.gamemodifiers.contexts.OnExtraFishingLootCheck;
 import com.mlib.gamemodifiers.contexts.OnItemFished;
-import com.mlib.gamemodifiers.Priority;
 import com.mlib.math.AnyPos;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -23,14 +23,14 @@ import java.util.function.BiConsumer;
 @AutoInstance
 public class FishingLootIncreaser extends GameModifier {
 	public FishingLootIncreaser() {
-		new OnItemFished.Context( this::increaseLoot )
+		OnItemFished.listen( this::increaseLoot )
 			.priority( Priority.HIGHEST )
-			.addCondition( new Condition.IsServer<>() )
+			.addCondition( Condition.isServer() )
 			.insertTo( this );
 	}
 
 	private void increaseLoot( OnItemFished.Data data ) {
-		OnExtraFishingLootCheck.Data extraData = this.dispatchContext( data );
+		OnExtraFishingLootCheck.Data extraData = OnExtraFishingLootCheck.dispatch( data.drops, data.player );
 		if( extraData.isExtraLootEmpty() )
 			return;
 
@@ -40,23 +40,19 @@ public class FishingLootIncreaser extends GameModifier {
 		this.sendMessage( data, extraData.extraLoot );
 	}
 
-	private OnExtraFishingLootCheck.Data dispatchContext( OnItemFished.Data data ) {
-		return OnExtraFishingLootCheck.Context.accept( new OnExtraFishingLootCheck.Data( data ) );
-	}
-
 	private void spawnLoot( OnItemFished.Data data, List< ItemStack > extraLoot ) {
 		extraLoot.forEach( itemStack->{
 			Vec3 spawnPosition = AnyPos.from( data.hook.position() ).add( Random.getRandomVector( -0.25, 0.25, 0.125, 0.5, -0.25, 0.25 ) ).vec3();
-			ItemEntity itemEntity = new ItemEntity( data.level, spawnPosition.x, spawnPosition.y, spawnPosition.z, itemStack );
+			ItemEntity itemEntity = new ItemEntity( data.getLevel(), spawnPosition.x, spawnPosition.y, spawnPosition.z, itemStack );
 			Vec3 motion = data.player.position().subtract( itemEntity.position() ).multiply( 0.1, 0.1, 0.1 );
 			itemEntity.setDeltaMovement( motion.add( 0.0, Math.pow( AnyPos.from( motion ).len().doubleValue(), 0.5 ) * 0.25, 0.0 ) );
-			data.level.addFreshEntity( itemEntity );
+			data.getLevel().addFreshEntity( itemEntity );
 		} );
 	}
 
 	private void spawnExperience( OnItemFished.Data data, int experience ) {
 		if( experience > 0 ) {
-			EntityHelper.spawnExperience( data.level, AnyPos.from( data.player.position() ).add( 0.5 ).vec3(), experience );
+			EntityHelper.spawnExperience( data.getLevel(), AnyPos.from( data.player.position() ).add( 0.5 ).vec3(), experience );
 		}
 	}
 

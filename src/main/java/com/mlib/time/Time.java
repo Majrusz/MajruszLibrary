@@ -2,6 +2,7 @@ package com.mlib.time;
 
 import com.mlib.Utility;
 import com.mlib.annotations.AutoInstance;
+import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnServerTick;
 import com.mlib.gamemodifiers.Priority;
@@ -50,9 +51,9 @@ public class Time {
 	@AutoInstance
 	public static class Updater extends GameModifier {
 		public Updater() {
-			new OnServerTick.Context( this::updateExecs )
+			OnServerTick.listen( this::updateExecs )
 				.priority( Priority.HIGHEST )
-				.addCondition( TimeHelper::isEndPhase )
+				.addCondition( Condition.isEndPhase() )
 				.insertTo( this );
 		}
 

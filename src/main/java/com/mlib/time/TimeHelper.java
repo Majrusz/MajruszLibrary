@@ -3,25 +3,17 @@ package com.mlib.time;
 import com.mlib.Utility;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.config.DoubleConfig;
-import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Condition;
+import com.mlib.gamemodifiers.GameModifier;
+import com.mlib.gamemodifiers.Priority;
 import com.mlib.gamemodifiers.contexts.OnClientTick;
 import com.mlib.gamemodifiers.contexts.OnServerTick;
-import com.mlib.gamemodifiers.Priority;
-import net.minecraftforge.event.TickEvent;
 
 import javax.annotation.Nonnegative;
 
 public class TimeHelper {
 	static long clientCounter = 1;
 	static long serverCounter = 1;
-
-	public static boolean isEndPhase( TickEvent event ) {
-		return event.phase == TickEvent.Phase.END;
-	}
-
-	public static < Type extends TickEvent > boolean isEndPhase( ContextData.Event< Type > data ) {
-		return isEndPhase( data.event );
-	}
 
 	public static boolean hasClientTicksPassed( @Nonnegative int ticks ) {
 		return clientCounter % ticks == 0;
@@ -56,15 +48,17 @@ public class TimeHelper {
 	}
 
 	@AutoInstance
-	public static class Updater {
+	public static class Updater extends GameModifier {
 		public Updater() {
-			new OnClientTick.Context( data->++clientCounter )
+			OnClientTick.listen( data->++clientCounter )
 				.priority( Priority.HIGHEST )
-				.addCondition( TimeHelper::isEndPhase );
+				.addCondition( Condition.isEndPhase() )
+				.insertTo( this );
 
-			new OnServerTick.Context( data->++serverCounter )
+			OnServerTick.listen( data->++serverCounter )
 				.priority( Priority.HIGHEST )
-				.addCondition( TimeHelper::isEndPhase );
+				.addCondition( Condition.isEndPhase() )
+				.insertTo( this );
 		}
 	}
 }

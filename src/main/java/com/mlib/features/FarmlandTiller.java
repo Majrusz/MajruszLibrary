@@ -23,32 +23,28 @@ public class FarmlandTiller extends GameModifier {
 	final Function< OnPlayerInteract.Data, Player > PLAYER_SUPPLIER = data->data.player;
 
 	public FarmlandTiller() {
-		new OnPlayerInteract.Context( this::applyHoeBonus )
-			.addCondition( new Condition.IsServer<>() )
-			.addCondition( new Condition.IsShiftKeyDown<>( PLAYER_SUPPLIER ).negate() )
-			.addCondition( OnPlayerInteract.IS_BLOCK_INTERACTION )
-			.addCondition( OnPlayerInteract.HAS_FACE )
+		OnPlayerInteract.listen( this::applyHoeBonus )
+			.addCondition( Condition.isServer() )
+			.addCondition( Condition.isShiftKeyDown( PLAYER_SUPPLIER ).negate() )
+			.addCondition( OnPlayerInteract.isBlockInteraction() )
+			.addCondition( OnPlayerInteract.hasFace() )
 			.insertTo( this );
 	}
 
 	private void applyHoeBonus( OnPlayerInteract.Data data ) {
-		OnFarmlandTillCheck.Data extraData = this.dispatchContext( data );
-		if( extraData.area == 0 || this.getInfo( data.level, data.player, data.position, data.hand, data.face ) == null )
+		OnFarmlandTillCheck.Data extraData = OnFarmlandTillCheck.dispatch( data.getServerLevel(), data.player, data.itemStack );
+		if( extraData.area == 0 || this.getInfo( data.getServerLevel(), data.player, data.position, data.hand, data.face ) == null )
 			return;
 
 		for( int x = -extraData.area; x <= extraData.area; ++x ) {
 			for( int z = -extraData.area; z <= extraData.area; ++z ) {
-				BlockInfo blockInfo = this.getInfo( data.level, data.player, data.position.offset( x, 0, z ), data.hand, data.face );
+				BlockInfo blockInfo = this.getInfo( data.getServerLevel(), data.player, data.position.offset( x, 0, z ), data.hand, data.face );
 				if( blockInfo != null ) {
 					blockInfo.accept();
 					data.itemStack.hurtAndBreak( 1, data.player, entity->entity.broadcastBreakEvent( data.hand ) );
 				}
 			}
 		}
-	}
-
-	private OnFarmlandTillCheck.Data dispatchContext( OnPlayerInteract.Data data ) {
-		return OnFarmlandTillCheck.Context.accept( new OnFarmlandTillCheck.Data( data ) );
 	}
 
 	private BlockInfo getInfo( ServerLevel level, Player player, BlockPos position, InteractionHand hand, Direction direction ) {

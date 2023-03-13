@@ -2,10 +2,11 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.Utility;
 import com.mlib.gamemodifiers.ContextBase;
-import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.data.ILevelData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,33 +14,33 @@ import net.minecraftforge.fml.common.Mod;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+@Mod.EventBusSubscriber
 public class OnDeath {
-	@Mod.EventBusSubscriber
-	public static class Context extends ContextBase< Data > {
-		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
-
-		public Context( Consumer< Data > consumer ) {
-			super( consumer );
-
-			CONTEXTS.add( this );
-		}
-
-		@SubscribeEvent
-		public static void onDamaged( LivingDeathEvent event ) {
-			CONTEXTS.accept( new Data( event ) );
-		}
+	public static ContextBase< Data > listen( Consumer< Data > consumer ) {
+		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static class Data extends ContextData.Event< LivingDeathEvent > {
+	@SubscribeEvent
+	public static void onDamaged( LivingDeathEvent event ) {
+		Contexts.get( Data.class ).dispatch( new Data( event ) );
+	}
+
+	public static class Data implements ILevelData {
+		public final LivingDeathEvent event;
 		public final DamageSource source;
 		@Nullable public final LivingEntity attacker;
 		public final LivingEntity target;
 
 		public Data( LivingDeathEvent event ) {
-			super( event.getEntity(), event );
+			this.event = event;
 			this.source = event.getSource();
 			this.attacker = Utility.castIfPossible( LivingEntity.class, source.getEntity() );
 			this.target = event.getEntity();
+		}
+
+		@Override
+		public Level getLevel() {
+			return this.target.getLevel();
 		}
 	}
 

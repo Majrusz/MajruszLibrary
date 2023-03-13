@@ -1,7 +1,7 @@
 package com.mlib.tests;
 
 import com.mlib.gamemodifiers.GameModifier;
-import com.mlib.gamemodifiers.contexts.OnTestsRegister;
+import com.mlib.gamemodifiers.contexts.OnTestsRegistered;
 import net.minecraft.gametest.framework.GameTestHelper;
 
 import java.util.function.Supplier;
@@ -33,7 +33,7 @@ public class BaseTest extends GameModifier {
 	}
 
 	public BaseTest( Class< ? > clazz ) {
-		new OnTestsRegister.Context( data->data.event.register( clazz ) )
+		OnTestsRegistered.listen( data->data.event.register( clazz ) )
 			.insertTo( this );
 	}
 }

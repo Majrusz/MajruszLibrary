@@ -3,9 +3,7 @@ package com.mlib.tests;
 import com.mlib.MajruszLibrary;
 import com.mlib.config.IConfigurable;
 import com.mlib.gamemodifiers.Condition;
-import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.GameModifier;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;
@@ -15,13 +13,13 @@ import org.apache.commons.lang3.mutable.MutableInt;
 public class ConditionTests extends BaseTest {
 	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void priority( GameTestHelper helper ) {
-		Contexts.getInstances()
-			.forEach( contexts->contexts.getContexts()
+		Contexts.streamAll()
+			.forEach( contexts->contexts.stream()
 				.forEach( context->{
 					MutableInt max = new MutableInt( Integer.MIN_VALUE );
 					context.getConditions()
 						.forEach( condition->{
-							int priority = condition.getParams().getPriorityAsInt();
+							int priority = condition.getPriority().ordinal();
 							assertThat( helper, priority >= max.getValue(), ()->"%s has invalid priority in %s".formatted( getClassName( condition ), getClassName( context ) ) );
 							max.setValue( priority );
 						} );
@@ -32,36 +30,31 @@ public class ConditionTests extends BaseTest {
 
 	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void validParameters( GameTestHelper helper ) {
-		Contexts.getInstances()
-			.forEach( contexts->contexts.getContexts()
+		Contexts.streamAll()
+			.forEach( contexts->contexts.stream()
 				.forEach( context->context.getConditions()
 					.forEach( condition->{
-						boolean isConfigurable = condition.getParams().isConfigurable();
+						boolean isConfigurable = condition.isConfigurable();
 						boolean doesNotHaveConfigs = condition.getConfigs().isEmpty();
 						assertThat( helper, !( isConfigurable && doesNotHaveConfigs ), ()->"%s is marked configurable even though it does not have any config".formatted( getClassName( condition ) ) );
 					} ) ) );
 
-		Condition< ? > condition = new Condition<>() {
-			@Override
-			public boolean check( GameModifier feature, ContextData data ) {
-				return true;
-			}
-		};
-		assertThat( helper, condition.isMet( null, null ), ()->"%s does not return expected result".formatted( getClassName( condition ) ) );
+		Condition< ? > condition = new Condition<>( data->true );
+		assertThat( helper, condition.check( null ), ()->"%s does not return expected result".formatted( getClassName( condition ) ) );
 
 		condition.negate();
-		assertThat( helper, !condition.isMet( null, null ), ()->"%s does not return expected negated result".formatted( getClassName( condition ) ) );
+		assertThat( helper, !condition.check( null ), ()->"%s does not return expected negated result".formatted( getClassName( condition ) ) );
 
 		helper.succeed();
 	}
 
 	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void builtConfigs( GameTestHelper helper ) {
-		Contexts.getInstances()
-			.forEach( contexts->contexts.getContexts()
+		Contexts.streamAll()
+			.forEach( contexts->contexts.stream()
 				.forEach( context->context.getConditions()
 					.forEach( condition->{
-						boolean isConfigurable = condition.getParams().isConfigurable();
+						boolean isConfigurable = condition.isConfigurable();
 						boolean isConditionBuilt = condition.isBuilt();
 						boolean areConditionConfigsBuilt = condition.getConfigs().stream().allMatch( IConfigurable::isBuilt );
 						assertThat( helper, !isConfigurable || isConditionBuilt && areConditionConfigsBuilt, ()->"Some of the configs in %s has not been built".formatted( getClassName( condition ) ) );

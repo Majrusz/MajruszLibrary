@@ -1,6 +1,5 @@
 package com.mlib.gamemodifiers;
 
-import com.mlib.Registries;
 import com.mlib.config.ConfigGroup;
 
 import java.util.ArrayList;
@@ -19,30 +18,24 @@ import static com.mlib.MajruszLibrary.MOD_CONFIGS;
  mods much easier.
  */
 public abstract class GameModifier extends ConfigGroup {
-	public static final String DEFAULT_ID = Registries.getLocationString( "default" );
-	final List< ContextBase< ? extends ContextData > > contexts = new ArrayList<>();
-	final String configKey;
+	final List< ContextBase< ? > > contexts = new ArrayList<>();
+	final String configId;
 
-	public GameModifier( String configKey ) {
-		this.configKey = configKey;
+	public GameModifier( String configId ) {
+		this.configId = configId;
 
-		MOD_CONFIGS.insert( configKey, this );
+		MOD_CONFIGS.insert( configId, this );
 	}
 
 	public GameModifier() {
-		this( DEFAULT_ID );
+		this( ModConfigs.DEFAULT_ID );
 	}
 
-	public < DataType extends ContextData > void addContext( ContextBase< DataType > context ) {
-		context.setup( this );
-		this.addConfig( context );
-	}
-
-	public List< ContextBase< ? extends ContextData > > getContexts() {
+	public List< ContextBase< ? > > getContexts() {
 		return Collections.unmodifiableList( this.contexts );
 	}
 
-	public String getConfigKey() {
-		return this.configKey;
+	public String getConfigId() {
+		return this.configId;
 	}
 }

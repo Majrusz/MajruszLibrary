@@ -1,38 +1,40 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.events.ItemSwingDurationEvent;
 import com.mlib.gamemodifiers.ContextBase;
-import com.mlib.gamemodifiers.ContextData;
 import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.data.ILevelData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.world.level.Level;
 
 import java.util.function.Consumer;
 
 public class OnItemSwingDuration {
-	@Mod.EventBusSubscriber
-	public static class Context extends ContextBase< Data > {
-		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
-
-		public Context( Consumer< Data > consumer ) {
-			super( consumer );
-
-			CONTEXTS.add( this );
-		}
-
-		@SubscribeEvent
-		public static void onItemSwingDuration( ItemSwingDurationEvent event ) {
-			CONTEXTS.accept( new Data( event ) );
-		}
+	public static ContextBase< Data > listen( Consumer< Data > consumer ) {
+		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static class Data extends ContextData.Event< ItemSwingDurationEvent > {
-		public final LivingEntity entity;
+	public static Data dispatch( LivingEntity entity, int swingDuration ) {
+		return Contexts.get( Data.class ).dispatch( new Data( entity, swingDuration ) );
+	}
 
-		public Data( ItemSwingDurationEvent event ) {
-			super( event.entity, event );
-			this.entity = event.entity;
+	public static class Data implements ILevelData {
+		public final LivingEntity entity;
+		public final int swingDuration;
+		public int extraDuration = 0;
+
+		public Data( LivingEntity entity, int swingDuration ) {
+			this.entity = entity;
+			this.swingDuration = swingDuration;
+		}
+
+		@Override
+		public Level getLevel() {
+			return this.entity.getLevel();
+		}
+
+		public int getTotalSwingDuration() {
+			return Mth.clamp( this.swingDuration + this.extraDuration, 1, 100 );
 		}
 	}
 }

@@ -2,20 +2,18 @@ package com.mlib.gamemodifiers;
 
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.IConfigurable;
-import com.mlib.gamemodifiers.parameters.Parameters;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 // TODO: rename to Context<>
-public class ContextBase< DataType extends ContextData > extends ConfigGroup {
+public class ContextBase< DataType > extends ConfigGroup {
 	final Consumer< DataType > consumer;
 	final List< Condition< DataType > > conditions = new ArrayList<>();
-	protected Priority priority = Priority.NORMAL;
-	protected GameModifier gameModifier = null;
+	Priority priority = Priority.NORMAL;
+	GameModifier gameModifier = null;
 
 	public ContextBase( Consumer< DataType > consumer ) {
 		this.consumer = consumer;
@@ -62,43 +60,39 @@ public class ContextBase< DataType extends ContextData > extends ConfigGroup {
 		return this;
 	}
 
-	public void setup( GameModifier gameModifier ) {
-		assert this.gameModifier == null : "Context has already been set up";
-		this.gameModifier = gameModifier;
-		this.conditions.stream()
-			.filter( condition->condition.getParams().isConfigurable() )
-			.forEach( this::addConfig );
-	}
-
 	public ContextBase< DataType > addCondition( Condition< DataType > condition ) {
 		assert this.gameModifier == null : "Context has already been set up";
 		this.conditions.add( condition );
-		this.conditions.sort( Parameters.COMPARATOR );
 
 		return this;
 	}
 
-	public ContextBase< DataType > addCondition( Predicate< DataType > predicate ) {
-		return this.addCondition( new Condition.Custom<>( predicate ) );
-	}
-
-	public ContextBase< DataType > addCondition( Supplier< Boolean > check ) {
-		return this.addCondition( new Condition.Custom<>( data->check.get() ) );
-	}
-
 	public void insertTo( GameModifier modifier ) {
-		modifier.addContext( this );
+		assert this.gameModifier == null : "Context has already been set up";
+		this.gameModifier = modifier;
+		this.conditions.sort( ( left, right )->Priority.COMPARATOR.compare( left.getPriority(), right.getPriority() ) );
+		this.conditions.stream()
+			.filter( Condition::isConfigurable )
+			.forEach( this::addConfig );
+
+		modifier.addConfig( this );
 	}
 
-	public boolean check( DataType data ) {
-		return this.conditions.stream().allMatch( condition->condition.isMet( this.gameModifier, data ) );
+	public void accept( DataType data ) {
+		if( this.conditions.stream().allMatch( condition->condition.check( data ) ) ) {
+			this.consumer.accept( data );
+		}
 	}
 
 	public List< Condition< DataType > > getConditions() {
-		return this.conditions;
+		return Collections.unmodifiableList( this.conditions );
 	}
 
 	public GameModifier getGameModifier() {
 		return this.gameModifier;
+	}
+
+	public Priority getPriority() {
+		return this.priority;
 	}
 }

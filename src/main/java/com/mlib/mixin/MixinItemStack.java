@@ -1,8 +1,8 @@
 package com.mlib.mixin;
 
-import com.mlib.events.ItemHurtEvent;
 import com.mlib.gamemodifiers.contexts.OnFoodPropertiesGet;
 import com.mlib.gamemodifiers.contexts.OnItemAttributeTooltip;
+import com.mlib.gamemodifiers.contexts.OnItemHurt;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -12,7 +12,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityProvider;
 import net.minecraftforge.common.extensions.IForgeItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,30 +32,25 @@ public abstract class MixinItemStack extends CapabilityProvider< ItemStack > imp
 
 	@Override
 	public FoodProperties getFoodProperties( @Nullable LivingEntity entity ) {
-		OnFoodPropertiesGet.Data data = new OnFoodPropertiesGet.Data( IForgeItemStack.super.getFoodProperties( entity ), ( ItemStack )( Object )this, entity );
-		OnFoodPropertiesGet.broadcast( data );
-
-		return data.properties;
+		return OnFoodPropertiesGet.dispatch( IForgeItemStack.super.getFoodProperties( entity ), ( ItemStack )( Object )this, entity ).properties;
 	}
 
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "hurt(ILnet/minecraft/util/RandomSource;Lnet/minecraft/server/level/ServerPlayer;)Z", at = @At( "RETURN" ), cancellable = true )
 	private void hurt( int damage, RandomSource source, @Nullable ServerPlayer player, CallbackInfoReturnable< Boolean > callback ) {
 		ItemStack itemStack = ( ItemStack )( Object )this;
-		ItemHurtEvent itemHurtEvent = new ItemHurtEvent( player, itemStack, damage );
-		MinecraftForge.EVENT_BUS.post( itemHurtEvent );
-		if( itemHurtEvent.extraDamage != 0 ) {
-			itemStack.setDamageValue( itemStack.getDamageValue() + itemHurtEvent.extraDamage );
+		OnItemHurt.Data data = OnItemHurt.dispatch( player, itemStack, damage );
+		if( data.extraDamage != 0 ) {
+			itemStack.setDamageValue( itemStack.getDamageValue() + data.extraDamage );
 		}
 
-		callback.setReturnValue( itemHurtEvent.hasBeenBroken() );
+		callback.setReturnValue( data.hasBeenBroken() );
 	}
 
 	@Shadow( aliases = { "this$0" } )
 	@ModifyVariable( method = "getTooltipLines(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;hasTag()Z", ordinal = 1 ) )
 	private List< Component > getTooltipLines( List< Component > components ) {
-		OnItemAttributeTooltip.Data data = new OnItemAttributeTooltip.Data( ( ItemStack )( Object )this );
-		OnItemAttributeTooltip.Context.accept( data );
+		OnItemAttributeTooltip.Data data = OnItemAttributeTooltip.dispatch( ( ItemStack )( Object )this );
 		for( EquipmentSlot slot : EquipmentSlot.values() ) {
 			List< Component > slotComponents = data.components.get( slot );
 			if( slotComponents.isEmpty() )

@@ -3,44 +3,41 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.data.ILevelData;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.FishingHook;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.player.ItemFishedEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
-public class OnItemFished {
+public class OnExplosionDetonate {
 	public static ContextBase< Data > listen( Consumer< Data > consumer ) {
 		return Contexts.get( Data.class ).add( consumer );
 	}
 
 	@SubscribeEvent
-	public static void onItemFished( ItemFishedEvent event ) {
+	public static void onExplosionDetonate( ExplosionEvent.Detonate event ) {
 		Contexts.get( Data.class ).dispatch( new Data( event ) );
 	}
 
 	public static class Data implements ILevelData {
-		public final ItemFishedEvent event;
-		public final Player player;
-		public final FishingHook hook;
-		public final NonNullList< ItemStack > drops;
+		public final ExplosionEvent.Detonate event;
+		public final Explosion explosion;
+		@Nullable public final LivingEntity sourceMob;
 
-		public Data( ItemFishedEvent event ) {
+		public Data( ExplosionEvent.Detonate event ) {
 			this.event = event;
-			this.player = event.getEntity();
-			this.hook = event.getHookEntity();
-			this.drops = event.getDrops();
+			this.explosion = event.getExplosion();
+			this.sourceMob = this.explosion.getIndirectSourceEntity();
 		}
 
 		@Override
 		public Level getLevel() {
-			return this.player.getLevel();
+			return this.event.getLevel();
 		}
 	}
 }

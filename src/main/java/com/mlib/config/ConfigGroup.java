@@ -35,14 +35,6 @@ public class ConfigGroup extends UserConfig {
 		return this.configs.stream().allMatch( IConfigurable::isBuilt );
 	}
 
-	public ConfigGroup addGroup( ConfigGroup group ) {
-		return this.addConfig( group );
-	}
-
-	public ConfigGroup addGroups( ConfigGroup... groups ) {
-		return this.addConfigs( groups );
-	}
-
 	public ConfigGroup addConfig( IConfigurable config ) {
 		this.configs.add( config );
 

@@ -1,6 +1,7 @@
 package com.mlib.mixin;
 
-import com.mlib.events.ProjectileEvent;
+import com.mlib.gamemodifiers.contexts.OnProjectileHit;
+import com.mlib.gamemodifiers.contexts.OnProjectileShot;
 import com.mlib.mixininterfaces.IMixinProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
@@ -50,19 +51,19 @@ public abstract class MixinProjectile implements IMixinProjectile {
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "shoot(DDDFF)V", at = @At( "RETURN" ) )
 	private void shoot( double x, double y, double z, float scale, float randomRange, CallbackInfo callback ) {
-		MinecraftForge.EVENT_BUS.post( new ProjectileEvent.Shot( Projectile.class.cast( this ), this.mlibWeapon, this.mlibArrow, this.mlibCustomTag ) );
+		OnProjectileShot.dispatch( Projectile.class.cast( this ), this.mlibWeapon, this.mlibArrow, this.mlibCustomTag );
 	}
 
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "onHitEntity(Lnet/minecraft/world/phys/EntityHitResult;)V", at = @At( "RETURN" ) )
 	private void onHitEntity( EntityHitResult hitResult, CallbackInfo callback ) {
-		MinecraftForge.EVENT_BUS.post( new ProjectileEvent.Hit( Projectile.class.cast( this ), this.mlibWeapon, this.mlibArrow, this.mlibCustomTag, hitResult ) );
+		OnProjectileHit.dispatch( Projectile.class.cast( this ), this.mlibWeapon, this.mlibArrow, this.mlibCustomTag, hitResult );
 	}
 
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "onHitBlock(Lnet/minecraft/world/phys/BlockHitResult;)V", at = @At( "RETURN" ) )
 	private void onHitBlock( BlockHitResult hitResult, CallbackInfo callback ) {
-		MinecraftForge.EVENT_BUS.post( new ProjectileEvent.Hit( Projectile.class.cast( this ), this.mlibWeapon, this.mlibArrow, this.mlibCustomTag, hitResult ) );
+		OnProjectileHit.dispatch( Projectile.class.cast( this ), this.mlibWeapon, this.mlibArrow, this.mlibCustomTag, hitResult );
 	}
 
 	@Shadow( aliases = { "this$0" } )

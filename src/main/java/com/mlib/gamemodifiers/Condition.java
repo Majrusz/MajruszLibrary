@@ -6,10 +6,13 @@ import com.mlib.Utility;
 import com.mlib.config.BooleanConfig;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.DoubleConfig;
+import com.mlib.config.IConfigurable;
 import com.mlib.entities.EntityHelper;
-import com.mlib.gamemodifiers.parameters.ConditionParameters;
+import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.ITickData;
 import com.mlib.math.Range;
 import com.mlib.time.TimeHelper;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,293 +23,196 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.event.TickEvent;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public abstract class Condition< DataType extends ContextData > extends ConfigGroup implements IParameterizable< ConditionParameters > {
-	protected final ConditionParameters params = new ConditionParameters();
+public class Condition< DataType > extends ConfigGroup {
+	final Predicate< DataType > predicate;
+	Priority priority = Priority.NORMAL;
+	boolean isNegated = false;
+	boolean isConfigurable = false;
+
+	public static < DataType > Condition< DataType > excludable( boolean defaultValue ) {
+		BooleanConfig availability = new BooleanConfig( defaultValue );
+
+		return new Condition< DataType >( data->availability.getOrDefault() )
+			.priority( Priority.HIGHEST )
+			.configurable( true )
+			.addConfig( availability.name( "is_enabled" ).comment( "Specifies whether this is enabled." ) );
+	}
+
+	public static < DataType > Condition< DataType > excludable() {
+		return excludable( true );
+	}
+
+	public static < DataType > Condition< DataType > chance( double defaultChance ) {
+		DoubleConfig chance = new DoubleConfig( defaultChance, Range.CHANCE );
+
+		return new Condition< DataType >( data->Random.tryChance( chance.getOrDefault() ) )
+			.priority( Priority.HIGH )
+			.configurable( true )
+			.addConfig( chance.name( "chance" ).comment( "Chance for this to happen." ) );
+	}
+
+	public static < DataType > Condition< DataType > isLivingBeing( Function< DataType, Entity > entity ) {
+		return new Condition< DataType >( data->EntityHelper.isAnimal( entity.apply( data ) ) || EntityHelper.isHuman( entity.apply( data ) ) );
+	}
+
+	public static < DataType > Condition< DataType > predicate( Predicate< DataType > predicate ) {
+		return new Condition< DataType >( predicate )
+			.priority( Priority.LOW );
+	}
+
+	public static < DataType > Condition< DataType > predicate( Supplier< Boolean > check ) {
+		return new Condition< DataType >( data->check.get() )
+			.priority( Priority.LOW );
+	}
+
+	public static < DataType > Condition< DataType > cooldown( double defaultSeconds, Dist distribution ) {
+		Predicate< Double > predicate = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
+		DoubleConfig cooldown = new DoubleConfig( defaultSeconds, new Range<>( 0.1, 300.0 ) );
+
+		return new Condition< DataType >( data->predicate.test( cooldown.getOrDefault() ) )
+			.priority( Priority.HIGH )
+			.configurable( true )
+			.addConfig( cooldown.name( "cooldown" ).comment( "Cooldown in seconds before it happens." ) );
+	}
+
+	public static < DataType > Condition< DataType > cooldown( int defaultTicks, Dist distribution ) {
+		return cooldown( Utility.ticksToSeconds( defaultTicks ), distribution );
+	}
+
+	public static < DataType > Condition< DataType > hasEnchantment( Supplier< ? extends Enchantment > enchantment,
+		Function< DataType, LivingEntity > entity
+	) {
+		return new Condition< DataType >( data->entity.apply( data ) != null && EnchantmentHelper.getEnchantmentLevel( enchantment.get(), entity.apply( data ) ) > 0 );
+	}
+
+	public static < DataType > Condition< DataType > hasEnchantment( Enchantment enchantment, Function< DataType, LivingEntity > entity ) {
+		return hasEnchantment( ()->enchantment, entity );
+	}
+
+	public static < DataType > Condition< DataType > hasEffect( Supplier< ? extends MobEffect > effect,
+		Function< DataType, LivingEntity > entity
+	) {
+		return new Condition< DataType >( data->entity.apply( data ) != null && entity.apply( data ).hasEffect( effect.get() ) );
+	}
+
+	public static < DataType > Condition< DataType > hasEffect( MobEffect effect, Function< DataType, LivingEntity > entity ) {
+		return hasEffect( ()->effect, entity );
+	}
+
+	public static < DataType extends ILevelData > Condition< DataType > isServer() {
+		return new Condition< DataType >( data->data.getLevel() instanceof ServerLevel )
+			.priority( Priority.HIGH );
+	}
+
+	public static < DataType > Condition< DataType > isShiftKeyDown( Function< DataType, Player > player ) {
+		return new Condition< DataType >( data->player.apply( data ) != null && player.apply( data ).isShiftKeyDown() )
+			.priority( Priority.HIGH );
+	}
+
+	public static < DataType > Condition< DataType > isOnGround( Function< DataType, Entity > entity ) {
+		return new Condition< DataType >( data->entity.apply( data ) != null && entity.apply( data ).isOnGround() )
+			.priority( Priority.HIGH );
+	}
+
+	public static < DataType extends ITickData > Condition< DataType > isEndPhase() {
+		return new Condition< DataType >( data->data.getPhase() == TickEvent.Phase.END );
+	}
+
+	public static < DataType > Condition< DataType > armorDependentChance( Map< EquipmentSlot, Double > chances, Function< DataType, LivingEntity > entity ) {
+		Map< EquipmentSlot, DoubleConfig > multipliers = new HashMap<>();
+		ConfigGroup group = new ConfigGroup();
+
+		for( EquipmentSlot slot : EquipmentSlots.ARMOR ) {
+			DoubleConfig config = new DoubleConfig( chances.get( slot ), Range.CHANCE );
+			multipliers.put( slot, config );
+			group.addConfig( config.name( String.format( "%s_multiplier", slot.getName() ) ) );
+		}
+
+		return new Condition< DataType >( data->{
+			double chance = 1.0;
+			for( EquipmentSlot slot : multipliers.keySet() ) {
+				DoubleConfig config = multipliers.get( slot );
+				ItemStack itemStack = entity.apply( data ).getItemBySlot( slot );
+				if( !itemStack.isEmpty() && itemStack.getAttributeModifiers( slot ).containsKey( Attributes.ARMOR ) ) {
+					chance *= config.getOrDefault();
+				}
+			}
+
+			return Random.tryChance( chance );
+		} ).configurable( true )
+			.addConfig( group
+				.name( "ArmorChanceMultipliers" )
+				.comment( "Chance multipliers for each armor piece.\nFor instance 'head_multiplier = 0.8' makes the final chance 20% lower if mob has any helmet." )
+			);
+	}
+
+	public static < DataType > Condition< DataType > armorDependentChance( double headChance, double chestChance, double legsChance, double feetChance,
+		Function< DataType, LivingEntity > entity
+	) {
+		return armorDependentChance( Map.of( EquipmentSlot.HEAD, headChance, EquipmentSlot.CHEST, chestChance, EquipmentSlot.LEGS, legsChance, EquipmentSlot.FEET, feetChance ), entity );
+	}
+
+	public static < DataType > Condition< DataType > armorDependentChance( double chance, Function< DataType, LivingEntity > entity ) {
+		return armorDependentChance( chance, chance, chance, chance, entity );
+	}
+
+	public Condition( Predicate< DataType > predicate ) {
+		this.predicate = predicate;
+	}
 
 	@Override
-	public ConditionParameters getParams() {
-		return this.params;
+	public Condition< DataType > addConfig( IConfigurable config ) {
+		super.addConfig( config );
+
+		return this;
 	}
 
-	public boolean isMet( GameModifier feature, DataType data ) {
-		return this.params.isNegated() ^ this.check( feature, data );
+	@Override
+	public Condition< DataType > addConfigs( IConfigurable... configs ) {
+		super.addConfigs( configs );
+
+		return this;
 	}
 
-	public Condition< DataType > apply( Consumer< ConditionParameters > consumer ) {
-		consumer.accept( this.params );
+	public Condition< DataType > configurable( boolean isConfigurable ) {
+		this.isConfigurable = isConfigurable;
 
 		return this;
 	}
 
 	public Condition< DataType > negate() {
-		return this.apply( params->params.negated( !params.isNegated() ) );
-	}
+		this.isNegated = !this.isNegated;
 
-	public Condition< DataType > configurable( boolean isConfigurable ) {
-		return this.apply( params->params.configurable( isConfigurable ) );
+		return this;
 	}
 
 	public Condition< DataType > priority( Priority priority ) {
-		return this.apply( params->params.priority( priority ) );
+		this.priority = priority;
+
+		return this;
 	}
 
-	protected abstract boolean check( GameModifier feature, DataType data );
-
-	public static class Excludable< DataType extends ContextData > extends Condition< DataType > {
-		protected final BooleanConfig availability;
-
-		public Excludable( boolean defaultValue ) {
-			this.availability = new BooleanConfig( defaultValue );
-
-			this.priority( Priority.HIGHEST )
-				.configurable( true )
-				.addConfig( this.availability.name( "is_enabled" ).comment( "Specifies whether this is enabled." ) );
-		}
-
-		public Excludable() {
-			this( true );
-		}
-
-		@Override
-		protected boolean check( GameModifier gameModifier, DataType data ) {
-			return this.availability.getOrDefault();
-		}
+	public Priority getPriority() {
+		return this.priority;
 	}
 
-	public static class Chance< DataType extends ContextData > extends Condition< DataType > {
-		protected final DoubleConfig chance;
-
-		public Chance( double chance ) {
-			this.chance = new DoubleConfig( chance, Range.CHANCE );
-
-			this.priority( Priority.HIGH )
-				.configurable( true )
-				.addConfig( this.chance.name( "chance" ).comment( "Chance for this to happen." ) );
-		}
-
-		@Override
-		protected boolean check( GameModifier gameModifier, DataType data ) {
-			return Random.tryChance( this.chance.getOrDefault() );
-		}
+	public boolean isNegated() {
+		return this.isNegated;
 	}
 
-	public static class IsLivingBeing< DataType extends ContextData > extends Condition< DataType > {
-		@Override
-		protected boolean check( GameModifier feature, DataType data ) {
-			return EntityHelper.isAnimal( data.entity ) || EntityHelper.isHuman( data.entity );
-		}
+	public boolean isConfigurable() {
+		return this.isConfigurable;
 	}
 
-	public static class ArmorDependentChance< DataType extends ContextData > extends Condition< DataType > {
-		static protected final Function< EquipmentSlot, String > SLOT_FORMAT = slot->String.format( "%s_multiplier", slot.getName() );
-		protected final Map< EquipmentSlot, DoubleConfig > multipliers = new HashMap<>();
-		protected final ConfigGroup group = new ConfigGroup();
-
-		public ArmorDependentChance( Map< EquipmentSlot, Double > chances ) {
-			for( EquipmentSlot slot : EquipmentSlots.ARMOR ) {
-				DoubleConfig config = new DoubleConfig( chances.get( slot ), Range.CHANCE );
-				this.multipliers.put( slot, config );
-				this.group.addConfig( config.name( SLOT_FORMAT.apply( slot ) ) );
-			}
-
-			this.configurable( true )
-				.addConfig( this.group
-					.name( "ArmorChanceMultipliers" )
-					.comment( "Chance multipliers for each armor piece.\nFor instance 'head_multiplier = 0.8' makes the final chance 20% lower if mob has any helmet." )
-				);
-		}
-
-		public ArmorDependentChance( double headChance, double chestChance, double legsChance, double feetChance ) {
-			this( Map.of(
-				EquipmentSlot.HEAD, headChance,
-				EquipmentSlot.CHEST, chestChance,
-				EquipmentSlot.LEGS, legsChance,
-				EquipmentSlot.FEET, feetChance
-			) );
-		}
-
-		public ArmorDependentChance( double chance ) {
-			this( chance, chance, chance, chance );
-		}
-
-		public ArmorDependentChance() {
-			this( 0.7 );
-		}
-
-		@Override
-		protected boolean check( GameModifier feature, DataType data ) {
-			double chance = 1.0;
-			if( data.entity instanceof LivingEntity entity ) {
-				for( EquipmentSlot slot : this.multipliers.keySet() ) {
-					DoubleConfig config = this.multipliers.get( slot );
-					ItemStack itemStack = entity.getItemBySlot( slot );
-					if( !itemStack.isEmpty() && itemStack.getAttributeModifiers( slot ).containsKey( Attributes.ARMOR ) ) {
-						chance *= config.getOrDefault();
-					}
-				}
-			}
-
-			return Random.tryChance( chance );
-		}
-	}
-
-	public static class Custom< DataType extends ContextData > extends Condition< DataType > {
-		protected final Predicate< DataType > predicate;
-
-		public Custom( Predicate< DataType > predicate ) {
-			this.predicate = predicate;
-
-			this.priority( Priority.LOW );
-		}
-
-		@Override
-		protected boolean check( GameModifier gameModifier, DataType data ) {
-			return this.predicate.test( data );
-		}
-	}
-
-	public static class Cooldown< DataType extends ContextData > extends Condition< DataType > {
-		protected final Predicate< Double > distribution;
-		protected final DoubleConfig cooldown;
-
-		public Cooldown( double seconds, Dist distribution ) {
-			this.distribution = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
-			this.cooldown = new DoubleConfig( seconds, new Range<>( 0.1, 300.0 ) );
-
-			this.priority( Priority.HIGH )
-				.configurable( true )
-				.addConfig( this.cooldown.name( "cooldown" ).comment( "Cooldown in seconds before it happens." ) );
-		}
-
-		public Cooldown( int ticks, Dist distribution ) {
-			this( Utility.ticksToSeconds( ticks ), distribution );
-		}
-
-		@Override
-		protected boolean check( GameModifier feature, DataType data ) {
-			return this.distribution.test( this.cooldown.getOrDefault() );
-		}
-	}
-
-	public static class HasEnchantment< DataType extends ContextData > extends Condition< DataType > {
-		protected final Supplier< Enchantment > enchantment;
-		protected final Function< DataType, LivingEntity > entity;
-
-		public HasEnchantment( RegistryObject< ? extends Enchantment > enchantment, Function< DataType, LivingEntity > entity ) {
-			this.enchantment = enchantment::get;
-			this.entity = entity;
-		}
-
-		public HasEnchantment( RegistryObject< ? extends Enchantment > enchantment ) {
-			this( enchantment, data->( LivingEntity )data.entity );
-		}
-
-		public HasEnchantment( Enchantment enchantment, Function< DataType, LivingEntity > entity ) {
-			this.enchantment = ()->enchantment;
-			this.entity = entity;
-		}
-
-		public HasEnchantment( Enchantment enchantment ) {
-			this( enchantment, data->( LivingEntity )data.entity );
-		}
-
-		@Override
-		protected boolean check( GameModifier feature, DataType data ) {
-			LivingEntity entity = this.entity.apply( data );
-
-			return entity != null && EnchantmentHelper.getEnchantmentLevel( this.enchantment.get(), entity ) > 0;
-		}
-	}
-
-	public static class HasEffect< DataType extends ContextData > extends Condition< DataType > {
-		protected final Supplier< MobEffect > effect;
-		protected final Function< DataType, LivingEntity > entity;
-
-		public HasEffect( RegistryObject< ? extends MobEffect > effect, Function< DataType, LivingEntity > entity ) {
-			this.effect = effect::get;
-			this.entity = entity;
-		}
-
-		public HasEffect( RegistryObject< ? extends MobEffect > effect ) {
-			this( effect, data->( LivingEntity )data.entity );
-		}
-
-		public HasEffect( MobEffect effect, Function< DataType, LivingEntity > entity ) {
-			this.effect = ()->effect;
-			this.entity = entity;
-		}
-
-		public HasEffect( MobEffect effect ) {
-			this( effect, data->( LivingEntity )data.entity );
-		}
-
-		@Override
-		protected boolean check( GameModifier feature, DataType data ) {
-			LivingEntity entity = this.entity.apply( data );
-
-			return entity != null && entity.hasEffect( this.effect.get() );
-		}
-	}
-
-	public static class IsServer< DataType extends ContextData > extends Condition< DataType > {
-		public IsServer() {
-			this.priority( Priority.HIGH );
-		}
-
-		@Override
-		protected boolean check( GameModifier feature, DataType data ) {
-			return data.level != null;
-		}
-	}
-
-	public static class IsShiftKeyDown< DataType extends ContextData > extends Condition< DataType > {
-		protected final Function< DataType, Player > player;
-
-		public IsShiftKeyDown( Function< DataType, Player > player ) {
-			this.player = player;
-
-			this.priority( Priority.HIGH );
-		}
-
-		public IsShiftKeyDown() {
-			this( data->( Player )data.entity );
-		}
-
-		@Override
-		protected boolean check( GameModifier feature, DataType data ) {
-			Player player = this.player.apply( data );
-
-			return player != null && player.isShiftKeyDown();
-		}
-	}
-
-	public static class IsOnGround< DataType extends ContextData > extends Condition< DataType > {
-		protected final Function< DataType, Entity > entity;
-
-		public IsOnGround( Function< DataType, Entity > entity ) {
-			this.entity = entity;
-
-			this.priority( Priority.HIGH );
-		}
-
-		public IsOnGround() {
-			this( data->data.entity );
-		}
-
-		@Override
-		protected boolean check( GameModifier feature, DataType data ) {
-			Entity entity = this.entity.apply( data );
-
-			return entity != null && entity.isOnGround();
-		}
+	public boolean check( DataType data ) {
+		return this.isNegated ^ this.predicate.test( data );
 	}
 }
