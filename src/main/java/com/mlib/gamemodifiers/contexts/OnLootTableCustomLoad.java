@@ -2,7 +2,7 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.google.gson.JsonObject;
 import com.mlib.ObfuscationGetter;
-import com.mlib.gamemodifiers.ContextBase;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class OnLootTableCustomLoad {
-	public static ContextBase< Data > listen( Consumer< Data > consumer ) {
+	public static Context< Data > listen( Consumer< Data > consumer ) {
 		return Contexts.get( Data.class ).add( consumer );
 	}
 

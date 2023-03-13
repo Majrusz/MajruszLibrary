@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 public class Contexts< DataType > {
 	final static Map< Class< ? >, Contexts< ? > > CONTEXTS = Collections.synchronizedMap( new HashMap<>() );
-	final List< ContextBase< DataType > > contexts = Collections.synchronizedList( new ArrayList<>() );
+	final List< Context< DataType > > contexts = Collections.synchronizedList( new ArrayList<>() );
 	boolean isSorted = false;
 
 	private Contexts() {}
@@ -19,8 +19,8 @@ public class Contexts< DataType > {
 		return CONTEXTS.values().stream();
 	}
 
-	public ContextBase< DataType > add( Consumer< DataType > consumer ) {
-		ContextBase< DataType > context = new ContextBase<>( consumer );
+	public Context< DataType > add( Consumer< DataType > consumer ) {
+		Context< DataType > context = new Context<>( consumer );
 		this.contexts.add( context );
 		this.isSorted = false;
 
@@ -34,7 +34,7 @@ public class Contexts< DataType > {
 		return data;
 	}
 
-	public Stream< ContextBase< DataType > > stream() {
+	public Stream< Context< DataType > > stream() {
 		return this.contexts.stream();
 	}
 

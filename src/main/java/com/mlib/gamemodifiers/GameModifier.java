@@ -18,7 +18,7 @@ import static com.mlib.MajruszLibrary.MOD_CONFIGS;
  mods much easier.
  */
 public abstract class GameModifier extends ConfigGroup {
-	final List< ContextBase< ? > > contexts = new ArrayList<>();
+	final List< Context< ? > > contexts = new ArrayList<>();
 	final String configId;
 
 	public GameModifier( String configId ) {
@@ -31,7 +31,7 @@ public abstract class GameModifier extends ConfigGroup {
 		this( ModConfigs.DEFAULT_ID );
 	}
 
-	public List< ContextBase< ? > > getContexts() {
+	public List< Context< ? > > getContexts() {
 		return Collections.unmodifiableList( this.contexts );
 	}
 

@@ -1,6 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.ContextBase;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class OnTradeSetup {
-	public static ContextBase< Data > listen( Consumer< Data > consumer ) {
+	public static Context< Data > listen( Consumer< Data > consumer ) {
 		return Contexts.get( Data.class ).add( consumer );
 	}
 

@@ -2,7 +2,7 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.config.StringListConfig;
 import com.mlib.gamemodifiers.Condition;
-import com.mlib.gamemodifiers.ContextBase;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.Priority;
 import com.mlib.gamemodifiers.data.ILevelData;
@@ -27,7 +27,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class OnLoot {
-	public static ContextBase< Data > listen( Consumer< Data > consumer ) {
+	public static Context< Data > listen( Consumer< Data > consumer ) {
 		return Contexts.get( Data.class ).add( consumer );
 	}
 

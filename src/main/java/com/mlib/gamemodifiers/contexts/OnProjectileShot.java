@@ -1,6 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.ContextBase;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.data.ILevelData;
 import net.minecraft.nbt.CompoundTag;
@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class OnProjectileShot {
-	public static ContextBase< Data > listen( Consumer< Data > consumer ) {
+	public static Context< Data > listen( Consumer< Data > consumer ) {
 		return Contexts.get( Data.class ).add( consumer );
 	}
 

@@ -8,59 +8,58 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-// TODO: rename to Context<>
-public class ContextBase< DataType > extends ConfigGroup {
+public class Context< DataType > extends ConfigGroup {
 	final Consumer< DataType > consumer;
 	final List< Condition< DataType > > conditions = new ArrayList<>();
 	Priority priority = Priority.NORMAL;
 	GameModifier gameModifier = null;
 
-	public ContextBase( Consumer< DataType > consumer ) {
+	public Context( Consumer< DataType > consumer ) {
 		this.consumer = consumer;
 	}
 
 	@Override
-	public ContextBase< DataType > addConfig( IConfigurable config ) {
+	public Context< DataType > addConfig( IConfigurable config ) {
 		super.addConfig( config );
 
 		return this;
 	}
 
 	@Override
-	public ContextBase< DataType > addConfigs( IConfigurable... configs ) {
+	public Context< DataType > addConfigs( IConfigurable... configs ) {
 		super.addConfigs( configs );
 
 		return this;
 	}
 
 	@Override
-	public ContextBase< DataType > name( String name ) {
+	public Context< DataType > name( String name ) {
 		super.name( name );
 
 		return this;
 	}
 
 	@Override
-	public ContextBase< DataType > comment( String comment ) {
+	public Context< DataType > comment( String comment ) {
 		super.comment( comment );
 
 		return this;
 	}
 
 	@Override
-	public ContextBase< DataType > requiresWorldRestart( boolean worldRestartRequired ) {
+	public Context< DataType > requiresWorldRestart( boolean worldRestartRequired ) {
 		super.requiresWorldRestart( worldRestartRequired );
 
 		return this;
 	}
 
-	public ContextBase< DataType > priority( Priority priority ) {
+	public Context< DataType > priority( Priority priority ) {
 		this.priority = priority;
 
 		return this;
 	}
 
-	public ContextBase< DataType > addCondition( Condition< DataType > condition ) {
+	public Context< DataType > addCondition( Condition< DataType > condition ) {
 		assert this.gameModifier == null : "Context has already been set up";
 		this.conditions.add( condition );
 
