@@ -2,10 +2,10 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IEntityData;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
 
 import java.util.function.Consumer;
 
@@ -18,7 +18,7 @@ public class OnItemSwingDuration {
 		return Contexts.get( Data.class ).dispatch( new Data( entity, swingDuration ) );
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements IEntityData {
 		public final LivingEntity entity;
 		public final int swingDuration;
 		public int extraDuration = 0;
@@ -29,8 +29,8 @@ public class OnItemSwingDuration {
 		}
 
 		@Override
-		public Level getLevel() {
-			return this.entity.getLevel();
+		public Entity getEntity() {
+			return this.entity;
 		}
 
 		public int getTotalSwingDuration() {

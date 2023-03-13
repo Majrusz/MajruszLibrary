@@ -3,12 +3,14 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IPositionData;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -44,7 +46,7 @@ public class OnExplosionStart {
 					.get( player ) ) );
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements ILevelData, IPositionData {
 		public final ExplosionEvent.Start event;
 		public final Explosion explosion;
 		@Nullable public final LivingEntity sourceMob;
@@ -62,6 +64,11 @@ public class OnExplosionStart {
 		@Override
 		public Level getLevel() {
 			return this.event.getLevel();
+		}
+
+		@Override
+		public Vec3 getPosition() {
+			return this.explosion.getPosition();
 		}
 	}
 }

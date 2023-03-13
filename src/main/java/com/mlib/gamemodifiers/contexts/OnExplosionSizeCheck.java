@@ -3,6 +3,7 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IPositionData;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -44,7 +45,7 @@ public class OnExplosionSizeCheck {
 		}
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements ILevelData, IPositionData {
 		public final Level level;
 		public final Explosion explosion;
 		public float size;
@@ -60,6 +61,11 @@ public class OnExplosionSizeCheck {
 		@Override
 		public Level getLevel() {
 			return this.level;
+		}
+
+		@Override
+		public Vec3 getPosition() {
+			return this.explosion.getPosition();
 		}
 	}
 }

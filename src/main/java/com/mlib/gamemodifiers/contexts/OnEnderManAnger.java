@@ -2,10 +2,10 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.EnderManAngerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,7 +23,7 @@ public class OnEnderManAnger {
 		Contexts.get( Data.class ).dispatch( new Data( event ) );
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements IEntityData {
 		public final EnderManAngerEvent event;
 		public final EnderMan enderMan;
 		public final Player player;
@@ -35,8 +35,8 @@ public class OnEnderManAnger {
 		}
 
 		@Override
-		public Level getLevel() {
-			return this.enderMan.getLevel();
+		public Entity getEntity() {
+			return this.enderMan;
 		}
 	}
 }

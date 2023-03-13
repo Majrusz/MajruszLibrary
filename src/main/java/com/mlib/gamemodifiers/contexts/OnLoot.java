@@ -6,6 +6,7 @@ import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.Priority;
 import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IPositionData;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -76,7 +77,7 @@ public class OnLoot {
 		return is( Stream.of( ids ).map( ResourceLocation::toString ).toArray( String[]::new ) );
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements ILevelData, IPositionData {
 		public final ObjectArrayList< ItemStack > generatedLoot;
 		public final LootContext context;
 		@Nullable public final BlockState blockState;
@@ -102,6 +103,11 @@ public class OnLoot {
 		@Override
 		public Level getLevel() {
 			return this.entity != null ? this.entity.getLevel() : null;
+		}
+
+		@Override
+		public Vec3 getPosition() {
+			return this.origin != null ? this.origin : new Vec3( 0.0, 0.0, 0.0 );
 		}
 
 		public void addAsChestLoot( ResourceLocation id ) {

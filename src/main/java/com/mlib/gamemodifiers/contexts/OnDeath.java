@@ -3,10 +3,10 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.Utility;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IEntityData;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,7 +25,7 @@ public class OnDeath {
 		Contexts.get( Data.class ).dispatch( new Data( event ) );
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements IEntityData {
 		public final LivingDeathEvent event;
 		public final DamageSource source;
 		@Nullable public final LivingEntity attacker;
@@ -39,8 +39,8 @@ public class OnDeath {
 		}
 
 		@Override
-		public Level getLevel() {
-			return this.target.getLevel();
+		public Entity getEntity() {
+			return this.target;
 		}
 	}
 

@@ -2,11 +2,11 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IEntityData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 
 import java.util.function.Consumer;
 
@@ -24,7 +24,7 @@ public class OnEntitySignalCheck {
 		return isNotTriggeredByPlayer ? Contexts.get( Data.class ).dispatch( data ) : data;
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements IEntityData {
 		public final ServerLevel level;
 		public final BlockPos position;
 		public final Player player;
@@ -41,8 +41,8 @@ public class OnEntitySignalCheck {
 		}
 
 		@Override
-		public Level getLevel() {
-			return this.level;
+		public Entity getEntity() {
+			return this.player;
 		}
 	}
 }

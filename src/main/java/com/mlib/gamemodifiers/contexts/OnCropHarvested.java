@@ -5,6 +5,8 @@ import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.GameModifier;
+import com.mlib.gamemodifiers.data.IEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.CropBlock;
@@ -19,7 +21,7 @@ public class OnCropHarvested {
 		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static class Data {
+	public static class Data implements IEntityData {
 		public final Player player;
 		public final List< ItemStack > generatedLoot;
 		public final CropBlock crops;
@@ -34,6 +36,11 @@ public class OnCropHarvested {
 			this.blockState = blockState;
 			this.tool = tool;
 			this.origin = origin;
+		}
+
+		@Override
+		public Entity getEntity() {
+			return this.player;
 		}
 	}
 

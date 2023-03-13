@@ -3,11 +3,11 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.Random;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IEntityData;
 import com.mlib.items.ItemHelper;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -27,7 +27,7 @@ public class OnExtraFishingLootCheck {
 		return Contexts.get( Data.class ).dispatch( new Data( drops, player ) );
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements IEntityData {
 		public final List< ItemStack > drops;
 		public final List< ItemStack > extraLoot = new ArrayList<>();
 		public final Player player;
@@ -59,8 +59,8 @@ public class OnExtraFishingLootCheck {
 		}
 
 		@Override
-		public Level getLevel() {
-			return this.player.getLevel();
+		public Entity getEntity() {
+			return this.player;
 		}
 	}
 }

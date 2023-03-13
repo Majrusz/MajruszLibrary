@@ -3,11 +3,13 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IPositionData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -21,7 +23,7 @@ public class OnProjectileShot {
 		return Contexts.get( Data.class ).dispatch( new Data( projectile, weapon, arrow, customTag ) );
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements ILevelData, IPositionData {
 		public final Projectile projectile;
 		public final Level level;
 		@Nullable public final Entity owner;
@@ -41,6 +43,11 @@ public class OnProjectileShot {
 		@Override
 		public Level getLevel() {
 			return this.level;
+		}
+
+		@Override
+		public Vec3 getPosition() {
+			return this.projectile.getPosition( 0.0f );
 		}
 	}
 }

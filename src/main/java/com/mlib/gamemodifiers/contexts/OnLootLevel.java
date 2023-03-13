@@ -4,9 +4,11 @@ import com.mlib.Utility;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IPositionData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LootingLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -25,7 +27,7 @@ public class OnLootLevel {
 		Contexts.get( Data.class ).dispatch( new Data( event ) );
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements ILevelData, IPositionData {
 		public final LootingLevelEvent event;
 		@Nullable public final DamageSource source;
 		@Nullable public final LivingEntity attacker;
@@ -39,6 +41,11 @@ public class OnLootLevel {
 		@Override
 		public Level getLevel() {
 			return this.attacker != null ? this.attacker.getLevel() : null;
+		}
+
+		@Override
+		public Vec3 getPosition() {
+			return this.attacker != null ? this.attacker.position() : new Vec3( 0.0, 0.0, 0.0 );
 		}
 	}
 }

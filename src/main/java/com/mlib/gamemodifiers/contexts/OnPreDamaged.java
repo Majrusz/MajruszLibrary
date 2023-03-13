@@ -4,10 +4,10 @@ import com.mlib.Utility;
 import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IEntityData;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
@@ -35,7 +35,7 @@ public class OnPreDamaged {
 		return new Condition< Data >( data->data.target.invulnerableTime <= 10 ); // sources like fire deal damage every tick and only invulnerableTime blocks them from applying damage
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements IEntityData {
 		public final DamageSource source;
 		@Nullable public final LivingEntity attacker;
 		public final LivingEntity target;
@@ -53,8 +53,8 @@ public class OnPreDamaged {
 		}
 
 		@Override
-		public Level getLevel() {
-			return this.target.getLevel();
+		public Entity getEntity() {
+			return this.target;
 		}
 	}
 }

@@ -3,9 +3,9 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -83,7 +83,7 @@ public class OnSpawned {
 		} );
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements IEntityData {
 		public final LivingEntity target;
 		public final boolean loadedFromDisk;
 
@@ -93,8 +93,8 @@ public class OnSpawned {
 		}
 
 		@Override
-		public Level getLevel() {
-			return this.target.getLevel();
+		public Entity getEntity() {
+			return this.target;
 		}
 	}
 

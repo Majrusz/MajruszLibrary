@@ -2,11 +2,11 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -24,7 +24,7 @@ public class OnItemEquipped {
 		Contexts.get( Data.class ).dispatch( new Data( event ) );
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements IEntityData {
 		public final LivingEquipmentChangeEvent event;
 		public final LivingEntity entity;
 		public final EquipmentSlot slot;
@@ -40,8 +40,8 @@ public class OnItemEquipped {
 		}
 
 		@Override
-		public Level getLevel() {
-			return this.entity.getLevel();
+		public Entity getEntity() {
+			return this.entity;
 		}
 	}
 }

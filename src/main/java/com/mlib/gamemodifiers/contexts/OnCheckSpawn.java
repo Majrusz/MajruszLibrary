@@ -2,9 +2,9 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,7 +22,7 @@ public class OnCheckSpawn {
 		Contexts.get( Data.class ).dispatch( new Data( event ) );
 	}
 
-	public static class Data implements ILevelData {
+	public static class Data implements IEntityData {
 		public final LivingSpawnEvent.CheckSpawn event;
 		public final Mob mob;
 
@@ -32,8 +32,8 @@ public class OnCheckSpawn {
 		}
 
 		@Override
-		public Level getLevel() {
-			return this.mob.getLevel();
+		public Entity getEntity() {
+			return this.mob;
 		}
 	}
 }
