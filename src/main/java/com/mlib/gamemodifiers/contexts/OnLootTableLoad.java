@@ -3,7 +3,6 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.ContextBase;
 import com.mlib.gamemodifiers.Contexts;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraftforge.event.LootTableLoadEvent;

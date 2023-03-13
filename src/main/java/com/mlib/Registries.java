@@ -3,7 +3,6 @@ package com.mlib;
 import com.mlib.annotations.AnnotationHandler;
 import com.mlib.commands.Command;
 import com.mlib.features.AnyModification;
-import com.mlib.gamemodifiers.ModConfigs;
 import com.mlib.registries.RegistryHelper;
 import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;

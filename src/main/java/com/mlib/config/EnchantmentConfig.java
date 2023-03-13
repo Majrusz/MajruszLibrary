@@ -1,8 +1,5 @@
 package com.mlib.config;
 
-import com.mlib.config.BooleanConfig;
-import com.mlib.config.ConfigGroup;
-
 public class EnchantmentConfig extends ConfigGroup {
 	final BooleanConfig availability = new BooleanConfig( true );
 
