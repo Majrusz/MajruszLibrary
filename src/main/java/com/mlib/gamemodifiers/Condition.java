@@ -9,7 +9,9 @@ import com.mlib.config.DoubleConfig;
 import com.mlib.config.IConfigurable;
 import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IPositionData;
 import com.mlib.gamemodifiers.data.ITickData;
+import com.mlib.levels.LevelHelper;
 import com.mlib.math.Range;
 import com.mlib.time.TimeHelper;
 import net.minecraft.server.level.ServerLevel;
@@ -57,6 +59,23 @@ public class Condition< DataType > extends ConfigGroup {
 			.priority( Priority.HIGH )
 			.configurable( true )
 			.addConfig( chance.name( "chance" ).comment( "Chance for this to happen." ) );
+	}
+
+	/** WARNING: This condition cannot be used with OnSpawned.listen! (use OnSpawned.listenSafe) */
+	public static < DataType extends ILevelData & IPositionData > Condition< DataType > chanceCRD( double defaultChance, boolean defaultScaledByCRD ) {
+		DoubleConfig chance = new DoubleConfig( defaultChance, Range.CHANCE );
+		BooleanConfig scaledByCRD = new BooleanConfig( defaultScaledByCRD );
+		Predicate< DataType > predicate = data->{
+			double multiplier = scaledByCRD.isEnabled() ? LevelHelper.getRegionalDifficulty( data.getLevel(), data.getPosition() ) : 1.0;
+
+			return Random.tryChance( multiplier * chance.getOrDefault() );
+		};
+
+		return new Condition< DataType >( predicate )
+			.priority( Priority.HIGH )
+			.configurable( true )
+			.addConfig( chance.name( "chance" ).comment( "Chance for this to happen." ) )
+			.addConfig( scaledByCRD.name( "scaled_by_crd" ).comment( "Specifies whether the chance should be scaled by Clamped Regional Difficulty." ) );
 	}
 
 	public static < DataType > Condition< DataType > isLivingBeing( Function< DataType, Entity > entity ) {
