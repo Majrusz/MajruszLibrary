@@ -1,6 +1,5 @@
 package com.mlib.itemsets;
 
-import com.mlib.text.FormattedTranslatable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -45,14 +44,11 @@ public class BonusData {
 
 	public MutableComponent buildTranslatedName( ItemSet itemSet, boolean isConditionMet ) {
 		ChatFormatting chatFormatting = isConditionMet ? itemSet.getChatFormatting() : ChatFormatting.DARK_GRAY;
-		FormattedTranslatable component = new FormattedTranslatable( this.keyId, isConditionMet ? ChatFormatting.GRAY : chatFormatting );
-		Arrays.stream( this.parameters ).forEach( parameter->component.addParameter( parameter, chatFormatting ) );
+		MutableComponent component = Component.translatable( this.keyId )
+			.withStyle( isConditionMet ? ChatFormatting.GRAY : ChatFormatting.DARK_GRAY );
+		Arrays.stream( this.parameters ).forEach( parameter->component.append( Component.literal( parameter.toString() ).withStyle( chatFormatting ) ) );
 
-		return component.create();
-	}
-
-	private ChatFormatting getChatFormatting( ItemSet itemSet, LivingEntity entity ) {
-		return this.isConditionMet( itemSet, entity ) ? itemSet.getChatFormatting() : ChatFormatting.GRAY;
+		return component;
 	}
 
 	@FunctionalInterface

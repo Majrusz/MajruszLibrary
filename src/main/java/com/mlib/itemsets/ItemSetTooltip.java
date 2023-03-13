@@ -1,7 +1,6 @@
 package com.mlib.itemsets;
 
 import com.mlib.client.ClientHelper;
-import com.mlib.text.FormattedTranslatable;
 import com.mlib.text.TextHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -73,11 +72,12 @@ public class ItemSetTooltip {
 		itemSet.getBonuses().forEach( bonus->{
 			boolean isConditionMet = bonus.isConditionMet( itemSet, player );
 			ChatFormatting chatFormatting = isConditionMet ? itemSet.getChatFormatting() : ChatFormatting.DARK_GRAY;
-			FormattedTranslatable component = new FormattedTranslatable( BONUS_KEY, chatFormatting );
-			component.addParameter( bonus.buildTranslatedRequirements( itemSet, isConditionMet ) )
-				.addParameter( bonus.buildTranslatedName( itemSet, isConditionMet ) );
+			MutableComponent component = Component.translatable( BONUS_KEY )
+				.withStyle( chatFormatting )
+				.append( bonus.buildTranslatedRequirements( itemSet, isConditionMet ) )
+				.append( bonus.buildTranslatedName( itemSet, isConditionMet ) );
 
-			tooltip.add( component.create() );
+			tooltip.add( component );
 		} );
 	}
 }
