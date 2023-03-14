@@ -8,12 +8,9 @@ import com.mojang.serialization.Codec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import static com.mlib.MajruszLibrary.CONFIG_HANDLER;
 
 public class Registries {
 	static final RegistryHelper HELPER = new RegistryHelper( MajruszLibrary.MOD_ID );
@@ -30,7 +27,6 @@ public class Registries {
 
 	public static void initialize() {
 		HELPER.registerAll();
-		CONFIG_HANDLER.register( ModLoadingContext.get() );
 	}
 
 	public static ResourceLocation getLocation( String register ) {

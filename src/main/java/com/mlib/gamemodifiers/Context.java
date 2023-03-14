@@ -12,7 +12,7 @@ public class Context< DataType > extends ConfigGroup {
 	final Consumer< DataType > consumer;
 	final List< Condition< DataType > > conditions = new ArrayList<>();
 	Priority priority = Priority.NORMAL;
-	GameModifier gameModifier = null;
+	boolean isSorted = true;
 
 	public Context( Consumer< DataType > consumer ) {
 		this.consumer = consumer;
@@ -60,38 +60,36 @@ public class Context< DataType > extends ConfigGroup {
 	}
 
 	public Context< DataType > addCondition( Condition< DataType > condition ) {
-		assert this.gameModifier == null : "Context has already been set up";
 		this.conditions.add( condition );
+		if( condition.isConfigurable() ) {
+			this.addConfig( condition );
+		}
+		this.isSorted = false;
 
 		return this;
 	}
 
-	public void insertTo( GameModifier modifier ) {
-		assert this.gameModifier == null : "Context has already been set up";
-		this.gameModifier = modifier;
-		this.conditions.sort( ( left, right )->Priority.COMPARATOR.compare( left.getPriority(), right.getPriority() ) );
-		this.conditions.stream()
-			.filter( Condition::isConfigurable )
-			.forEach( this::addConfig );
-
-		modifier.addConfig( this );
-	}
-
 	public void accept( DataType data ) {
-		if( this.gameModifier != null && this.conditions.stream().allMatch( condition->condition.check( data ) ) ) {
+		this.tryToSort();
+		if( this.conditions.stream().allMatch( condition->condition.check( data ) ) ) {
 			this.consumer.accept( data );
 		}
 	}
 
 	public List< Condition< DataType > > getConditions() {
-		return Collections.unmodifiableList( this.conditions );
-	}
+		this.tryToSort();
 
-	public GameModifier getGameModifier() {
-		return this.gameModifier;
+		return Collections.unmodifiableList( this.conditions );
 	}
 
 	public Priority getPriority() {
 		return this.priority;
+	}
+
+	private void tryToSort() {
+		if( !this.isSorted ) {
+			this.conditions.sort( ( left, right )->Priority.COMPARATOR.compare( left.getPriority(), right.getPriority() ) );
+			this.isSorted = true;
+		}
 	}
 }

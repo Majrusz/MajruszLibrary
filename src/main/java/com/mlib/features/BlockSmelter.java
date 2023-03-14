@@ -5,7 +5,6 @@ import com.mlib.annotations.AutoInstance;
 import com.mlib.effects.ParticleHandler;
 import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.Condition;
-import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.Priority;
 import com.mlib.gamemodifiers.contexts.OnBlockSmeltCheck;
 import com.mlib.gamemodifiers.contexts.OnLoot;
@@ -24,15 +23,14 @@ import java.util.List;
 import java.util.Optional;
 
 @AutoInstance
-public class BlockSmelter extends GameModifier {
+public class BlockSmelter {
 	public BlockSmelter() {
 		OnLoot.listen( this::replaceWithSmeltedLoot )
 			.priority( Priority.HIGH )
 			.addCondition( OnLoot.hasBlockState() )
 			.addCondition( OnLoot.hasTool() )
 			.addCondition( Condition.isServer() )
-			.addCondition( Condition.predicate( data->data.entity instanceof Player player && !player.isCrouching() ) )
-			.insertTo( this );
+			.addCondition( Condition.predicate( data->data.entity instanceof Player player && !player.isCrouching() ) );
 	}
 
 	private void replaceWithSmeltedLoot( OnLoot.Data data ) {

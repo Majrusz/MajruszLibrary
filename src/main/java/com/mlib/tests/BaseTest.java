@@ -1,12 +1,11 @@
 package com.mlib.tests;
 
-import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnTestsRegistered;
 import net.minecraft.gametest.framework.GameTestHelper;
 
 import java.util.function.Supplier;
 
-public class BaseTest extends GameModifier {
+public class BaseTest {
 	public static String getClassName( Object object ) {
 		Class< ? > clazz = object.getClass();
 		if( clazz.isMemberClass() ) {
@@ -33,7 +32,6 @@ public class BaseTest extends GameModifier {
 	}
 
 	public BaseTest( Class< ? > clazz ) {
-		OnTestsRegistered.listen( data->data.event.register( clazz ) )
-			.insertTo( this );
+		OnTestsRegistered.listen( data->data.event.register( clazz ) );
 	}
 }

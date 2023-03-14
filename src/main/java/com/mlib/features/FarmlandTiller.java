@@ -2,7 +2,6 @@ package com.mlib.features;
 
 import com.mlib.annotations.AutoInstance;
 import com.mlib.gamemodifiers.Condition;
-import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.contexts.OnFarmlandTillCheck;
 import com.mlib.gamemodifiers.contexts.OnPlayerInteract;
 import net.minecraft.core.BlockPos;
@@ -19,7 +18,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 @AutoInstance
-public class FarmlandTiller extends GameModifier {
+public class FarmlandTiller {
 	final Function< OnPlayerInteract.Data, Player > PLAYER_SUPPLIER = data->data.player;
 
 	public FarmlandTiller() {
@@ -27,8 +26,7 @@ public class FarmlandTiller extends GameModifier {
 			.addCondition( Condition.isServer() )
 			.addCondition( Condition.isShiftKeyDown( PLAYER_SUPPLIER ).negate() )
 			.addCondition( OnPlayerInteract.isBlockInteraction() )
-			.addCondition( OnPlayerInteract.hasFace() )
-			.insertTo( this );
+			.addCondition( OnPlayerInteract.hasFace() );
 	}
 
 	private void applyHoeBonus( OnPlayerInteract.Data data ) {

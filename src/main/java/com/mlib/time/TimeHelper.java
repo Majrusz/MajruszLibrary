@@ -4,7 +4,6 @@ import com.mlib.Utility;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.config.DoubleConfig;
 import com.mlib.gamemodifiers.Condition;
-import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.Priority;
 import com.mlib.gamemodifiers.contexts.OnClientTick;
 import com.mlib.gamemodifiers.contexts.OnServerTick;
@@ -48,17 +47,15 @@ public class TimeHelper {
 	}
 
 	@AutoInstance
-	public static class Updater extends GameModifier {
+	public static class Updater {
 		public Updater() {
 			OnClientTick.listen( data->++clientCounter )
 				.priority( Priority.HIGHEST )
-				.addCondition( Condition.isEndPhase() )
-				.insertTo( this );
+				.addCondition( Condition.isEndPhase() );
 
 			OnServerTick.listen( data->++serverCounter )
 				.priority( Priority.HIGHEST )
-				.addCondition( Condition.isEndPhase() )
-				.insertTo( this );
+				.addCondition( Condition.isEndPhase() );
 		}
 	}
 }

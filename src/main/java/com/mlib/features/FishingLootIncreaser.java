@@ -4,7 +4,6 @@ import com.mlib.Random;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.Condition;
-import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.Priority;
 import com.mlib.gamemodifiers.contexts.OnExtraFishingLootCheck;
 import com.mlib.gamemodifiers.contexts.OnItemFished;
@@ -21,12 +20,11 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 @AutoInstance
-public class FishingLootIncreaser extends GameModifier {
+public class FishingLootIncreaser {
 	public FishingLootIncreaser() {
 		OnItemFished.listen( this::increaseLoot )
 			.priority( Priority.HIGHEST )
-			.addCondition( Condition.isServer() )
-			.insertTo( this );
+			.addCondition( Condition.isServer() );
 	}
 
 	private void increaseLoot( OnItemFished.Data data ) {

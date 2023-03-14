@@ -4,7 +4,6 @@ import com.mlib.annotations.AutoInstance;
 import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
-import com.mlib.gamemodifiers.GameModifier;
 import com.mlib.gamemodifiers.data.IEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -45,7 +44,7 @@ public class OnCropHarvested {
 	}
 
 	@AutoInstance
-	public static class Dispatcher extends GameModifier {
+	public static class Dispatcher {
 		public Dispatcher() {
 			OnLoot.listen( this::dispatchCropEvent )
 				.addCondition( OnLoot.hasBlockState() )
@@ -53,8 +52,7 @@ public class OnCropHarvested {
 				.addCondition( OnLoot.hasTool() )
 				.addCondition( OnLoot.hasOrigin() )
 				.addCondition( Condition.predicate( data->data.blockState.getBlock() instanceof CropBlock ) )
-				.addCondition( Condition.predicate( data->data.entity instanceof Player ) )
-				.insertTo( this );
+				.addCondition( Condition.predicate( data->data.entity instanceof Player ) );
 		}
 
 		private void dispatchCropEvent( OnLoot.Data data ) {
