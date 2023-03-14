@@ -78,7 +78,7 @@ public class Context< DataType > extends ConfigGroup {
 	}
 
 	public void accept( DataType data ) {
-		if( this.conditions.stream().allMatch( condition->condition.check( data ) ) ) {
+		if( this.gameModifier != null && this.conditions.stream().allMatch( condition->condition.check( data ) ) ) {
 			this.consumer.accept( data );
 		}
 	}
