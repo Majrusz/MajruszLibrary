@@ -83,8 +83,10 @@ minecraft {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
-jar.exclude '**/com/mlib/tests/**'
-jar.exclude '**/data/mlib/structures/*tests*'
+if( !version.contains( "unfinished" ) ) {
+    jar.exclude '**/com/mlib/tests/**'
+    jar.exclude '**/data/mlib/structures/*tests*'
+}
 
 mixin {
     add sourceSets.main, 'mixins.mlib.refmap.json'
