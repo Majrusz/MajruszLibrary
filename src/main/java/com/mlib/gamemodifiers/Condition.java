@@ -12,6 +12,7 @@ import com.mlib.gamemodifiers.data.ILevelData;
 import com.mlib.gamemodifiers.data.IPositionData;
 import com.mlib.gamemodifiers.data.ITickData;
 import com.mlib.levels.LevelHelper;
+import com.mlib.math.AnyPos;
 import com.mlib.math.Range;
 import com.mlib.time.TimeHelper;
 import net.minecraft.server.level.ServerLevel;
@@ -66,7 +67,7 @@ public class Condition< DataType > extends ConfigGroup {
 		DoubleConfig chance = new DoubleConfig( defaultChance, Range.CHANCE );
 		BooleanConfig scaledByCRD = new BooleanConfig( defaultScaledByCRD );
 		Predicate< DataType > predicate = data->{
-			double multiplier = scaledByCRD.isEnabled() ? LevelHelper.getRegionalDifficulty( data.getLevel(), data.getPosition() ) : 1.0;
+			double multiplier = scaledByCRD.isEnabled() ? LevelHelper.getRegionalDifficultyAt( data.getLevel(), AnyPos.from( data.getPosition() ).block() ) : 1.0;
 
 			return Random.tryChance( multiplier * chance.getOrDefault() );
 		};

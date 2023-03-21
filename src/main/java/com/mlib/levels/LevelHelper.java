@@ -17,7 +17,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,51 +33,44 @@ public class LevelHelper {
 		return entity.level.dimension() == worldRegistryKey;
 	}
 
-	public static DifficultyInstance getDifficultyInstance( Entity entity ) {
-		return getDifficultyInstance( entity.level, entity.position() );
+	public static DifficultyInstance getDifficultyAt( Entity entity ) {
+		return getDifficultyAt( entity.level, entity.blockPosition() );
 	}
 
-	public static DifficultyInstance getDifficultyInstance( Level level, Vec3 position ) {
-		return level.getCurrentDifficultyAt( new BlockPos( position ) );
+	public static DifficultyInstance getDifficultyAt( Level level, BlockPos position ) {
+		return level.getCurrentDifficultyAt( position );
 	}
 
-	public static double getRegionalDifficulty( Entity entity ) {
-		return getRegionalDifficulty( entity.level, entity.position() );
+	public static double getRegionalDifficultyAt( Entity entity ) {
+		return getRegionalDifficultyAt( entity.level, entity.blockPosition() );
 	}
 
-	public static double getRegionalDifficulty( Level level, Vec3 position ) {
-		return getDifficultyInstance( level, position ).getEffectiveDifficulty();
+	public static double getRegionalDifficultyAt( Level level, BlockPos position ) {
+		return getDifficultyAt( level, position ).getEffectiveDifficulty();
 	}
 
-	public static double getClampedRegionalDifficulty( Entity entity ) {
-		return getClampedRegionalDifficulty( entity.level, entity.position() );
+	public static double getClampedRegionalDifficultyAt( Entity entity ) {
+		return getClampedRegionalDifficultyAt( entity.level, entity.blockPosition() );
 	}
 
-	public static double getClampedRegionalDifficulty( Level level, Vec3 position ) {
-		return getDifficultyInstance( level, position ).getSpecialMultiplier();
+	public static double getClampedRegionalDifficultyAt( Level level, BlockPos position ) {
+		return getDifficultyAt( level, position ).getSpecialMultiplier();
 	}
 
 	public static boolean isEntityOutside( Entity entity ) {
-		return entity.level.canSeeSky( new BlockPos( entity.position() ) );
+		return entity.level.canSeeSky( entity.blockPosition() );
 	}
 
-	public static boolean isRainingAtEntityBiome( Entity entity ) {
-		Level level = entity.level;
-		Biome biome = level.getBiome( new BlockPos( entity.position() ) ).get();
-
-		return level.isRaining() && biome.getPrecipitation() == Biome.Precipitation.RAIN;
+	public static boolean isRainingAt( Entity entity ) {
+		return entity.level.isRainingAt( entity.blockPosition() );
 	}
 
-	public static boolean isEntityOutsideWhenItIsRaining( Entity entity ) {
-		return isEntityOutside( entity ) && isRainingAtEntityBiome( entity );
+	public static boolean isDayAt( Entity entity ) {
+		return entity.level.isDay();
 	}
 
-	public static boolean isEntityOutsideDuringTheDay( Entity entity ) {
-		return isEntityOutside( entity ) && entity.level.isDay();
-	}
-
-	public static boolean isEntityOutsideDuringTheNight( Entity entity ) {
-		return isEntityOutside( entity ) && entity.level.isNight();
+	public static boolean isNightAt( Entity entity ) {
+		return entity.level.isNight();
 	}
 
 	public static Pair< Vec3, ServerLevel > getSpawnData( ServerPlayer player ) {
