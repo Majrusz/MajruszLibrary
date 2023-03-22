@@ -29,6 +29,10 @@ public class ModConfigs {
 		return MOD_CONFIGS.register( parentId );
 	}
 
+	public static ConfigGroup getGroup( String id ) {
+		return MOD_CONFIGS.get( id );
+	}
+
 	private synchronized ConfigGroup init( String id ) {
 		assert !this.map.containsKey( id ) : String.format( "Group '%s' has been initialized already!", id );
 		ConfigGroup group = new ConfigGroup();
