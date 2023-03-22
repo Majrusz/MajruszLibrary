@@ -8,6 +8,7 @@ import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.Priority;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class OnEnchantmentAvailabilityCheck {
 	public static final Consumer< Data > ENABLE = data->data.isAvailable = true;
@@ -20,8 +21,8 @@ public class OnEnchantmentAvailabilityCheck {
 		return Contexts.get( Data.class ).dispatch( new Data( enchantment ) );
 	}
 
-	public static < Type extends CustomEnchantment > Condition< Data > is( Class< Type > clazz ) {
-		return new Condition< Data >( data->clazz.isInstance( data.enchantment ) )
+	public static < Type extends CustomEnchantment > Condition< Data > is( Supplier< Type > enchantment ) {
+		return new Condition< Data >( data->data.enchantment.equals( enchantment.get() ) )
 			.priority( Priority.HIGH );
 	}
 
