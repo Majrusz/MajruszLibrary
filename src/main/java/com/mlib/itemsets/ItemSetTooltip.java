@@ -72,10 +72,8 @@ public class ItemSetTooltip {
 		itemSet.getBonuses().forEach( bonus->{
 			boolean isConditionMet = bonus.isConditionMet( itemSet, player );
 			ChatFormatting chatFormatting = isConditionMet ? itemSet.getChatFormatting() : ChatFormatting.DARK_GRAY;
-			MutableComponent component = Component.translatable( BONUS_KEY )
-				.withStyle( chatFormatting )
-				.append( bonus.buildTranslatedRequirements( itemSet, isConditionMet ) )
-				.append( bonus.buildTranslatedName( itemSet, isConditionMet ) );
+			MutableComponent component = Component.translatable( BONUS_KEY, bonus.buildTranslatedRequirements( itemSet, isConditionMet ), bonus.buildTranslatedName( itemSet, isConditionMet ) )
+				.withStyle( chatFormatting );
 
 			tooltip.add( component );
 		} );

@@ -44,11 +44,17 @@ public class BonusData {
 
 	public MutableComponent buildTranslatedName( ItemSet itemSet, boolean isConditionMet ) {
 		ChatFormatting chatFormatting = isConditionMet ? itemSet.getChatFormatting() : ChatFormatting.DARK_GRAY;
-		MutableComponent component = Component.translatable( this.keyId )
-			.withStyle( isConditionMet ? ChatFormatting.GRAY : ChatFormatting.DARK_GRAY );
-		Arrays.stream( this.parameters ).forEach( parameter->component.append( Component.literal( parameter.toString() ).withStyle( chatFormatting ) ) );
+		Object[] params = Arrays.stream( this.parameters )
+			.map( parameter -> {
+				if( parameter instanceof MutableComponent component ) {
+					return component.withStyle( chatFormatting );
+				}
 
-		return component;
+				return Component.literal( parameter.toString() ).withStyle( chatFormatting );
+			} ).toArray();
+
+		return Component.translatable( this.keyId, params )
+			.withStyle( isConditionMet ? ChatFormatting.GRAY : ChatFormatting.DARK_GRAY );
 	}
 
 	@FunctionalInterface
