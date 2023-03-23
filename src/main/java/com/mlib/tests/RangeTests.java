@@ -28,11 +28,34 @@ public class RangeTests extends BaseTest {
 		helper.succeed();
 	}
 
-	private static < Type extends Number & Comparable< Type > > void assertThat( GameTestHelper helper, Range< Type > range,
-		Type value, boolean expected
-	) {
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
+	public static void clamp( GameTestHelper helper ) {
+		assertThat( helper, new Range<>( 1.0f, 1.2f ), 0.9999f, 1.0000f );
+		assertThat( helper, new Range<>( 0.9f, 1.0f ), 0.9999f, 0.9999f );
+		assertThat( helper, new Range<>( -1.0f, 0.2f ), 0.2000f, 0.2000f );
+		assertThat( helper, new Range<>( -1.2f, 0.0f ), -1.2001f, -1.2000f );
+
+		assertThat( helper, new Range<>( 1.0, 1.2 ), 0.9999, 1.0000 );
+		assertThat( helper, new Range<>( 0.9, 1.0 ), 0.9999, 0.9999 );
+		assertThat( helper, new Range<>( -1.0, 0.2 ), 0.2000, 0.2000 );
+		assertThat( helper, new Range<>( -1.2, 0.0 ), -1.2001, -1.2000 );
+
+		assertThat( helper, new Range<>( 1, 5 ), 0, 1 );
+		assertThat( helper, new Range<>( 0, 4 ), 3, 3 );
+		assertThat( helper, new Range<>( -5, -1 ), -1, -1 );
+		assertThat( helper, new Range<>( -8, -8 ), -9, -8 );
+
+		helper.succeed();
+	}
+
+	private static < Type extends Number & Comparable< Type > > void assertThat( GameTestHelper helper, Range< Type > range, Type value, boolean expected ) {
 		boolean result = range.within( value );
 		assertThat( helper, result == expected, ()->"Range.within() returns invalid result (result: %s, expected: %s)".formatted( result, expected ) );
+	}
+
+	private static < Type extends Number & Comparable< Type > > void assertThat( GameTestHelper helper, Range< Type > range, Type value, Type expected ) {
+		Type result = range.clamp( value );
+		assertThat( helper, result.equals( expected ), ()->"Range.clamp() returns invalid result (result: %s, expected: %s)".formatted( result, expected ) );
 	}
 
 	public RangeTests() {
