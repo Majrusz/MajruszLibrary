@@ -40,31 +40,40 @@ public class Condition< DataType > extends ConfigGroup {
 	boolean isNegated = false;
 	boolean isConfigurable = false;
 
-	public static < DataType > Condition< DataType > excludable( boolean defaultValue ) {
-		BooleanConfig availability = new BooleanConfig( defaultValue );
-
+	public static < DataType > Condition< DataType > excludable( BooleanConfig availability ) {
 		return new Condition< DataType >( data->availability.getOrDefault() )
 			.priority( Priority.HIGHEST )
 			.configurable( true )
-			.addConfig( availability.name( "is_enabled" ).comment( "Specifies whether this is enabled." ) );
+			.addConfig( availability );
+	}
+
+	public static < DataType > Condition< DataType > excludable( boolean defaultValue ) {
+		BooleanConfig availability = new BooleanConfig( defaultValue );
+		availability.name( "is_enabled" ).comment( "Specifies whether this is enabled." );
+
+		return excludable( availability );
 	}
 
 	public static < DataType > Condition< DataType > excludable() {
 		return excludable( true );
 	}
 
-	public static < DataType > Condition< DataType > chance( double defaultChance ) {
-		DoubleConfig chance = new DoubleConfig( defaultChance, Range.CHANCE );
-
+	public static < DataType > Condition< DataType > chance( DoubleConfig chance ) {
 		return new Condition< DataType >( data->Random.tryChance( chance.getOrDefault() ) )
 			.priority( Priority.HIGH )
 			.configurable( true )
-			.addConfig( chance.name( "chance" ).comment( "Chance for this to happen." ) );
+			.addConfig( chance );
+	}
+
+	public static < DataType > Condition< DataType > chance( double defaultChance ) {
+		DoubleConfig chance = new DoubleConfig( defaultChance, Range.CHANCE );
+		chance.name( "chance" ).comment( "Chance for this to happen." );
+
+		return chance( chance );
 	}
 
 	/** WARNING: This condition cannot be used with OnSpawned.listen! (use OnSpawned.listenSafe) */
-	public static < DataType extends ILevelData & IPositionData > Condition< DataType > chanceCRD( double defaultChance, boolean defaultScaledByCRD ) {
-		DoubleConfig chance = new DoubleConfig( defaultChance, Range.CHANCE );
+	public static < DataType extends ILevelData & IPositionData > Condition< DataType > chanceCRD( DoubleConfig chance, boolean defaultScaledByCRD ) {
 		BooleanConfig scaledByCRD = new BooleanConfig( defaultScaledByCRD );
 		Predicate< DataType > predicate = data->{
 			double multiplier = scaledByCRD.isEnabled() ? LevelHelper.getClampedRegionalDifficultyAt( data.getLevel(), AnyPos.from( data.getPosition() ).block() ) : 1.0;
@@ -75,8 +84,16 @@ public class Condition< DataType > extends ConfigGroup {
 		return new Condition< DataType >( predicate )
 			.priority( Priority.HIGH )
 			.configurable( true )
-			.addConfig( chance.name( "chance" ).comment( "Chance for this to happen." ) )
+			.addConfig( chance )
 			.addConfig( scaledByCRD.name( "scaled_by_crd" ).comment( "Specifies whether the chance should be scaled by Clamped Regional Difficulty." ) );
+	}
+
+	/** WARNING: This condition cannot be used with OnSpawned.listen! (use OnSpawned.listenSafe) */
+	public static < DataType extends ILevelData & IPositionData > Condition< DataType > chanceCRD( double defaultChance, boolean defaultScaledByCRD ) {
+		DoubleConfig chance = new DoubleConfig( defaultChance, Range.CHANCE );
+		chance.name( "chance" ).comment( "Chance for this to happen." );
+
+		return chanceCRD( chance, defaultScaledByCRD );
 	}
 
 	public static < DataType > Condition< DataType > isLivingBeing( Function< DataType, Entity > entity ) {
@@ -93,14 +110,20 @@ public class Condition< DataType > extends ConfigGroup {
 			.priority( Priority.LOW );
 	}
 
-	public static < DataType > Condition< DataType > cooldown( double defaultSeconds, Dist distribution ) {
+	public static < DataType > Condition< DataType > cooldown( DoubleConfig cooldown, Dist distribution ) {
 		Predicate< Double > predicate = distribution == Dist.CLIENT ? TimeHelper::hasClientSecondsPassed : TimeHelper::hasServerSecondsPassed;
-		DoubleConfig cooldown = new DoubleConfig( defaultSeconds, new Range<>( 0.1, 300.0 ) );
 
 		return new Condition< DataType >( data->predicate.test( cooldown.getOrDefault() ) )
 			.priority( Priority.HIGH )
 			.configurable( true )
-			.addConfig( cooldown.name( "cooldown" ).comment( "Cooldown in seconds before it happens." ) );
+			.addConfig( cooldown );
+	}
+
+	public static < DataType > Condition< DataType > cooldown( double defaultSeconds, Dist distribution ) {
+		DoubleConfig cooldown = new DoubleConfig( defaultSeconds, new Range<>( 0.1, 300.0 ) );
+		cooldown.name( "cooldown" ).comment( "Cooldown in seconds before it happens." );
+
+		return cooldown( cooldown, distribution );
 	}
 
 	public static < DataType > Condition< DataType > cooldown( int defaultTicks, Dist distribution ) {
