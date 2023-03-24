@@ -64,13 +64,18 @@ public class OnLoot {
 		return new Condition<>( data->data.origin != null );
 	}
 
-	public static Condition< Data > is( String... ids ) {
-		StringListConfig idsConfig = new StringListConfig( ids );
-
+	public static Condition< Data > is( StringListConfig idsConfig ) {
 		return new Condition< Data >( data->idsConfig.contains( data.context.getQueriedLootTableId().toString() ) )
 			.priority( Priority.HIGH )
 			.configurable( true )
-			.addConfig( idsConfig.name( "loot_table_ids" ).comment( "Determines to which loot tables it is applicable." ) );
+			.addConfig( idsConfig );
+	}
+
+	public static Condition< Data > is( String... ids ) {
+		StringListConfig idsConfig = new StringListConfig( ids );
+		idsConfig.name( "loot_table_ids" ).comment( "Determines to which loot tables it is applicable." );
+
+		return is( idsConfig );
 	}
 
 	public static Condition< Data > is( ResourceLocation... ids ) {
