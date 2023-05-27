@@ -47,6 +47,6 @@ public class MobEffectHelper {
 	public static int getAmplifier( LivingEntity entity, MobEffect effect ) {
 		MobEffectInstance effectInstance = entity.getEffect( effect );
 
-		return effectInstance != null ? effectInstance.getAmplifier() : -1 ;
+		return effectInstance != null ? effectInstance.getAmplifier() : -1;
 	}
 }

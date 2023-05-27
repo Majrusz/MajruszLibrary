@@ -1,14 +1,14 @@
 package com.mlib.mixin;
 
-import com.mlib.events.ItemSwingDurationEvent;
+import com.mlib.gamemodifiers.contexts.OnItemSwingDuration;
 import com.mlib.gamemodifiers.contexts.OnPreDamaged;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,22 +23,17 @@ public abstract class MixinLivingEntity {
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "getCurrentSwingDuration ()I", at = @At( "RETURN" ), cancellable = true )
 	private void getCurrentSwingDuration( CallbackInfoReturnable< Integer > callback ) {
-		LivingEntity livingEntity = ( LivingEntity )( Object )this;
-		ItemSwingDurationEvent event = new ItemSwingDurationEvent( livingEntity, callback.getReturnValue() );
-		MinecraftForge.EVENT_BUS.post( event );
-
-		callback.setReturnValue( event.getTotalSwingDuration() );
+		callback.setReturnValue( OnItemSwingDuration.dispatch( ( LivingEntity )( Object )this, callback.getReturnValue() ).getTotalSwingDuration() );
 	}
 
 	@Shadow( aliases = { "this$0" } )
 	@Inject( method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At( "HEAD" ), cancellable = true )
 	private void hurt( DamageSource source, float damage, CallbackInfoReturnable< Boolean > callback ) {
 		this.mlibLastExtraDamage = 0.0f;
-		OnPreDamaged.Data data = new OnPreDamaged.Data( source, ( LivingEntity )( Object )this, damage );
-		if( willBeCancelled( data ) )
+		if( willBeCancelled( source, ( LivingEntity )( Object )this ) )
 			return;
 
-		OnPreDamaged.Context.accept( data );
+		OnPreDamaged.Data data = OnPreDamaged.dispatch( source, ( LivingEntity )( Object )this, damage );
 		if( data.isCancelled ) {
 			callback.setReturnValue( false );
 		} else {
@@ -68,11 +63,11 @@ public abstract class MixinLivingEntity {
 		}
 	}
 
-	private static boolean willBeCancelled( OnPreDamaged.Data data ) {
-		boolean isInvulnerable = data.target.isInvulnerableTo( data.source );
-		boolean isClientSide = data.level == null;
-		boolean isDeadOrDying = data.target.isDeadOrDying();
-		boolean isFireResistant = data.source.isFire() && data.target.hasEffect( MobEffects.FIRE_RESISTANCE );
+	private static boolean willBeCancelled( DamageSource source, LivingEntity target ) {
+		boolean isInvulnerable = target.isInvulnerableTo( source );
+		boolean isClientSide = !( target.getLevel() instanceof ServerLevel );
+		boolean isDeadOrDying = target.isDeadOrDying();
+		boolean isFireResistant = source.isFire() && target.hasEffect( MobEffects.FIRE_RESISTANCE );
 
 		return isInvulnerable || isClientSide || isDeadOrDying || isFireResistant;
 	}

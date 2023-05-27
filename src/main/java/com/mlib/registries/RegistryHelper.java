@@ -1,5 +1,7 @@
 package com.mlib.registries;
 
+import com.mlib.triggers.BasicTrigger;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
@@ -31,6 +33,10 @@ public class RegistryHelper {
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		this.registers.forEach( register->register.register( modEventBus ) );
+	}
+
+	public BasicTrigger registerBasicTrigger() {
+		return CriteriaTriggers.register( new BasicTrigger( this.getLocation( "basic_trigger" ) ) );
 	}
 
 	public ResourceLocation getLocation( String register ) {

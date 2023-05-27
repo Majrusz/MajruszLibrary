@@ -1,59 +1,53 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.Utility;
-import com.mlib.events.ProjectileEvent;
-import com.mlib.gamemodifiers.ContextBase;
-import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.data.ILevelData;
+import com.mlib.gamemodifiers.data.IPositionData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class OnProjectileShot {
-	@Mod.EventBusSubscriber
-	public static class Context extends ContextBase< Data > {
-		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
-
-		public Context( Consumer< Data > consumer ) {
-			super( consumer );
-
-			CONTEXTS.add( this );
-		}
-
-		@SubscribeEvent
-		public static void onProjectileShot( ProjectileEvent.Shot event ) {
-			CONTEXTS.accept( new Data( event ) );
-		}
+	public static Context< Data > listen( Consumer< Data > consumer ) {
+		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static class Data extends ContextData.Event< ProjectileEvent > {
+	public static Data dispatch( Projectile projectile, @Nullable ItemStack weapon, @Nullable ItemStack arrow, CompoundTag customTag ) {
+		return Contexts.get( Data.class ).dispatch( new Data( projectile, weapon, arrow, customTag ) );
+	}
+
+	public static class Data implements ILevelData, IPositionData {
 		public final Projectile projectile;
 		public final Level level;
-		@Nullable final Entity owner;
+		@Nullable public final Entity owner;
 		@Nullable public final ItemStack weapon;
 		@Nullable public final ItemStack arrow;
 		public final CompoundTag customTag;
 
-		protected Data( ProjectileEvent event ) {
-			super( Utility.castIfPossible( LivingEntity.class, event.projectile.getOwner() ), event );
-			this.projectile = event.projectile;
-			this.level = event.level;
-			this.owner = event.owner;
-			this.weapon = event.weapon;
-			this.arrow = event.arrow;
-			this.customTag = event.customTag;
+		public Data( Projectile projectile, @Nullable ItemStack weapon, @Nullable ItemStack arrow, CompoundTag customTag ) {
+			this.projectile = projectile;
+			this.level = projectile.level;
+			this.owner = projectile.getOwner();
+			this.weapon = weapon;
+			this.arrow = arrow;
+			this.customTag = customTag;
 		}
 
-		public Data( ProjectileEvent.Shot event ) {
-			this( ( ProjectileEvent )event );
+		@Override
+		public Level getLevel() {
+			return this.level;
+		}
+
+		@Override
+		public Vec3 getPosition() {
+			return this.projectile.getPosition( 0.0f );
 		}
 	}
 }

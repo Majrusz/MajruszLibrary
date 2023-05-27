@@ -1,14 +1,13 @@
 package com.mlib.features;
 
 import com.google.common.base.Suppliers;
-import com.mlib.events.AnyLootModificationEvent;
+import com.mlib.gamemodifiers.contexts.OnLoot;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 
@@ -26,8 +25,7 @@ public class AnyModification extends LootModifier {
 	@Nonnull
 	@Override
 	public ObjectArrayList< ItemStack > doApply( ObjectArrayList< ItemStack > generatedLoot, LootContext context ) {
-		MinecraftForge.EVENT_BUS.post( new AnyLootModificationEvent( generatedLoot, context ) );
-		return generatedLoot;
+		return OnLoot.dispatch( generatedLoot, context ).generatedLoot;
 	}
 
 	@Override

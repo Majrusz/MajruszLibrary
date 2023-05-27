@@ -5,19 +5,18 @@ import com.mlib.gamemodifiers.Contexts;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class ContextTests extends BaseTest {
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void priority( GameTestHelper helper ) {
-		Contexts.getInstances()
+		Contexts.streamAll()
 			.forEach( contexts->{
 				MutableInt max = new MutableInt( Integer.MIN_VALUE );
-				contexts.getContexts()
+				contexts.stream()
 					.forEach( context->{
-						int priority = context.getParams().getPriorityAsInt();
+						int priority = context.getPriority().ordinal();
 						assertThat( helper, priority >= max.getValue(), ()->"%s has invalid priority".formatted( getClassName( context ) ) );
 						max.setValue( priority );
 					} );

@@ -1,8 +1,8 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.ContextBase;
-import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.data.IEntityData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -12,21 +12,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 public class OnEntitySignalReceived {
-	public static class Context extends ContextBase< Data > {
-		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
-
-		public static Data accept( Data data ) {
-			return CONTEXTS.accept( data );
-		}
-
-		public Context( Consumer< Data > consumer ) {
-			super( consumer );
-
-			CONTEXTS.add( this );
-		}
+	public static Context< Data > listen( Consumer< Data > consumer ) {
+		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static class Data extends ContextData {
+	public static Data dispatch( ServerLevel level, BlockPos position, Player player, @Nullable Entity owner, @Nullable Entity ownersProjectile,
+		float distance
+	) {
+		return Contexts.get( Data.class ).dispatch( new Data( level, position, player, owner, ownersProjectile, distance ) );
+	}
+
+	public static class Data implements IEntityData {
 		public final ServerLevel level;
 		public final BlockPos position;
 		public final Player player;
@@ -35,14 +31,17 @@ public class OnEntitySignalReceived {
 		public final float distance;
 
 		public Data( ServerLevel level, BlockPos position, Player player, @Nullable Entity owner, @Nullable Entity ownersProjectile, float distance ) {
-			super( player );
-
 			this.level = level;
 			this.position = position;
 			this.player = player;
 			this.owner = owner;
 			this.ownersProjectile = ownersProjectile;
 			this.distance = distance;
+		}
+
+		@Override
+		public Entity getEntity() {
+			return this.player;
 		}
 	}
 }

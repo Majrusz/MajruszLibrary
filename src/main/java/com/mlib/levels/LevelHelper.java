@@ -3,7 +3,7 @@ package com.mlib.levels;
 import com.mlib.Random;
 import com.mlib.effects.ParticleHandler;
 import com.mlib.effects.SoundHandler;
-import com.mlib.math.VectorHelper;
+import com.mlib.math.AnyPos;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -17,7 +17,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -34,51 +33,44 @@ public class LevelHelper {
 		return entity.level.dimension() == worldRegistryKey;
 	}
 
-	public static DifficultyInstance getDifficultyInstance( Entity entity ) {
-		return getDifficultyInstance( entity.level, entity.position() );
+	public static DifficultyInstance getDifficultyAt( Entity entity ) {
+		return getDifficultyAt( entity.level, entity.blockPosition() );
 	}
 
-	public static DifficultyInstance getDifficultyInstance( Level level, Vec3 position ) {
-		return level.getCurrentDifficultyAt( new BlockPos( position ) );
+	public static DifficultyInstance getDifficultyAt( Level level, BlockPos position ) {
+		return level.getCurrentDifficultyAt( position );
 	}
 
-	public static double getRegionalDifficulty( Entity entity ) {
-		return getRegionalDifficulty( entity.level, entity.position() );
+	public static double getRegionalDifficultyAt( Entity entity ) {
+		return getRegionalDifficultyAt( entity.level, entity.blockPosition() );
 	}
 
-	public static double getRegionalDifficulty( Level level, Vec3 position ) {
-		return getDifficultyInstance( level, position ).getEffectiveDifficulty();
+	public static double getRegionalDifficultyAt( Level level, BlockPos position ) {
+		return getDifficultyAt( level, position ).getEffectiveDifficulty();
 	}
 
-	public static double getClampedRegionalDifficulty( Entity entity ) {
-		return getClampedRegionalDifficulty( entity.level, entity.position() );
+	public static double getClampedRegionalDifficultyAt( Entity entity ) {
+		return getClampedRegionalDifficultyAt( entity.level, entity.blockPosition() );
 	}
 
-	public static double getClampedRegionalDifficulty( Level level, Vec3 position ) {
-		return getDifficultyInstance( level, position ).getSpecialMultiplier();
+	public static double getClampedRegionalDifficultyAt( Level level, BlockPos position ) {
+		return getDifficultyAt( level, position ).getSpecialMultiplier();
 	}
 
 	public static boolean isEntityOutside( Entity entity ) {
-		return entity.level.canSeeSky( new BlockPos( entity.position() ) );
+		return entity.level.canSeeSky( entity.blockPosition() );
 	}
 
-	public static boolean isRainingAtEntityBiome( Entity entity ) {
-		Level level = entity.level;
-		Biome biome = level.getBiome( new BlockPos( entity.position() ) ).get();
-
-		return level.isRaining() && biome.getPrecipitation() == Biome.Precipitation.RAIN;
+	public static boolean isRainingAt( Entity entity ) {
+		return entity.level.isRainingAt( entity.blockPosition() );
 	}
 
-	public static boolean isEntityOutsideWhenItIsRaining( Entity entity ) {
-		return isEntityOutside( entity ) && isRainingAtEntityBiome( entity );
+	public static boolean isDayAt( Entity entity ) {
+		return entity.level.isDay();
 	}
 
-	public static boolean isEntityOutsideDuringTheDay( Entity entity ) {
-		return isEntityOutside( entity ) && entity.level.isDay();
-	}
-
-	public static boolean isEntityOutsideDuringTheNight( Entity entity ) {
-		return isEntityOutside( entity ) && entity.level.isNight();
+	public static boolean isNightAt( Entity entity ) {
+		return entity.level.isNight();
 	}
 
 	public static Pair< Vec3, ServerLevel > getSpawnData( ServerPlayer player ) {
@@ -97,7 +89,7 @@ public class LevelHelper {
 		if( exactSpawnPosition == null ) {
 			serverLevel = player.server.getLevel( Level.OVERWORLD );
 			assert serverLevel != null;
-			exactSpawnPosition = VectorHelper.vec3( serverLevel.getSharedSpawnPos() );
+			exactSpawnPosition = AnyPos.from( serverLevel.getSharedSpawnPos() ).vec3();
 		}
 
 		return new Pair<>( exactSpawnPosition, serverLevel );
@@ -116,7 +108,7 @@ public class LevelHelper {
 		if( isEntityInside )
 			offset /= 2;
 
-		Vec3 newPosition = Random.getRandomVector3d( -offset, offset, -1.0, 1.0, -offset, offset ).add( target.position() );
+		Vec3 newPosition = Random.getRandomVector( -offset, offset, -1.0, 1.0, -offset, offset ).add( target.position() ).vec3();
 		double y = level.getHeight( Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ( int )newPosition.x, ( int )newPosition.z ) + 1;
 		if( !( y < level.getMinBuildHeight() + 1 ) && target.randomTeleport( newPosition.x, target.yOld + 8 > y ? y : newPosition.y, newPosition.z, true ) ) {
 			Vec3 position = new Vec3( target.xo, target.getY( 0.5 ), target.zo );
@@ -164,11 +156,11 @@ public class LevelHelper {
 	}
 
 	public static void spawnItemEntityFlyingTowardsDirection( ItemStack itemStack, Level level, Vec3 from, Vec3 to ) {
-		Vec3 spawnPosition = VectorHelper.add( from, Random.getRandomVector3d( -0.25, 0.25, 0.125, 0.5, -0.25, 0.25 ) );
-		Vec3 motion = VectorHelper.multiply( VectorHelper.subtract( to, spawnPosition ), 0.1 );
+		Vec3 spawnPosition = AnyPos.from( from ).add( Random.getRandomVector( -0.25, 0.25, 0.125, 0.5, -0.25, 0.25 ) ).vec3();
+		Vec3 motion = AnyPos.from( to ).sub( spawnPosition ).mul( 0.1 ).vec3();
 
 		ItemEntity itemEntity = new ItemEntity( level, spawnPosition.x, spawnPosition.y, spawnPosition.z, itemStack );
-		itemEntity.setDeltaMovement( VectorHelper.add( motion, new Vec3( 0.0, Math.pow( VectorHelper.length( motion ), 0.5 ) * 0.25, 0.0 ) ) );
+		itemEntity.setDeltaMovement( AnyPos.from( motion ).add( 0.0, Math.pow( AnyPos.from( motion ).len().doubleValue(), 0.5 ) * 0.25, 0.0 ).vec3() );
 
 		level.addFreshEntity( itemEntity );
 	}

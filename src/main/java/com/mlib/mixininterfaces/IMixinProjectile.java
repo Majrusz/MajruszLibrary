@@ -5,7 +5,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
-import java.util.function.Supplier;
 
 public interface IMixinProjectile {
 	static ItemStack getWeaponFromDirectEntity( DamageSource source ) {

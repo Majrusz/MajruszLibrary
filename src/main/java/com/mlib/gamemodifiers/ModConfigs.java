@@ -2,39 +2,60 @@ package com.mlib.gamemodifiers;
 
 import com.mlib.MajruszLibrary;
 import com.mlib.config.ConfigGroup;
+import com.mlib.config.ConfigHandler;
 
 import java.util.HashMap;
 
+import static com.mlib.MajruszLibrary.MOD_CONFIGS;
+
 public class ModConfigs {
-	private final HashMap< String, ConfigGroup > map = new HashMap<>();
+	final HashMap< String, ConfigGroup > map = new HashMap<>();
 
-	public synchronized void setup( String key, ConfigGroup group ) {
-		assert !this.map.containsKey( key ) : "Config for " + key + " has been initialized already!";
-		this.map.put( key, group );
+	public static ConfigGroup init( ConfigHandler handler, String id ) {
+		ConfigGroup group = MOD_CONFIGS.init( id );
+		handler.addConfig( group );
 
-		MajruszLibrary.logOnDev( "[ModConfigs] Game modifier group '%s' has been initialized.", key );
+		return group;
 	}
 
-	public synchronized void insert( String key, GameModifier modifier ) {
-		assert this.map.containsKey( key ) : "Config for " + key + " has not been initialized yet!";
-		this.map.get( key ).addConfig( modifier );
+	public static ConfigGroup init( String parentId, String id ) {
+		ConfigGroup group = MOD_CONFIGS.init( id );
+		MOD_CONFIGS.get( parentId ).addConfig( group );
 
-		String name = modifier.getName();
-		String message = name.isEmpty() ? "Unnamed game modifier" : String.format( "Game modifier '%s'", name );
-		MajruszLibrary.logOnDev( "[ModConfigs] %s has been inserted to '%s'.", message, key );
+		return group;
 	}
 
-	public synchronized void insert( GameModifier modifier ) {
-		insert( GameModifier.DEFAULT_KEY, modifier );
+	public static ConfigGroup registerSubgroup( String parentId ) {
+		return MOD_CONFIGS.register( parentId );
 	}
 
-	public synchronized boolean has( String key ) {
-		return this.map.containsKey( key );
+	public static ConfigGroup getGroup( String id ) {
+		return MOD_CONFIGS.get( id );
 	}
 
-	public synchronized ConfigGroup get( String key ) {
-		assert this.map.containsKey( key ) : "Config for " + key + " has not been initialized yet!";
+	private synchronized ConfigGroup init( String id ) {
+		assert !this.map.containsKey( id ) : String.format( "Group '%s' has been initialized already!", id );
+		ConfigGroup group = new ConfigGroup();
+		this.map.put( id, group );
 
-		return this.map.get( key );
+		MajruszLibrary.logOnDev( "[ModConfigs] Group '%s' has been initialized.", id );
+
+		return group;
+	}
+
+	private synchronized ConfigGroup register( String id ) {
+		assert this.map.containsKey( id ) : String.format( "Group '%s' has not been initialized yet!", id );
+		ConfigGroup group = new ConfigGroup();
+		this.map.get( id ).addConfig( group );
+
+		MajruszLibrary.logOnDev( "[ModConfigs] Subgroup has been added to '%s'.", id );
+
+		return group;
+	}
+
+	private synchronized ConfigGroup get( String id ) {
+		assert this.map.containsKey( id ) : String.format( "Group '%s' has not been initialized yet!", id );
+
+		return this.map.get( id );
 	}
 }

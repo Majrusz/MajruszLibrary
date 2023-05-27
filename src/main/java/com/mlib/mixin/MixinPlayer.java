@@ -69,14 +69,14 @@ public abstract class MixinPlayer extends MixinEntity {
 
 		@Override
 		public boolean shouldListen( ServerLevel level, GameEventListener listener, BlockPos position, GameEvent event, GameEvent.Context eventContext ) {
-			return OnEntitySignalCheck.Context.accept( new OnEntitySignalCheck.Data( level, position, this.player ) ).shouldListen();
+			return OnEntitySignalCheck.dispatch( level, position, this.player ).shouldListen();
 		}
 
 		@Override
 		public void onSignalReceive( ServerLevel level, GameEventListener listener, BlockPos position, GameEvent event, @Nullable Entity owner,
 			@Nullable Entity ownersProjectile, float distance
 		) {
-			OnEntitySignalReceived.Context.accept( new OnEntitySignalReceived.Data( level, position, this.player, owner, ownersProjectile, distance ) );
+			OnEntitySignalReceived.dispatch( level, position, this.player, owner, ownersProjectile, distance );
 		}
 	}
 }
