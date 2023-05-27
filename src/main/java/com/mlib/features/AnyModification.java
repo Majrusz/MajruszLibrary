@@ -1,7 +1,7 @@
 package com.mlib.features;
 
 import com.google.gson.JsonObject;
-import com.mlib.events.AnyLootModificationEvent;
+import com.mlib.gamemodifiers.contexts.OnLoot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -22,8 +22,7 @@ public class AnyModification extends LootModifier {
 	@Nonnull
 	@Override
 	public List< ItemStack > doApply( List< ItemStack > generatedLoot, LootContext context ) {
-		MinecraftForge.EVENT_BUS.post( new AnyLootModificationEvent( generatedLoot, context ) );
-		return generatedLoot;
+		return OnLoot.dispatch( generatedLoot, context ).generatedLoot;
 	}
 
 	public static class Serializer extends GlobalLootModifierSerializer< AnyModification > {

@@ -1,46 +1,41 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.ContextBase;
-import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.data.IEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.common.Mod;
 
 import java.util.function.Consumer;
 
 public class OnBlockSmeltCheck {
 	public static final Consumer< Data > ENABLE_SMELT = data->data.shouldSmelt = true;
 
-	@Mod.EventBusSubscriber
-	public static class Context extends ContextBase< Data > {
-		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
-
-		public static Data accept( Data data ) {
-			return CONTEXTS.accept( data );
-		}
-
-		public Context( Consumer< Data > consumer ) {
-			super( consumer );
-
-			CONTEXTS.add( this );
-		}
+	public static Context< Data > listen( Consumer< Data > consumer ) {
+		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static class Data extends ContextData {
-		public boolean shouldSmelt;
+	public static Data dispatch( ItemStack tool, BlockState blockState, Player player ) {
+		return Contexts.get( Data.class ).dispatch( new Data( tool, blockState, player ) );
+	}
+
+	public static class Data implements IEntityData {
 		public final ItemStack tool;
 		public final BlockState blockState;
 		public final Player player;
+		public boolean shouldSmelt = false;
 
-		public Data( OnLoot.Data data ) {
-			super( data.entity );
+		public Data( ItemStack tool, BlockState blockState, Player player ) {
+			this.tool = tool;
+			this.blockState = blockState;
+			this.player = player;
+		}
 
-			this.shouldSmelt = false;
-			this.tool = data.tool;
-			this.blockState = data.blockState;
-			this.player = ( Player )data.entity;
+		@Override
+		public Entity getEntity() {
+			return this.player;
 		}
 	}
 }

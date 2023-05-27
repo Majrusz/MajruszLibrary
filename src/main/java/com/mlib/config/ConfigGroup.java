@@ -35,12 +35,25 @@ public class ConfigGroup extends UserConfig {
 		return this.configs.stream().allMatch( IConfigurable::isBuilt );
 	}
 
-	public ConfigGroup addGroup( ConfigGroup group ) {
-		return this.addConfig( group );
+	@Override
+	public ConfigGroup name( String name ) {
+		super.name( name );
+
+		return this;
 	}
 
-	public ConfigGroup addGroups( ConfigGroup... groups ) {
-		return this.addConfigs( groups );
+	@Override
+	public ConfigGroup comment( String comment ) {
+		super.comment( comment );
+
+		return this;
+	}
+
+	@Override
+	public ConfigGroup requiresWorldRestart( boolean worldRestartRequired ) {
+		super.requiresWorldRestart( worldRestartRequired );
+
+		return this;
 	}
 
 	public ConfigGroup addConfig( IConfigurable config ) {

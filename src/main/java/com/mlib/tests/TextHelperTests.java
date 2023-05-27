@@ -5,13 +5,12 @@ import com.mlib.text.TextHelper;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
 import java.util.function.Function;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class TextHelperTests extends BaseTest {
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void romanLetters( GameTestHelper helper ) {
 		String name = "TextHelper.toRoman()";
 		assertThat( helper, "I", 1, TextHelper::toRoman, name );
@@ -24,7 +23,7 @@ public class TextHelperTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void minPrecision( GameTestHelper helper ) {
 		String name = "TextHelper.minPrecision()";
 		assertThat( helper, "1", 1.0f, TextHelper::minPrecision, name );
@@ -37,7 +36,7 @@ public class TextHelperTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void signed( GameTestHelper helper ) {
 		String name = "TextHelper.signed()";
 		assertThat( helper, "+1", 1.0f, TextHelper::signed, name );
@@ -50,7 +49,7 @@ public class TextHelperTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void signedPercent( GameTestHelper helper ) {
 		String name = "TextHelper.signedPercent()";
 		assertThat( helper, "+101%", 1.01f, TextHelper::signedPercent, name );
@@ -63,7 +62,7 @@ public class TextHelperTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void percent( GameTestHelper helper ) {
 		String name = "TextHelper.percent()";
 		assertThat( helper, "99%", 0.99f, TextHelper::percent, name );

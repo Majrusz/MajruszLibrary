@@ -1,11 +1,11 @@
 package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.Random;
-import com.mlib.gamemodifiers.ContextBase;
-import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.data.IEntityData;
 import com.mlib.items.ItemHelper;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.ItemStack;
@@ -20,21 +20,15 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class OnExtraFishingLootCheck {
-	public static class Context extends ContextBase< Data > {
-		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
-
-		public static Data accept( Data data ) {
-			return CONTEXTS.accept( data );
-		}
-
-		public Context( Consumer< Data > consumer ) {
-			super( consumer );
-
-			CONTEXTS.add( this );
-		}
+	public static Context< Data > listen( Consumer< Data > consumer ) {
+		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static class Data extends ContextData {
+	public static Data dispatch( List< ItemStack > drops, Player player ) {
+		return Contexts.get( Data.class ).dispatch( new Data( drops, player ) );
+	}
+
+	public static class Data implements IEntityData {
 		public final List< ItemStack > drops;
 		public final List< ItemStack > extraLoot = new ArrayList<>();
 		public final Player player;
@@ -42,16 +36,14 @@ public class OnExtraFishingLootCheck {
 		public int extraExperience = 0;
 		public int extraRodDamage = 0;
 
-		public Data( OnItemFished.Data data ) {
-			super( data.player );
-
-			this.drops = Collections.unmodifiableList( data.drops );
-			this.player = data.player;
-			this.fishingRod = ItemHelper.getMatchingHandItem( this.player, Data::isFishingRod );
+		public Data( List< ItemStack > drops, Player player ) {
+			this.drops = Collections.unmodifiableList( drops );
+			this.player = player;
+			this.fishingRod = ItemHelper.getMatchingHandItem( player, Data::isFishingRod );
 		}
 
 		public LootContext generateLootContext() {
-			return new LootContext.Builder( ( ServerLevel )this.player.level )
+			return new LootContext.Builder( this.getServerLevel() )
 				.withParameter( LootContextParams.TOOL, this.fishingRod )
 				.withRandom( Random.getThreadSafe() )
 				.withLuck( this.player.getLuck() )
@@ -65,6 +57,11 @@ public class OnExtraFishingLootCheck {
 
 		private static boolean isFishingRod( ItemStack itemStack ) {
 			return itemStack.getItem() instanceof FishingRodItem;
+		}
+
+		@Override
+		public Entity getEntity() {
+			return this.player;
 		}
 	}
 }

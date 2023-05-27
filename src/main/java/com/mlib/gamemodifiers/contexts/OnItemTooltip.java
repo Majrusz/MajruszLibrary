@@ -1,7 +1,6 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.ContextBase;
-import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import net.minecraft.network.chat.*;
 import net.minecraft.world.entity.player.Player;
@@ -15,31 +14,26 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Mod.EventBusSubscriber
 public class OnItemTooltip {
-	@Mod.EventBusSubscriber
-	public static class Context extends ContextBase< Data > {
-		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
-
-		public Context( Consumer< Data > consumer ) {
-			super( consumer );
-
-			CONTEXTS.add( this );
-		}
-
-		@SubscribeEvent
-		public static void onItemSwingDuration( ItemTooltipEvent event ) {
-			CONTEXTS.accept( new Data( event ) );
-		}
+	public static Context< Data > listen( Consumer< Data > consumer ) {
+		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static class Data extends ContextData.Event< ItemTooltipEvent > {
+	@SubscribeEvent
+	public static void onItemTooltip( ItemTooltipEvent event ) {
+		Contexts.get( Data.class ).dispatch( new Data( event ) );
+	}
+
+	public static class Data {
+		public final ItemTooltipEvent event;
 		public final ItemStack itemStack;
 		public final List< Component > tooltip;
 		public final TooltipFlag flags;
 		@Nullable public final Player player;
 
 		public Data( ItemTooltipEvent event ) {
-			super( event.getEntity(), event );
+			this.event = event;
 			this.itemStack = event.getItemStack();
 			this.tooltip = event.getToolTip();
 			this.flags = event.getFlags();

@@ -1,7 +1,7 @@
 package com.mlib.effects;
 
 import com.mlib.Random;
-import com.mlib.math.VectorHelper;
+import com.mlib.math.AnyPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
@@ -64,10 +64,10 @@ public class ParticleHandler {
 	public void spawnLine( ServerLevel level, Vec3 from, Vec3 to, int particlesPerBlock, Supplier< Vec3 > offsetProvider,
 		Supplier< Float > speedProvider
 	) {
-		Vec3 difference = VectorHelper.subtract( to, from );
+		AnyPos difference = AnyPos.from( to ).sub( from );
 		int amountOfParticles = ( int )Math.ceil( from.distanceTo( to ) * particlesPerBlock );
 		for( int i = 0; i <= amountOfParticles; i++ ) {
-			Vec3 step = VectorHelper.add( from, VectorHelper.multiply( difference, ( float )( i ) / amountOfParticles ) );
+			Vec3 step = AnyPos.from( from ).add( difference.mul( 1.0f * i / amountOfParticles ) ).vec3();
 			this.spawn( level, step, 1, offsetProvider, speedProvider );
 		}
 	}

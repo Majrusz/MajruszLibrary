@@ -37,6 +37,10 @@ public abstract class UserConfig implements IConfigurable {
 		return this;
 	}
 
+	public void insertTo( ConfigGroup group ) {
+		group.addConfig( this );
+	}
+
 	@Override
 	public String getName() {
 		return this.name;

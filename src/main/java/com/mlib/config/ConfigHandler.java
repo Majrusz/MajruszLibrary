@@ -1,8 +1,7 @@
 package com.mlib.config;
 
-import com.mlib.events.ConfigsLoadedEvent;
+import com.mlib.gamemodifiers.contexts.OnConfigLoaded;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -22,7 +21,7 @@ public class ConfigHandler extends ConfigGroup {
 
 		this.configSpec = this.builder.build();
 		modLoadingContext.registerConfig( this.type, this.configSpec );
-		MinecraftForge.EVENT_BUS.post( new ConfigsLoadedEvent( this ) );
+		OnConfigLoaded.dispatch( this );
 		if( this.type == ModConfig.Type.SERVER && this.configSpec.size() > 0 ) {
 			this.registerHelpConfigSpec( modLoadingContext );
 		}

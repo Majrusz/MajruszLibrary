@@ -1,14 +1,11 @@
 package com.mlib.itemsets;
 
-import com.mlib.text.FormattedTranslatable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.Arrays;
-import java.util.function.BiFunction;
 
 public class BonusData {
 	final ICondition condition;
@@ -47,14 +44,17 @@ public class BonusData {
 
 	public MutableComponent buildTranslatedName( ItemSet itemSet, boolean isConditionMet ) {
 		ChatFormatting chatFormatting = isConditionMet ? itemSet.getChatFormatting() : ChatFormatting.DARK_GRAY;
-		FormattedTranslatable component = new FormattedTranslatable( this.keyId, isConditionMet ? ChatFormatting.GRAY : chatFormatting );
-		Arrays.stream( this.parameters ).forEach( parameter->component.addParameter( parameter, chatFormatting ) );
+		Object[] params = Arrays.stream( this.parameters )
+			.map( parameter -> {
+				if( parameter instanceof MutableComponent component ) {
+					return component.withStyle( chatFormatting );
+				}
 
-		return component.create();
-	}
+				return Component.literal( parameter.toString() ).withStyle( chatFormatting );
+			} ).toArray();
 
-	private ChatFormatting getChatFormatting( ItemSet itemSet, LivingEntity entity ) {
-		return this.isConditionMet( itemSet, entity ) ? itemSet.getChatFormatting() : ChatFormatting.GRAY;
+		return Component.translatable( this.keyId, params )
+			.withStyle( isConditionMet ? ChatFormatting.GRAY : ChatFormatting.DARK_GRAY );
 	}
 
 	@FunctionalInterface

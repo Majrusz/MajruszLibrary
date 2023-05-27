@@ -1,8 +1,5 @@
-package com.mlib.gamemodifiers.configs;
+package com.mlib.config;
 
-import com.mlib.config.ConfigGroup;
-import com.mlib.config.DoubleConfig;
-import com.mlib.config.IntegerConfig;
 import com.mlib.math.Range;
 import com.mlib.mobeffects.MobEffectHelper;
 import net.minecraft.world.effect.MobEffect;

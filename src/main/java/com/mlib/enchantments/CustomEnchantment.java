@@ -2,6 +2,7 @@ package com.mlib.enchantments;
 
 import com.mlib.ObfuscationGetter;
 import com.mlib.Utility;
+import com.mlib.gamemodifiers.contexts.OnEnchantmentAvailabilityCheck;
 import com.mlib.items.ItemHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -16,13 +17,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public abstract class CustomEnchantment extends Enchantment {
 	static final ObfuscationGetter.Field< Enchantment, EquipmentSlot[] > SLOTS = new ObfuscationGetter.Field<>( Enchantment.class, "f_44671_" );
 	static final ObfuscationGetter.Field< Enchantment, Rarity > RARITY = new ObfuscationGetter.Field<>( Enchantment.class, "f_44674_" );
 	static final ObfuscationGetter.Field< Enchantment, EnchantmentCategory > CATEGORY = new ObfuscationGetter.Field<>( Enchantment.class, "f_44672_" );
-	protected Supplier< Boolean > availability = ()->true;
 	protected boolean isCurse = false;
 	protected int maxLevel = 1;
 	protected CostFormula minLevelCost = level->10;
@@ -198,12 +197,8 @@ public abstract class CustomEnchantment extends Enchantment {
 		return getEnchantmentLevel( deduceUsedHandItem( entity ) );
 	}
 
-	public void setEnabledSupplier( Supplier< Boolean > availability ) {
-		this.availability = availability;
-	}
-
 	protected boolean isEnabled() {
-		return this.availability.get();
+		return OnEnchantmentAvailabilityCheck.dispatch( this ).isEnabled();
 	}
 
 	protected boolean isDisabled() {

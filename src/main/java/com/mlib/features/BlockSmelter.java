@@ -4,10 +4,10 @@ import com.mlib.Random;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.effects.ParticleHandler;
 import com.mlib.entities.EntityHelper;
-import com.mlib.gamemodifiers.GameModifier;
+import com.mlib.gamemodifiers.Condition;
+import com.mlib.gamemodifiers.Priority;
 import com.mlib.gamemodifiers.contexts.OnBlockSmeltCheck;
 import com.mlib.gamemodifiers.contexts.OnLoot;
-import com.mlib.gamemodifiers.parameters.Priority;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;
@@ -23,27 +23,23 @@ import java.util.List;
 import java.util.Optional;
 
 @AutoInstance
-public class BlockSmelter extends GameModifier {
+public class BlockSmelter {
 	public BlockSmelter() {
-		new OnLoot.Context( this::replaceWithSmeltedLoot )
+		OnLoot.listen( this::replaceWithSmeltedLoot )
 			.priority( Priority.HIGH )
-			.addCondition( data->data.blockState != null )
-			.addCondition( data->data.level != null )
-			.addCondition( data->data.entity instanceof Player player && !player.isCrouching() )
-			.insertTo( this );
-	}
-
-	private OnBlockSmeltCheck.Data dispatchContext( OnLoot.Data data ) {
-		return OnBlockSmeltCheck.Context.accept( new OnBlockSmeltCheck.Data( data ) );
+			.addCondition( OnLoot.hasBlockState() )
+			.addCondition( OnLoot.hasTool() )
+			.addCondition( Condition.isServer() )
+			.addCondition( Condition.predicate( data->data.entity instanceof Player player && !player.isCrouching() ) );
 	}
 
 	private void replaceWithSmeltedLoot( OnLoot.Data data ) {
-		OnBlockSmeltCheck.Data extraData = this.dispatchContext( data );
+		OnBlockSmeltCheck.Data extraData = OnBlockSmeltCheck.dispatch( data.tool, data.blockState, ( Player )data.entity );
 		if( !extraData.shouldSmelt )
 			return;
 
 		List< ItemStack > generatedLoot = data.generatedLoot;
-		ServerLevel level = data.level;
+		ServerLevel level = data.getServerLevel();
 		Vec3 position = data.origin;
 		RecipeManager recipeManager = level.getRecipeManager();
 
@@ -57,7 +53,7 @@ public class BlockSmelter extends GameModifier {
 
 			int experience = Random.roundRandomly( recipe.get().getExperience() * itemStack.getCount() );
 			if( experience > 0 ) {
-				EntityHelper.spawnExperience( data.level, position, experience );
+				EntityHelper.spawnExperience( data.getLevel(), position, experience );
 			}
 
 			amountOfSmeltedItems = amountOfSmeltedItems + itemStack.getCount();
