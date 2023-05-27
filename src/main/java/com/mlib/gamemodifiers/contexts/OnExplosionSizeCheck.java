@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.level.ExplosionEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -24,7 +24,7 @@ public class OnExplosionSizeCheck {
 
 	@SubscribeEvent
 	public static void onExplosion( ExplosionEvent.Start explosionEvent ) {
-		Level level = explosionEvent.getLevel();
+		Level level = explosionEvent.getWorld();
 		Explosion explosion = explosionEvent.getExplosion();
 		Data data = Contexts.get( Data.class ).dispatch( new Data( level, explosion ) );
 

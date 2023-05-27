@@ -4,6 +4,7 @@ import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.data.IEntityData;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,11 +25,11 @@ public class OnCheckSpawn {
 
 	public static class Data implements IEntityData {
 		public final LivingSpawnEvent.CheckSpawn event;
-		public final Mob mob;
+		public final LivingEntity mob;
 
 		public Data( LivingSpawnEvent.CheckSpawn event ) {
 			this.event = event;
-			this.mob = event.getEntity();
+			this.mob = event.getEntityLiving();
 		}
 
 		@Override

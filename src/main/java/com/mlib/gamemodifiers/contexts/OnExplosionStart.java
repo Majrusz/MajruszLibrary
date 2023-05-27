@@ -11,7 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.level.ExplosionEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.commons.lang3.mutable.MutableBoolean;
@@ -56,14 +56,14 @@ public class OnExplosionStart {
 		public Data( ExplosionEvent.Start event ) {
 			this.event = event;
 			this.explosion = event.getExplosion();
-			this.sourceMob = this.explosion.getIndirectSourceEntity();
+			this.sourceMob = this.explosion.getSourceMob();
 			this.radius = new MutableFloat( this.explosion.radius );
 			this.causesFire = new MutableBoolean( this.explosion.fire );
 		}
 
 		@Override
 		public Level getLevel() {
-			return this.event.getLevel();
+			return this.event.getWorld();
 		}
 
 		@Override

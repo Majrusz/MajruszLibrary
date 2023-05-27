@@ -32,7 +32,7 @@ public class OnLoot {
 		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static Data dispatch( ObjectArrayList< ItemStack > generatedLoot, LootContext context ) {
+	public static Data dispatch( List< ItemStack > generatedLoot, LootContext context ) {
 		return Contexts.get( Data.class ).dispatch( new Data( generatedLoot, context ) );
 	}
 
@@ -83,7 +83,7 @@ public class OnLoot {
 	}
 
 	public static class Data implements ILevelData, IPositionData {
-		public final ObjectArrayList< ItemStack > generatedLoot;
+		public final List< ItemStack > generatedLoot;
 		public final LootContext context;
 		@Nullable public final BlockState blockState;
 		@Nullable public final DamageSource damageSource;
@@ -93,7 +93,7 @@ public class OnLoot {
 		@Nullable public final ItemStack tool;
 		@Nullable public final Vec3 origin;
 
-		public Data( ObjectArrayList< ItemStack > generatedLoot, LootContext context ) {
+		public Data( List< ItemStack > generatedLoot, LootContext context ) {
 			this.generatedLoot = generatedLoot;
 			this.context = context;
 			this.blockState = this.getParameter( LootContextParams.BLOCK_STATE );

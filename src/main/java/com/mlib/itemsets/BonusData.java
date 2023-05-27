@@ -50,10 +50,10 @@ public class BonusData {
 					return component.withStyle( chatFormatting );
 				}
 
-				return Component.literal( parameter.toString() ).withStyle( chatFormatting );
+				return new TextComponent( parameter.toString() ).withStyle( chatFormatting );
 			} ).toArray();
 
-		return Component.translatable( this.keyId, params )
+		return new TranslatableComponent( this.keyId, params )
 			.withStyle( isConditionMet ? ChatFormatting.GRAY : ChatFormatting.DARK_GRAY );
 	}
 
