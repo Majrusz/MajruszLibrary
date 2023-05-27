@@ -34,7 +34,7 @@ public class OnExplosionDetonate {
 		public Data( ExplosionEvent.Detonate event ) {
 			this.event = event;
 			this.explosion = event.getExplosion();
-			this.sourceMob = this.explosion.getIndirectSourceEntity();
+			this.sourceMob = this.explosion.getSourceMob();
 		}
 
 		@Override

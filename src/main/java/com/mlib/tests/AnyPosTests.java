@@ -2,13 +2,13 @@ package com.mlib.tests;
 
 import com.mlib.MajruszLibrary;
 import com.mlib.math.AnyPos;
+import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.gametest.GameTestHolder;
-import org.joml.Vector3f;
 
 import java.util.function.Supplier;
 
@@ -170,7 +170,7 @@ public class AnyPosTests extends BaseTest {
 
 	public static void assertThat( GameTestHelper helper, AnyPos result, Vector3f expected, Supplier< String > message ) {
 		Vector3f vec3f = result.vec3f();
-		boolean condition = Math.abs( vec3f.x - expected.x ) < ERROR && Math.abs( vec3f.y - expected.y ) < ERROR && Math.abs( vec3f.z - expected.z ) < ERROR;
+		boolean condition = Math.abs( vec3f.x() - expected.x() ) < ERROR && Math.abs( vec3f.y() - expected.y() ) < ERROR && Math.abs( vec3f.z() - expected.z() ) < ERROR;
 
 		assertThat( helper, condition, message );
 	}

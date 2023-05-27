@@ -1,10 +1,10 @@
 package com.mlib.math;
 
+import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 /**
  This class is an adapter for most position-related operations in the game. It has been
@@ -23,7 +23,7 @@ public class AnyPos {
 	}
 
 	public static AnyPos from( Vector3f vec3f ) {
-		return new AnyPos( vec3f.x, vec3f.y, vec3f.z );
+		return new AnyPos( vec3f.x(), vec3f.y(), vec3f.z() );
 	}
 
 	public static AnyPos from( Vec3i vec3i ) {
