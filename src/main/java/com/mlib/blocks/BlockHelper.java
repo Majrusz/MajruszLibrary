@@ -51,8 +51,4 @@ public class BlockHelper {
 	public static BlockEntity getBlockEntity( Level level, Vec3 position ) {
 		return getBlockEntity( level, new BlockPos( position.x, position.y, position.z ) );
 	}
-
-	public static BlockPos toBlockPos( Vec3 position ) {
-		return new BlockPos( position.x, position.y, position.z );
-	}
 }

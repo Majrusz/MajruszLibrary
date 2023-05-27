@@ -1,6 +1,6 @@
 package com.mlib.animations;
 
-import com.mlib.math.VectorHelper;
+import com.mlib.math.AnyPos;
 import net.minecraft.util.Mth;
 import org.joml.Vector3f;
 
@@ -73,7 +73,7 @@ public abstract class Frame< Type > {
 
 		@Override
 		public Vector3f interpolate( float ratio, Frame< Vector3f > nextFrame ) {
-			return VectorHelper.lerp( nextFrame.interpolationType.apply( ratio ), this.getValue(), nextFrame.getValue() );
+			return AnyPos.from( this.getValue() ).lerp( nextFrame.interpolationType.apply( ratio ), nextFrame.getValue() ).vec3f();
 		}
 	}
 }

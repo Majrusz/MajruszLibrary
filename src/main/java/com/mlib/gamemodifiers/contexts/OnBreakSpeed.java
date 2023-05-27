@@ -1,8 +1,9 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.ContextBase;
-import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.data.IEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -10,29 +11,34 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.function.Consumer;
 
+@Mod.EventBusSubscriber
 public class OnBreakSpeed {
-	@Mod.EventBusSubscriber
-	public static class Context extends ContextBase< Data > {
-		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
-
-		public Context( Consumer< Data > consumer ) {
-			super( consumer );
-
-			CONTEXTS.add( this );
-		}
-
-		@SubscribeEvent
-		public static void onBreakSpeed( PlayerEvent.BreakSpeed event ) {
-			CONTEXTS.accept( new Data( event ) );
-		}
+	public static Context< Data > listen( Consumer< Data > consumer ) {
+		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static class Data extends ContextData.Event< PlayerEvent.BreakSpeed > {
+	@SubscribeEvent
+	public static void onBreakSpeed( PlayerEvent.BreakSpeed event ) {
+		Data data = Contexts.get( Data.class ).dispatch( new Data( event ) );
+		event.setNewSpeed( data.newSpeed );
+	}
+
+	public static class Data implements IEntityData {
+		public final PlayerEvent.BreakSpeed event;
 		public final Player player;
+		public final float originalSpeed;
+		public float newSpeed;
 
 		public Data( PlayerEvent.BreakSpeed event ) {
-			super( event.getEntity(), event );
+			this.event = event;
 			this.player = event.getEntity();
+			this.originalSpeed = event.getOriginalSpeed();
+			this.newSpeed = event.getNewSpeed();
+		}
+
+		@Override
+		public Entity getEntity() {
+			return this.player;
 		}
 	}
 }

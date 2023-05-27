@@ -2,11 +2,9 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.google.gson.JsonObject;
 import com.mlib.ObfuscationGetter;
-import com.mlib.gamemodifiers.ContextBase;
-import com.mlib.gamemodifiers.ContextData;
+import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -18,21 +16,15 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class OnLootTableCustomLoad {
-	public static class Context extends ContextBase< Data > {
-		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
-
-		public Context( Consumer< Data > consumer ) {
-			super( consumer );
-
-			CONTEXTS.add( this );
-		}
-
-		public static void broadcast( Data data ) {
-			CONTEXTS.accept( data );
-		}
+	public static Context< Data > listen( Consumer< Data > consumer ) {
+		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static class Data extends ContextData {
+	public static Data dispatch( ResourceLocation name, LootTable table, JsonObject jsonObject ) {
+		return Contexts.get( Data.class ).dispatch( new Data( name, table, jsonObject ) );
+	}
+
+	public static class Data {
 		static final ObfuscationGetter.Field< LootTable, List< LootPool > > POOLS = new ObfuscationGetter.Field<>( LootTable.class, "f_79109_" );
 		static final ObfuscationGetter.Field< LootPool, LootPoolEntryContainer[] > ENTRIES = new ObfuscationGetter.Field<>( LootPool.class, "f_79023_" );
 		public final ResourceLocation name;
@@ -41,7 +33,6 @@ public class OnLootTableCustomLoad {
 		public final JsonObject jsonObject;
 
 		public Data( ResourceLocation name, LootTable table, JsonObject jsonObject ) {
-			super( ( LivingEntity )null );
 			this.name = name;
 			this.table = table;
 			this.pools = POOLS.get( table );

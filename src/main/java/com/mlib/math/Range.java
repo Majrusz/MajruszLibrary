@@ -13,4 +13,8 @@ public class Range< Type extends Number & Comparable< Type > > {
 	public boolean within( Type value ) {
 		return this.from.compareTo( value ) <= 0 && this.to.compareTo( value ) >= 0;
 	}
+
+	public Type clamp( Type value ) {
+		return this.from.compareTo( value ) > 0 ? this.from : ( this.to.compareTo( value ) < 0 ? this.to : value );
+	}
 }

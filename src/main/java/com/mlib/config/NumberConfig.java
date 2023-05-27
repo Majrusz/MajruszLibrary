@@ -9,4 +9,8 @@ public abstract class NumberConfig< Type extends Number & Comparable< Type > > e
 		super( defaultValue );
 		this.range = range;
 	}
+
+	public Range< Type > getRange() {
+		return this.range;
+	}
 }

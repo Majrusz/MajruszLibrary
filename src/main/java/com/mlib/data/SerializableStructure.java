@@ -106,7 +106,7 @@ public abstract class SerializableStructure implements ISerializable {
 
 	@Override
 	public void read( CompoundTag tag ) {
-		if( this.key != null )  {
+		if( this.key != null ) {
 			CompoundTag subtag = tag.getCompound( this.key );
 			this.serializableList.forEach( serializable->serializable.read( subtag ) );
 		} else {

@@ -2,9 +2,9 @@ package com.mlib.time;
 
 import com.mlib.Utility;
 import com.mlib.annotations.AutoInstance;
-import com.mlib.gamemodifiers.GameModifier;
+import com.mlib.gamemodifiers.Condition;
+import com.mlib.gamemodifiers.Priority;
 import com.mlib.gamemodifiers.contexts.OnServerTick;
-import com.mlib.gamemodifiers.parameters.Priority;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,12 +48,11 @@ public class Time {
 	}
 
 	@AutoInstance
-	public static class Updater extends GameModifier {
+	public static class Updater {
 		public Updater() {
-			new OnServerTick.Context( this::updateExecs )
+			OnServerTick.listen( this::updateExecs )
 				.priority( Priority.HIGHEST )
-				.addCondition( TimeHelper::isEndPhase )
-				.insertTo( this );
+				.addCondition( Condition.isEndPhase() );
 		}
 
 		private void updateExecs( OnServerTick.Data data ) {

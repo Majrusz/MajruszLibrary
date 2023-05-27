@@ -1,6 +1,10 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.gamemodifiers.*;
+import com.mlib.gamemodifiers.Condition;
+import com.mlib.gamemodifiers.Context;
+import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.data.IEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -11,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 /**
  BE CAREFUL!
@@ -20,110 +23,84 @@ import java.util.function.Predicate;
  like adding new mobs, checking chunk/structure info etc. may cause deadlocks on these chunks.
  Use ContextSafe whenever a world interaction is required! (see EntityJoinLevelEvent for more info)
  */
+@Mod.EventBusSubscriber
 public class OnSpawned {
-	@Deprecated( since = "3.2.0 (use IsNotLoadedFromDisk class instead)", forRemoval = true )
-	public static final Predicate< Data > IS_NOT_LOADED_FROM_DISK = data->!data.loadedFromDisk;
+	static final List< DataSafe > CLIENT_PENDING_LIST = new ArrayList<>();
+	static final List< DataSafe > SERVER_PENDING_LIST = new ArrayList<>();
 
-	@Mod.EventBusSubscriber
-	public static class Context extends ContextBase< Data > {
-		static final Contexts< Data, Context > CONTEXTS = new Contexts<>();
-
-		public Context( Consumer< Data > consumer ) {
-			super( consumer );
-
-			CONTEXTS.add( this );
-		}
-
-		@SubscribeEvent
-		public static void onSpawn( EntityJoinLevelEvent event ) {
-			if( !( event.getEntity() instanceof LivingEntity entity ) )
-				return;
-
-			CONTEXTS.accept( new Data( entity, event.loadedFromDisk() ) );
-		}
+	public static Context< Data > listen( Consumer< Data > consumer ) {
+		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	@Mod.EventBusSubscriber
-	public static class ContextSafe extends ContextBase< Data > {
-		static final Contexts< Data, ContextSafe > CONTEXTS = new Contexts<>();
-		static final List< Data > CLIENT_PENDING_LIST = new ArrayList<>();
-		static final List< Data > SERVER_PENDING_LIST = new ArrayList<>();
+	public static Context< DataSafe > listenSafe( Consumer< DataSafe > consumer ) {
+		return Contexts.get( DataSafe.class ).add( consumer );
+	}
 
-		public ContextSafe( Consumer< Data > consumer ) {
-			super( consumer );
+	@SubscribeEvent
+	public static void onSpawn( EntityJoinLevelEvent event ) {
+		if( !( event.getEntity() instanceof LivingEntity entity ) )
+			return;
 
-			CONTEXTS.add( this );
+		Contexts.get( Data.class ).dispatch( new Data( entity, event.loadedFromDisk() ) );
+		List< DataSafe > list = entity.level.isClientSide ? CLIENT_PENDING_LIST : SERVER_PENDING_LIST;
+		list.add( new DataSafe( entity, event.loadedFromDisk() ) );
+	}
+
+	@SubscribeEvent
+	public static void onClientTickEnd( TickEvent.ClientTickEvent event ) {
+		if( event.phase != TickEvent.Phase.END )
+			return;
+
+		handle( CLIENT_PENDING_LIST );
+	}
+
+	@SubscribeEvent
+	public static void onServerTickEnd( TickEvent.ServerTickEvent event ) {
+		if( event.phase != TickEvent.Phase.END )
+			return;
+
+		handle( SERVER_PENDING_LIST );
+	}
+
+	public static < DataType extends Data > Condition< DataType > isNotLoadedFromDisk() {
+		return new Condition<>( data->!data.loadedFromDisk );
+	}
+
+	public static < DataType extends Data > Condition< DataType > is( Class< ? >... classes ) {
+		return new Condition<>( data->Arrays.stream( classes ).anyMatch( clazz->data.target.getClass().equals( clazz ) ) );
+	}
+
+	private static void handle( List< DataSafe > pendingList ) {
+		List< DataSafe > list;
+		synchronized( pendingList ) {
+			list = new ArrayList<>( pendingList );
+			pendingList.clear();
 		}
-
-		@SubscribeEvent
-		public static void onSpawn( EntityJoinLevelEvent event ) {
-			if( !( event.getEntity() instanceof LivingEntity entity ) )
-				return;
-
-			List< Data > list = entity.level.isClientSide ? CLIENT_PENDING_LIST : SERVER_PENDING_LIST;
-			list.add( new Data( entity, event.loadedFromDisk() ) );
-		}
-
-		@SubscribeEvent
-		public static void onClientTickEnd( TickEvent.ClientTickEvent event ) {
-			if( event.phase != TickEvent.Phase.END )
-				return;
-
-			handle( CLIENT_PENDING_LIST );
-		}
-
-		@SubscribeEvent
-		public static void onServerTickEnd( TickEvent.ServerTickEvent event ) {
-			if( event.phase != TickEvent.Phase.END )
-				return;
-
-			handle( SERVER_PENDING_LIST );
-		}
-
-		private static void handle( List< Data > pendingList ) {
-			List< Data > list;
-			synchronized( pendingList ) {
-				list = new ArrayList<>( pendingList );
-				pendingList.clear();
+		list.forEach( data->{
+			if( data.target.isAddedToWorld() ) {
+				Contexts.get( DataSafe.class ).dispatch( data );
 			}
-			list.forEach( data->{
-				if( data.target.isAddedToWorld() ) {
-					CONTEXTS.accept( data );
-				}
-			} );
-		}
+		} );
 	}
 
-	public static class Data extends ContextData {
+	public static class Data implements IEntityData {
 		public final LivingEntity target;
 		public final boolean loadedFromDisk;
 
 		public Data( LivingEntity target, boolean loadedFromDisk ) {
-			super( target );
-
 			this.target = target;
 			this.loadedFromDisk = loadedFromDisk;
 		}
-	}
 
-	public static class IsNotLoadedFromDisk< Type extends Data > extends Condition< Type > {
 		@Override
-		protected boolean check( GameModifier feature, Type data ) {
-			return !data.loadedFromDisk;
+		public Entity getEntity() {
+			return this.target;
 		}
 	}
 
-	public static class Is< Type extends Data > extends Condition< Type > {
-		final Class< ? >[] classes;
-
-		public Is( Class< ? >... classes ) {
-			this.classes = classes;
-		}
-
-		@Override
-		protected boolean check( GameModifier feature, Type data ) {
-			return Arrays.stream( this.classes )
-				.anyMatch( clazz->data.target.getClass().equals( clazz ) );
+	public static class DataSafe extends Data {
+		public DataSafe( LivingEntity target, boolean loadedFromDisk ) {
+			super( target, loadedFromDisk );
 		}
 	}
 }

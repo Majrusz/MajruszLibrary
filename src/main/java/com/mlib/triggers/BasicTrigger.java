@@ -2,36 +2,27 @@ package com.mlib.triggers;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.mlib.registries.RegistryHelper;
-import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.function.Supplier;
-
-/** Trigger that is called only with custom id. */
 public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance > {
-	private final ResourceLocation triggerID;
+	final ResourceLocation triggerId;
 
-	public BasicTrigger( RegistryHelper helper ) {
-		this.triggerID = helper.getLocation( "basic_trigger" );
+	public BasicTrigger( ResourceLocation triggerId ) {
+		this.triggerId = triggerId;
 	}
 
 	@Override
 	public ResourceLocation getId() {
-		return this.triggerID;
+		return this.triggerId;
 	}
 
 	@Override
 	public BasicTrigger.Instance createInstance( JsonObject json, EntityPredicate.Composite predicate, DeserializationContext conditions ) {
 		JsonElement triggerType = json.get( "type" );
 
-		return new BasicTrigger.Instance( this.triggerID, predicate, triggerType.getAsString() );
-	}
-
-	public static BasicTrigger createRegisteredInstance( RegistryHelper helper ) {
-		return CriteriaTriggers.register( new BasicTrigger( helper ) );
+		return new BasicTrigger.Instance( this.triggerId, predicate, triggerType.getAsString() );
 	}
 
 	public void trigger( ServerPlayer player, String triggerType ) {
@@ -39,7 +30,7 @@ public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance 
 	}
 
 	protected static class Instance extends AbstractCriterionTriggerInstance {
-		private final String triggerType;
+		final String triggerType;
 
 		public Instance( ResourceLocation triggerID, EntityPredicate.Composite predicate, String triggerType ) {
 			super( triggerID, predicate );

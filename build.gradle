@@ -14,7 +14,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '3.3.0'
+version = '4.0.0'
 group = 'com.mlib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'majrusz-library-1.19.3'
 
@@ -83,6 +83,10 @@ minecraft {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+if( !version.contains( "unfinished" ) ) {
+    jar.exclude '**/com/mlib/tests/**'
+    jar.exclude '**/data/mlib/structures/*tests*'
+}
 
 mixin {
     add sourceSets.main, 'mixins.mlib.refmap.json'

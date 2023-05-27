@@ -5,7 +5,6 @@ import com.mlib.Random;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;
-import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.Set;
 
 @GameTestHolder( MajruszLibrary.MOD_ID )
 public class RandomTests extends BaseTest {
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void list( GameTestHelper helper ) {
 		List< String > list1 = List.of( "a", "b", "c" );
 		for( int i = 0; i < list1.size() * 2; ++i ) {
@@ -26,7 +25,7 @@ public class RandomTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void set( GameTestHelper helper ) {
 		Set< String > set1 = Set.of( "a", "b", "c" );
 		for( int i = 0; i < set1.size() * 2; ++i ) {
@@ -38,7 +37,7 @@ public class RandomTests extends BaseTest {
 		helper.succeed();
 	}
 
-	@GameTest( templateNamespace = "mlib", template = "empty_test" )
+	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void map( GameTestHelper helper ) {
 		Map< String, String > map1 = Map.of( "1", "a", "2", "b", "3", "c" );
 		for( int i = 0; i < map1.size() * 2; ++i ) {

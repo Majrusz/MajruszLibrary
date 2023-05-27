@@ -1,49 +1,46 @@
 package com.mlib.gamemodifiers;
 
-import com.mlib.gamemodifiers.parameters.Parameters;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-public class Contexts< DataType extends ContextData, ContextType extends ContextBase< DataType > > {
-	static List< Contexts< ? extends ContextData, ? extends ContextBase< ? > > > INSTANCES = new ArrayList<>();
-	final List< ContextType > contexts = Collections.synchronizedList( new ArrayList<>() );
+public class Contexts< DataType > {
+	final static Map< Class< ? >, Contexts< ? > > CONTEXTS = Collections.synchronizedMap( new HashMap<>() );
+	final List< Context< DataType > > contexts = Collections.synchronizedList( new ArrayList<>() );
 	boolean isSorted = false;
 
-	public static List< Contexts< ? extends ContextData, ? extends ContextBase< ? > > > getInstances() {
-		return INSTANCES;
+	private Contexts() {}
+
+	public static < DataType > Contexts< DataType > get( Class< DataType > clazz ) {
+		return ( Contexts< DataType > )CONTEXTS.computeIfAbsent( clazz, key->new Contexts< DataType >() );
 	}
 
-	public Contexts() {
-		INSTANCES.add( this );
+	public static Stream< Contexts< ? > > streamAll() {
+		return CONTEXTS.values().stream();
 	}
 
-	public void add( ContextType context ) {
+	public Context< DataType > add( Consumer< DataType > consumer ) {
+		Context< DataType > context = new Context<>( consumer );
 		this.contexts.add( context );
 		this.isSorted = false;
+
+		return context;
 	}
 
-	public DataType accept( DataType data ) {
+	public DataType dispatch( DataType data ) {
 		this.tryToSort();
-		this.contexts.forEach( context->{
-			if( context.check( data ) ) {
-				context.consumer.accept( data );
-			}
-		} );
+		this.contexts.forEach( context->context.accept( data ) );
 
 		return data;
 	}
 
-	public List< ContextType > getContexts() {
-		this.tryToSort();
-
-		return Collections.unmodifiableList( this.contexts );
+	public Stream< Context< DataType > > stream() {
+		return this.contexts.stream();
 	}
 
 	private void tryToSort() {
 		if( !this.isSorted ) {
-			this.contexts.sort( Parameters.COMPARATOR );
+			this.contexts.sort( ( left, right )->Priority.COMPARATOR.compare( left.priority, right.priority ) );
 			this.isSorted = true;
 		}
 	}
