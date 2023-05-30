@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
 
 [[mods]]
     modId="mlib"
-    version="4.0.0"
+    version="4.1.0-unfinished"
     displayName="Majrusz Library"
     updateJSONURL="https://raw.githubusercontent.com/Majrusz/MinecraftCommon/main/Library/update.json"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/majrusz-library"
