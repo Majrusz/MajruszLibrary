@@ -14,9 +14,9 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '4.1.0-unfinished'
+version = versions_mod
 group = 'com.mlib' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'majrusz-library-1.19.3'
+archivesBaseName = "majrusz-library-${versions_minecraft}"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 compileJava {
@@ -24,7 +24,7 @@ compileJava {
 }
 
 minecraft {
-    mappings channel: 'official', version: '1.19.3'
+    mappings channel: 'official', version: versions_minecraft
 
     accessTransformer = file( 'src/main/resources/META-INF/accesstransformer.cfg' ) // Currently, this location cannot be changed from the default.
 
@@ -93,8 +93,14 @@ mixin {
     config 'mixins.mlib.json'
 }
 
+processResources {
+    filesMatching('META-INF/mods.toml') {
+        expand project.properties
+    }
+}
+
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.3-44.0.18'
+    minecraft "net.minecraftforge:forge:${versions_minecraft}-${versions_forge}"
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
