@@ -33,7 +33,7 @@ public class Contexts< DataType > {
 		String sectionName = data.getClass().getName();
 		Utility.profile( sectionName, ()->{
 			this.tryToSort();
-			this.contexts.forEach( context->context.accept( data ) );
+			this.stream().forEach( context->context.accept( data ) ); // IMPORTANT: it uses unsynchronized stream to avoid deadlocks on recursive calls
 		} );
 
 		return data;
