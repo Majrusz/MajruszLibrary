@@ -97,6 +97,7 @@ processResources {
     filesMatching('META-INF/mods.toml') {
         expand project.properties
     }
+    outputs.upToDateWhen { false }
 }
 
 dependencies {

@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -132,12 +133,21 @@ public class Utility {
 
 	public static void profile( String sectionName, Runnable runnable ) {
 		ProfilerFiller profiler = getProfiler();
-		profiler.push( sectionName );
-		runnable.run();
-		profiler.pop();
+		if( profiler != null ) {
+			profiler.push( sectionName );
+			runnable.run();
+			profiler.pop();
+		} else {
+			runnable.run();
+		}
 	}
 
-	public static ProfilerFiller getProfiler() {
-		return isServerSide() ? ServerLifecycleHooks.getCurrentServer().getProfiler() : Minecraft.getInstance().getProfiler();
+	@Nullable
+	private static ProfilerFiller getProfiler() {
+		return DistExecutor.unsafeRunForDist( ()->()->{
+			return Minecraft.getInstance() != null ? Minecraft.getInstance().getProfiler() : null;
+		}, ()->()->{
+			return ServerLifecycleHooks.getCurrentServer() != null ? ServerLifecycleHooks.getCurrentServer().getProfiler() : null;
+		} );
 	}
 }

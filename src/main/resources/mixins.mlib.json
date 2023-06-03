@@ -5,6 +5,7 @@
   "mixins": [
     "MixinArrow",
     "MixinDifficultyInstance",
+    "MixinFishingHook",
     "MixinItemStack",
     "MixinLivingEntity",
     "MixinLootTableSerializer",
