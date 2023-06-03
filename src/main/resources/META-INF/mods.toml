@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
 
 [[mods]]
     modId="mlib"
-    version="4.0.0"
+    version="${versions_mod}"
     displayName="Majrusz Library"
     updateJSONURL="https://raw.githubusercontent.com/Majrusz/MinecraftCommon/main/Library/update.json"
     displayURL="https://www.curseforge.com/minecraft/mc-mods/majrusz-library"
@@ -17,13 +17,13 @@ issueTrackerURL="https://github.com/Majrusz/MajruszLibrary/issues"
 [[dependencies.mlib]]
     modId="forge"
     mandatory=true
-    versionRange="[43.2.0,)"
+    versionRange="${versions_forge_range}"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.mlib]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.2,1.20)"
+    versionRange="${versions_minecraft_range}"
     ordering="NONE"
     side="BOTH"
