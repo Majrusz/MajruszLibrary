@@ -18,7 +18,7 @@ public class OnFishingTimeSet {
 		return Contexts.get( Data.class ).dispatch( new Data( hook, timeUntilLured ) );
 	}
 
-	public static Condition< Data > hasTool() {
+	public static Condition< Data > hasPlayer() {
 		return new Condition<>( data->data.player != null );
 	}
 
