@@ -76,7 +76,10 @@ public class Condition< DataType > extends ConfigGroup {
 	public static < DataType extends ILevelData & IPositionData > Condition< DataType > chanceCRD( DoubleConfig chance, boolean defaultScaledByCRD ) {
 		BooleanConfig scaledByCRD = new BooleanConfig( defaultScaledByCRD );
 		Predicate< DataType > predicate = data->{
-			double multiplier = scaledByCRD.isEnabled() ? LevelHelper.getClampedRegionalDifficultyAt( data.getLevel(), AnyPos.from( data.getPosition() ).block() ) : 1.0;
+			double multiplier = 1.0;
+			if( scaledByCRD.isEnabled() && data.getLevel() != null ) {
+				multiplier *= LevelHelper.getClampedRegionalDifficultyAt( data.getLevel(), AnyPos.from( data.getPosition() ).block() );
+			}
 
 			return Random.tryChance( multiplier * chance.getOrDefault() );
 		};

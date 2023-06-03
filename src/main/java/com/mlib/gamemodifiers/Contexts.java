@@ -1,5 +1,7 @@
 package com.mlib.gamemodifiers;
 
+import com.mlib.Utility;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -28,8 +30,11 @@ public class Contexts< DataType > {
 	}
 
 	public DataType dispatch( DataType data ) {
-		this.tryToSort();
-		this.contexts.forEach( context->context.accept( data ) );
+		String sectionName = data.getClass().getName();
+		Utility.profile( sectionName, ()->{
+			this.tryToSort();
+			this.stream().forEach( context->context.accept( data ) ); // IMPORTANT: it uses unsynchronized stream to avoid deadlocks on recursive calls
+		} );
 
 		return data;
 	}

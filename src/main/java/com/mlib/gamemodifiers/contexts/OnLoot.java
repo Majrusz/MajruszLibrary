@@ -127,8 +127,9 @@ public class OnLoot {
 			this.generatedLoot.addAll( itemStacks );
 		}
 
+		@Nullable
 		private < Type > Type getParameter( LootContextParam< Type > parameter ) {
-			return this.context.hasParam( parameter ) ? this.context.getParam( parameter ) : null;
+			return this.context.getParamOrNull( parameter );
 		}
 	}
 }
