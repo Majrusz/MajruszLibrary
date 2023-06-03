@@ -6,6 +6,7 @@
     "MixinArrow",
     "MixinDifficultyInstance",
     "MixinEntity",
+    "MixinFishingHook",
     "MixinItemStack",
     "MixinLivingEntity",
     "MixinLootTableSerializer",
