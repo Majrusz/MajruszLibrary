@@ -133,12 +133,21 @@ public class Utility {
 
 	public static void profile( String sectionName, Runnable runnable ) {
 		ProfilerFiller profiler = getProfiler();
-		profiler.push( sectionName );
-		runnable.run();
-		profiler.pop();
+		if( profiler != null ) {
+			profiler.push( sectionName );
+			runnable.run();
+			profiler.pop();
+		} else {
+			runnable.run();
+		}
 	}
 
-	public static ProfilerFiller getProfiler() {
-		return DistExecutor.unsafeRunForDist( ()->()->Minecraft.getInstance().getProfiler(), ()->()->ServerLifecycleHooks.getCurrentServer().getProfiler() );
+	@Nullable
+	private static ProfilerFiller getProfiler() {
+		return DistExecutor.unsafeRunForDist( ()->()->{
+			return Minecraft.getInstance() != null ? Minecraft.getInstance().getProfiler() : null;
+		}, ()->()->{
+			return ServerLifecycleHooks.getCurrentServer() != null ? ServerLifecycleHooks.getCurrentServer().getProfiler() : null;
+		} );
 	}
 }
