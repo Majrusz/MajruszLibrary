@@ -25,19 +25,19 @@ public class OnFishingTimeSet {
 	public static class Data {
 		public FishingHook hook;
 		public final int original;
-		public int time;
+		public int ticks;
 		@Nullable
 		public Player player;
 
 		public Data( FishingHook hook, int original ) {
 			this.hook = hook;
 			this.original = original;
-			this.time = original;
+			this.ticks = original;
 			this.player = hook.getPlayerOwner();
 		}
 
-		public int getTime() {
-			return Math.max( this.time, 1 );
+		public int getTicks() {
+			return Math.max( this.ticks, 1 );
 		}
 	}
 }

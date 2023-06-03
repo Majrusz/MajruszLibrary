@@ -17,7 +17,7 @@ public abstract class MixinFishingHook {
 	@Redirect( method = "catchingFish (Lnet/minecraft/core/BlockPos;)V", at = @At( value = "FIELD", target = "Lnet/minecraft/world/entity/projectile/FishingHook;timeUntilLured:I", opcode = Opcodes.PUTFIELD, ordinal = 3 ) )
 	private void catchingFish( FishingHook hook, int timeUntilLured ) {
 		if( timeUntilLured > 0 ) {
-			TIME_UNTIL_LURED.set( hook, OnFishingTimeSet.dispatch( hook, timeUntilLured ).getTime() );
+			TIME_UNTIL_LURED.set( hook, OnFishingTimeSet.dispatch( hook, timeUntilLured ).getTicks() );
 		}
 	}
 }
