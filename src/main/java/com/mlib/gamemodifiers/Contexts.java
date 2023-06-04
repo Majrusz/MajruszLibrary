@@ -1,6 +1,8 @@
 package com.mlib.gamemodifiers;
 
-import com.mlib.Utility;
+import com.mlib.gamemodifiers.data.IProfilerData;
+import net.minecraft.util.profiling.InactiveProfiler;
+import net.minecraft.util.profiling.ProfilerFiller;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -30,11 +32,11 @@ public class Contexts< DataType > {
 	}
 
 	public DataType dispatch( DataType data ) {
-		String sectionName = data.getClass().getName();
-		Utility.profile( sectionName, ()->{
-			this.tryToSort();
-			this.stream().forEach( context->context.accept( data ) ); // IMPORTANT: it uses unsynchronized stream to avoid deadlocks on recursive calls
-		} );
+		ProfilerFiller profiler = data instanceof IProfilerData profilerData ? profilerData.getProfiler() : InactiveProfiler.INSTANCE;
+		profiler.push( data.getClass().getName() );
+		this.tryToSort();
+		this.stream().forEach( context->context.accept( data ) ); // IMPORTANT: it uses unsynchronized stream to avoid deadlocks on recursive calls
+		profiler.pop();
 
 		return data;
 	}
