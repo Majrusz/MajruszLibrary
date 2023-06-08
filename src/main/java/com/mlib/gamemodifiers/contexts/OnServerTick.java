@@ -8,6 +8,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.function.Consumer;
 
@@ -36,7 +37,7 @@ public class OnServerTick {
 
 		@Override
 		public ProfilerFiller getProfiler() {
-			return this.event.getServer().getProfiler();
+			return ServerLifecycleHooks.getCurrentServer().getProfiler();
 		}
 	}
 }
