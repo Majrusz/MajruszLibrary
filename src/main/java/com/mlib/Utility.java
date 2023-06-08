@@ -1,8 +1,6 @@
 package com.mlib;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -10,11 +8,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
 
@@ -129,25 +125,5 @@ public class Utility {
 
 	public static boolean isDevBuild() {
 		return !FMLEnvironment.production;
-	}
-
-	public static void profile( String sectionName, Runnable runnable ) {
-		ProfilerFiller profiler = getProfiler();
-		if( profiler != null ) {
-			profiler.push( sectionName );
-			runnable.run();
-			profiler.pop();
-		} else {
-			runnable.run();
-		}
-	}
-
-	@Nullable
-	private static ProfilerFiller getProfiler() {
-		return DistExecutor.unsafeRunForDist( ()->()->{
-			return Minecraft.getInstance() != null ? Minecraft.getInstance().getProfiler() : null;
-		}, ()->()->{
-			return ServerLifecycleHooks.getCurrentServer() != null ? ServerLifecycleHooks.getCurrentServer().getProfiler() : null;
-		} );
 	}
 }
