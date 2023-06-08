@@ -2,6 +2,7 @@ package com.mlib.gamemodifiers.contexts;
 
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.data.IProfilerData;
 import com.mlib.gamemodifiers.data.ITickData;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,7 +21,7 @@ public class OnClientTick {
 		Contexts.get( Data.class ).dispatch( new Data( event ) );
 	}
 
-	public static class Data implements ITickData {
+	public static class Data implements ITickData, IProfilerData.Client {
 		public final TickEvent.ClientTickEvent event;
 
 		public Data( TickEvent.ClientTickEvent event ) {

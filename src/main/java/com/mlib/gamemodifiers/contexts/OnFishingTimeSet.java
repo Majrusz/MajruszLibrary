@@ -3,6 +3,8 @@ package com.mlib.gamemodifiers.contexts;
 import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
+import com.mlib.gamemodifiers.data.IEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 
@@ -22,7 +24,7 @@ public class OnFishingTimeSet {
 		return new Condition<>( data->data.player != null );
 	}
 
-	public static class Data {
+	public static class Data implements IEntityData {
 		public FishingHook hook;
 		public final int original;
 		public int ticks;
@@ -38,6 +40,11 @@ public class OnFishingTimeSet {
 
 		public int getTicks() {
 			return Math.max( this.ticks, 1 );
+		}
+
+		@Override
+		public Entity getEntity() {
+			return this.hook;
 		}
 	}
 }
