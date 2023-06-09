@@ -3,6 +3,7 @@ package com.mlib.mixin;
 import com.mlib.gamemodifiers.contexts.OnItemSwingDuration;
 import com.mlib.gamemodifiers.contexts.OnPreDamaged;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -65,9 +66,9 @@ public abstract class MixinLivingEntity {
 
 	private static boolean willBeCancelled( DamageSource source, LivingEntity target ) {
 		boolean isInvulnerable = target.isInvulnerableTo( source );
-		boolean isClientSide = !( target.getLevel() instanceof ServerLevel );
+		boolean isClientSide = !( target.level() instanceof ServerLevel );
 		boolean isDeadOrDying = target.isDeadOrDying();
-		boolean isFireResistant = source.isFire() && target.hasEffect( MobEffects.FIRE_RESISTANCE );
+		boolean isFireResistant = source.is( DamageTypeTags.IS_FIRE ) && target.hasEffect( MobEffects.FIRE_RESISTANCE );
 
 		return isInvulnerable || isClientSide || isDeadOrDying || isFireResistant;
 	}

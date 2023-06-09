@@ -8,7 +8,7 @@ public interface IEntityData extends ILevelData, IPositionData {
 	Entity getEntity();
 
 	default Level getLevel() {
-		return this.getEntity().getLevel();
+		return this.getEntity().level();
 	}
 
 	default Vec3 getPosition() {

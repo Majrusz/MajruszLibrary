@@ -1,6 +1,5 @@
 package com.mlib.gamemodifiers.contexts;
 
-import com.mlib.Random;
 import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.data.IEntityData;
@@ -8,7 +7,7 @@ import com.mlib.items.ItemHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.common.ToolActions;
@@ -41,10 +40,9 @@ public class OnExtraFishingLootCheck {
 			this.fishingRod = ItemHelper.getMatchingHandItem( player, Data::isFishingRod );
 		}
 
-		public LootContext generateLootContext() {
-			return new LootContext.Builder( this.getServerLevel() )
+		public LootParams generateLootParams() {
+			return new LootParams.Builder( this.getServerLevel() )
 				.withParameter( LootContextParams.TOOL, this.fishingRod )
-				.withRandom( Random.getThreadSafe() )
 				.withLuck( this.player.getLuck() )
 				.withParameter( LootContextParams.ORIGIN, this.player.position() )
 				.create( LootContextParamSets.FISHING );

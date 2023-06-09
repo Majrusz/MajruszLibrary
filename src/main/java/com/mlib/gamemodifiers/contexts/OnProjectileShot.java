@@ -33,7 +33,7 @@ public class OnProjectileShot {
 
 		public Data( Projectile projectile, @Nullable ItemStack weapon, @Nullable ItemStack arrow, CompoundTag customTag ) {
 			this.projectile = projectile;
-			this.level = projectile.level;
+			this.level = projectile.level();
 			this.owner = projectile.getOwner();
 			this.weapon = weapon;
 			this.arrow = arrow;

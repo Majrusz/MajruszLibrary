@@ -41,7 +41,7 @@ public class BlockHelper {
 	}
 
 	public static BlockState getBlockState( Level level, Vec3 position ) {
-		return getBlockState( level, new BlockPos( position.x, position.y, position.z ) );
+		return getBlockState( level, BlockPos.containing( position.x, position.y, position.z ) );
 	}
 
 	public static BlockEntity getBlockEntity( Level level, BlockPos position ) {
@@ -49,6 +49,6 @@ public class BlockHelper {
 	}
 
 	public static BlockEntity getBlockEntity( Level level, Vec3 position ) {
-		return getBlockEntity( level, new BlockPos( position.x, position.y, position.z ) );
+		return getBlockEntity( level, BlockPos.containing( position.x, position.y, position.z ) );
 	}
 }

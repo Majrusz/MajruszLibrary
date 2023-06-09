@@ -164,7 +164,7 @@ public class Condition< DataType > extends ConfigGroup {
 	}
 
 	public static < DataType > Condition< DataType > isOnGround( Function< DataType, Entity > entity ) {
-		return new Condition< DataType >( data->entity.apply( data ) != null && entity.apply( data ).isOnGround() )
+		return new Condition< DataType >( data->entity.apply( data ) != null && entity.apply( data ).onGround() )
 			.priority( Priority.HIGH );
 	}
 

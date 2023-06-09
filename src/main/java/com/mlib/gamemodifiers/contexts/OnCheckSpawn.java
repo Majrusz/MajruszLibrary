@@ -5,7 +5,7 @@ import com.mlib.gamemodifiers.Contexts;
 import com.mlib.gamemodifiers.data.IEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -18,15 +18,15 @@ public class OnCheckSpawn {
 	}
 
 	@SubscribeEvent
-	public static void onSpawnCheck( LivingSpawnEvent.CheckSpawn event ) {
+	public static void onSpawnCheck( MobSpawnEvent.FinalizeSpawn event ) {
 		Contexts.get( Data.class ).dispatch( new Data( event ) );
 	}
 
 	public static class Data implements IEntityData {
-		public final LivingSpawnEvent.CheckSpawn event;
+		public final MobSpawnEvent.FinalizeSpawn event;
 		public final Mob mob;
 
-		public Data( LivingSpawnEvent.CheckSpawn event ) {
+		public Data( MobSpawnEvent.FinalizeSpawn event ) {
 			this.event = event;
 			this.mob = event.getEntity();
 		}

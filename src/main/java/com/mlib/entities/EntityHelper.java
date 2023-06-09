@@ -41,7 +41,7 @@ public class EntityHelper {
 	public static void cheatDeath( LivingEntity entity, float healthRatio, boolean shouldPlayEffects ) {
 		entity.setHealth( entity.getMaxHealth() * healthRatio );
 
-		if( shouldPlayEffects && entity.level instanceof ServerLevel level ) {
+		if( shouldPlayEffects && entity.level() instanceof ServerLevel level ) {
 			level.sendParticles( ParticleTypes.TOTEM_OF_UNDYING, entity.getX(), entity.getY( 0.75 ), entity.getZ(), 64, 0.25, 0.5, 0.25, 0.5 );
 			level.playSound( null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, SoundSource.AMBIENT, 1.0f, 1.0f );
 		}
@@ -82,7 +82,7 @@ public class EntityHelper {
 	public static void disableCurrentItem( Player player, double seconds ) {
 		player.getCooldowns().addCooldown( player.getUseItem().getItem(), Utility.secondsToTicks( seconds ) );
 		player.stopUsingItem();
-		player.level.broadcastEntityEvent( player, ( byte )30 );
+		player.level().broadcastEntityEvent( player, ( byte )30 );
 	}
 
 	public static boolean spawnExperience( Level level, Vec3 position, int experience ) {

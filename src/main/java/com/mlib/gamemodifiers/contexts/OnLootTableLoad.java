@@ -4,7 +4,6 @@ import com.mlib.gamemodifiers.Context;
 import com.mlib.gamemodifiers.Contexts;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTables;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,13 +25,11 @@ public class OnLootTableLoad {
 		public final LootTableLoadEvent event;
 		public final ResourceLocation name;
 		public final LootTable table;
-		public final LootTables lootTableManager;
 
 		public Data( LootTableLoadEvent event ) {
 			this.event = event;
 			this.name = event.getName();
 			this.table = event.getTable();
-			this.lootTableManager = event.getLootTableManager();
 		}
 	}
 }

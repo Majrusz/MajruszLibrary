@@ -27,6 +27,7 @@ public class OnLootTableCustomLoad {
 	public static class Data {
 		static final ObfuscationGetter.Field< LootTable, List< LootPool > > POOLS = new ObfuscationGetter.Field<>( LootTable.class, "f_79109_" );
 		static final ObfuscationGetter.Field< LootPool, LootPoolEntryContainer[] > ENTRIES = new ObfuscationGetter.Field<>( LootPool.class, "f_79023_" );
+		static final ObfuscationGetter.Field< LootPool.Builder, String > NAME = new ObfuscationGetter.Field<>( LootPool.Builder.class, "f_79071_" );
 		public final ResourceLocation name;
 		public final LootTable table;
 		public final List< LootPool > pools;
@@ -54,7 +55,9 @@ public class OnLootTableCustomLoad {
 		}
 
 		public int addPool() {
-			this.pools.add( LootPool.lootPool().name( String.format( "custom#%s%d", this.name.toString(), this.pools.size() ) ).build() );
+			LootPool.Builder builder = LootPool.lootPool();
+			NAME.set( builder, String.format( "custom#%s%d", this.name.toString(), this.pools.size() ) );
+			this.pools.add( builder.build() );
 
 			return this.pools.size() - 1;
 		}

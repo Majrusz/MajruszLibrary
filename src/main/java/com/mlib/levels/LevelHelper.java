@@ -18,10 +18,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.FrostedIceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -30,11 +29,11 @@ import java.util.Optional;
 
 public class LevelHelper {
 	public static boolean isEntityIn( Entity entity, ResourceKey< Level > worldRegistryKey ) {
-		return entity.level.dimension() == worldRegistryKey;
+		return entity.level().dimension() == worldRegistryKey;
 	}
 
 	public static DifficultyInstance getDifficultyAt( Entity entity ) {
-		return getDifficultyAt( entity.level, entity.blockPosition() );
+		return getDifficultyAt( entity.level(), entity.blockPosition() );
 	}
 
 	public static DifficultyInstance getDifficultyAt( Level level, BlockPos position ) {
@@ -42,7 +41,7 @@ public class LevelHelper {
 	}
 
 	public static double getRegionalDifficultyAt( Entity entity ) {
-		return getRegionalDifficultyAt( entity.level, entity.blockPosition() );
+		return getRegionalDifficultyAt( entity.level(), entity.blockPosition() );
 	}
 
 	public static double getRegionalDifficultyAt( Level level, BlockPos position ) {
@@ -50,7 +49,7 @@ public class LevelHelper {
 	}
 
 	public static double getClampedRegionalDifficultyAt( Entity entity ) {
-		return getClampedRegionalDifficultyAt( entity.level, entity.blockPosition() );
+		return getClampedRegionalDifficultyAt( entity.level(), entity.blockPosition() );
 	}
 
 	public static double getClampedRegionalDifficultyAt( Level level, BlockPos position ) {
@@ -58,19 +57,19 @@ public class LevelHelper {
 	}
 
 	public static boolean isEntityOutside( Entity entity ) {
-		return entity.level.canSeeSky( entity.blockPosition() );
+		return entity.level().canSeeSky( entity.blockPosition() );
 	}
 
 	public static boolean isRainingAt( Entity entity ) {
-		return entity.level.isRainingAt( entity.blockPosition() );
+		return entity.level().isRainingAt( entity.blockPosition() );
 	}
 
 	public static boolean isDayAt( Entity entity ) {
-		return entity.level.isDay();
+		return entity.level().isDay();
 	}
 
 	public static boolean isNightAt( Entity entity ) {
-		return entity.level.isNight();
+		return entity.level().isNight();
 	}
 
 	public static Pair< Vec3, ServerLevel > getSpawnData( ServerPlayer player ) {
@@ -127,28 +126,28 @@ public class LevelHelper {
 	public static void freezeWater( Entity entity, double radius, int minimumIceDuration, int maximumIceDuration,
 		boolean requireOnGround
 	) {
-		if( requireOnGround && !entity.isOnGround() )
+		if( requireOnGround && !entity.onGround() )
 			return;
 
 		BlockState iceBlockState = Blocks.FROSTED_ICE.defaultBlockState();
 		BlockPos entityPosition = entity.blockPosition();
 		BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
-		Iterable< BlockPos > blocksInRange = BlockPos.betweenClosed( entityPosition.offset( -radius, -1.0, -radius ), entityPosition.offset( radius, -1.0, radius ) );
+		Iterable< BlockPos > blocksInRange = BlockPos.betweenClosed( entityPosition.offset( ( int )-radius, -1, ( int )-radius ), entityPosition.offset( ( int )radius, -1, ( int )radius ) );
 
 		for( BlockPos blockPos : blocksInRange ) {
 			if( blockPos.closerThan( entityPosition, radius ) ) {
 				mutableBlockPos.set( blockPos.getX(), blockPos.getY() + 1, blockPos.getZ() );
-				BlockState blockState = entity.level.getBlockState( mutableBlockPos );
+				BlockState blockState = entity.level().getBlockState( mutableBlockPos );
 				if( blockState.isAir() ) {
-					BlockState blockState2 = entity.level.getBlockState( blockPos );
-					boolean isWater = blockState2.getMaterial() == Material.WATER;
-					boolean isFull = blockState2.getBlock() == Blocks.WATER && blockState2.getValue( LiquidBlock.LEVEL ) == 0;
-					boolean canSurvive = iceBlockState.canSurvive( entity.level, blockPos );
-					boolean isUnobstructed = entity.level.isUnobstructed( iceBlockState, blockPos, CollisionContext.empty() );
+					BlockState blockState2 = entity.level().getBlockState( blockPos );
+					boolean meltsIntoFrostedIceBlock = blockState2 == FrostedIceBlock.meltsInto();
+					boolean canSurvive = iceBlockState.canSurvive( entity.level(), blockPos );
+					boolean isUnobstructed = entity.level().isUnobstructed( iceBlockState, blockPos, CollisionContext.empty() );
 
-					if( isWater && isFull && canSurvive && isUnobstructed && !net.minecraftforge.event.ForgeEventFactory.onBlockPlace( entity, net.minecraftforge.common.util.BlockSnapshot.create( entity.level.dimension(), entity.level, blockPos ), net.minecraft.core.Direction.UP ) ) {
-						entity.level.setBlockAndUpdate( blockPos, iceBlockState );
-						entity.level.scheduleTick( blockPos, Blocks.FROSTED_ICE, Mth.nextInt( Random.getThreadSafe(), 60, 120 ) );
+					if( meltsIntoFrostedIceBlock && canSurvive && isUnobstructed && !net.minecraftforge.event.ForgeEventFactory.onBlockPlace( entity, net.minecraftforge.common.util.BlockSnapshot.create( entity.level()
+						.dimension(), entity.level(), blockPos ), net.minecraft.core.Direction.UP ) ) {
+						entity.level().setBlockAndUpdate( blockPos, iceBlockState );
+						entity.level().scheduleTick( blockPos, Blocks.FROSTED_ICE, Mth.nextInt( Random.getThreadSafe(), 60, 120 ) );
 					}
 				}
 			}

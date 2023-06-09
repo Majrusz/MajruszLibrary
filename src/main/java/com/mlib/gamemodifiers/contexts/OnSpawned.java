@@ -42,7 +42,7 @@ public class OnSpawned {
 			return;
 
 		Contexts.get( Data.class ).dispatch( new Data( entity, event.loadedFromDisk() ) );
-		List< DataSafe > list = entity.level.isClientSide ? CLIENT_PENDING_LIST : SERVER_PENDING_LIST;
+		List< DataSafe > list = entity.level().isClientSide ? CLIENT_PENDING_LIST : SERVER_PENDING_LIST;
 		list.add( new DataSafe( entity, event.loadedFromDisk() ) );
 	}
 

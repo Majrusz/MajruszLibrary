@@ -40,7 +40,7 @@ public class OnLootLevel {
 
 		@Override
 		public Level getLevel() {
-			return this.attacker != null ? this.attacker.getLevel() : null;
+			return this.attacker != null ? this.attacker.level() : null;
 		}
 
 		@Override

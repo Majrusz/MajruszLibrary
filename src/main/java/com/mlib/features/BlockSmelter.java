@@ -70,7 +70,7 @@ public class BlockSmelter {
 	private ItemStack smeltIfPossible( ItemStack itemStack, ServerLevel level ) {
 		return level.getRecipeManager()
 			.getRecipeFor( RecipeType.SMELTING, new SimpleContainer( itemStack ), level )
-			.map( SmeltingRecipe::getResultItem )
+			.map( recipe->recipe.getResultItem( level.registryAccess() ) )
 			.filter( i->!i.isEmpty() )
 			.map( i->ItemHandlerHelper.copyStackWithSize( i, itemStack.getCount() * i.getCount() ) )
 			.orElse( itemStack );

@@ -19,7 +19,7 @@ public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance 
 	}
 
 	@Override
-	public BasicTrigger.Instance createInstance( JsonObject json, EntityPredicate.Composite predicate, DeserializationContext conditions ) {
+	public BasicTrigger.Instance createInstance( JsonObject json, ContextAwarePredicate predicate, DeserializationContext conditions ) {
 		JsonElement triggerType = json.get( "type" );
 
 		return new BasicTrigger.Instance( this.triggerId, predicate, triggerType.getAsString() );
@@ -32,7 +32,7 @@ public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance 
 	protected static class Instance extends AbstractCriterionTriggerInstance {
 		final String triggerType;
 
-		public Instance( ResourceLocation triggerID, EntityPredicate.Composite predicate, String triggerType ) {
+		public Instance( ResourceLocation triggerID, ContextAwarePredicate predicate, String triggerType ) {
 			super( triggerID, predicate );
 
 			this.triggerType = triggerType;

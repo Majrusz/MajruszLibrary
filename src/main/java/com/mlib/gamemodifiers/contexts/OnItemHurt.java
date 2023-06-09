@@ -41,7 +41,7 @@ public class OnItemHurt {
 
 		@Override
 		public Level getLevel() {
-			return this.player != null ? this.player.getLevel() : null;
+			return this.player != null ? this.player.level() : null;
 		}
 	}
 }

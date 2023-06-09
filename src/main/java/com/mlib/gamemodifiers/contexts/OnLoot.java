@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -107,7 +108,7 @@ public class OnLoot {
 
 		@Override
 		public Level getLevel() {
-			return this.entity != null ? this.entity.getLevel() : null;
+			return this.entity != null ? this.entity.level() : null;
 		}
 
 		@Override
@@ -116,13 +117,14 @@ public class OnLoot {
 		}
 
 		public void addAsChestLoot( ResourceLocation id ) {
+			LootParams params = new LootParams.Builder( this.getServerLevel() )
+				.withParameter( LootContextParams.ORIGIN, this.origin )
+				.create( LootContextParamSets.CHEST );
+
 			List< ItemStack > itemStacks = ServerLifecycleHooks.getCurrentServer()
-				.getLootTables()
-				.get( id )
-				.getRandomItems( new LootContext.Builder( this.getServerLevel() )
-					.withParameter( LootContextParams.ORIGIN, this.origin )
-					.create( LootContextParamSets.CHEST )
-				);
+				.getLootData()
+				.getLootTable( id )
+				.getRandomItems( params );
 
 			this.generatedLoot.addAll( itemStacks );
 		}

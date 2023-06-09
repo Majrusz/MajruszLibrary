@@ -101,7 +101,7 @@ public abstract class CustomSkills< SkillType extends Enum< ? > > {
 	protected CustomSkills< SkillType > start( SkillType skillType, int ticks ) {
 		this.skillType = skillType;
 		this.ticksLeft = this.ticksTotal = ticks;
-		if( this.mob.level instanceof ServerLevel level ) {
+		if( this.mob.level() instanceof ServerLevel level ) {
 			this.channel.send( PacketDistributor.DIMENSION.with( level::dimension ), this.messageConstructor.construct( this.mob, ticks, skillType ) );
 		}
 
