@@ -14,7 +14,7 @@ public class ConditionTests extends BaseTest {
 	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void priority( GameTestHelper helper ) {
 		Contexts.streamAll()
-			.forEach( contexts->contexts.stream()
+			.forEach( contexts->contexts
 				.forEach( context->{
 					MutableInt max = new MutableInt( Integer.MIN_VALUE );
 					context.getConditions()
@@ -31,7 +31,7 @@ public class ConditionTests extends BaseTest {
 	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void validParameters( GameTestHelper helper ) {
 		Contexts.streamAll()
-			.forEach( contexts->contexts.stream()
+			.forEach( contexts->contexts
 				.forEach( context->context.getConditions()
 					.forEach( condition->{
 						boolean isConfigurable = condition.isConfigurable();
@@ -51,7 +51,7 @@ public class ConditionTests extends BaseTest {
 	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void builtConfigs( GameTestHelper helper ) {
 		Contexts.streamAll()
-			.forEach( contexts->contexts.stream()
+			.forEach( contexts->contexts
 				.forEach( context->context.getConditions()
 					.forEach( condition->{
 						boolean isConfigurable = condition.isConfigurable();

@@ -14,12 +14,11 @@ public class ContextTests extends BaseTest {
 		Contexts.streamAll()
 			.forEach( contexts->{
 				MutableInt max = new MutableInt( Integer.MIN_VALUE );
-				contexts.stream()
-					.forEach( context->{
-						int priority = context.getPriority().ordinal();
-						assertThat( helper, priority >= max.getValue(), ()->"%s has invalid priority".formatted( getClassName( context ) ) );
-						max.setValue( priority );
-					} );
+				contexts.forEach( context->{
+					int priority = context.getPriority().ordinal();
+					assertThat( helper, priority >= max.getValue(), ()->"%s has invalid priority".formatted( getClassName( context ) ) );
+					max.setValue( priority );
+				} );
 			} );
 		helper.succeed();
 	}
