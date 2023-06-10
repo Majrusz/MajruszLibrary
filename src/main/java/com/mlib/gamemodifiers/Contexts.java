@@ -35,14 +35,17 @@ public class Contexts< DataType > {
 		ProfilerFiller profiler = data instanceof IProfilerData profilerData ? profilerData.getProfiler() : InactiveProfiler.INSTANCE;
 		profiler.push( data.getClass().getName() );
 		this.tryToSort();
-		this.stream().forEach( context->context.accept( data ) ); // IMPORTANT: it uses unsynchronized stream to avoid deadlocks on recursive calls
+		this.forEach( context->context.accept( data ) );
 		profiler.pop();
 
 		return data;
 	}
 
-	public Stream< Context< DataType > > stream() {
-		return this.contexts.stream();
+	public void forEach( Consumer< Context< DataType > > consumer ) {
+		// NOTE: it uses index loop on purpose to avoid deadlocks and concurrent modification exceptions on recursive calls
+		for( int idx = 0; idx < this.contexts.size(); ++idx ) {
+			consumer.accept( this.contexts.get( idx ) );
+		}
 	}
 
 	private void tryToSort() {
