@@ -11,6 +11,7 @@ import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
@@ -26,22 +27,24 @@ public class OnBabySpawn {
 
 	public static class Data implements IEntityData {
 		public final BabyEntitySpawnEvent event;
-		public final AgeableMob child;
 		public final Mob parentA;
 		public final Mob parentB;
+		@Nullable
 		public final Player player;
+		@Nullable
+		public final AgeableMob child;
 
 		public Data( BabyEntitySpawnEvent event ) {
 			this.event = event;
-			this.child = event.getChild();
 			this.parentA = event.getParentA();
 			this.parentB = event.getParentB();
 			this.player = event.getCausedByPlayer();
+			this.child = event.getChild();
 		}
 
 		@Override
 		public Entity getEntity() {
-			return this.child;
+			return this.child != null ? this.child : null;
 		}
 	}
 }
