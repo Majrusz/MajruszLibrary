@@ -3,16 +3,15 @@ package com.mlib.gamemodifiers;
 import com.mlib.config.ConfigGroup;
 import com.mlib.config.IConfigurable;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.function.Consumer;
 
 public class Context< DataType > extends ConfigGroup {
 	final Consumer< DataType > consumer;
-	final List< Condition< DataType > > conditions = new ArrayList<>();
+	final SortedSet< Condition< DataType > > conditions = new TreeSet<>( ( left, right )->Priority.COMPARATOR.compare( left.getPriority(), right.getPriority() ) );
 	Priority priority = Priority.NORMAL;
-	boolean isSorted = true;
 
 	public Context( Consumer< DataType > consumer ) {
 		this.consumer = consumer;
@@ -64,32 +63,21 @@ public class Context< DataType > extends ConfigGroup {
 		if( condition.isConfigurable() ) {
 			this.addConfig( condition );
 		}
-		this.isSorted = false;
 
 		return this;
 	}
 
 	public void accept( DataType data ) {
-		this.tryToSort();
 		if( this.conditions.stream().allMatch( condition->condition.check( data ) ) ) {
 			this.consumer.accept( data );
 		}
 	}
 
-	public List< Condition< DataType > > getConditions() {
-		this.tryToSort();
-
-		return Collections.unmodifiableList( this.conditions );
+	public SortedSet< Condition< DataType > > getConditions() {
+		return Collections.unmodifiableSortedSet( this.conditions );
 	}
 
 	public Priority getPriority() {
 		return this.priority;
-	}
-
-	private void tryToSort() {
-		if( !this.isSorted ) {
-			this.conditions.sort( ( left, right )->Priority.COMPARATOR.compare( left.getPriority(), right.getPriority() ) );
-			this.isSorted = true;
-		}
 	}
 }

@@ -11,7 +11,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 public class ContextTests extends BaseTest {
 	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void priority( GameTestHelper helper ) {
-		Contexts.streamAll()
+		Contexts.get()
 			.forEach( contexts->{
 				MutableInt max = new MutableInt( Integer.MIN_VALUE );
 				contexts.forEach( context->{

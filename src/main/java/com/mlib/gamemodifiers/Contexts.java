@@ -6,12 +6,10 @@ import net.minecraft.util.profiling.ProfilerFiller;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 public class Contexts< DataType > {
 	final static Map< Class< ? >, Contexts< ? > > CONTEXTS = Collections.synchronizedMap( new HashMap<>() );
-	final List< Context< DataType > > contexts = Collections.synchronizedList( new ArrayList<>() );
-	boolean isSorted = false;
+	final SortedSet< Context< DataType > > contexts = new TreeSet<>( ( left, right )->Priority.COMPARATOR.compare( left.priority, right.priority ) );
 
 	private Contexts() {}
 
@@ -19,14 +17,13 @@ public class Contexts< DataType > {
 		return ( Contexts< DataType > )CONTEXTS.computeIfAbsent( clazz, key->new Contexts< DataType >() );
 	}
 
-	public static Stream< Contexts< ? > > streamAll() {
-		return CONTEXTS.values().stream();
+	public static Collection< Contexts< ? > > get() {
+		return CONTEXTS.values();
 	}
 
-	public Context< DataType > add( Consumer< DataType > consumer ) {
+	public synchronized Context< DataType > add( Consumer< DataType > consumer ) {
 		Context< DataType > context = new Context<>( consumer );
 		this.contexts.add( context );
-		this.isSorted = false;
 
 		return context;
 	}
@@ -34,7 +31,6 @@ public class Contexts< DataType > {
 	public DataType dispatch( DataType data ) {
 		ProfilerFiller profiler = data instanceof IProfilerData profilerData ? profilerData.getProfiler() : InactiveProfiler.INSTANCE;
 		profiler.push( data.getClass().getName() );
-		this.tryToSort();
 		this.forEach( context->context.accept( data ) );
 		profiler.pop();
 
@@ -42,16 +38,6 @@ public class Contexts< DataType > {
 	}
 
 	public void forEach( Consumer< Context< DataType > > consumer ) {
-		// NOTE: it uses index loop on purpose to avoid deadlocks and concurrent modification exceptions on recursive calls
-		for( int idx = 0; idx < this.contexts.size(); ++idx ) {
-			consumer.accept( this.contexts.get( idx ) );
-		}
-	}
-
-	private void tryToSort() {
-		if( !this.isSorted ) {
-			this.contexts.sort( ( left, right )->Priority.COMPARATOR.compare( left.priority, right.priority ) );
-			this.isSorted = true;
-		}
+		this.contexts.forEach( consumer );
 	}
 }
