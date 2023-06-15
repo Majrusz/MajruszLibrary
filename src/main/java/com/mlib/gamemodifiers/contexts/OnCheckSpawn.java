@@ -13,6 +13,8 @@ import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnCheckSpawn {
+	public static final Consumer< Data > CANCEL = data->data.event.setSpawnCancelled( true );
+
 	public static Context< Data > listen( Consumer< Data > consumer ) {
 		return Contexts.get( Data.class ).add( consumer );
 	}
