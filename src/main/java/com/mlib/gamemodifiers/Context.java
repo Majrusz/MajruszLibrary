@@ -76,6 +76,13 @@ public class Context< DataType > extends ConfigGroup {
 		}
 	}
 
+	public synchronized void tryToSort() {
+		if( !this.isSorted ) {
+			this.conditions.sort( ( left, right )->Priority.COMPARATOR.compare( left.getPriority(), right.getPriority() ) );
+			this.isSorted = true;
+		}
+	}
+
 	public List< Condition< DataType > > getConditions() {
 		this.tryToSort();
 
@@ -84,12 +91,5 @@ public class Context< DataType > extends ConfigGroup {
 
 	public Priority getPriority() {
 		return this.priority;
-	}
-
-	private void tryToSort() {
-		if( !this.isSorted ) {
-			this.conditions.sort( ( left, right )->Priority.COMPARATOR.compare( left.getPriority(), right.getPriority() ) );
-			this.isSorted = true;
-		}
 	}
 }
