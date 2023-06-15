@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 
 public class Contexts< DataType > {
 	final static Map< Class< ? >, Contexts< ? > > CONTEXTS = Collections.synchronizedMap( new HashMap<>() );
-	final List< Context< DataType > > contexts = Collections.synchronizedList( new ArrayList<>() );
-	boolean isSorted = false;
+	final List< Context< DataType > > contexts = new ArrayList<>();
+	boolean isSorted = true;
 
 	private Contexts() {}
 
@@ -19,11 +19,11 @@ public class Contexts< DataType > {
 		return ( Contexts< DataType > )CONTEXTS.computeIfAbsent( clazz, key->new Contexts< DataType >() );
 	}
 
-	public static Stream< Contexts< ? > > streamAll() {
+	public static Stream< Contexts< ? > > get() {
 		return CONTEXTS.values().stream();
 	}
 
-	public Context< DataType > add( Consumer< DataType > consumer ) {
+	public synchronized Context< DataType > add( Consumer< DataType > consumer ) {
 		Context< DataType > context = new Context<>( consumer );
 		this.contexts.add( context );
 		this.isSorted = false;
@@ -42,15 +42,13 @@ public class Contexts< DataType > {
 	}
 
 	public void forEach( Consumer< Context< DataType > > consumer ) {
-		// NOTE: it uses index loop on purpose to avoid deadlocks and concurrent modification exceptions on recursive calls
-		for( int idx = 0; idx < this.contexts.size(); ++idx ) {
-			consumer.accept( this.contexts.get( idx ) );
-		}
+		this.contexts.forEach( consumer );
 	}
 
-	private void tryToSort() {
+	public synchronized void tryToSort() {
 		if( !this.isSorted ) {
 			this.contexts.sort( ( left, right )->Priority.COMPARATOR.compare( left.priority, right.priority ) );
+			this.contexts.forEach( Context::tryToSort );
 			this.isSorted = true;
 		}
 	}
