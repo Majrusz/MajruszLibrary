@@ -6,6 +6,7 @@ import com.mlib.gamemodifiers.data.IEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -13,7 +14,7 @@ import java.util.function.Consumer;
 
 @Mod.EventBusSubscriber
 public class OnCheckSpawn {
-	public static final Consumer< Data > CANCEL = data->data.event.setSpawnCancelled( true );
+	public static final Consumer< Data > CANCEL = data->data.event.setResult( Event.Result.DENY );
 
 	public static Context< Data > listen( Consumer< Data > consumer ) {
 		return Contexts.get( Data.class ).add( consumer );
