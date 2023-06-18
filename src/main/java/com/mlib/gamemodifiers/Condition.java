@@ -22,6 +22,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -170,6 +171,10 @@ public class Condition< DataType > extends ConfigGroup {
 
 	public static < DataType extends ITickData > Condition< DataType > isEndPhase() {
 		return new Condition< DataType >( data->data.getPhase() == TickEvent.Phase.END );
+	}
+
+	public static < DataType > Condition< DataType > isCooldownOver( Function< DataType, Player > player, Supplier< Item > item ) {
+		return new Condition< DataType >( data->player.apply( data ) != null && player.apply( data ).getCooldowns().isOnCooldown( item.get() ) );
 	}
 
 	public static < DataType > Condition< DataType > armorDependentChance( Map< EquipmentSlot, Double > chances, Function< DataType, LivingEntity > entity ) {
