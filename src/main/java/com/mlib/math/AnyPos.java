@@ -276,6 +276,12 @@ public class AnyPos {
 		return this.lerp( ratio, from( x, y, z ) );
 	}
 
+	public AnyPos rot2d( double radians ) {
+		double sin = Math.sin( radians ), cos = Math.cos( radians );
+
+		return new AnyPos( cos * this.x - sin * this.z, this.y, sin * this.x + cos * this.z );
+	}
+
 	public Number len() {
 		return Math.sqrt( Math.pow( this.x, 2 ) + Math.pow( this.y, 2 ) + Math.pow( this.z, 2 ) );
 	}
