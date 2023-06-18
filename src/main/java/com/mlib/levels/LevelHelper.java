@@ -4,8 +4,10 @@ import com.mlib.Random;
 import com.mlib.effects.ParticleHandler;
 import com.mlib.effects.SoundHandler;
 import com.mlib.math.AnyPos;
+import com.mlib.math.Range;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,6 +26,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Optional;
 
@@ -187,5 +190,29 @@ public class LevelHelper {
 		data.setRainTime( ticks );
 		data.setThundering( false );
 		data.setThunderTime( ticks );
+	}
+
+	public static < Type extends Number & Comparable< Type > > Optional< BlockPos > findBlockPosOnGround( Level level, Type x, Range< Type > y, Type z ) {
+		BlockPos blockPos = AnyPos.from( x, y.to, z ).block();
+		do {
+			BlockPos blockPosBelow = blockPos.below();
+			BlockState blockStateBelow = level.getBlockState( blockPosBelow );
+			if( blockStateBelow.isFaceSturdy( level, blockPosBelow, Direction.UP ) ) {
+				if( !level.isEmptyBlock( blockPos ) ) {
+					BlockState blockState = level.getBlockState( blockPos );
+					VoxelShape voxelshape = blockState.getCollisionShape( level, blockPos );
+					BlockPos blockPosAbove = AnyPos.from( blockPos ).add( 0, !voxelshape.isEmpty() ? voxelshape.max( Direction.Axis.Y ) : 0, 0 ).block();
+					if( blockState.getCollisionShape( level, blockPosAbove ).isEmpty() ) {
+						return Optional.of( blockPosAbove );
+					}
+				} else {
+					return Optional.of( blockPos );
+				}
+			}
+
+			blockPos = blockPos.below();
+		} while( blockPos.getY() >= y.from.intValue() - 1 );
+
+		return Optional.empty();
 	}
 }
