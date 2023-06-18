@@ -174,7 +174,7 @@ public class Condition< DataType > extends ConfigGroup {
 	}
 
 	public static < DataType > Condition< DataType > isCooldownOver( Function< DataType, Player > player, Supplier< Item > item ) {
-		return new Condition< DataType >( data->player.apply( data ) != null && player.apply( data ).getCooldowns().isOnCooldown( item.get() ) );
+		return new Condition< DataType >( data->player.apply( data ) != null && !player.apply( data ).getCooldowns().isOnCooldown( item.get() ) );
 	}
 
 	public static < DataType > Condition< DataType > armorDependentChance( Map< EquipmentSlot, Double > chances, Function< DataType, LivingEntity > entity ) {
