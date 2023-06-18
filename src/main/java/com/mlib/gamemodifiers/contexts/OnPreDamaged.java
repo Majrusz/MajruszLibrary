@@ -24,15 +24,15 @@ public class OnPreDamaged {
 	}
 
 	public static Condition< Data > isDirect() {
-		return new Condition< Data >( data->data.source.getDirectEntity() == data.attacker );
+		return new Condition<>( Data::isDirect );
 	}
 
 	public static Condition< Data > dealtAnyDamage() {
-		return new Condition< Data >( data->data.damage > 0.0f );
+		return new Condition<>( Data::dealtAnyDamage );
 	}
 
 	public static Condition< Data > willTakeFullDamage() {
-		return new Condition< Data >( data->data.target.invulnerableTime <= 10 ); // sources like fire deal damage every tick and only invulnerableTime blocks them from applying damage
+		return new Condition<>( Data::willTakeFullDamage ); // sources like fire deal damage every tick and only invulnerableTime blocks them from applying damage
 	}
 
 	public static class Data implements IEntityData {
@@ -55,6 +55,18 @@ public class OnPreDamaged {
 		@Override
 		public Entity getEntity() {
 			return this.target;
+		}
+
+		public boolean isDirect() {
+			return this.source.getDirectEntity() == this.attacker;
+		}
+
+		public boolean dealtAnyDamage() {
+			return this.damage > 0.0f;
+		}
+
+		public boolean willTakeFullDamage() {
+			return this.target.invulnerableTime <= 10;
 		}
 	}
 }

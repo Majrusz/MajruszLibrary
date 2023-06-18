@@ -27,11 +27,11 @@ public class OnDamaged {
 	}
 
 	public static Condition< Data > isDirect() {
-		return new Condition<>( data->data.source.getDirectEntity() == data.attacker );
+		return new Condition<>( Data::isDirect );
 	}
 
 	public static Condition< Data > dealtAnyDamage() {
-		return new Condition<>( data->data.event.getAmount() > 0.0f );
+		return new Condition<>( Data::dealtAnyDamage );
 	}
 
 	public static class Data implements IEntityData {
@@ -50,6 +50,14 @@ public class OnDamaged {
 		@Override
 		public Entity getEntity() {
 			return this.target;
+		}
+
+		public boolean isDirect() {
+			return this.source.getDirectEntity() == this.attacker;
+		}
+
+		public boolean dealtAnyDamage() {
+			return this.event.getAmount() > 0.0f;
 		}
 	}
 }
