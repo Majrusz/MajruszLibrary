@@ -302,6 +302,10 @@ public class AnyPos {
 		return new AnyPos( Math.ceil( this.x ), Math.ceil( this.y ), Math.ceil( this.z ) );
 	}
 
+	public AnyPos round() {
+		return new AnyPos( Math.round( this.x ), Math.round( this.y ), Math.round( this.z ) );
+	}
+
 	public Vec3 vec3() {
 		return new Vec3( this.x, this.y, this.z );
 	}

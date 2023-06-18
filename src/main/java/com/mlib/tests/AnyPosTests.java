@@ -159,6 +159,7 @@ public class AnyPosTests extends BaseTest {
 		assertThat( helper, AnyPos.from( 1, 2, 3 ).neg(), new Vec3( -1, -2, -3 ), ()->"AnyPos does not negate vector properly" );
 		assertThat( helper, AnyPos.from( 1.4, 2.5, 3.6 ).floor(), new Vec3( 1, 2, 3 ), ()->"AnyPos does not round vector properly" );
 		assertThat( helper, AnyPos.from( 1.4, 2.5, 3.6 ).ceil(), new Vec3( 2, 3, 4 ), ()->"AnyPos does not round vector properly" );
+		assertThat( helper, AnyPos.from( 1.4, 2.5, 3.6 ).ceil(), new Vec3( 1, 2, 4 ), ()->"AnyPos does not round vector properly" );
 
 		helper.succeed();
 	}
