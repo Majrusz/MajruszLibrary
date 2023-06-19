@@ -7,6 +7,8 @@ import com.mlib.gamemodifiers.Condition;
 import com.mlib.gamemodifiers.Priority;
 import com.mlib.gamemodifiers.contexts.OnClientTick;
 import com.mlib.gamemodifiers.contexts.OnServerTick;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.DistExecutor;
 
 import javax.annotation.Nonnegative;
 
@@ -44,6 +46,10 @@ public class TimeHelper {
 
 	public static long getServerTicks() {
 		return serverCounter;
+	}
+
+	public static float getPartialTicks() {
+		return DistExecutor.unsafeRunForDist( ()->()->Minecraft.getInstance().getPartialTick(), ()->()->0.0f );
 	}
 
 	@AutoInstance
