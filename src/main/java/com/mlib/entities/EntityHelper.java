@@ -23,15 +23,18 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -160,5 +163,20 @@ public class EntityHelper {
 
 	public static void sendExtraClientGlowTicks( ServerPlayer player, Entity target, int ticks ) {
 		NetworkHandler.CHANNEL.send( PacketDistributor.PLAYER.with( ()->player ), new NetworkHandler.EntityGlow( target, ticks ) );
+	}
+
+	public static boolean destroyBlocks( Entity entity, AABB aabb, BiPredicate< BlockPos, BlockState > predicate ) {
+		if( !ForgeEventFactory.getMobGriefingEvent( entity.level(), entity ) ) {
+			return false;
+		}
+
+		boolean destroyedAnyBlock = false;
+		for( BlockPos blockPos : BlockPos.betweenClosed( Mth.floor( aabb.minX ), Mth.floor( aabb.minY ), Mth.floor( aabb.minZ ), Mth.floor( aabb.maxX ), Mth.floor( aabb.maxY ), Mth.floor( aabb.maxZ ) ) ) {
+			if( predicate.test( blockPos, entity.level().getBlockState( blockPos ) ) ) {
+				destroyedAnyBlock |= entity.level().destroyBlock( blockPos, true, entity );
+			}
+		}
+
+		return destroyedAnyBlock;
 	}
 }
