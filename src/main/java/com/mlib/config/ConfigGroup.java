@@ -56,6 +56,13 @@ public class ConfigGroup extends UserConfig {
 		return this;
 	}
 
+	@Override
+	public void onReload() {
+		super.onReload();
+
+		this.configs.forEach( IConfigurable::onReload );
+	}
+
 	public ConfigGroup addConfig( IConfigurable config ) {
 		this.configs.add( config );
 

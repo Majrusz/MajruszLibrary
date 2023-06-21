@@ -1,6 +1,5 @@
 package com.mlib.config;
 
-import com.mlib.MajruszLibrary;
 import com.mlib.gamemodifiers.contexts.OnConfigLoaded;
 import com.mlib.modhelper.ModHelper;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -14,6 +13,7 @@ public class ConfigHandler extends ConfigGroup {
 	final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 	final ModConfig.Type type;
 	ForgeConfigSpec configSpec = null;
+	boolean areConfigsValid = false;
 
 	public ConfigHandler( ModConfig.Type type ) {
 		this.type = type;
@@ -30,6 +30,7 @@ public class ConfigHandler extends ConfigGroup {
 			this.registerHelpConfigSpec( modLoadingContext );
 		}
 		FMLJavaModLoadingContext.get().getModEventBus().addListener( this::onConfigReload );
+		FMLJavaModLoadingContext.get().getModEventBus().addListener( this::onConfigLoaded );
 	}
 
 	public void register( ModHelper helper ) {
@@ -43,6 +44,7 @@ public class ConfigHandler extends ConfigGroup {
 			this.registerHelpConfigSpec( modLoadingContext );
 		}
 		helper.getEventBus().addListener( this::onConfigReload );
+		helper.getEventBus().addListener( this::onConfigLoaded );
 	}
 
 	public ModConfig.Type getType() {
@@ -50,7 +52,15 @@ public class ConfigHandler extends ConfigGroup {
 	}
 
 	private void onConfigReload( ModConfigEvent.Reloading event ) {
-		MajruszLibrary.log( "config %s", event.getConfig().getModId() );
+		if( !this.areConfigsValid ) {
+			return;
+		}
+
+		this.configs.forEach( IConfigurable::onReload );
+	}
+
+	private void onConfigLoaded( ModConfigEvent.Loading event ) {
+		this.areConfigsValid = true;
 	}
 
 	private void registerHelpConfigSpec( final ModLoadingContext modLoadingContext ) {
@@ -61,11 +71,11 @@ public class ConfigHandler extends ConfigGroup {
 			" with other players on the server, which is crucial for some of the functionalities.",
 			"  ",
 			" Anyway, here are the exact locations for 'true' configuration files:",
-			"   Singleplayer: %appdata%/saves/<world>/serverconfig",
+			"   Singleplayer: %appdata%/.minecraft/saves/<world>/serverconfig",
 			"   Multiplayer: <your server>/<world>/serverconfig",
 			"  ",
 			" Remember that server-side configs can be used on all newly created",
-			" worlds when you just copy them to 'defaultconfigs' folder inside '.minecraft'.",
+			" worlds when you copy them to folder: %appdata%/.minecraft/defaultconfigs",
 			"  ",
 			" If you have any questions or want to see some more configs, feel",
 			" free to contact me on my Discord server! Hope to see you there :D"
