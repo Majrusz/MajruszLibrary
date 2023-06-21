@@ -29,9 +29,8 @@ public abstract class SerializableStructure implements ISerializable {
 	final List< ISerializable > serializableList = new ArrayList<>();
 	final String key;
 
-	public static < Type extends SerializableStructure > void register( SimpleChannel channel, int index, Class< Type > classType,
-		Supplier< Type > supplier
-	) {
+	@Deprecated( since = "4.4.0", forRemoval = true )
+	public static < Type extends SerializableStructure > void register( SimpleChannel channel, int index, Class< Type > classType, Supplier< Type > supplier ) {
 		channel.registerMessage(
 			index,
 			classType,
@@ -116,10 +115,10 @@ public abstract class SerializableStructure implements ISerializable {
 		this.onRead();
 	}
 
-	protected void onServer( ServerPlayer sender, NetworkEvent.Context context ) {}
+	public void onServer( ServerPlayer sender, NetworkEvent.Context context ) {}
 
 	@OnlyIn( Dist.CLIENT )
-	protected void onClient( NetworkEvent.Context context ) {}
+	public void onClient( NetworkEvent.Context context ) {}
 
 	protected void onWrite() {}
 

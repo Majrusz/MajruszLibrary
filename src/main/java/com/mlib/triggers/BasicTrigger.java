@@ -6,6 +6,7 @@ import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
+@Deprecated( since = "4.4.0", forRemoval = true )
 public class BasicTrigger extends SimpleCriterionTrigger< BasicTrigger.Instance > {
 	final ResourceLocation triggerId;
 

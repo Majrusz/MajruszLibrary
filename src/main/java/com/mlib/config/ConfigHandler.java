@@ -1,9 +1,13 @@
 package com.mlib.config;
 
+import com.mlib.MajruszLibrary;
 import com.mlib.gamemodifiers.contexts.OnConfigLoaded;
+import com.mlib.modhelper.ModHelper;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /** Handler that makes creating new configs much easier. */
 public class ConfigHandler extends ConfigGroup {
@@ -15,7 +19,7 @@ public class ConfigHandler extends ConfigGroup {
 		this.type = type;
 	}
 
-	/** Registers all configs (all config values are valid after this call). */
+	@Deprecated
 	public void register( final ModLoadingContext modLoadingContext ) {
 		this.build( this.builder );
 
@@ -25,23 +29,43 @@ public class ConfigHandler extends ConfigGroup {
 		if( this.type == ModConfig.Type.SERVER && this.configSpec.size() > 0 ) {
 			this.registerHelpConfigSpec( modLoadingContext );
 		}
+		FMLJavaModLoadingContext.get().getModEventBus().addListener( this::onConfigReload );
+	}
+
+	public void register( ModHelper helper ) {
+		this.build( this.builder );
+
+		ModLoadingContext modLoadingContext = helper.getModLoadingContext();
+		this.configSpec = this.builder.build();
+		modLoadingContext.registerConfig( this.type, this.configSpec );
+		OnConfigLoaded.dispatch( this );
+		if( this.type == ModConfig.Type.SERVER && this.configSpec.size() > 0 ) {
+			this.registerHelpConfigSpec( modLoadingContext );
+		}
+		helper.getEventBus().addListener( this::onConfigReload );
 	}
 
 	public ModConfig.Type getType() {
 		return this.type;
 	}
 
+	private void onConfigReload( ModConfigEvent.Reloading event ) {
+		MajruszLibrary.log( "config %s", event.getConfig().getModId() );
+	}
+
 	private void registerHelpConfigSpec( final ModLoadingContext modLoadingContext ) {
 		String[] comments = {
 			" Hello, Majrusz over here!",
-			" Since one of 1.19.2 release, configs used by my mods are mostly server-side",
-			" which means they are stored separately per world. Thanks to this change,",
-			" configuration files are synchronised with other players on the server, which",
-			" is crucial for some of the functionalities.",
+			" Configs used by my mods are mostly server-side which means they are stored",
+			" separately per world. Thanks to this change, configuration files are synchronised",
+			" with other players on the server, which is crucial for some of the functionalities.",
 			"  ",
 			" Anyway, here are the exact locations for 'true' configuration files:",
 			"   Singleplayer: %appdata%/saves/<world>/serverconfig",
 			"   Multiplayer: <your server>/<world>/serverconfig",
+			"  ",
+			" Remember that server-side configs can be used on all newly created",
+			" worlds when you just copy them to 'defaultconfigs' folder inside '.minecraft'.",
 			"  ",
 			" If you have any questions or want to see some more configs, feel",
 			" free to contact me on my Discord server! Hope to see you there :D"

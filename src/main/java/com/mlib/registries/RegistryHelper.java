@@ -14,6 +14,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated( since = "4.4.0", forRemoval = true )
 public class RegistryHelper {
 	final String modId;
 	final List< DeferredRegister< ? > > registers = new ArrayList<>();

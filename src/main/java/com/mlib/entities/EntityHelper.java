@@ -1,10 +1,13 @@
 package com.mlib.entities;
 
-import com.mlib.NetworkHandler;
 import com.mlib.ObfuscationGetter;
+import com.mlib.Registries;
 import com.mlib.Utility;
+import com.mlib.data.SerializableStructure;
 import com.mlib.math.AABBHelper;
 import com.mlib.math.AnyPos;
+import com.mlib.mixininterfaces.IMixinEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -27,7 +30,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -162,7 +168,7 @@ public class EntityHelper {
 	}
 
 	public static void sendExtraClientGlowTicks( ServerPlayer player, Entity target, int ticks ) {
-		NetworkHandler.CHANNEL.send( PacketDistributor.PLAYER.with( ()->player ), new NetworkHandler.EntityGlow( target, ticks ) );
+		Registries.HELPER.sendMessage( PacketDistributor.PLAYER.with( ()->player ), new EntityGlow( target, ticks ) );
 	}
 
 	public static boolean destroyBlocks( Entity entity, AABB aabb, BiPredicate< BlockPos, BlockState > predicate ) {
@@ -178,5 +184,31 @@ public class EntityHelper {
 		}
 
 		return destroyedAnyBlock;
+	}
+
+	public static class EntityGlow extends SerializableStructure {
+		int entityId = 0;
+		int ticks = 0;
+
+		public EntityGlow( Entity entity, int ticks ) {
+			this();
+
+			this.entityId = entity.getId();
+			this.ticks = ticks;
+		}
+
+		public EntityGlow() {
+			this.define( null, ()->this.entityId, x->this.entityId = x );
+			this.define( null, ()->this.ticks, x->this.ticks = x );
+		}
+
+		@Override
+		@OnlyIn( Dist.CLIENT )
+		public void onClient( NetworkEvent.Context context ) {
+			Level level = Minecraft.getInstance().level;
+			if( level != null ) {
+				IMixinEntity.addGlowTicks( level.getEntity( this.entityId ), this.ticks );
+			}
+		}
 	}
 }

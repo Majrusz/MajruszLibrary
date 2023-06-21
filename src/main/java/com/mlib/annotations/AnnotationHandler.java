@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+@Deprecated( since = "4.4.0", forRemoval = true )
 public class AnnotationHandler {
 	final Class< ? extends Annotation > annotationClass;
 	final List< ? extends Class< ? > > classes;
