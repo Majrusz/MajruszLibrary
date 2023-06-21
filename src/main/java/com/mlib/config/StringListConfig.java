@@ -23,6 +23,7 @@ public class StringListConfig extends ValueConfig< List< ? extends String > > {
 	public void build( ForgeConfigSpec.Builder builder ) {
 		super.build( builder );
 
+		builder.comment( "Supports 'regular expressions' when text starts with %s prefix.".formatted( REGEX_PREFIX ) );
 		this.config = builder.defineList( this.name, this.defaultValue, list->true );
 	}
 
