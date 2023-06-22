@@ -3,10 +3,7 @@ package com.mlib.gamemodifiers;
 import com.mlib.EquipmentSlots;
 import com.mlib.Random;
 import com.mlib.Utility;
-import com.mlib.config.BooleanConfig;
-import com.mlib.config.ConfigGroup;
-import com.mlib.config.DoubleConfig;
-import com.mlib.config.IConfigurable;
+import com.mlib.config.*;
 import com.mlib.entities.EntityHelper;
 import com.mlib.gamemodifiers.data.ILevelData;
 import com.mlib.gamemodifiers.data.IPositionData;
@@ -15,6 +12,7 @@ import com.mlib.levels.LevelHelper;
 import com.mlib.math.AnyPos;
 import com.mlib.math.Range;
 import com.mlib.time.TimeHelper;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
@@ -26,9 +24,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -175,6 +175,29 @@ public class Condition< DataType > extends ConfigGroup {
 
 	public static < DataType > Condition< DataType > isCooldownOver( Function< DataType, Player > player, Supplier< Item > item ) {
 		return new Condition< DataType >( data->player.apply( data ) != null && !player.apply( data ).getCooldowns().isOnCooldown( item.get() ) );
+	}
+
+	public static < DataType extends ILevelData > Condition< DataType > isLevel( StringListConfig levels ) {
+		return new Condition< DataType >( data->levels.contains( data.getLevel().dimension().location().toString() ) )
+			.priority( Priority.HIGH )
+			.configurable( true )
+			.addConfig( levels );
+	}
+
+	public static < DataType extends ILevelData > Condition< DataType > isLevel( String... levelIds ) {
+		StringListConfig config = new StringListConfig( levelIds );
+		config.name( "dimensions" ).comment( "Determines in which dimensions it should work." );
+
+		return Condition.isLevel( config );
+	}
+
+	@SafeVarargs
+	public static < DataType extends ILevelData > Condition< DataType > isLevel( ResourceKey< Level >... levels ) {
+		return Condition.isLevel( Arrays.stream( levels ).map( level->level.location().toString() ).toArray( String[]::new ) );
+	}
+
+	public static < DataType extends ILevelData > Condition< DataType > isAnyLevel() {
+		return Condition.isLevel( "%s.*".formatted( StringListConfig.REGEX_PREFIX ) );
 	}
 
 	public static < DataType > Condition< DataType > armorDependentChance( Map< EquipmentSlot, Double > chances, Function< DataType, LivingEntity > entity ) {
