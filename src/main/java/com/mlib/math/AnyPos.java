@@ -6,6 +6,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 
+import java.util.function.BiFunction;
+
 /**
  This class is an adapter for most position-related operations in the game. It has been
  created because the interface for vector-like classes in Minecraft has changed too many
@@ -276,10 +278,8 @@ public class AnyPos {
 		return this.lerp( ratio, from( x, y, z ) );
 	}
 
-	public AnyPos rot2d( double radians ) {
-		double sin = Math.sin( radians ), cos = Math.cos( radians );
-
-		return new AnyPos( cos * this.x - sin * this.z, this.y, sin * this.x + cos * this.z );
+	public AnyPos rot( AnyRot anyRot ) {
+		return from( anyRot.quaternion.transform( this.vec3f() ) );
 	}
 
 	public Number len() {
