@@ -6,6 +6,7 @@ import com.mlib.Utility;
 import com.mlib.data.SerializableStructure;
 import com.mlib.math.AABBHelper;
 import com.mlib.math.AnyPos;
+import com.mlib.math.AnyRot;
 import com.mlib.mixininterfaces.IMixinEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -184,6 +185,11 @@ public class EntityHelper {
 		}
 
 		return destroyedAnyBlock;
+	}
+
+	public static AnyRot getLookRotation( Entity entity ) {
+		return AnyRot.y( Math.toRadians( -entity.getYRot() ) - Math.PI / 2.0 )
+			.rotZ( Math.toRadians( -entity.getXRot() ) );
 	}
 
 	public static class EntityGlow extends SerializableStructure {
