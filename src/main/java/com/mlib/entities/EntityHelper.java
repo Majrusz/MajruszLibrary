@@ -16,10 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.monster.Witch;
@@ -40,6 +37,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
@@ -99,33 +97,36 @@ public class EntityHelper {
 		return level.addFreshEntity( new ExperienceOrb( level, position.x, position.y, position.z, experience ) );
 	}
 
+	@Deprecated( since = "4.4.0", forRemoval = true )
 	@Nullable
 	public static < Type extends Entity > Type spawn( EntityType< Type > entityType, Level level, Consumer< Type > beforeEvent ) {
-		Type entity = entityType.create( level );
-		if( entity != null ) {
-			beforeEvent.accept( entity );
-			if( !level.addFreshEntity( entity ) )
-				return null;
-		}
-
-		return entity;
+		return createSpawner( entityType, level ).beforeEvent( beforeEvent ).spawn();
 	}
 
+	@Deprecated( since = "4.4.0", forRemoval = true )
 	@Nullable
 	public static < Type extends Entity > Type spawn( RegistryObject< EntityType< Type > > entityType, Level level, Consumer< Type > beforeEvent ) {
-		return spawn( entityType.get(), level, beforeEvent );
+		return createSpawner( entityType, level ).beforeEvent( beforeEvent ).spawn();
 	}
 
+	@Deprecated( since = "4.4.0", forRemoval = true )
 	@Nullable
 	public static < Type extends Entity > Type spawn( EntityType< Type > entityType, Level level, Vec3 position ) {
-		return spawn( entityType, level, entity->entity.moveTo( position ) );
+		return createSpawner( entityType, level ).position( position ).spawn();
 	}
 
+	@Deprecated( since = "4.4.0", forRemoval = true )
 	@Nullable
-	public static < Type extends Entity > Type spawn( RegistryObject< EntityType< Type > > entityType, Level level,
-		Vec3 position
-	) {
-		return spawn( entityType.get(), level, position );
+	public static < Type extends Entity > Type spawn( RegistryObject< EntityType< Type > > entityType, Level level, Vec3 position ) {
+		return createSpawner( entityType, level ).position( position ).spawn();
+	}
+
+	public static < Type extends Entity > Spawner< Type > createSpawner( EntityType< Type > type, Level level ) {
+		return new Spawner<>( type, level );
+	}
+
+	public static < Type extends Entity > Spawner< Type > createSpawner( RegistryObject< EntityType< Type > > type, Level level ) {
+		return createSpawner( type.get(), level );
 	}
 
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass,
@@ -190,6 +191,55 @@ public class EntityHelper {
 	public static AnyRot getLookRotation( Entity entity ) {
 		return AnyRot.y( Math.toRadians( -entity.getYRot() ) - Math.PI / 2.0 )
 			.rotZ( Math.toRadians( -entity.getXRot() ) );
+	}
+
+	public static class Spawner< Type extends Entity > {
+		final EntityType< Type > type;
+		final Level level;
+		MobSpawnType mobSpawnType = MobSpawnType.EVENT;
+		Vec3 position = null;
+		Consumer< Type > beforeEvent = null;
+
+		public Spawner< Type > mobSpawnType( MobSpawnType mobSpawnType ) {
+			this.mobSpawnType = mobSpawnType;
+
+			return this;
+		}
+
+		public Spawner< Type > position( Vec3 position ) {
+			this.position = position;
+
+			return this;
+		}
+
+		public Spawner< Type > beforeEvent( Consumer< Type > beforeEvent ) {
+			this.beforeEvent = beforeEvent;
+
+			return this;
+		}
+
+		@Nullable
+		public Type spawn() {
+			Type entity = this.type.create( this.level );
+			if( entity != null ) {
+				Optional.ofNullable( this.position ).ifPresent( entity::moveTo );
+				Optional.ofNullable( this.beforeEvent ).ifPresent( beforeEvent->beforeEvent.accept( entity ) );
+				if( entity instanceof Mob mob && this.level instanceof ServerLevel serverLevel ) {
+					ForgeEventFactory.onFinalizeSpawn( mob, serverLevel, this.level.getCurrentDifficultyAt( mob.blockPosition() ), this.mobSpawnType, null, null );
+				}
+
+				if( !this.level.addFreshEntity( entity ) ) {
+					return null;
+				}
+			}
+
+			return entity;
+		}
+
+		Spawner( EntityType< Type > type, Level level ) {
+			this.type = type;
+			this.level = level;
+		}
 	}
 
 	public static class EntityGlow extends SerializableStructure {
