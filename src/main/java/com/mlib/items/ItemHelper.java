@@ -70,16 +70,15 @@ public class ItemHelper {
 
 	/** Required because Mob::equipItemIfPossible makes item a guaranteed drop and enables persistence for mob. */
 	public static @Nullable EquipmentSlot equip( Mob mob, ItemStack itemStack ) {
-		if( mob.canHoldItem( itemStack ) ) {
-			EquipmentSlot equipmentSlot = Mob.getEquipmentSlotForItem( itemStack );
-			boolean canEquipArmorPiece = equipmentSlot.isArmor() && mob.getItemBySlot( equipmentSlot ).isEmpty();
-			equipmentSlot = canEquipArmorPiece ? equipmentSlot : EquipmentSlot.MAINHAND;
-			mob.setItemSlot( equipmentSlot, itemStack );
-
-			return equipmentSlot;
+		if( !mob.canHoldItem( itemStack ) ) {
+			return null;
 		}
 
-		return null;
+		EquipmentSlot equipmentSlot = Mob.getEquipmentSlotForItem( itemStack );
+		equipmentSlot = equipmentSlot.isArmor() ? equipmentSlot : EquipmentSlot.MAINHAND;
+		mob.setItemSlot( equipmentSlot, itemStack );
+
+		return equipmentSlot;
 	}
 
 	public static void consumeItemOnUse( ItemStack itemStack, Player player ) {
