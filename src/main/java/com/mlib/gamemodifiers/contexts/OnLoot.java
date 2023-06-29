@@ -65,18 +65,15 @@ public class OnLoot {
 		return new Condition<>( data->data.origin != null );
 	}
 
-	public static Condition< Data > is( StringListConfig idsConfig ) {
-		return new Condition< Data >( data->idsConfig.contains( data.context.getQueriedLootTableId().toString() ) )
+	public static Condition< Data > is( StringListConfig ids ) {
+		return new Condition< Data >( data->ids.contains( data.context.getQueriedLootTableId().toString() ) )
 			.priority( Priority.HIGH )
 			.configurable( true )
-			.addConfig( idsConfig );
+			.addConfig( ids );
 	}
 
-	public static Condition< Data > is( String... ids ) {
-		StringListConfig idsConfig = new StringListConfig( ids );
-		idsConfig.name( "loot_table_ids" ).comment( "Determines to which loot tables it is applicable." );
-
-		return is( idsConfig );
+	public static Condition< Data > is( String... defaultIds ) {
+		return is( DefaultConfigs.is( defaultIds ) );
 	}
 
 	public static Condition< Data > is( ResourceLocation... ids ) {
@@ -132,6 +129,15 @@ public class OnLoot {
 		@Nullable
 		private < Type > Type getParameter( LootContextParam< Type > parameter ) {
 			return this.context.getParamOrNull( parameter );
+		}
+	}
+
+	public static class DefaultConfigs {
+		public static StringListConfig is( String... defaultIds ) {
+			StringListConfig ids = new StringListConfig( defaultIds );
+			ids.name( "loot_table_ids" ).comment( "Determines to which loot tables it is applicable." );
+
+			return ids;
 		}
 	}
 }

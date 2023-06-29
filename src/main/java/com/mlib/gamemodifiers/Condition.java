@@ -49,10 +49,7 @@ public class Condition< DataType > extends ConfigGroup {
 	}
 
 	public static < DataType > Condition< DataType > excludable( boolean defaultValue ) {
-		BooleanConfig availability = new BooleanConfig( defaultValue );
-		availability.name( "is_enabled" ).comment( "Specifies whether this is enabled." );
-
-		return excludable( availability );
+		return excludable( DefaultConfigs.excludable( defaultValue ) );
 	}
 
 	public static < DataType > Condition< DataType > excludable() {
@@ -67,10 +64,7 @@ public class Condition< DataType > extends ConfigGroup {
 	}
 
 	public static < DataType > Condition< DataType > chance( double defaultChance ) {
-		DoubleConfig chance = new DoubleConfig( defaultChance, Range.CHANCE );
-		chance.name( "chance" ).comment( "Chance for this to happen." );
-
-		return chance( chance );
+		return chance( DefaultConfigs.chance( defaultChance ) );
 	}
 
 	/** WARNING: This condition cannot be used with OnSpawned.listen! (use OnSpawned.listenSafe) */
@@ -94,10 +88,7 @@ public class Condition< DataType > extends ConfigGroup {
 
 	/** WARNING: This condition cannot be used with OnSpawned.listen! (use OnSpawned.listenSafe) */
 	public static < DataType extends ILevelData & IPositionData > Condition< DataType > chanceCRD( double defaultChance, boolean defaultScaledByCRD ) {
-		DoubleConfig chance = new DoubleConfig( defaultChance, Range.CHANCE );
-		chance.name( "chance" ).comment( "Chance for this to happen." );
-
-		return chanceCRD( chance, defaultScaledByCRD );
+		return chanceCRD( DefaultConfigs.chance( defaultChance ), defaultScaledByCRD );
 	}
 
 	public static < DataType > Condition< DataType > isLivingBeing( Function< DataType, Entity > entity ) {
@@ -124,10 +115,7 @@ public class Condition< DataType > extends ConfigGroup {
 	}
 
 	public static < DataType > Condition< DataType > cooldown( double defaultSeconds, Dist distribution ) {
-		DoubleConfig cooldown = new DoubleConfig( defaultSeconds, new Range<>( 0.1, 300.0 ) );
-		cooldown.name( "cooldown" ).comment( "Cooldown in seconds before it happens." );
-
-		return cooldown( cooldown, distribution );
+		return cooldown( DefaultConfigs.cooldown( defaultSeconds ), distribution );
 	}
 
 	public static < DataType > Condition< DataType > cooldown( int defaultTicks, Dist distribution ) {
@@ -185,10 +173,7 @@ public class Condition< DataType > extends ConfigGroup {
 	}
 
 	public static < DataType extends ILevelData > Condition< DataType > isLevel( String... levelIds ) {
-		StringListConfig config = new StringListConfig( levelIds );
-		config.name( "dimensions" ).comment( "Determines in which dimensions it should work." );
-
-		return Condition.isLevel( config );
+		return Condition.isLevel( DefaultConfigs.isLevel( levelIds ) );
 	}
 
 	@SafeVarargs
@@ -288,5 +273,35 @@ public class Condition< DataType > extends ConfigGroup {
 
 	public boolean check( DataType data ) {
 		return this.isNegated ^ this.predicate.test( data );
+	}
+
+	public static class DefaultConfigs {
+		public static BooleanConfig excludable( boolean defaultValue ) {
+			BooleanConfig availability = new BooleanConfig( defaultValue );
+			availability.name( "is_enabled" ).comment( "Specifies whether this is enabled." );
+
+			return availability;
+		}
+
+		public static DoubleConfig chance( double defaultChance ) {
+			DoubleConfig chance = new DoubleConfig( defaultChance, Range.CHANCE );
+			chance.name( "chance" ).comment( "Chance for this to happen." );
+
+			return chance;
+		}
+
+		public static DoubleConfig cooldown( double defaultSeconds ) {
+			DoubleConfig cooldown = new DoubleConfig( defaultSeconds, new Range<>( 0.1, 300.0 ) );
+			cooldown.name( "cooldown" ).comment( "Cooldown in seconds before it happens." );
+
+			return cooldown;
+		}
+
+		public static StringListConfig isLevel( String... levelIds ) {
+			StringListConfig dimensions = new StringListConfig( levelIds );
+			dimensions.name( "dimensions" ).comment( "Determines in which dimensions it should work." );
+
+			return dimensions;
+		}
 	}
 }

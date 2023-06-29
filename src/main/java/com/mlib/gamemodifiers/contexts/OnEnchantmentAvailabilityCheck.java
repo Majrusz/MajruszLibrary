@@ -27,12 +27,12 @@ public class OnEnchantmentAvailabilityCheck {
 	}
 
 	public static < DataType extends Data > Condition< DataType > excludable( boolean defaultValue ) {
-		BooleanConfig availability = new BooleanConfig( defaultValue );
+		BooleanConfig availability = DefaultConfigs.excludable( defaultValue );
 
 		return new Condition< DataType >( data->availability.getOrDefault() )
 			.priority( Priority.HIGHEST )
 			.configurable( true )
-			.addConfig( availability.name( "is_enabled" ).comment( "Specifies whether this enchantment is obtainable in survival mode." ) );
+			.addConfig( availability );
 	}
 
 	public static < DataType extends Data > Condition< DataType > excludable() {
@@ -49,6 +49,15 @@ public class OnEnchantmentAvailabilityCheck {
 
 		public boolean isEnabled() {
 			return this.isAvailable;
+		}
+	}
+
+	public static class DefaultConfigs {
+		public static BooleanConfig excludable( boolean defaultValue ) {
+			BooleanConfig availability = new BooleanConfig( defaultValue );
+			availability.name( "is_enabled" ).comment( "Specifies whether this enchantment is obtainable in survival mode." );
+
+			return availability;
 		}
 	}
 }
