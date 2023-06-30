@@ -1,7 +1,10 @@
 package com.mlib.items;
 
 import com.mlib.Random;
+import com.mlib.data.SerializableHelper;
+import com.mlib.data.SerializableStructure;
 import com.mlib.entities.EntityHelper;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -14,6 +17,8 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 /** Some useful methods for items. */
@@ -162,5 +167,25 @@ public class ItemHelper {
 			|| item instanceof DiggerItem
 			|| item instanceof BowItem
 			|| item instanceof CrossbowItem;
+	}
+
+	public static List< EnchantmentInfo > getEnchantmentsInfo( ItemStack itemStack ) {
+		List< EnchantmentInfo > infoList = new ArrayList<>();
+		ListTag tags = itemStack.getEnchantmentTags();
+		for( int idx = 0; idx < tags.size(); ++idx ) {
+			infoList.add( SerializableHelper.read( EnchantmentInfo::new, tags.getCompound( idx ) ) );
+		}
+
+		return infoList;
+	}
+
+	public static class EnchantmentInfo extends SerializableStructure {
+		public String id;
+		public int level;
+
+		public EnchantmentInfo() {
+			this.define( "id", ()->this.id, x->this.id = x );
+			this.define( "lvl", ()->this.level, x->this.level = x );
+		}
 	}
 }
