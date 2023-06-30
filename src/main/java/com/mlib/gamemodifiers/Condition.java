@@ -11,6 +11,7 @@ import com.mlib.gamemodifiers.data.ITickData;
 import com.mlib.levels.LevelHelper;
 import com.mlib.math.AnyPos;
 import com.mlib.math.Range;
+import com.mlib.text.RegexString;
 import com.mlib.time.TimeHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -182,9 +183,10 @@ public class Condition< DataType > extends ConfigGroup {
 	}
 
 	public static < DataType extends ILevelData > Condition< DataType > isAnyLevel() {
-		return Condition.isLevel( "%s.*".formatted( StringListConfig.REGEX_PREFIX ) );
+		return Condition.isLevel( "%s.*".formatted( RegexString.REGEX_PREFIX ) );
 	}
 
+	@Deprecated( since = "4.4.0" )
 	public static < DataType > Condition< DataType > armorDependentChance( Map< EquipmentSlot, Double > chances, Function< DataType, LivingEntity > entity ) {
 		Map< EquipmentSlot, DoubleConfig > multipliers = new HashMap<>();
 		ConfigGroup group = new ConfigGroup();
@@ -213,12 +215,14 @@ public class Condition< DataType > extends ConfigGroup {
 			);
 	}
 
+	@Deprecated( since = "4.4.0" )
 	public static < DataType > Condition< DataType > armorDependentChance( double headChance, double chestChance, double legsChance, double feetChance,
 		Function< DataType, LivingEntity > entity
 	) {
 		return armorDependentChance( Map.of( EquipmentSlot.HEAD, headChance, EquipmentSlot.CHEST, chestChance, EquipmentSlot.LEGS, legsChance, EquipmentSlot.FEET, feetChance ), entity );
 	}
 
+	@Deprecated( since = "4.4.0" )
 	public static < DataType > Condition< DataType > armorDependentChance( double chance, Function< DataType, LivingEntity > entity ) {
 		return armorDependentChance( chance, chance, chance, chance, entity );
 	}

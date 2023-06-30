@@ -1,15 +1,14 @@
 package com.mlib.config;
 
+import com.mlib.text.RegexString;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class StringListConfig extends ValueConfig< List< ? extends String > > {
-	public static final String REGEX_PREFIX = "{regex}";
-	protected final List< Predicate< String > > predicates = new ArrayList<>();
+	protected final List< RegexString > strings = new ArrayList<>();
 
 	public StringListConfig( List< ? extends String > defaultValue ) {
 		super( defaultValue );
@@ -23,7 +22,7 @@ public class StringListConfig extends ValueConfig< List< ? extends String > > {
 	public void build( ForgeConfigSpec.Builder builder ) {
 		super.build( builder );
 
-		builder.comment( "Supports 'regular expressions' when text starts with %s prefix.".formatted( REGEX_PREFIX ) );
+		builder.comment( "Supports 'regular expressions' when text starts with %s prefix.".formatted( RegexString.REGEX_PREFIX ) );
 		this.config = builder.defineList( this.name, this.defaultValue, list->true );
 	}
 
@@ -31,24 +30,11 @@ public class StringListConfig extends ValueConfig< List< ? extends String > > {
 	public void onReload() {
 		super.onReload();
 
-		this.predicates.clear();
-		this.getOrDefault()
-			.forEach( value->{
-				if( value.startsWith( REGEX_PREFIX ) ) {
-					this.predicates.add( subvalue->subvalue.matches( value.substring( REGEX_PREFIX.length() ) ) );
-				} else {
-					this.predicates.add( subvalue->subvalue.equals( value ) );
-				}
-			} );
+		this.strings.clear();
+		this.getOrDefault().forEach( value->this.strings.add( new RegexString( value ) ) );
 	}
 
 	public boolean contains( String value ) {
-		for( Predicate< String > predicate : this.predicates ) {
-			if( predicate.test( value ) ) {
-				return true;
-			}
-		}
-
-		return false;
+		return this.strings.stream().anyMatch( subvalue->subvalue.matches( value ) );
 	}
 }
