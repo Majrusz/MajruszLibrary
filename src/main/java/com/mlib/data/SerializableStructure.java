@@ -6,9 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.simple.SimpleChannel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,33 +26,6 @@ import java.util.function.Supplier;
 public abstract class SerializableStructure implements ISerializable {
 	final List< ISerializable > serializableList = new ArrayList<>();
 	final String key;
-
-	@Deprecated( since = "4.4.0", forRemoval = true )
-	public static < Type extends SerializableStructure > void register( SimpleChannel channel, int index, Class< Type > classType, Supplier< Type > supplier ) {
-		channel.registerMessage(
-			index,
-			classType,
-			SerializableStructure::write,
-			( buffer )->{
-				Type value = supplier.get();
-				value.read( buffer );
-
-				return value;
-			},
-			( structure, contextSupplier )->{
-				NetworkEvent.Context context = contextSupplier.get();
-				context.enqueueWork( ()->{
-					ServerPlayer sender = context.getSender();
-					if( sender != null ) {
-						structure.onServer( sender, context );
-					} else {
-						DistExecutor.unsafeRunWhenOn( Dist.CLIENT, ()->()->structure.onClient( context ) );
-					}
-				} );
-				context.setPacketHandled( true );
-			}
-		);
-	}
 
 	public SerializableStructure( String key ) {
 		this.key = key;

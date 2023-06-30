@@ -22,9 +22,4 @@ public class LootHelper {
 			.withParameter( LootContextParams.THIS_ENTITY, entity )
 			.create( LootContextParamSets.GIFT );
 	}
-
-	@Deprecated( since = "4.4.0", forRemoval = true )
-	public static LootParams toGiftParams( Entity entity, ResourceLocation id ) {
-		return toGiftParams( entity );
-	}
 }

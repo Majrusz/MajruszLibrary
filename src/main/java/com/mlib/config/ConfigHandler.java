@@ -6,7 +6,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 /** Handler that makes creating new configs much easier. */
 public class ConfigHandler extends ConfigGroup {
@@ -17,20 +16,6 @@ public class ConfigHandler extends ConfigGroup {
 
 	public ConfigHandler( ModConfig.Type type ) {
 		this.type = type;
-	}
-
-	@Deprecated
-	public void register( final ModLoadingContext modLoadingContext ) {
-		this.build( this.builder );
-
-		this.configSpec = this.builder.build();
-		modLoadingContext.registerConfig( this.type, this.configSpec );
-		OnConfigLoaded.dispatch( this );
-		if( this.type == ModConfig.Type.SERVER && this.configSpec.size() > 0 ) {
-			this.registerHelpConfigSpec( modLoadingContext );
-		}
-		FMLJavaModLoadingContext.get().getModEventBus().addListener( this::onConfigReload );
-		FMLJavaModLoadingContext.get().getModEventBus().addListener( this::onConfigLoaded );
 	}
 
 	public void register( ModHelper helper ) {

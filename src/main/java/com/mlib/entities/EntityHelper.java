@@ -97,30 +97,6 @@ public class EntityHelper {
 		return level.addFreshEntity( new ExperienceOrb( level, position.x, position.y, position.z, experience ) );
 	}
 
-	@Deprecated( since = "4.4.0", forRemoval = true )
-	@Nullable
-	public static < Type extends Entity > Type spawn( EntityType< Type > entityType, Level level, Consumer< Type > beforeEvent ) {
-		return createSpawner( entityType, level ).beforeEvent( beforeEvent ).spawn();
-	}
-
-	@Deprecated( since = "4.4.0", forRemoval = true )
-	@Nullable
-	public static < Type extends Entity > Type spawn( RegistryObject< EntityType< Type > > entityType, Level level, Consumer< Type > beforeEvent ) {
-		return createSpawner( entityType, level ).beforeEvent( beforeEvent ).spawn();
-	}
-
-	@Deprecated( since = "4.4.0", forRemoval = true )
-	@Nullable
-	public static < Type extends Entity > Type spawn( EntityType< Type > entityType, Level level, Vec3 position ) {
-		return createSpawner( entityType, level ).position( position ).spawn();
-	}
-
-	@Deprecated( since = "4.4.0", forRemoval = true )
-	@Nullable
-	public static < Type extends Entity > Type spawn( RegistryObject< EntityType< Type > > entityType, Level level, Vec3 position ) {
-		return createSpawner( entityType, level ).position( position ).spawn();
-	}
-
 	public static < Type extends Entity > Spawner< Type > createSpawner( EntityType< Type > type, Level level ) {
 		return new Spawner<>( type, level );
 	}

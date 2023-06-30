@@ -1,6 +1,5 @@
 package com.mlib.gamemodifiers;
 
-import com.mlib.EquipmentSlots;
 import com.mlib.Random;
 import com.mlib.Utility;
 import com.mlib.config.*;
@@ -17,12 +16,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -30,8 +26,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -184,47 +178,6 @@ public class Condition< DataType > extends ConfigGroup {
 
 	public static < DataType extends ILevelData > Condition< DataType > isAnyLevel() {
 		return Condition.isLevel( "%s.*".formatted( RegexString.REGEX_PREFIX ) );
-	}
-
-	@Deprecated( since = "4.4.0" )
-	public static < DataType > Condition< DataType > armorDependentChance( Map< EquipmentSlot, Double > chances, Function< DataType, LivingEntity > entity ) {
-		Map< EquipmentSlot, DoubleConfig > multipliers = new HashMap<>();
-		ConfigGroup group = new ConfigGroup();
-
-		for( EquipmentSlot slot : EquipmentSlots.ARMOR ) {
-			DoubleConfig config = new DoubleConfig( chances.get( slot ), Range.CHANCE );
-			multipliers.put( slot, config );
-			group.addConfig( config.name( String.format( "%s_multiplier", slot.getName() ) ) );
-		}
-
-		return new Condition< DataType >( data->{
-			double chance = 1.0;
-			for( EquipmentSlot slot : multipliers.keySet() ) {
-				DoubleConfig config = multipliers.get( slot );
-				ItemStack itemStack = entity.apply( data ).getItemBySlot( slot );
-				if( !itemStack.isEmpty() && itemStack.getAttributeModifiers( slot ).containsKey( Attributes.ARMOR ) ) {
-					chance *= config.getOrDefault();
-				}
-			}
-
-			return Random.tryChance( chance );
-		} ).configurable( true )
-			.addConfig( group
-				.name( "ArmorChanceMultipliers" )
-				.comment( "Chance multipliers for each armor piece.\nFor instance 'head_multiplier = 0.8' makes the final chance 20% lower if mob has any helmet." )
-			);
-	}
-
-	@Deprecated( since = "4.4.0" )
-	public static < DataType > Condition< DataType > armorDependentChance( double headChance, double chestChance, double legsChance, double feetChance,
-		Function< DataType, LivingEntity > entity
-	) {
-		return armorDependentChance( Map.of( EquipmentSlot.HEAD, headChance, EquipmentSlot.CHEST, chestChance, EquipmentSlot.LEGS, legsChance, EquipmentSlot.FEET, feetChance ), entity );
-	}
-
-	@Deprecated( since = "4.4.0" )
-	public static < DataType > Condition< DataType > armorDependentChance( double chance, Function< DataType, LivingEntity > entity ) {
-		return armorDependentChance( chance, chance, chance, chance, entity );
 	}
 
 	public Condition( Predicate< DataType > predicate ) {
