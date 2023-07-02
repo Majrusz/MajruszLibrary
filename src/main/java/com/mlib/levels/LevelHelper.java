@@ -22,7 +22,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FrostedIceBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -98,22 +97,17 @@ public class LevelHelper {
 	}
 
 	public static void teleportToSpawnPosition( ServerPlayer player ) {
-		Pair< Vec3, ServerLevel > spawnData = getSpawnData( player );
+		Pair< Vec3, ServerLevel > spawnData = LevelHelper.getSpawnData( player );
 		Vec3 spawnPosition = spawnData.getFirst();
-		ServerLevel serverLevel = spawnData.getSecond();
+		ServerLevel level = spawnData.getSecond();
 
-		player.teleportTo( serverLevel, spawnPosition.x, spawnPosition.y, spawnPosition.z, player.getYRot(), player.getXRot() );
+		player.teleportTo( level, spawnPosition.x, spawnPosition.y, spawnPosition.z, player.getYRot(), player.getXRot() );
 	}
 
 	public static boolean teleportNearby( LivingEntity target, ServerLevel level, double offset ) {
-		boolean isEntityInside = target.yOld + 8 > level.getHeight( Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ( int )target.xOld, ( int )target.zOld );
-		if( isEntityInside )
-			offset /= 2;
-
-		Vec3 newPosition = Random.getRandomVector( -offset, offset, -1.0, 1.0, -offset, offset ).add( target.position() ).vec3();
-		double y = level.getHeight( Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ( int )newPosition.x, ( int )newPosition.z ) + 1;
-		if( !( y < level.getMinBuildHeight() + 1 ) && target.randomTeleport( newPosition.x, target.yOld + 8 > y ? y : newPosition.y, newPosition.z, true ) ) {
-			Vec3 position = new Vec3( target.xo, target.getY( 0.5 ), target.zo );
+		Vec3 position = AnyPos.from( target.position() ).add( Random.nextDouble( -offset, offset ), 0.0, Random.nextDouble( -offset, offset ) ).vec3();
+		BlockPos blockPos = LevelHelper.findBlockPosOnGround( level, position, 3 ).orElse( null );
+		if( blockPos != null && target.randomTeleport( blockPos.getX(), blockPos.getY(), blockPos.getZ(), true ) ) {
 			SoundHandler.ENDERMAN_TELEPORT.play( level, position );
 			ParticleHandler.PORTAL.spawn( level, position, 10 );
 			return true;
@@ -190,6 +184,10 @@ public class LevelHelper {
 		data.setRainTime( ticks );
 		data.setThundering( false );
 		data.setThunderTime( ticks );
+	}
+
+	public static < Type extends Number & Comparable< Type > > Optional< BlockPos > findBlockPosOnGround( Level level, Vec3 position, Type yOffset ) {
+		return LevelHelper.findBlockPosOnGround( level, position.x, new Range<>( position.y - yOffset.doubleValue(), position.y + yOffset.doubleValue() ), position.z );
 	}
 
 	public static < Type extends Number & Comparable< Type > > Optional< BlockPos > findBlockPosOnGround( Level level, Type x, Range< Type > y, Type z ) {
