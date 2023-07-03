@@ -2,7 +2,6 @@ package com.mlib.data;
 
 import com.google.gson.JsonElement;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -26,7 +25,10 @@ public abstract class SerializableMap implements ISerializable {
 
 	@Override
 	public void read( JsonElement element ) {
-		JsonElement subelement = this.key != null ? element.getAsJsonObject().get( this.key ) : element;
+		JsonElement subelement = SerializableHelper.getReadSubelement( element, this.key );
+		if( subelement == null ) {
+			return;
+		}
 
 		this.serializable.read( subelement );
 	}
@@ -43,14 +45,20 @@ public abstract class SerializableMap implements ISerializable {
 
 	@Override
 	public void write( Tag tag ) {
-		Tag subtag = this.key != null ? ( ( CompoundTag )tag ).get( this.key ) : tag;
+		Tag subtag = SerializableHelper.getWriteSubtag( tag, this.key );
+		if( subtag == null ) {
+			return;
+		}
 
 		this.serializable.write( subtag );
 	}
 
 	@Override
 	public void read( Tag tag ) {
-		Tag subtag = this.key != null ? ( ( CompoundTag )tag ).get( this.key ) : tag;
+		Tag subtag = SerializableHelper.getReadSubtag( tag, this.key );
+		if( subtag == null ) {
+			return;
+		}
 
 		this.serializable.read( subtag );
 	}
