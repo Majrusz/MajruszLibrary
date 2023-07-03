@@ -1,7 +1,7 @@
 package com.mlib.modhelper;
 
 import com.mlib.config.ConfigHandler;
-import com.mlib.data.SerializableStructure;
+import com.mlib.data.ISerializable;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Registry;
@@ -60,7 +60,7 @@ public class ModHelper {
 		return configHandler;
 	}
 
-	public < Type extends SerializableStructure > void createMessage( Class< Type > clazz, Supplier< Type > supplier ) {
+	public < Type extends ISerializable > void createMessage( Class< Type > clazz, Supplier< Type > supplier ) {
 		this.networkHandler.add( clazz, supplier );
 	}
 

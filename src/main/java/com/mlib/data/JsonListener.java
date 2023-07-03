@@ -20,11 +20,9 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class JsonListener {
-	final static List< SerializableStructure > STRUCTURES = Collections.synchronizedList( new ArrayList<>() );
+	final static List< ISerializable > STRUCTURES = Collections.synchronizedList( new ArrayList<>() );
 
-	public static < Type extends SerializableStructure > Holder< Type > add( String data, ResourceLocation location, Class< Type > clazz,
-		Supplier< Type > newInstance
-	) {
+	public static < Type extends ISerializable > Holder< Type > add( String data, ResourceLocation id, Class< Type > clazz, Supplier< Type > newInstance ) {
 		Holder< Type > holder = new Holder<>( STRUCTURES.size() );
 		STRUCTURES.add( newInstance.get() );
 		var gson = Deserializers.createFunctionSerializer()
@@ -33,7 +31,7 @@ public class JsonListener {
 		var listener = new SimpleJsonResourceReloadListener( gson, data ) {
 			@Override
 			protected void apply( Map< ResourceLocation, JsonElement > elements, ResourceManager manager, ProfilerFiller filler ) {
-				STRUCTURES.set( holder.idx, gson.fromJson( elements.get( location ), clazz ) );
+				STRUCTURES.set( holder.idx, gson.fromJson( elements.get( id ), clazz ) );
 			}
 		};
 		MinecraftForge.EVENT_BUS.addListener( ( AddReloadListenerEvent event )->event.addListener( listener ) );
@@ -41,7 +39,7 @@ public class JsonListener {
 		return holder;
 	}
 
-	public static class Holder< Type extends SerializableStructure > implements Supplier< Type > {
+	public static class Holder< Type extends ISerializable > implements Supplier< Type > {
 		final int idx;
 
 		Holder( int idx ) {

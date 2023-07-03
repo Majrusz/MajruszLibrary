@@ -2,9 +2,9 @@ package com.mlib.items;
 
 import com.mlib.Random;
 import com.mlib.data.SerializableHelper;
+import com.mlib.data.SerializableList;
 import com.mlib.data.SerializableStructure;
 import com.mlib.entities.EntityHelper;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -17,7 +17,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -169,14 +168,16 @@ public class ItemHelper {
 			|| item instanceof CrossbowItem;
 	}
 
-	public static List< EnchantmentInfo > getEnchantmentsInfo( ItemStack itemStack ) {
-		List< EnchantmentInfo > infoList = new ArrayList<>();
-		ListTag tags = itemStack.getEnchantmentTags();
-		for( int idx = 0; idx < tags.size(); ++idx ) {
-			infoList.add( SerializableHelper.read( EnchantmentInfo::new, tags.getCompound( idx ) ) );
-		}
+	public static EnchantmentsInfo getEnchantmentsInfo( ItemStack itemStack ) {
+		return SerializableHelper.read( EnchantmentsInfo::new, itemStack.getEnchantmentTags() );
+	}
 
-		return infoList;
+	public static class EnchantmentsInfo extends SerializableList {
+		public List< EnchantmentInfo > enchantments;
+
+		public EnchantmentsInfo() {
+			this.define( ()->this.enchantments, x->this.enchantments = x, EnchantmentInfo::new );
+		}
 	}
 
 	public static class EnchantmentInfo extends SerializableStructure {

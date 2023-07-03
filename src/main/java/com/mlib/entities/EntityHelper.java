@@ -230,8 +230,8 @@ public class EntityHelper {
 		}
 
 		public EntityGlow() {
-			this.define( null, ()->this.entityId, x->this.entityId = x );
-			this.define( null, ()->this.ticks, x->this.ticks = x );
+			this.define( "id", ()->this.entityId, x->this.entityId = x );
+			this.define( "ticks", ()->this.ticks, x->this.ticks = x );
 		}
 
 		@Override

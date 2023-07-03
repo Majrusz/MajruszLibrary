@@ -1,6 +1,7 @@
 package com.mlib.modhelper;
 
-import com.mlib.data.SerializableStructure;
+import com.mlib.data.ISerializable;
+import com.mlib.data.SerializableHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -28,26 +29,21 @@ class NetworkHandler {
 		helper.onRegister( ()->helper.getEventBus().addListener( this::register ) );
 	}
 
-	public < Type extends SerializableStructure > void add( Class< Type > clazz, Supplier< Type > supplier ) {
+	public < Type extends ISerializable > void add( Class< Type > clazz, Supplier< Type > supplier ) {
 		int idx = this.pendingConsumers.size();
 		this.pendingConsumers.add( channel->channel.registerMessage(
 			idx,
 			clazz,
-			SerializableStructure::write,
-			( buffer )->{
-				Type value = supplier.get();
-				value.read( buffer );
-
-				return value;
-			},
-			( structure, contextSupplier )->{
+			ISerializable::write,
+			( buffer )->SerializableHelper.read( supplier, buffer ),
+			( serializable, contextSupplier )->{
 				NetworkEvent.Context context = contextSupplier.get();
 				context.enqueueWork( ()->{
 					ServerPlayer sender = context.getSender();
 					if( sender != null ) {
-						structure.onServer( sender, context );
+						serializable.onServer( sender, context );
 					} else {
-						DistExecutor.unsafeRunWhenOn( Dist.CLIENT, ()->()->structure.onClient( context ) );
+						DistExecutor.unsafeRunWhenOn( Dist.CLIENT, ()->()->serializable.onClient( context ) );
 					}
 				} );
 				context.setPacketHandled( true );
