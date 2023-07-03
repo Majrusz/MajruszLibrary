@@ -41,16 +41,4 @@ class ReaderCustom< Type extends ISerializable > implements IReader< Type > {
 	public Type read( Tag tag ) {
 		return SerializableHelper.read( this.supplier, tag );
 	}
-
-	public interface Getter< Type extends ISerializable > extends Supplier< Type > {}
-
-	public interface Setter< Type extends ISerializable > extends Consumer< Type > {}
-
-	public interface ListGetter< Type extends ISerializable > extends Supplier< List< Type > > {}
-
-	public interface ListSetter< Type extends ISerializable > extends Consumer< List< Type > > {}
-
-	public interface MapGetter< Type extends ISerializable > extends Supplier< Map< String, Type > > {}
-
-	public interface MapSetter< Type extends ISerializable > extends Consumer< Map< String, Type > > {}
 }

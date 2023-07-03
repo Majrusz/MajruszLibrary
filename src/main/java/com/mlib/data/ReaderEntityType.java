@@ -18,16 +18,4 @@ class ReaderEntityType extends ReaderStringCustom< EntityType< ? > > {
 	public String convert( EntityType< ? > entityType ) {
 		return Utility.getRegistryString( entityType );
 	}
-
-	public interface Getter extends Supplier< EntityType< ? > > {}
-
-	public interface Setter extends Consumer< EntityType< ? > > {}
-
-	public interface ListGetter extends Supplier< List< EntityType< ? > > > {}
-
-	public interface ListSetter extends Consumer< List< EntityType< ? > > > {}
-
-	public interface MapGetter extends Supplier< Map< String, EntityType< ? > > > {}
-
-	public interface MapSetter extends Consumer< Map< String, EntityType< ? > > > {}
 }

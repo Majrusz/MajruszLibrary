@@ -37,16 +37,4 @@ class ReaderUUID implements IReader< UUID > {
 	public UUID read( Tag tag ) {
 		return NbtUtils.loadUUID( tag );
 	}
-
-	public interface Getter extends Supplier< UUID > {}
-
-	public interface Setter extends Consumer< UUID > {}
-
-	public interface ListGetter extends Supplier< List< UUID > > {}
-
-	public interface ListSetter extends Consumer< List< UUID > > {}
-
-	public interface MapGetter extends Supplier< Map< String, UUID > > {}
-
-	public interface MapSetter extends Consumer< Map< String, UUID > > {}
 }

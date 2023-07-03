@@ -35,16 +35,4 @@ class ReaderBoolean implements IReader< Boolean > {
 	public Boolean read( Tag tag ) {
 		return ( ( ByteTag )tag ).getAsByte() != 0;
 	}
-
-	public interface Getter extends Supplier< Boolean > {}
-
-	public interface Setter extends Consumer< Boolean > {}
-
-	public interface ListGetter extends Supplier< List< Boolean > > {}
-
-	public interface ListSetter extends Consumer< List< Boolean > > {}
-
-	public interface MapGetter extends Supplier< Map< String, Boolean > > {}
-
-	public interface MapSetter extends Consumer< Map< String, Boolean > > {}
 }

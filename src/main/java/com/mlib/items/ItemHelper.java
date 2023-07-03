@@ -176,7 +176,7 @@ public class ItemHelper {
 		public List< EnchantmentInfo > enchantments;
 
 		public EnchantmentsInfo() {
-			this.define( ()->this.enchantments, x->this.enchantments = x, EnchantmentInfo::new );
+			this.defineCustom( ()->this.enchantments, x->this.enchantments = x, EnchantmentInfo::new );
 		}
 	}
 
@@ -185,8 +185,8 @@ public class ItemHelper {
 		public int level;
 
 		public EnchantmentInfo() {
-			this.define( "id", ()->this.id, x->this.id = x );
-			this.define( "lvl", ()->this.level, x->this.level = x );
+			this.defineString( "id", ()->this.id, x->this.id = x );
+			this.defineInteger( "lvl", ()->this.level, x->this.level = x );
 		}
 	}
 }

@@ -36,16 +36,4 @@ class ReaderInteger implements IReader< Integer > {
 	public Integer read( Tag tag ) {
 		return ( ( NumericTag )tag ).getAsInt();
 	}
-
-	public interface Getter extends Supplier< Integer > {}
-
-	public interface Setter extends Consumer< Integer > {}
-
-	public interface ListGetter extends Supplier< List< Integer > > {}
-
-	public interface ListSetter extends Consumer< List< Integer > > {}
-
-	public interface MapGetter extends Supplier< Map< String, Integer > > {}
-
-	public interface MapSetter extends Consumer< Map< String, Integer > > {}
 }

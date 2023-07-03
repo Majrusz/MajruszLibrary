@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-record DataMap< Type >( Supplier< Map< String, Type > > getter, Consumer< Map< String, Type > > setter, IReader< Type > reader ) implements ISerializable {
+record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< Type > reader ) implements ISerializable {
 	@Override
 	public void read( JsonElement element ) {
 		JsonObject jsonObject = element.getAsJsonObject();
@@ -64,4 +64,8 @@ record DataMap< Type >( Supplier< Map< String, Type > > getter, Consumer< Map< S
 
 		this.setter.accept( values );
 	}
+
+	public interface Getter< Type > extends Supplier< Map< String, Type > > {}
+
+	public interface Setter< Type > extends Consumer< Map< String, Type > > {}
 }

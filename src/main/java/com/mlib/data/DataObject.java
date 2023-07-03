@@ -45,4 +45,8 @@ record DataObject< Type >( Supplier< Type > getter, Consumer< Type > setter, IRe
 			this.setter.accept( this.reader.read( compoundTag.get( this.key ) ) );
 		}
 	}
+
+	public interface Getter< Type > extends Supplier< Type > {}
+
+	public interface Setter< Type > extends Consumer< Type > {}
 }

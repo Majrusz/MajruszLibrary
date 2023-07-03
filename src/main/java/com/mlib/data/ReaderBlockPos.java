@@ -24,16 +24,4 @@ class ReaderBlockPos extends ReaderStringCustom< BlockPos > {
 	public String convert( BlockPos position ) {
 		return String.format( "%d,%d,%d", position.getX(), position.getY(), position.getZ() );
 	}
-
-	public interface Getter extends Supplier< BlockPos > {}
-
-	public interface Setter extends Consumer< BlockPos > {}
-
-	public interface ListGetter extends Supplier< List< BlockPos > > {}
-
-	public interface ListSetter extends Consumer< List< BlockPos > > {}
-
-	public interface MapGetter extends Supplier< Map< String, BlockPos > > {}
-
-	public interface MapSetter extends Consumer< Map< String, BlockPos > > {}
 }

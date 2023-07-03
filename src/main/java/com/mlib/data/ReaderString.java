@@ -35,16 +35,4 @@ class ReaderString implements IReader< String > {
 	public String read( Tag tag ) {
 		return tag.getAsString();
 	}
-
-	public interface Getter extends Supplier< String > {}
-
-	public interface Setter extends Consumer< String > {}
-
-	public interface ListGetter extends Supplier< List< String > > {}
-
-	public interface ListSetter extends Consumer< List< String > > {}
-
-	public interface MapGetter extends Supplier< Map< String, String > > {}
-
-	public interface MapSetter extends Consumer< Map< String, String > > {}
 }

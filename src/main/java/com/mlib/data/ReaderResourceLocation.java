@@ -17,16 +17,4 @@ class ReaderResourceLocation extends ReaderStringCustom< ResourceLocation > {
 	public String convert( ResourceLocation location ) {
 		return location.toString();
 	}
-
-	public interface Getter extends Supplier< ResourceLocation > {}
-
-	public interface Setter extends Consumer< ResourceLocation > {}
-
-	public interface ListGetter extends Supplier< List< ResourceLocation > > {}
-
-	public interface ListSetter extends Consumer< List< ResourceLocation > > {}
-
-	public interface MapGetter extends Supplier< Map< String, ResourceLocation > > {}
-
-	public interface MapSetter extends Consumer< Map< String, ResourceLocation > > {}
 }

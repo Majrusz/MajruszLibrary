@@ -18,16 +18,4 @@ class ReaderEnchantment extends ReaderStringCustom< Enchantment > {
 	public String convert( Enchantment enchantment ) {
 		return Utility.getRegistryString( enchantment );
 	}
-
-	public interface Getter extends Supplier< Enchantment > {}
-
-	public interface Setter extends Consumer< Enchantment > {}
-
-	public interface ListGetter extends Supplier< List< Enchantment > > {}
-
-	public interface ListSetter extends Consumer< List< Enchantment > > {}
-
-	public interface MapGetter extends Supplier< Map< String, Enchantment > > {}
-
-	public interface MapSetter extends Consumer< Map< String, Enchantment > > {}
 }

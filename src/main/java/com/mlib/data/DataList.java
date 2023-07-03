@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-record DataList< Type >( Supplier< List< Type > > getter, Consumer< List< Type > > setter, IReader< Type > reader ) implements ISerializable {
+record DataList< Type >( Getter< Type > getter, Setter< Type > setter, IReader< Type > reader ) implements ISerializable {
 	@Override
 	public void read( JsonElement element ) {
 		JsonArray jsonArray = element.getAsJsonArray();
@@ -52,4 +52,8 @@ record DataList< Type >( Supplier< List< Type > > getter, Consumer< List< Type >
 
 		this.setter.accept( values );
 	}
+
+	public interface Getter< Type > extends Supplier< List< Type > > {}
+
+	public interface Setter< Type > extends Consumer< List< Type > > {}
 }

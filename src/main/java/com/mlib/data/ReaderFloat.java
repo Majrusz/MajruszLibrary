@@ -36,16 +36,4 @@ class ReaderFloat implements IReader< Float > {
 	public Float read( Tag tag ) {
 		return ( ( NumericTag )tag ).getAsFloat();
 	}
-
-	public interface Getter extends Supplier< Float > {}
-
-	public interface Setter extends Consumer< Float > {}
-
-	public interface ListGetter extends Supplier< List< Float > > {}
-
-	public interface ListSetter extends Consumer< List< Float > > {}
-
-	public interface MapGetter extends Supplier< Map< String, Float > > {}
-
-	public interface MapSetter extends Consumer< Map< String, Float > > {}
 }
