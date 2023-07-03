@@ -6,11 +6,6 @@ import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
 class ReaderInteger implements IReader< Integer > {
 	@Override
 	public Integer read( JsonElement element ) {

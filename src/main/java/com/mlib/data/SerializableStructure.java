@@ -2,6 +2,7 @@ package com.mlib.data;
 
 import com.google.gson.JsonElement;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -15,10 +16,21 @@ import java.util.function.Supplier;
 
 public abstract class SerializableStructure implements ISerializable {
 	final List< ISerializable > serializableList = new ArrayList<>();
+	final String key;
+
+	public SerializableStructure( String key ) {
+		this.key = key;
+	}
+
+	public SerializableStructure() {
+		this( null );
+	}
 
 	@Override
 	public void read( JsonElement element ) {
-		this.serializableList.forEach( serializable->serializable.read( element ) );
+		JsonElement subelement = this.key != null ? element.getAsJsonObject().get( this.key ) : element;
+
+		this.serializableList.forEach( serializable->serializable.read( subelement ) );
 	}
 
 	@Override
@@ -33,12 +45,16 @@ public abstract class SerializableStructure implements ISerializable {
 
 	@Override
 	public void write( Tag tag ) {
-		this.serializableList.forEach( serializable->serializable.write( tag ) );
+		Tag subtag = this.key != null ? ( ( CompoundTag )tag ).get( this.key ) : tag;
+
+		this.serializableList.forEach( serializable->serializable.write( subtag ) );
 	}
 
 	@Override
 	public void read( Tag tag ) {
-		this.serializableList.forEach( serializable->serializable.read( tag ) );
+		Tag subtag = this.key != null ? ( ( CompoundTag )tag ).get( this.key ) : tag;
+
+		this.serializableList.forEach( serializable->serializable.read( subtag ) );
 	}
 
 	public void defineBlockPos( String key, DataObject.Getter< BlockPos > getter, DataObject.Setter< BlockPos > setter ) {

@@ -5,9 +5,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 class ReaderCustom< Type extends ISerializable > implements IReader< Type > {

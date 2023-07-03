@@ -2,6 +2,7 @@ package com.mlib.data;
 
 import com.google.gson.JsonElement;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -12,11 +13,22 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 public abstract class SerializableList implements ISerializable {
+	final String key;
 	ISerializable serializable = null;
+
+	public SerializableList( String key ) {
+		this.key = key;
+	}
+
+	public SerializableList() {
+		this( null );
+	}
 
 	@Override
 	public void read( JsonElement element ) {
-		this.serializable.read( element );
+		JsonElement subelement = this.key != null ? element.getAsJsonObject().get( this.key ) : element;
+
+		this.serializable.read( subelement );
 	}
 
 	@Override
@@ -31,12 +43,16 @@ public abstract class SerializableList implements ISerializable {
 
 	@Override
 	public void write( Tag tag ) {
-		this.serializable.write( tag );
+		Tag subtag = this.key != null ? ( ( CompoundTag )tag ).get( this.key ) : tag;
+
+		this.serializable.write( subtag );
 	}
 
 	@Override
 	public void read( Tag tag ) {
-		this.serializable.read( tag );
+		Tag subtag = this.key != null ? ( ( CompoundTag )tag ).get( this.key ) : tag;
+
+		this.serializable.read( subtag );
 	}
 
 	public void defineBlockPos( DataList.Getter< BlockPos > getter, DataList.Setter< BlockPos > setter ) {
