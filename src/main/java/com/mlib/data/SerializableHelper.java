@@ -55,11 +55,11 @@ public class SerializableHelper {
 		}
 	}
 
-	static Tag getWriteSubtag( Tag tag, String key ) {
+	static Tag getWriteSubtag( Tag tag, String key, Supplier< Tag > newSubtag ) {
 		if( key == null ) {
 			return tag;
 		} else {
-			CompoundTag subtag = new CompoundTag();
+			Tag subtag = newSubtag.get();
 			( ( CompoundTag )tag ).put( key, subtag );
 
 			return subtag;

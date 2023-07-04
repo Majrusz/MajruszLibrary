@@ -2,6 +2,7 @@ package com.mlib.data;
 
 import com.google.gson.JsonElement;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -47,7 +48,7 @@ public abstract class SerializableStructure implements ISerializable {
 
 	@Override
 	public void write( Tag tag ) {
-		Tag subtag = SerializableHelper.getWriteSubtag( tag, this.key );
+		Tag subtag = SerializableHelper.getWriteSubtag( tag, this.key, CompoundTag::new );
 		if( subtag == null ) {
 			return;
 		}
