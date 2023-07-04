@@ -31,7 +31,7 @@ class ReaderCustom< Type extends ISerializable > implements IReader< Type > {
 
 	@Override
 	public Tag write( Type value ) {
-		return SerializableHelper.write( this.supplier, new CompoundTag() );
+		return SerializableHelper.write( ()->value, new CompoundTag() );
 	}
 
 	@Override
