@@ -9,6 +9,8 @@
     "MixinFishingHook",
     "MixinItemStack",
     "MixinLivingEntity",
+    "MixinMobCategory",
+    "MixinNaturalSpawner",
     "MixinPlayer",
     "MixinProjectile"
   ],
