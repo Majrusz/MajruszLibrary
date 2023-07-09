@@ -92,10 +92,10 @@ public class Random {
 	 There is a 37% (0.37) chance to return 22,
 	 and there is a 63% (1.0-0.37) chance to return 21.
 	 */
-	public static int roundRandomly( double experience ) {
-		int outputExperience = ( int )experience;
+	public static int roundRandomly( double value ) {
+		int roundedValue = ( int )value;
 
-		return outputExperience + ( tryChance( experience - outputExperience ) ? 1 : 0 );
+		return roundedValue + ( tryChance( value - roundedValue ) ? 1 : 0 );
 	}
 
 	public static AnyPos getRandomVector( float minX, float maxX, float minY, float maxY, float minZ, float maxZ ) {
