@@ -1,7 +1,6 @@
 package com.mlib.modhelper;
 
 import com.mlib.MajruszLibrary;
-import com.mlib.annotations.AutoInstance;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.forgespi.language.ModFileScanData;
 

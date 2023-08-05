@@ -1,6 +1,6 @@
 package com.mlib.features;
 
-import com.mlib.annotations.AutoInstance;
+import com.mlib.modhelper.AutoInstance;
 import com.mlib.contexts.base.Condition;
 import com.mlib.contexts.OnFarmlandTillCheck;
 import com.mlib.contexts.OnPlayerInteract;

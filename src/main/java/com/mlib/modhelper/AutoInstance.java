@@ -1,4 +1,4 @@
-package com.mlib.annotations;
+package com.mlib.modhelper;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

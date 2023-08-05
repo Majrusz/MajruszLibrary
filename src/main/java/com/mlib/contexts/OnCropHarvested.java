@@ -1,6 +1,6 @@
 package com.mlib.contexts;
 
-import com.mlib.annotations.AutoInstance;
+import com.mlib.modhelper.AutoInstance;
 import com.mlib.contexts.base.Condition;
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;

@@ -1,7 +1,7 @@
 package com.mlib.time;
 
 import com.mlib.Utility;
-import com.mlib.annotations.AutoInstance;
+import com.mlib.modhelper.AutoInstance;
 import com.mlib.contexts.base.Condition;
 import com.mlib.contexts.base.Priority;
 import com.mlib.contexts.OnServerTick;
