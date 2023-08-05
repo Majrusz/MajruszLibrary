@@ -1,6 +1,6 @@
 package com.mlib.tests;
 
-import com.mlib.gamemodifiers.contexts.OnTestsRegistered;
+import com.mlib.contexts.OnTestsRegistered;
 import net.minecraft.gametest.framework.GameTestHelper;
 
 import java.util.function.Supplier;

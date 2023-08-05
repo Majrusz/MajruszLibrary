@@ -1,7 +1,7 @@
 package com.mlib.mixin;
 
 import com.mlib.ObfuscationGetter;
-import com.mlib.gamemodifiers.contexts.OnFishingTimeSet;
+import com.mlib.contexts.OnFishingTimeSet;
 import net.minecraft.world.entity.projectile.FishingHook;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;

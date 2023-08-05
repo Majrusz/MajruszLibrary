@@ -3,7 +3,7 @@ package com.mlib;
 import com.mlib.commands.Command;
 import com.mlib.entities.EntityHelper;
 import com.mlib.features.AnyModification;
-import com.mlib.gamemodifiers.Contexts;
+import com.mlib.contexts.base.Contexts;
 import com.mlib.modhelper.ModHelper;
 import com.mojang.serialization.Codec;
 import net.minecraftforge.common.MinecraftForge;

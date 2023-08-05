@@ -1,7 +1,7 @@
 package com.mlib.mixin;
 
 import com.mlib.Random;
-import com.mlib.gamemodifiers.contexts.OnMobSpawnRate;
+import com.mlib.contexts.OnMobSpawnRate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobCategory;

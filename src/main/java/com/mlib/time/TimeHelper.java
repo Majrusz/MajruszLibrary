@@ -3,10 +3,10 @@ package com.mlib.time;
 import com.mlib.Utility;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.config.DoubleConfig;
-import com.mlib.gamemodifiers.Condition;
-import com.mlib.gamemodifiers.Priority;
-import com.mlib.gamemodifiers.contexts.OnClientTick;
-import com.mlib.gamemodifiers.contexts.OnServerTick;
+import com.mlib.contexts.base.Condition;
+import com.mlib.contexts.base.Priority;
+import com.mlib.contexts.OnClientTick;
+import com.mlib.contexts.OnServerTick;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.DistExecutor;
 

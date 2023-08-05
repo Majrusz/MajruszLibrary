@@ -1,7 +1,7 @@
 package com.mlib.tests;
 
 import com.mlib.MajruszLibrary;
-import com.mlib.gamemodifiers.Contexts;
+import com.mlib.contexts.base.Contexts;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraftforge.gametest.GameTestHolder;

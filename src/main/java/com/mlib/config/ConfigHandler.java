@@ -1,6 +1,6 @@
 package com.mlib.config;
 
-import com.mlib.gamemodifiers.contexts.OnConfigLoaded;
+import com.mlib.contexts.OnConfigLoaded;
 import com.mlib.modhelper.ModHelper;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
