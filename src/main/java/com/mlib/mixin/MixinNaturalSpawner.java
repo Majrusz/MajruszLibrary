@@ -22,7 +22,7 @@ public abstract class MixinNaturalSpawner {
 	private static void spawnCategoryForChunk( MobCategory category, ServerLevel level, LevelChunk chunk, NaturalSpawner.SpawnPredicate predicate,
 		NaturalSpawner.AfterSpawnCallback spawnCallback, CallbackInfo callbackInfo
 	) {
-		int extraMobsCount = Random.roundRandomly( OnMobSpawnRate.dispatch( category, level, chunk ).getSpawnRate() - 1.0f );
+		int extraMobsCount = Random.round( OnMobSpawnRate.dispatch( category, level, chunk ).getSpawnRate() - 1.0f );
 		for( int idx = 0; idx < extraMobsCount; ++idx ) {
 			NaturalSpawner.spawnCategoryForPosition( category, level, chunk, getRandomSpawnPos( level, chunk ), predicate, spawnCallback );
 		}

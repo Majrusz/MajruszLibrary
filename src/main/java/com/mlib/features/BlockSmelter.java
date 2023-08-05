@@ -51,7 +51,7 @@ public class BlockSmelter {
 			if( recipe.isEmpty() )
 				continue;
 
-			int experience = Random.roundRandomly( recipe.get().getExperience() * itemStack.getCount() );
+			int experience = Random.round( recipe.get().getExperience() * itemStack.getCount() );
 			if( experience > 0 ) {
 				EntityHelper.spawnExperience( data.getLevel(), position, experience );
 			}
