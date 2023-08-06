@@ -6,11 +6,14 @@ import com.mlib.contexts.base.Contexts;
 import com.mlib.contexts.data.IEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +28,7 @@ import java.util.function.Consumer;
  */
 @Mod.EventBusSubscriber
 public class OnSpawned {
+	public static final Consumer< Data > CANCEL = data->data.cancel.run();
 	static final List< DataSafe > CLIENT_PENDING_LIST = new ArrayList<>();
 	static final List< DataSafe > SERVER_PENDING_LIST = new ArrayList<>();
 
@@ -41,7 +45,7 @@ public class OnSpawned {
 		if( !( event.getEntity() instanceof LivingEntity entity ) )
 			return;
 
-		Contexts.get( Data.class ).dispatch( new Data( entity, event.loadedFromDisk() ) );
+		Contexts.get( Data.class ).dispatch( new Data( entity, event.loadedFromDisk(), ()->event.setCanceled( true ) ) );
 		List< DataSafe > list = entity.level().isClientSide ? CLIENT_PENDING_LIST : SERVER_PENDING_LIST;
 		list.add( new DataSafe( entity, event.loadedFromDisk() ) );
 	}
@@ -86,21 +90,28 @@ public class OnSpawned {
 	public static class Data implements IEntityData {
 		public final LivingEntity target;
 		public final boolean loadedFromDisk;
+		public final Runnable cancel;
 
-		public Data( LivingEntity target, boolean loadedFromDisk ) {
+		public Data( LivingEntity target, boolean loadedFromDisk, Runnable cancel ) {
 			this.target = target;
 			this.loadedFromDisk = loadedFromDisk;
+			this.cancel = cancel;
 		}
 
 		@Override
 		public Entity getEntity() {
 			return this.target;
 		}
+
+		@Nullable
+		public final MobSpawnType getSpawnType() {
+			return this.target instanceof Mob mob ? mob.getSpawnType() : null;
+		}
 	}
 
 	public static class DataSafe extends Data {
 		public DataSafe( LivingEntity target, boolean loadedFromDisk ) {
-			super( target, loadedFromDisk );
+			super( target, loadedFromDisk, ()->{} );
 		}
 	}
 }
