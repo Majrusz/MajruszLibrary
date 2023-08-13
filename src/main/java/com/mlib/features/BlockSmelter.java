@@ -1,13 +1,13 @@
 package com.mlib.features;
 
 import com.mlib.Random;
-import com.mlib.annotations.AutoInstance;
+import com.mlib.modhelper.AutoInstance;
 import com.mlib.effects.ParticleHandler;
 import com.mlib.entities.EntityHelper;
-import com.mlib.gamemodifiers.Condition;
-import com.mlib.gamemodifiers.Priority;
-import com.mlib.gamemodifiers.contexts.OnBlockSmeltCheck;
-import com.mlib.gamemodifiers.contexts.OnLoot;
+import com.mlib.contexts.base.Condition;
+import com.mlib.contexts.base.Priority;
+import com.mlib.contexts.OnBlockSmeltCheck;
+import com.mlib.contexts.OnLoot;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.SimpleContainer;
@@ -51,7 +51,7 @@ public class BlockSmelter {
 			if( recipe.isEmpty() )
 				continue;
 
-			int experience = Random.roundRandomly( recipe.get().getExperience() * itemStack.getCount() );
+			int experience = Random.round( recipe.get().getExperience() * itemStack.getCount() );
 			if( experience > 0 ) {
 				EntityHelper.spawnExperience( data.getLevel(), position, experience );
 			}

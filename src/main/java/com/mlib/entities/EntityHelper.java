@@ -1,10 +1,14 @@
 package com.mlib.entities;
 
-import com.mlib.NetworkHandler;
 import com.mlib.ObfuscationGetter;
+import com.mlib.Registries;
 import com.mlib.Utility;
+import com.mlib.data.SerializableStructure;
 import com.mlib.math.AABBHelper;
 import com.mlib.math.AnyPos;
+import com.mlib.math.AnyRot;
+import com.mlib.mixininterfaces.IMixinEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -12,10 +16,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ExperienceOrb;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.monster.Witch;
@@ -23,15 +24,22 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.PersistentEntitySectionManager;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -89,33 +97,12 @@ public class EntityHelper {
 		return level.addFreshEntity( new ExperienceOrb( level, position.x, position.y, position.z, experience ) );
 	}
 
-	@Nullable
-	public static < Type extends Entity > Type spawn( EntityType< Type > entityType, Level level, Consumer< Type > beforeEvent ) {
-		Type entity = entityType.create( level );
-		if( entity != null ) {
-			beforeEvent.accept( entity );
-			if( !level.addFreshEntity( entity ) )
-				return null;
-		}
-
-		return entity;
+	public static < Type extends Entity > Spawner< Type > createSpawner( EntityType< Type > type, Level level ) {
+		return new Spawner<>( type, level );
 	}
 
-	@Nullable
-	public static < Type extends Entity > Type spawn( RegistryObject< EntityType< Type > > entityType, Level level, Consumer< Type > beforeEvent ) {
-		return spawn( entityType.get(), level, beforeEvent );
-	}
-
-	@Nullable
-	public static < Type extends Entity > Type spawn( EntityType< Type > entityType, Level level, Vec3 position ) {
-		return spawn( entityType, level, entity->entity.moveTo( position ) );
-	}
-
-	@Nullable
-	public static < Type extends Entity > Type spawn( RegistryObject< EntityType< Type > > entityType, Level level,
-		Vec3 position
-	) {
-		return spawn( entityType.get(), level, position );
+	public static < Type extends Entity > Spawner< Type > createSpawner( RegistryObject< EntityType< Type > > type, Level level ) {
+		return createSpawner( type.get(), level );
 	}
 
 	public static < EntityType extends Entity > List< EntityType > getEntitiesInBox( Class< EntityType > entityClass,
@@ -159,6 +146,101 @@ public class EntityHelper {
 	}
 
 	public static void sendExtraClientGlowTicks( ServerPlayer player, Entity target, int ticks ) {
-		NetworkHandler.CHANNEL.send( PacketDistributor.PLAYER.with( ()->player ), new NetworkHandler.EntityGlow( target, ticks ) );
+		Registries.HELPER.sendMessage( PacketDistributor.PLAYER.with( ()->player ), new EntityGlow( target, ticks ) );
+	}
+
+	public static boolean destroyBlocks( Entity entity, AABB aabb, BiPredicate< BlockPos, BlockState > predicate ) {
+		if( !ForgeEventFactory.getMobGriefingEvent( entity.level(), entity ) ) {
+			return false;
+		}
+
+		boolean destroyedAnyBlock = false;
+		for( BlockPos blockPos : BlockPos.betweenClosed( Mth.floor( aabb.minX ), Mth.floor( aabb.minY ), Mth.floor( aabb.minZ ), Mth.floor( aabb.maxX ), Mth.floor( aabb.maxY ), Mth.floor( aabb.maxZ ) ) ) {
+			if( predicate.test( blockPos, entity.level().getBlockState( blockPos ) ) ) {
+				destroyedAnyBlock |= entity.level().destroyBlock( blockPos, true, entity );
+			}
+		}
+
+		return destroyedAnyBlock;
+	}
+
+	public static AnyRot getLookRotation( Entity entity ) {
+		return AnyRot.y( Math.toRadians( -entity.getYRot() ) - Math.PI / 2.0 )
+			.rotZ( Math.toRadians( -entity.getXRot() ) );
+	}
+
+	public static class Spawner< Type extends Entity > {
+		final EntityType< Type > type;
+		final Level level;
+		MobSpawnType mobSpawnType = MobSpawnType.EVENT;
+		Vec3 position = null;
+		Consumer< Type > beforeEvent = null;
+
+		public Spawner< Type > mobSpawnType( MobSpawnType mobSpawnType ) {
+			this.mobSpawnType = mobSpawnType;
+
+			return this;
+		}
+
+		public Spawner< Type > position( Vec3 position ) {
+			this.position = position;
+
+			return this;
+		}
+
+		public Spawner< Type > beforeEvent( Consumer< Type > beforeEvent ) {
+			this.beforeEvent = beforeEvent;
+
+			return this;
+		}
+
+		@Nullable
+		public Type spawn() {
+			Type entity = this.type.create( this.level );
+			if( entity != null ) {
+				Optional.ofNullable( this.position ).ifPresent( entity::moveTo );
+				Optional.ofNullable( this.beforeEvent ).ifPresent( beforeEvent->beforeEvent.accept( entity ) );
+				if( entity instanceof Mob mob && this.level instanceof ServerLevel serverLevel ) {
+					ForgeEventFactory.onFinalizeSpawn( mob, serverLevel, this.level.getCurrentDifficultyAt( mob.blockPosition() ), this.mobSpawnType, null, null );
+				}
+
+				if( !this.level.addFreshEntity( entity ) ) {
+					return null;
+				}
+			}
+
+			return entity;
+		}
+
+		Spawner( EntityType< Type > type, Level level ) {
+			this.type = type;
+			this.level = level;
+		}
+	}
+
+	public static class EntityGlow extends SerializableStructure {
+		int entityId = 0;
+		int ticks = 0;
+
+		public EntityGlow( Entity entity, int ticks ) {
+			this();
+
+			this.entityId = entity.getId();
+			this.ticks = ticks;
+		}
+
+		public EntityGlow() {
+			this.defineInteger( "id", ()->this.entityId, x->this.entityId = x );
+			this.defineInteger( "ticks", ()->this.ticks, x->this.ticks = x );
+		}
+
+		@Override
+		@OnlyIn( Dist.CLIENT )
+		public void onClient( NetworkEvent.Context context ) {
+			Level level = Minecraft.getInstance().level;
+			if( level != null ) {
+				IMixinEntity.addGlowTicks( level.getEntity( this.entityId ), this.ticks );
+			}
+		}
 	}
 }

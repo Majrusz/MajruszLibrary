@@ -2,6 +2,7 @@ package com.mlib.tests;
 
 import com.mlib.MajruszLibrary;
 import com.mlib.math.AnyPos;
+import com.mlib.math.AnyRot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.gametest.framework.GameTest;
@@ -152,11 +153,18 @@ public class AnyPosTests extends BaseTest {
 
 	@GameTest( templateNamespace = MajruszLibrary.MOD_ID, template = "empty" )
 	public static void utility( GameTestHelper helper ) {
+		assertThat( helper, AnyPos.from( 1.0, 0.17, 0.0 ).rot( AnyRot.x( Math.PI / 2 ) ), new Vec3( 1.0, 0.0, 0.17 ), ()->"AnyPos does not rotate position properly" );
+		assertThat( helper, AnyPos.from( -1.0, 0.0, -1.0 ).rot( AnyRot.y( Math.PI / 2 ) ), new Vec3( -1.0, 0.0, 1.0 ), ()->"AnyPos does not rotate position properly" );
+		assertThat( helper, AnyPos.from( -1.0, 0.0, -1.0 ).rot( AnyRot.z( Math.PI / 2 ) ), new Vec3( 0.0, -1.0, -1.0 ), ()->"AnyPos does not rotate position properly" );
+		assertThat( helper, AnyPos.from( 0.0, 1.0, 1.0 ).rot( AnyRot.y( Math.PI / 2 ).rotX( Math.PI / 2 ) ), new Vec3( 1.0, -1.0, 0.0 ), ()->"AnyPos does not rotate position properly" );
 		assertThat( helper, AnyPos.from( 0.0, 0.1, 0.2 ).len(), Math.sqrt( 0.01 + 0.04 ), ()->"AnyPos does not calculate length properly" );
 		assertThat( helper, AnyPos.from( 1.0f, -0.5f, -1.0f ).norm(), new Vector3f( 2.0f / 3.0f, -1.0f / 3.0f, -2.0f / 3.0f ), ()->"AnyPos does not calculate normalized vector properly" );
 		assertThat( helper, AnyPos.from( 1, 2, 3 ).norm().len(), 1, ()->"AnyPos does not calculate normalized vector properly" );
 		assertThat( helper, AnyPos.from( -1, 0, 1 ).center(), new Vec3( -0.5f, 0.5f, 1.5f ), ()->"AnyPos does not centered vector properly" );
 		assertThat( helper, AnyPos.from( 1, 2, 3 ).neg(), new Vec3( -1, -2, -3 ), ()->"AnyPos does not negate vector properly" );
+		assertThat( helper, AnyPos.from( 1.4, 2.5, 3.6 ).floor(), new Vec3( 1, 2, 3 ), ()->"AnyPos does not round vector properly" );
+		assertThat( helper, AnyPos.from( 1.4, 2.5, 3.6 ).ceil(), new Vec3( 2, 3, 4 ), ()->"AnyPos does not round vector properly" );
+		assertThat( helper, AnyPos.from( 1.4, 2.5, 3.6 ).round(), new Vec3( 1, 3, 4 ), ()->"AnyPos does not round vector properly" );
 
 		helper.succeed();
 	}

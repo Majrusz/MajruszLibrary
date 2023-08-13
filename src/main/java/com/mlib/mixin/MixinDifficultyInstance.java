@@ -1,6 +1,6 @@
 package com.mlib.mixin;
 
-import com.mlib.gamemodifiers.contexts.OnClampedRegionalDifficultyGet;
+import com.mlib.contexts.OnClampedRegionalDifficultyGet;
 import net.minecraft.world.DifficultyInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

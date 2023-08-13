@@ -1,7 +1,7 @@
 package com.mlib.features;
 
 import com.google.common.base.Suppliers;
-import com.mlib.gamemodifiers.contexts.OnLoot;
+import com.mlib.contexts.OnLoot;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;

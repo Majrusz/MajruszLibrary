@@ -1,7 +1,7 @@
 package com.mlib.mixin;
 
-import com.mlib.gamemodifiers.contexts.OnProjectileHit;
-import com.mlib.gamemodifiers.contexts.OnProjectileShot;
+import com.mlib.contexts.OnProjectileHit;
+import com.mlib.contexts.OnProjectileShot;
 import com.mlib.mixininterfaces.IMixinProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;

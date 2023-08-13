@@ -4,8 +4,10 @@ import com.mlib.Random;
 import com.mlib.effects.ParticleHandler;
 import com.mlib.effects.SoundHandler;
 import com.mlib.math.AnyPos;
+import com.mlib.math.Range;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,10 +22,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FrostedIceBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Optional;
 
@@ -95,22 +97,17 @@ public class LevelHelper {
 	}
 
 	public static void teleportToSpawnPosition( ServerPlayer player ) {
-		Pair< Vec3, ServerLevel > spawnData = getSpawnData( player );
+		Pair< Vec3, ServerLevel > spawnData = LevelHelper.getSpawnData( player );
 		Vec3 spawnPosition = spawnData.getFirst();
-		ServerLevel serverLevel = spawnData.getSecond();
+		ServerLevel level = spawnData.getSecond();
 
-		player.teleportTo( serverLevel, spawnPosition.x, spawnPosition.y, spawnPosition.z, player.getYRot(), player.getXRot() );
+		player.teleportTo( level, spawnPosition.x, spawnPosition.y, spawnPosition.z, player.getYRot(), player.getXRot() );
 	}
 
 	public static boolean teleportNearby( LivingEntity target, ServerLevel level, double offset ) {
-		boolean isEntityInside = target.yOld + 8 > level.getHeight( Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ( int )target.xOld, ( int )target.zOld );
-		if( isEntityInside )
-			offset /= 2;
-
-		Vec3 newPosition = Random.getRandomVector( -offset, offset, -1.0, 1.0, -offset, offset ).add( target.position() ).vec3();
-		double y = level.getHeight( Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, ( int )newPosition.x, ( int )newPosition.z ) + 1;
-		if( !( y < level.getMinBuildHeight() + 1 ) && target.randomTeleport( newPosition.x, target.yOld + 8 > y ? y : newPosition.y, newPosition.z, true ) ) {
-			Vec3 position = new Vec3( target.xo, target.getY( 0.5 ), target.zo );
+		Vec3 position = AnyPos.from( target.position() ).add( Random.nextDouble( -offset, offset ), 0.0, Random.nextDouble( -offset, offset ) ).vec3();
+		BlockPos blockPos = LevelHelper.findBlockPosOnGround( level, position, 3 ).orElse( null );
+		if( blockPos != null && target.randomTeleport( blockPos.getX(), blockPos.getY(), blockPos.getZ(), true ) ) {
 			SoundHandler.ENDERMAN_TELEPORT.play( level, position );
 			ParticleHandler.PORTAL.spawn( level, position, 10 );
 			return true;
@@ -123,9 +120,7 @@ public class LevelHelper {
 		freezeWater( entity, radius, minimumIceDuration, maximumIceDuration, true );
 	}
 
-	public static void freezeWater( Entity entity, double radius, int minimumIceDuration, int maximumIceDuration,
-		boolean requireOnGround
-	) {
+	public static void freezeWater( Entity entity, double radius, int minimumIceDuration, int maximumIceDuration, boolean requireOnGround ) {
 		if( requireOnGround && !entity.onGround() )
 			return;
 
@@ -147,7 +142,8 @@ public class LevelHelper {
 					if( meltsIntoFrostedIceBlock && canSurvive && isUnobstructed && !net.minecraftforge.event.ForgeEventFactory.onBlockPlace( entity, net.minecraftforge.common.util.BlockSnapshot.create( entity.level()
 						.dimension(), entity.level(), blockPos ), net.minecraft.core.Direction.UP ) ) {
 						entity.level().setBlockAndUpdate( blockPos, iceBlockState );
-						entity.level().scheduleTick( blockPos, Blocks.FROSTED_ICE, Mth.nextInt( Random.getThreadSafe(), 60, 120 ) );
+						entity.level()
+							.scheduleTick( blockPos, Blocks.FROSTED_ICE, Mth.nextInt( Random.getThreadSafe(), minimumIceDuration, maximumIceDuration ) );
 					}
 				}
 			}
@@ -155,7 +151,7 @@ public class LevelHelper {
 	}
 
 	public static void spawnItemEntityFlyingTowardsDirection( ItemStack itemStack, Level level, Vec3 from, Vec3 to ) {
-		Vec3 spawnPosition = AnyPos.from( from ).add( Random.getRandomVector( -0.25, 0.25, 0.125, 0.5, -0.25, 0.25 ) ).vec3();
+		Vec3 spawnPosition = AnyPos.from( from ).add( Random.nextVector( -0.25, 0.25, 0.125, 0.5, -0.25, 0.25 ) ).vec3();
 		Vec3 motion = AnyPos.from( to ).sub( spawnPosition ).mul( 0.1 ).vec3();
 
 		ItemEntity itemEntity = new ItemEntity( level, spawnPosition.x, spawnPosition.y, spawnPosition.z, itemStack );
@@ -188,5 +184,33 @@ public class LevelHelper {
 		data.setRainTime( ticks );
 		data.setThundering( false );
 		data.setThunderTime( ticks );
+	}
+
+	public static < Type extends Number & Comparable< Type > > Optional< BlockPos > findBlockPosOnGround( Level level, Vec3 position, Type yOffset ) {
+		return LevelHelper.findBlockPosOnGround( level, position.x, new Range<>( position.y - yOffset.doubleValue(), position.y + yOffset.doubleValue() ), position.z );
+	}
+
+	public static < Type extends Number & Comparable< Type > > Optional< BlockPos > findBlockPosOnGround( Level level, Type x, Range< Type > y, Type z ) {
+		BlockPos blockPos = AnyPos.from( x, y.to, z ).block();
+		do {
+			BlockPos blockPosBelow = blockPos.below();
+			BlockState blockStateBelow = level.getBlockState( blockPosBelow );
+			if( blockStateBelow.isFaceSturdy( level, blockPosBelow, Direction.UP ) ) {
+				if( !level.isEmptyBlock( blockPos ) ) {
+					BlockState blockState = level.getBlockState( blockPos );
+					VoxelShape voxelshape = blockState.getCollisionShape( level, blockPos );
+					BlockPos blockPosAbove = AnyPos.from( blockPos ).add( 0, !voxelshape.isEmpty() ? voxelshape.max( Direction.Axis.Y ) : 0, 0 ).block();
+					if( blockState.getCollisionShape( level, blockPosAbove ).isEmpty() ) {
+						return Optional.of( blockPosAbove );
+					}
+				} else {
+					return Optional.of( blockPos );
+				}
+			}
+
+			blockPos = blockPos.below();
+		} while( blockPos.getY() >= y.from.intValue() - 1 );
+
+		return Optional.empty();
 	}
 }

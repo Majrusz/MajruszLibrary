@@ -1,85 +1,59 @@
 package com.mlib.data;
 
-import net.minecraft.nbt.CompoundTag;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-class DataList< Type extends SerializableStructure > extends Data< List< Type > > {
-	final java.util.function.Supplier< Type > instanceProvider;
+record DataList< Type >( Getter< Type > getter, Setter< Type > setter, IReader< Type > reader ) implements ISerializable {
+	@Override
+	public void read( JsonElement element ) {
+		JsonArray jsonArray = element.getAsJsonArray();
+		List< Type > values = new ArrayList<>();
+		for( JsonElement subelement : jsonArray ) {
+			values.add( this.reader.read( subelement ) );
+		}
 
-	public DataList( String key, Supplier< Type > getter, Consumer< Type > setter, java.util.function.Supplier< Type > instanceProvider ) {
-		super( key, getter, setter );
-
-		this.instanceProvider = instanceProvider;
+		this.setter.accept( values );
 	}
 
 	@Override
-	protected JsonReader< List< Type > > getJsonReader() {
-		return element->{
-			List< Type > value = new ArrayList<>();
-			element.getAsJsonArray()
-				.forEach( subelement->{
-					Type subvalue = this.instanceProvider.get();
-					subvalue.read( subelement );
-
-					value.add( subvalue );
-				} );
-
-			return value;
-		};
+	public void write( FriendlyByteBuf buffer ) {
+		buffer.writeCollection( this.getter.get(), this.reader::write );
 	}
 
 	@Override
-	protected BufferWriter< List< Type > > getBufferWriter() {
-		return ( buffer, value )->buffer.writeCollection( value, ( subbuffer, subvalue )->subvalue.write( subbuffer ) );
+	public void read( FriendlyByteBuf buffer ) {
+		this.setter.accept( buffer.readCollection( ArrayList::new, this.reader::read ) );
 	}
 
 	@Override
-	protected BufferReader< List< Type > > getBufferReader() {
-		return buffer->buffer.readList( subbuffer->{
-			Type subvalue = this.instanceProvider.get();
-			subvalue.read( subbuffer );
-
-			return subvalue;
-		} );
+	public void write( Tag tag ) {
+		ListTag listTag = ( ListTag )tag;
+		List< Type > values = this.getter.get();
+		for( Type value : values ) {
+			listTag.add( this.reader.write( value ) );
+		}
 	}
 
 	@Override
-	protected TagWriter< List< Type > > getTagWriter() {
-		return ( tag, key, value )->{
-			ListTag list = new ListTag();
-			value.forEach( subvalue->{
-				CompoundTag subtag = new CompoundTag();
-				subvalue.write( subtag );
+	public void read( Tag tag ) {
+		ListTag listTag = ( ListTag )tag;
+		List< Type > values = new ArrayList<>();
+		for( Tag subtag : listTag ) {
+			values.add( this.reader.read( subtag ) );
+		}
 
-				list.add( subtag );
-			} );
-
-			tag.put( key, list );
-		};
+		this.setter.accept( values );
 	}
 
-	@Override
-	protected TagReader< List< Type > > getTagReader() {
-		return ( tag, key )->{
-			List< Type > value = new ArrayList<>();
-			tag.getList( key, 10 )
-				.forEach( subtag->{
-					Type subvalue = this.instanceProvider.get();
-					subvalue.read( ( CompoundTag )subtag );
+	public interface Getter< Type > extends Supplier< List< Type > > {}
 
-					value.add( subvalue );
-				} );
-
-			return value;
-		};
-	}
-
-	@FunctionalInterface
-	public interface Supplier< Type extends SerializableStructure > extends java.util.function.Supplier< List< Type > > {}
-
-	@FunctionalInterface
-	public interface Consumer< Type extends SerializableStructure > extends java.util.function.Consumer< List< Type > > {}
+	public interface Setter< Type > extends Consumer< List< Type > > {}
 }
