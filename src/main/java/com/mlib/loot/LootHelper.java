@@ -10,10 +10,10 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class LootHelper {
-	public static LootTable getLootTable( ResourceLocation location ) {
+	public static LootTable getLootTable( ResourceLocation id ) {
 		return ServerLifecycleHooks.getCurrentServer()
 			.getLootTables()
-			.get( location );
+			.get( id );
 	}
 
 	public static LootContext toGiftContext( Entity entity ) {

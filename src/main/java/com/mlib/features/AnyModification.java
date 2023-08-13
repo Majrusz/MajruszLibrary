@@ -1,12 +1,11 @@
 package com.mlib.features;
 
 import com.google.gson.JsonObject;
-import com.mlib.gamemodifiers.contexts.OnLoot;
 import net.minecraft.resources.ResourceLocation;
+import com.mlib.contexts.OnLoot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
 

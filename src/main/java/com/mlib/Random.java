@@ -61,20 +61,40 @@ public class Random {
 		return getThreadSafe().nextBoolean();
 	}
 
-	public static < Type > Type nextRandom( Type[] elements ) {
+	public static AnyPos nextVector( float minX, float maxX, float minY, float maxY, float minZ, float maxZ ) {
+		return AnyPos.from( nextFloat( minX, maxX ), nextFloat( minY, maxY ), nextFloat( minZ, maxZ ) );
+	}
+
+	public static AnyPos nextVector( double minX, double maxX, double minY, double maxY, double minZ, double maxZ ) {
+		return AnyPos.from( nextDouble( minX, maxX ), nextDouble( minY, maxY ), nextDouble( minZ, maxZ ) );
+	}
+
+	public static AnyPos nextVector( int minX, int maxX, int minY, int maxY, int minZ, int maxZ ) {
+		return AnyPos.from( nextInt( minX, maxX ), nextInt( minY, maxY ), nextInt( minZ, maxZ ) );
+	}
+
+	public static AnyPos nextUnitVector() {
+		AnyPos pos = nextVector( -1.0, 1.0, -1.0, 1.0, -1.0, 1.0 );
+		if( pos.len().doubleValue() < 1e-5 ) // to avoid dividing by zero (or very small number) and throwing exception
+			return Random.nextUnitVector();
+
+		return pos.norm();
+	}
+
+	public static < Type > Type next( Type[] elements ) {
 		return elements.length > 0 ? elements[ nextInt( elements.length ) ] : null;
 	}
 
-	public static < Type > Type nextRandom( List< Type > elements ) {
+	public static < Type > Type next( List< Type > elements ) {
 		return elements.size() > 0 ? elements.get( nextInt( elements.size() ) ) : null;
 	}
 
-	public static < Type > Type nextRandom( Set< Type > elements ) {
-		return ( Type )nextRandom( elements.toArray() );
+	public static < Type > Type next( Set< Type > elements ) {
+		return ( Type )next( elements.toArray() );
 	}
 
-	public static < Type1, Type2 > Map.Entry< Type1, Type2 > nextRandom( Map< Type1, Type2 > elements ) {
-		return nextRandom( elements.entrySet() );
+	public static < Type1, Type2 > Map.Entry< Type1, Type2 > next( Map< Type1, Type2 > elements ) {
+		return next( elements.entrySet() );
 	}
 
 	public static boolean tryChance( double chance ) {
@@ -91,29 +111,9 @@ public class Random {
 	 There is a 37% (0.37) chance to return 22,
 	 and there is a 63% (1.0-0.37) chance to return 21.
 	 */
-	public static int roundRandomly( double experience ) {
-		int outputExperience = ( int )experience;
+	public static int round( double value ) {
+		int roundedValue = ( int )value;
 
-		return outputExperience + ( tryChance( experience - outputExperience ) ? 1 : 0 );
-	}
-
-	public static AnyPos getRandomVector( float minX, float maxX, float minY, float maxY, float minZ, float maxZ ) {
-		return AnyPos.from( nextFloat( minX, maxX ), nextFloat( minY, maxY ), nextFloat( minZ, maxZ ) );
-	}
-
-	public static AnyPos getRandomVector( double minX, double maxX, double minY, double maxY, double minZ, double maxZ ) {
-		return AnyPos.from( nextDouble( minX, maxX ), nextDouble( minY, maxY ), nextDouble( minZ, maxZ ) );
-	}
-
-	public static AnyPos getRandomVector( int minX, int maxX, int minY, int maxY, int minZ, int maxZ ) {
-		return AnyPos.from( nextInt( minX, maxX ), nextInt( minY, maxY ), nextInt( minZ, maxZ ) );
-	}
-
-	public static AnyPos getRandomUnitVector() {
-		AnyPos pos = getRandomVector( -1.0, 1.0, -1.0, 1.0, -1.0, 1.0 );
-		if( pos.len().doubleValue() < 1e-5 ) // to avoid dividing by zero (or very small number) and throwing exception
-			return getRandomUnitVector();
-
-		return pos.norm();
+		return roundedValue + ( tryChance( value - roundedValue ) ? 1 : 0 );
 	}
 }

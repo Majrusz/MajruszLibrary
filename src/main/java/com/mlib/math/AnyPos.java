@@ -6,6 +6,8 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.function.BiFunction;
+
 /**
  This class is an adapter for most position-related operations in the game. It has been
  created because the interface for vector-like classes in Minecraft has changed too many
@@ -276,6 +278,13 @@ public class AnyPos {
 		return this.lerp( ratio, from( x, y, z ) );
 	}
 
+	public AnyPos rot( AnyRot anyRot ) {
+		Vector3f vec3f = this.vec3f();
+		vec3f.transform( anyRot.quaternion );
+
+		return from( vec3f );
+	}
+
 	public Number len() {
 		return Math.sqrt( Math.pow( this.x, 2 ) + Math.pow( this.y, 2 ) + Math.pow( this.z, 2 ) );
 	}
@@ -292,6 +301,18 @@ public class AnyPos {
 
 	public AnyPos center() {
 		return new AnyPos( Math.floor( this.x ) + 0.5, Math.floor( this.y ) + 0.5, Math.floor( this.z ) + 0.5 );
+	}
+
+	public AnyPos floor() {
+		return new AnyPos( Math.floor( this.x ), Math.floor( this.y ), Math.floor( this.z ) );
+	}
+
+	public AnyPos ceil() {
+		return new AnyPos( Math.ceil( this.x ), Math.ceil( this.y ), Math.ceil( this.z ) );
+	}
+
+	public AnyPos round() {
+		return new AnyPos( Math.round( this.x ), Math.round( this.y ), Math.round( this.z ) );
 	}
 
 	public Vec3 vec3() {

@@ -1,0 +1,45 @@
+package com.mlib.contexts;
+
+import com.mlib.contexts.base.Context;
+import com.mlib.contexts.base.Contexts;
+import com.mlib.contexts.data.IEntityData;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+import java.util.function.Consumer;
+
+@Mod.EventBusSubscriber
+public class OnEffectApplicable {
+	public static Context< Data > listen( Consumer< Data > consumer ) {
+		return Contexts.get( Data.class ).add( consumer );
+	}
+
+	@SubscribeEvent
+	public static void onEffectApplicable( PotionEvent.PotionApplicableEvent event ) {
+		Contexts.get( Data.class ).dispatch( new Data( event ) );
+	}
+
+	public static class Data implements IEntityData {
+		public final PotionEvent.PotionApplicableEvent event;
+		public final MobEffectInstance effectInstance;
+		public final MobEffect effect;
+		public final LivingEntity entity;
+
+		public Data( PotionEvent.PotionApplicableEvent event ) {
+			this.event = event;
+			this.effectInstance = event.getPotionEffect();
+			this.effect = this.effectInstance.getEffect();
+			this.entity = event.getEntityLiving();
+		}
+
+		@Override
+		public Entity getEntity() {
+			return this.entity;
+		}
+	}
+}

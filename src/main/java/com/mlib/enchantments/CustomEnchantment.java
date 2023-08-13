@@ -2,7 +2,7 @@ package com.mlib.enchantments;
 
 import com.mlib.ObfuscationGetter;
 import com.mlib.Utility;
-import com.mlib.gamemodifiers.contexts.OnEnchantmentAvailabilityCheck;
+import com.mlib.contexts.OnEnchantmentAvailabilityCheck;
 import com.mlib.items.ItemHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;

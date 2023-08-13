@@ -1,7 +1,7 @@
 package com.mlib.mixin;
 
-import com.mlib.gamemodifiers.contexts.OnItemSwingDuration;
-import com.mlib.gamemodifiers.contexts.OnPreDamaged;
+import com.mlib.contexts.OnItemSwingDuration;
+import com.mlib.contexts.OnPreDamaged;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;

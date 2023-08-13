@@ -1,8 +1,8 @@
 package com.mlib.mixin;
 
-import com.mlib.gamemodifiers.contexts.OnFoodPropertiesGet;
-import com.mlib.gamemodifiers.contexts.OnItemAttributeTooltip;
-import com.mlib.gamemodifiers.contexts.OnItemHurt;
+import com.mlib.contexts.OnFoodPropertiesGet;
+import com.mlib.contexts.OnItemAttributeTooltip;
+import com.mlib.contexts.OnItemHurt;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.*;
