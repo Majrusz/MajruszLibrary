@@ -25,6 +25,8 @@ public interface IConfigurable {
 		}
 	}
 
+	default void onReload() {}
+
 	private String buildComment() {
 		String comment = this.getComment();
 		if( !comment.isEmpty() && this.requiresWorldRestart() ) {

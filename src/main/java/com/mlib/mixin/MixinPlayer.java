@@ -1,7 +1,7 @@
 package com.mlib.mixin;
 
-import com.mlib.gamemodifiers.contexts.OnEntitySignalCheck;
-import com.mlib.gamemodifiers.contexts.OnEntitySignalReceived;
+import com.mlib.contexts.OnEntitySignalCheck;
+import com.mlib.contexts.OnEntitySignalReceived;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

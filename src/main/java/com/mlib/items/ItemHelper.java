@@ -1,6 +1,9 @@
 package com.mlib.items;
 
 import com.mlib.Random;
+import com.mlib.data.SerializableHelper;
+import com.mlib.data.SerializableList;
+import com.mlib.data.SerializableStructure;
 import com.mlib.entities.EntityHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
@@ -15,6 +18,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.common.ToolActions;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 /** Some useful methods for items. */
@@ -71,16 +75,15 @@ public class ItemHelper {
 
 	/** Required because Mob::equipItemIfPossible makes item a guaranteed drop and enables persistence for mob. */
 	public static @Nullable EquipmentSlot equip( Mob mob, ItemStack itemStack ) {
-		if( mob.canHoldItem( itemStack ) ) {
-			EquipmentSlot equipmentSlot = Mob.getEquipmentSlotForItem( itemStack );
-			boolean canEquipArmorPiece = mob.getItemBySlot( equipmentSlot ).isEmpty();
-			equipmentSlot = canEquipArmorPiece ? equipmentSlot : EquipmentSlot.MAINHAND;
-			mob.setItemSlot( equipmentSlot, itemStack );
-
-			return equipmentSlot;
+		if( !mob.canHoldItem( itemStack ) ) {
+			return null;
 		}
 
-		return null;
+		EquipmentSlot equipmentSlot = Mob.getEquipmentSlotForItem( itemStack );
+		equipmentSlot = equipmentSlot.getType() == EquipmentSlot.Type.ARMOR ? equipmentSlot : EquipmentSlot.MAINHAND;
+		mob.setItemSlot( equipmentSlot, itemStack );
+
+		return equipmentSlot;
 	}
 
 	public static void consumeItemOnUse( ItemStack itemStack, Player player ) {
@@ -191,6 +194,28 @@ public class ItemHelper {
 				i++;
 			}
 			itemTab.setEnchantmentCategories( temporary );
+		}
+	}
+
+	public static EnchantmentsInfo getEnchantmentsInfo( ItemStack itemStack ) {
+		return SerializableHelper.read( EnchantmentsInfo::new, itemStack.getEnchantmentTags() );
+	}
+
+	public static class EnchantmentsInfo extends SerializableList {
+		public List< EnchantmentInfo > enchantments;
+
+		public EnchantmentsInfo() {
+			this.defineCustom( ()->this.enchantments, x->this.enchantments = x, EnchantmentInfo::new );
+		}
+	}
+
+	public static class EnchantmentInfo extends SerializableStructure {
+		public String id;
+		public int level;
+
+		public EnchantmentInfo() {
+			this.defineString( "id", ()->this.id, x->this.id = x );
+			this.defineInteger( "lvl", ()->this.level, x->this.level = x );
 		}
 	}
 }

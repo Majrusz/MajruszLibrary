@@ -1,86 +1,71 @@
 package com.mlib.data;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-class DataMap< Type extends SerializableStructure > extends Data< Map< String, Type > > {
-	final java.util.function.Supplier< Type > instanceProvider;
+record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< Type > reader ) implements ISerializable {
+	@Override
+	public void read( JsonElement element ) {
+		JsonObject jsonObject = element.getAsJsonObject();
+		Map< String, Type > values = new HashMap<>();
+		for( String key : jsonObject.keySet() ) {
+			values.put( key, this.reader.read( jsonObject.get( key ) ) );
+		}
 
-	public DataMap( String key, Supplier< Type > getter, Consumer< Type > setter, java.util.function.Supplier< Type > instanceProvider ) {
-		super( key, getter, setter );
-
-		this.instanceProvider = instanceProvider;
+		this.setter.accept( values );
 	}
 
 	@Override
-	protected JsonReader< Map< String, Type > > getJsonReader() {
-		return element->{
-			Map< String, Type > value = new HashMap<>();
-			element.getAsJsonObject().keySet()
-				.forEach( subkey->{
-					Type subvalue = this.instanceProvider.get();
-					subvalue.read( element.getAsJsonObject().get( subkey ) );
-
-					value.put( subkey, subvalue );
-				} );
-
-			return value;
-		};
+	public void write( FriendlyByteBuf buffer ) {
+		Map< String, Type > values = this.getter.get();
+		buffer.writeVarInt( values.size() );
+		for( String key : values.keySet() ) {
+			buffer.writeUtf( key );
+			this.reader.write( buffer, values.get( key ) );
+		}
 	}
 
 	@Override
-	protected BufferWriter< Map< String, Type > > getBufferWriter() {
-		return ( buffer, value )->buffer.writeMap( value, FriendlyByteBuf::writeUtf, ( subbuffer, subvalue )->subvalue.write( subbuffer ) );
+	public void read( FriendlyByteBuf buffer ) {
+		Map< String, Type > values = new HashMap<>();
+		int size = buffer.readVarInt();
+		for( int idx = 0; idx < size; ++idx ) {
+			String key = buffer.readUtf();
+			values.put( key, this.reader.read( buffer ) );
+		}
+
+		this.setter.accept( values );
 	}
 
 	@Override
-	protected BufferReader< Map< String, Type > > getBufferReader() {
-		return buffer->buffer.readMap( FriendlyByteBuf::readUtf, subbuffer->{
-			Type subvalue = this.instanceProvider.get();
-			subvalue.read( subbuffer );
-
-			return subvalue;
-		} );
+	public void write( Tag tag ) {
+		CompoundTag compoundTag = ( CompoundTag )tag;
+		Map< String, Type > values = this.getter.get();
+		for( String key : values.keySet() ) {
+			compoundTag.put( key, this.reader.write( values.get( key ) ) );
+		}
 	}
 
 	@Override
-	protected TagWriter< Map< String, Type > > getTagWriter() {
-		return ( tag, key, value )->{
-			CompoundTag subtag = new CompoundTag();
-			value.forEach( ( subkey, subvalue )->{
-				CompoundTag subsubtag = new CompoundTag();
-				subvalue.write( subsubtag );
+	public void read( Tag tag ) {
+		CompoundTag compoundTag = ( CompoundTag )tag;
+		Map< String, Type > values = new HashMap<>();
+		for( String key : compoundTag.getAllKeys() ) {
+			values.put( key, this.reader.read( compoundTag.get( key ) ) );
+		}
 
-				subtag.put( subkey, subsubtag );
-			} );
-
-			tag.put( key, subtag );
-		};
+		this.setter.accept( values );
 	}
 
-	@Override
-	protected TagReader< Map< String, Type > > getTagReader() {
-		return ( tag, key )->{
-			Map< String, Type > value = new HashMap<>();
-			CompoundTag subtag = tag.getCompound( key );
-			subtag.getAllKeys()
-				.forEach( subkey->{
-					Type subvalue = this.instanceProvider.get();
-					subvalue.read( subtag.getCompound( subkey ) );
+	public interface Getter< Type > extends Supplier< Map< String, Type > > {}
 
-					value.put( subkey, subvalue );
-				} );
-
-			return value;
-		};
-	}
-
-	@FunctionalInterface
-	public interface Supplier< Type > extends java.util.function.Supplier< Map< String, Type > > {}
-
-	@FunctionalInterface
-	public interface Consumer< Type > extends java.util.function.Consumer< Map< String, Type > > {}
+	public interface Setter< Type > extends Consumer< Map< String, Type > > {}
 }

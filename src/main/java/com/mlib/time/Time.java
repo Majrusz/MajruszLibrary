@@ -1,10 +1,10 @@
 package com.mlib.time;
 
 import com.mlib.Utility;
-import com.mlib.annotations.AutoInstance;
-import com.mlib.gamemodifiers.Condition;
-import com.mlib.gamemodifiers.Priority;
-import com.mlib.gamemodifiers.contexts.OnServerTick;
+import com.mlib.modhelper.AutoInstance;
+import com.mlib.contexts.base.Condition;
+import com.mlib.contexts.base.Priority;
+import com.mlib.contexts.OnServerTick;
 
 import java.util.ArrayList;
 import java.util.Collections;

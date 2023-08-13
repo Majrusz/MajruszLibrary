@@ -122,9 +122,9 @@ public abstract class CustomSkills< SkillType extends Enum< ? > > {
 		}
 
 		public Message( Supplier< SkillType[] > skillTypes ) {
-			this.define( null, ()->this.entityId, x->this.entityId = x );
-			this.define( null, ()->this.ticks, x->this.ticks = x );
-			this.define( null, ()->this.skillType, x->this.skillType = x, skillTypes );
+			this.defineInteger( "id", ()->this.entityId, x->this.entityId = x );
+			this.defineInteger( "ticks", ()->this.ticks, x->this.ticks = x );
+			this.defineEnum( "skill", ()->this.skillType, x->this.skillType = x, skillTypes );
 		}
 
 		@Override

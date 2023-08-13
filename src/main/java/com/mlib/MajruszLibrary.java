@@ -1,6 +1,6 @@
 package com.mlib;
 
-import com.mlib.gamemodifiers.ModConfigs;
+import com.mlib.contexts.base.ModConfigs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
