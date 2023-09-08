@@ -2,6 +2,7 @@ package com.mlib;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.profiling.InactiveProfiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -10,7 +11,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fml.util.thread.SidedThreadGroup;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -120,11 +123,16 @@ public class Utility {
 	}
 
 	public static boolean isServerSide() {
-		return Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER;
+		return Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER
+			|| Utility.isMainThread() && FMLEnvironment.dist == Dist.DEDICATED_SERVER;
 	}
 
 	public static boolean isClientSide() {
 		return Thread.currentThread().getThreadGroup() == SidedThreadGroups.CLIENT;
+	}
+
+	public static boolean isMainThread() {
+		return !( Thread.currentThread().getThreadGroup() instanceof SidedThreadGroup );
 	}
 
 	public static boolean isDevBuild() {
@@ -133,7 +141,7 @@ public class Utility {
 
 	public static ProfilerFiller getProfiler() {
 		Supplier< Supplier< ProfilerFiller > > profiler = Utility.isServerSide()
-			? ()->()->ServerLifecycleHooks.getCurrentServer().getProfiler()
+			? ()->()->ServerLifecycleHooks.getCurrentServer() != null ? ServerLifecycleHooks.getCurrentServer().getProfiler() : InactiveProfiler.INSTANCE
 			: ()->()->Minecraft.getInstance().getProfiler();
 
 		return profiler.get().get();
