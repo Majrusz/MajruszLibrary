@@ -3,6 +3,7 @@ package com.mlib.loot;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -20,6 +21,7 @@ public class LootHelper {
 		return new LootParams.Builder( ( ServerLevel )entity.level() )
 			.withParameter( LootContextParams.ORIGIN, entity.position() )
 			.withParameter( LootContextParams.THIS_ENTITY, entity )
+			.withLuck( entity instanceof Player player ? player.getLuck() : 0.0f )
 			.create( LootContextParamSets.GIFT );
 	}
 }
