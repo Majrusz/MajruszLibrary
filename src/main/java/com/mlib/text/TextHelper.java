@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 public class TextHelper {
+	static final int DEFAULT_SCALE = 2;
 	static final TreeMap< Integer, String > ROMAN_LETTERS = new TreeMap<>();
 
 	static {
@@ -29,40 +30,60 @@ public class TextHelper {
 		return number == nearestKey ? ROMAN_LETTERS.get( number ) : ROMAN_LETTERS.get( nearestKey ) + toRoman( number - nearestKey );
 	}
 
-	public static String minPrecision( double number ) {
-		if( Math.abs( number - ( long )number ) < 0.001 ) {
+	public static String minPrecision( double number, int scale ) {
+		if( Math.abs( number - ( long )number ) < Math.pow( 0.1, scale + 1 ) ) {
 			return "%.0f".formatted( number );
 		} else {
-			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toPlainString();
+			return new BigDecimal( number ).setScale( scale, RoundingMode.HALF_EVEN ).stripTrailingZeros().toPlainString();
+		}
+	}
+
+	public static String minPrecision( double number ) {
+		return TextHelper.minPrecision( number, DEFAULT_SCALE );
+	}
+
+	public static String minPrecision( float number, int scale ) {
+		if( Math.abs( number - ( int )number ) < Math.pow( 0.1f, scale + 1 ) ) {
+			return "%.0f".formatted( number );
+		} else {
+			return new BigDecimal( number ).setScale( scale, RoundingMode.HALF_EVEN ).stripTrailingZeros().toPlainString();
 		}
 	}
 
 	public static String minPrecision( float number ) {
-		if( Math.abs( number - ( int )number ) < 0.001f ) {
-			return "%.0f".formatted( number );
-		} else {
-			return new BigDecimal( number ).setScale( 2, RoundingMode.HALF_EVEN ).stripTrailingZeros().toPlainString();
-		}
+		return TextHelper.minPrecision( number, DEFAULT_SCALE );
+	}
+
+	public static String signed( float number, int scale ) {
+		return "%s%s".formatted( number >= 0.0f ? "+" : "", TextHelper.minPrecision( number, scale ) );
 	}
 
 	public static String signed( float number ) {
-		return "%s%s".formatted( number >= 0.0f ? "+" : "", minPrecision( number ) );
+		return TextHelper.signed( number, DEFAULT_SCALE );
 	}
 
 	public static String signed( int number ) {
 		return "%s%d".formatted( number >= 0 ? "+" : "", number );
 	}
 
+	public static String signedPercent( float number, int scale ) {
+		return "%s%%".formatted( TextHelper.signed( number * 100.0f, scale ) );
+	}
+
 	public static String signedPercent( float number ) {
-		return "%s%%".formatted( signed( number * 100.0f ) );
+		return TextHelper.signedPercent( number, DEFAULT_SCALE );
 	}
 
 	public static String signedPercent( int number ) {
-		return "%s%%".formatted( signed( number * 100 ) );
+		return "%s%%".formatted( TextHelper.signed( number * 100 ) );
+	}
+
+	public static String percent( float number, int scale ) {
+		return "%s%%".formatted( TextHelper.minPrecision( number * 100.0f, scale ) );
 	}
 
 	public static String percent( float number ) {
-		return "%s%%".formatted( minPrecision( number * 100.0f ) );
+		return TextHelper.percent( number, DEFAULT_SCALE );
 	}
 
 	public static String percent( int number ) {
