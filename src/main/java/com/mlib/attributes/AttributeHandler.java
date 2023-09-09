@@ -21,6 +21,13 @@ public class AttributeHandler {
 		this.operation = operation;
 	}
 
+	public AttributeHandler( String name, Attribute attribute, AttributeModifier.Operation operation ) {
+		this.uuid = UUID.nameUUIDFromBytes( name.getBytes() );
+		this.name = name;
+		this.attribute = attribute;
+		this.operation = operation;
+	}
+
 	public static boolean hasAttribute( LivingEntity entity, Attribute attribute ) {
 		return entity.getAttributes().hasAttribute( attribute );
 	}
