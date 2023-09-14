@@ -28,7 +28,7 @@ public class FishingLootIncreaser {
 	}
 
 	private void increaseLoot( OnItemFished.Data data ) {
-		OnExtraFishingLootCheck.Data extraData = OnExtraFishingLootCheck.dispatch( data.drops, data.player );
+		OnExtraFishingLootCheck.Data extraData = OnExtraFishingLootCheck.dispatch( data.event );
 		if( extraData.extraLoot.isEmpty() ) {
 			return;
 		}

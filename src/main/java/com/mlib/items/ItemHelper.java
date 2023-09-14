@@ -168,6 +168,10 @@ public class ItemHelper {
 			|| item instanceof CrossbowItem;
 	}
 
+	public static boolean isFishingRod( ItemStack itemStack ) {
+		return itemStack.getItem().canPerformAction( itemStack, ToolActions.FISHING_ROD_CAST );
+	}
+
 	public static EnchantmentsInfo getEnchantmentsInfo( ItemStack itemStack ) {
 		return SerializableHelper.read( EnchantmentsInfo::new, itemStack.getEnchantmentTags() );
 	}
