@@ -29,13 +29,13 @@ public class FishingLootIncreaser {
 
 	private void increaseLoot( OnItemFished.Data data ) {
 		OnExtraFishingLootCheck.Data extraData = OnExtraFishingLootCheck.dispatch( data.drops, data.player );
-		if( extraData.isExtraLootEmpty() )
+		if( extraData.extraLoot.isEmpty() ) {
 			return;
+		}
 
 		this.spawnLoot( data, extraData.extraLoot );
 		this.spawnExperience( data, extraData.extraExperience );
 		this.damageFishingRod( data, extraData.extraRodDamage );
-		this.sendMessage( data, extraData.extraLoot );
 	}
 
 	private void spawnLoot( OnItemFished.Data data, List< ItemStack > extraLoot ) {
@@ -56,77 +56,5 @@ public class FishingLootIncreaser {
 
 	private void damageFishingRod( OnItemFished.Data data, int damage ) {
 		data.event.damageRodBy( data.event.getRodDamage() + damage );
-	}
-
-	private void sendMessage( OnItemFished.Data data, List< ItemStack > extraLoot ) {
-		List< FishedItem > fishedItems = this.buildFishedItemList( data, extraLoot );
-		MutableComponent message = this.buildMessage( fishedItems );
-
-		data.player.displayClientMessage( message, true );
-	}
-
-	private List< FishedItem > buildFishedItemList( OnItemFished.Data data, List< ItemStack > extraLoot ) {
-		List< FishedItem > fishedItems = new ArrayList<>();
-		BiConsumer< ItemStack, Boolean > addItem = ( ItemStack itemStack, Boolean isExtra )->{
-			for( FishedItem fishedItem : fishedItems ) {
-				if( fishedItem.is( itemStack ) ) {
-					fishedItem.increase( itemStack, isExtra );
-					return;
-				}
-			}
-
-			fishedItems.add( new FishedItem( itemStack, isExtra ) );
-		};
-
-		data.drops.forEach( itemStack->addItem.accept( itemStack, false ) );
-		extraLoot.forEach( itemStack->addItem.accept( itemStack, true ) );
-
-		return fishedItems;
-	}
-
-	private MutableComponent buildMessage( List< FishedItem > fishedItems ) {
-		MutableComponent message = Component.literal( "(" ).withStyle( ChatFormatting.WHITE );
-		for( int idx = 0; idx < fishedItems.size(); ++idx ) {
-			if( idx > 0 ) {
-				message.append( ", " );
-			}
-			message.append( fishedItems.get( idx ).build() );
-		}
-
-		return message.append( Component.literal( ")" ) );
-	}
-
-	private static class FishedItem {
-		public final ItemStack itemStack;
-		public final ChatFormatting itemFormatting;
-		public int count;
-		public ChatFormatting countFormatting;
-
-		public FishedItem( ItemStack itemStack, boolean isExtra ) {
-			ChatFormatting formatting = isExtra ? ChatFormatting.GOLD : ChatFormatting.WHITE;
-			this.itemStack = itemStack;
-			this.itemFormatting = formatting;
-			this.count = itemStack.getCount();
-			this.countFormatting = formatting;
-		}
-
-		public MutableComponent build() {
-			return this.itemStack.getItem()
-				.getName( this.itemStack )
-				.copy()
-				.withStyle( this.itemFormatting )
-				.append( Component.literal( this.count > 1 ? String.format( " x%d", this.count ) : "" ).withStyle( this.countFormatting ) );
-		}
-
-		public void increase( ItemStack itemStack, boolean isExtra ) {
-			this.count += itemStack.getCount();
-			if( isExtra ) {
-				this.countFormatting = ChatFormatting.GOLD;
-			}
-		}
-
-		public boolean is( ItemStack itemStack ) {
-			return this.itemStack.getItem().equals( itemStack.getItem() );
-		}
 	}
 }
