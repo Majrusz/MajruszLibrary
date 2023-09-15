@@ -1,6 +1,9 @@
 package com.mlib;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.profiling.InactiveProfiler;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -8,11 +11,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fml.util.thread.SidedThreadGroup;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
+import java.util.function.Supplier;
 
 public class Utility {
 	public static final int TICKS_IN_SECOND = 20;
@@ -116,14 +123,43 @@ public class Utility {
 	}
 
 	public static boolean isServerSide() {
-		return Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER;
+		return Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER
+			|| Utility.isMainThread() && FMLEnvironment.dist == Dist.DEDICATED_SERVER;
 	}
 
 	public static boolean isClientSide() {
 		return Thread.currentThread().getThreadGroup() == SidedThreadGroups.CLIENT;
 	}
 
+	public static boolean isMainThread() {
+		return !( Thread.currentThread().getThreadGroup() instanceof SidedThreadGroup );
+	}
+
 	public static boolean isDevBuild() {
 		return !FMLEnvironment.production;
+	}
+
+	public static ProfilerFiller getProfiler() {
+		Supplier< Supplier< ProfilerFiller > > profiler = Utility.isServerSide()
+			? ()->()->ServerLifecycleHooks.getCurrentServer() != null ? ServerLifecycleHooks.getCurrentServer().getProfiler() : InactiveProfiler.INSTANCE
+			: ()->()->Minecraft.getInstance().getProfiler();
+
+		return profiler.get().get();
+	}
+
+	public static void profile( String name, Runnable runnable ) {
+		ProfilerFiller profiler = Utility.getProfiler();
+		profiler.push( name );
+		runnable.run();
+		profiler.pop();
+	}
+
+	public static < Type > Type profile( String name, Supplier< Type > supplier ) {
+		ProfilerFiller profiler = Utility.getProfiler();
+		profiler.push( name );
+		Type value = supplier.get();
+		profiler.pop();
+
+		return value;
 	}
 }

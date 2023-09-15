@@ -7,15 +7,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Context< DataType > extends ConfigGroup {
 	final Consumer< DataType > consumer;
 	final List< Condition< DataType > > conditions = new ArrayList<>();
+	final String profilerName;
 	Priority priority = Priority.NORMAL;
 	boolean isSorted = true;
 
 	public Context( Consumer< DataType > consumer ) {
 		this.consumer = consumer;
+		this.profilerName = buildProfilerName( consumer );
 	}
 
 	@Override
@@ -89,7 +93,19 @@ public class Context< DataType > extends ConfigGroup {
 		return Collections.unmodifiableList( this.conditions );
 	}
 
+	public String getProfilerName() {
+		return this.profilerName;
+	}
+
 	public Priority getPriority() {
 		return this.priority;
+	}
+
+	private static String buildProfilerName( Consumer< ? > consumer ) {
+		String name = consumer.getClass().getName();
+		Pattern pattern = Pattern.compile( "(.*)\\$\\$Lambda.*" );
+		Matcher matcher = pattern.matcher( name );
+
+		return matcher.find() ? matcher.group( 1 ) : name;
 	}
 }

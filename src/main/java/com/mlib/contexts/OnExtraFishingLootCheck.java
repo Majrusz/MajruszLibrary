@@ -3,19 +3,15 @@ package com.mlib.contexts;
 import com.mlib.Random;
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
-import com.mlib.contexts.data.IEntityData;
-import com.mlib.items.ItemHelper;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.event.entity.player.ItemFishedEvent;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -24,22 +20,17 @@ public class OnExtraFishingLootCheck {
 		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static Data dispatch( List< ItemStack > drops, Player player ) {
-		return Contexts.get( Data.class ).dispatch( new Data( drops, player ) );
+	public static Data dispatch( ItemFishedEvent event ) {
+		return Contexts.get( Data.class ).dispatch( new Data( event ) );
 	}
 
-	public static class Data implements IEntityData {
-		public final List< ItemStack > drops;
+	public static class Data extends OnItemFished.Data {
 		public final List< ItemStack > extraLoot = new ArrayList<>();
-		public final Player player;
-		public final ItemStack fishingRod;
 		public int extraExperience = 0;
 		public int extraRodDamage = 0;
 
-		public Data( List< ItemStack > drops, Player player ) {
-			this.drops = Collections.unmodifiableList( drops );
-			this.player = player;
-			this.fishingRod = ItemHelper.getMatchingHandItem( player, Data::isFishingRod );
+		public Data( ItemFishedEvent event ) {
+			super( event );
 		}
 
 		public LootContext generateLootContext() {

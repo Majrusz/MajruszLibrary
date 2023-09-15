@@ -17,7 +17,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
@@ -67,7 +67,11 @@ public class EntityHelper {
 	}
 
 	public static boolean isHuman( Entity entity ) {
-		return ( entity instanceof Villager || entity instanceof WanderingTrader || entity instanceof Player || entity instanceof Witch || entity instanceof Pillager );
+		return entity instanceof Villager
+			|| entity instanceof WanderingTrader
+			|| entity instanceof Player
+			|| entity instanceof Witch
+			|| entity instanceof AbstractIllager;
 	}
 
 	public static boolean isLoaded( ServerLevel level, UUID uuid ) {

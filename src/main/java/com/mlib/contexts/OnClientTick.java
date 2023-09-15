@@ -2,7 +2,6 @@ package com.mlib.contexts;
 
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
-import com.mlib.contexts.data.IProfilerData;
 import com.mlib.contexts.data.ITickData;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,7 +20,7 @@ public class OnClientTick {
 		Contexts.get( Data.class ).dispatch( new Data( event ) );
 	}
 
-	public static class Data implements ITickData, IProfilerData.Client {
+	public static class Data implements ITickData {
 		public final TickEvent.ClientTickEvent event;
 
 		public Data( TickEvent.ClientTickEvent event ) {
