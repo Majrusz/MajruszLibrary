@@ -45,7 +45,7 @@ public class OnBlockPlaced {
 
 		@Override
 		public Level getLevel() {
-			return this.entity != null ? this.entity.level() : null;
+			return this.entity != null ? this.entity.level : null;
 		}
 
 		public List< BlockSnapshot > getBlockSnapshots() {
