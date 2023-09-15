@@ -3,6 +3,7 @@ package com.mlib.contexts;
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
 import com.mlib.contexts.data.IEntityData;
+import com.mlib.items.ItemHelper;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -30,12 +31,14 @@ public class OnItemFished {
 		public final Player player;
 		public final FishingHook hook;
 		public final NonNullList< ItemStack > drops;
+		public final ItemStack fishingRod;
 
 		public Data( ItemFishedEvent event ) {
 			this.event = event;
 			this.player = event.getEntity();
 			this.hook = event.getHookEntity();
 			this.drops = event.getDrops();
+			this.fishingRod = ItemHelper.getMatchingHandItem( this.player, ItemHelper::isFishingRod );
 		}
 
 		@Override

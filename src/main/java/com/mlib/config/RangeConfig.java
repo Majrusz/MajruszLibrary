@@ -5,6 +5,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.function.Supplier;
 
+@Deprecated( since = "5.1.0 use ValueRangeConfig instead" )
 public abstract class RangeConfig< Type extends Number & Comparable< Type > > extends UserConfig implements Supplier< Range< Type > > {
 	protected final Range< Type > defaultValue;
 	protected final Predicate predicateFrom;
