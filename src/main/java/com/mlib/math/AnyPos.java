@@ -2,11 +2,10 @@ package com.mlib.math;
 
 import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.function.BiFunction;
 
 /**
  This class is an adapter for most position-related operations in the game. It has been
@@ -34,6 +33,10 @@ public class AnyPos {
 
 	public static AnyPos from( BlockPos blockPos ) {
 		return new AnyPos( blockPos.getX(), blockPos.getY(), blockPos.getZ() );
+	}
+
+	public static AnyPos from( Direction direction ) {
+		return new AnyPos( direction.getStepX(), direction.getStepY(), direction.getStepZ() );
 	}
 
 	public static AnyPos from( Number x, Number y, Number z ) {
@@ -70,6 +73,10 @@ public class AnyPos {
 		return this.add( from( value, value, value ) );
 	}
 
+	public AnyPos add( Direction direction ) {
+		return this.add( from( direction ) );
+	}
+
 	public AnyPos add( Number x, Number y, Number z ) {
 		return this.add( from( x, y, z ) );
 	}
@@ -92,6 +99,10 @@ public class AnyPos {
 
 	public AnyPos sub( BlockPos blockPos ) {
 		return this.sub( from( blockPos ) );
+	}
+
+	public AnyPos sub( Direction direction ) {
+		return this.sub( from( direction ) );
 	}
 
 	public AnyPos sub( Number value ) {
@@ -122,6 +133,10 @@ public class AnyPos {
 		return this.mul( from( blockPos ) );
 	}
 
+	public AnyPos mul( Direction direction ) {
+		return this.mul( from( direction ) );
+	}
+
 	public AnyPos mul( Number value ) {
 		return this.mul( from( value, value, value ) );
 	}
@@ -148,6 +163,10 @@ public class AnyPos {
 
 	public AnyPos div( BlockPos blockPos ) {
 		return this.div( from( blockPos ) );
+	}
+
+	public AnyPos div( Direction direction ) {
+		return this.div( from( direction ) );
 	}
 
 	public AnyPos div( Number value ) {
@@ -178,6 +197,10 @@ public class AnyPos {
 		return this.dot( from( blockPos ) );
 	}
 
+	public Number dot( Direction direction ) {
+		return this.dot( from( direction ) );
+	}
+
 	public Number dot( Number x, Number y, Number z ) {
 		return this.dot( from( x, y, z ) );
 	}
@@ -200,6 +223,10 @@ public class AnyPos {
 
 	public Number dist( BlockPos blockPos ) {
 		return this.dist( from( blockPos ) );
+	}
+
+	public Number dist( Direction direction ) {
+		return this.dist( from( direction ) );
 	}
 
 	public Number dist( Number x, Number y, Number z ) {
@@ -226,6 +253,10 @@ public class AnyPos {
 		return this.distSqr( from( blockPos ) );
 	}
 
+	public Number distSqr( Direction direction ) {
+		return this.distSqr( from( direction ) );
+	}
+
 	public Number distSqr( Number x, Number y, Number z ) {
 		return this.distSqr( from( x, y, z ) );
 	}
@@ -250,6 +281,10 @@ public class AnyPos {
 		return this.dist2d( from( blockPos ) );
 	}
 
+	public Number dist2d( Direction direction ) {
+		return this.dist2d( from( direction ) );
+	}
+
 	public Number dist2d( Number x, Number y, Number z ) {
 		return this.dist2d( from( x, y, z ) );
 	}
@@ -272,6 +307,10 @@ public class AnyPos {
 
 	public AnyPos lerp( float ratio, BlockPos blockPos ) {
 		return this.lerp( ratio, from( blockPos ) );
+	}
+
+	public AnyPos lerp( float ratio, Direction direction ) {
+		return this.lerp( ratio, from( direction ) );
 	}
 
 	public AnyPos lerp( float ratio, Number x, Number y, Number z ) {

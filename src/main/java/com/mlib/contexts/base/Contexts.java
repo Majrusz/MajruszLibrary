@@ -1,7 +1,6 @@
 package com.mlib.contexts.base;
 
-import com.mlib.contexts.data.IProfilerData;
-import net.minecraft.util.profiling.InactiveProfiler;
+import com.mlib.Utility;
 import net.minecraft.util.profiling.ProfilerFiller;
 
 import java.util.*;
@@ -32,11 +31,12 @@ public class Contexts< DataType > {
 	}
 
 	public DataType dispatch( DataType data ) {
-		ProfilerFiller profiler = data instanceof IProfilerData profilerData ? profilerData.getProfiler() : InactiveProfiler.INSTANCE;
-		profiler.push( data.getClass().getName() );
-		this.tryToSort();
-		this.forEach( context->context.accept( data ) );
-		profiler.pop();
+		Utility.profile( data.getClass().getName(), ()->{
+			this.tryToSort();
+			this.forEach( context->Utility.profile( context.getProfilerName(), ()->{
+				context.accept( data );
+			} ) );
+		} );
 
 		return data;
 	}

@@ -5,6 +5,7 @@ import com.mlib.contexts.base.Contexts;
 import com.mlib.contexts.data.IEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -26,12 +27,14 @@ public class OnBreakSpeed {
 	public static class Data implements IEntityData {
 		public final PlayerEvent.BreakSpeed event;
 		public final Player player;
+		public final BlockState blockState;
 		public final float originalSpeed;
 		public float newSpeed;
 
 		public Data( PlayerEvent.BreakSpeed event ) {
 			this.event = event;
 			this.player = event.getEntity();
+			this.blockState = event.getState();
 			this.originalSpeed = event.getOriginalSpeed();
 			this.newSpeed = event.getNewSpeed();
 		}

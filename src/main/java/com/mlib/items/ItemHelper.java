@@ -169,6 +169,10 @@ public class ItemHelper {
 			|| item instanceof CrossbowItem;
 	}
 
+	public static boolean isFishingRod( ItemStack itemStack ) {
+		return itemStack.getItem().canPerformAction( itemStack, ToolActions.FISHING_ROD_CAST );
+	}
+
 	public static void addEnchantmentTypeToItemGroup( CreativeModeTab itemTab, EnchantmentCategory category ) {
 		EnchantmentCategory[] group = itemTab.getEnchantmentCategories();
 		if( group.length == 0 ) {
