@@ -12,10 +12,12 @@ public class StringListConfig extends ValueConfig< List< ? extends String > > {
 
 	public StringListConfig( List< ? extends String > defaultValue ) {
 		super( defaultValue );
+
+		this.defaultValue.forEach( value->this.strings.add( new RegexString( value ) ) );
 	}
 
 	public StringListConfig( String... values ) {
-		super( Arrays.asList( values ) );
+		this( Arrays.asList( values ) );
 	}
 
 	@Override
