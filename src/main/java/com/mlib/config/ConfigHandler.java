@@ -12,7 +12,6 @@ public class ConfigHandler extends ConfigGroup {
 	final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 	final ModConfig.Type type;
 	ForgeConfigSpec configSpec = null;
-	boolean areConfigsValid = false;
 
 	public ConfigHandler( ModConfig.Type type ) {
 		this.type = type;
@@ -28,7 +27,7 @@ public class ConfigHandler extends ConfigGroup {
 		if( this.type == ModConfig.Type.SERVER && this.configSpec.size() > 0 ) {
 			this.registerHelpConfigSpec( modLoadingContext );
 		}
-		helper.getEventBus().addListener( this::onConfigReload );
+		helper.getEventBus().addListener( this::onConfigReloaded );
 		helper.getEventBus().addListener( this::onConfigLoaded );
 	}
 
@@ -36,16 +35,12 @@ public class ConfigHandler extends ConfigGroup {
 		return this.type;
 	}
 
-	private void onConfigReload( ModConfigEvent.Reloading event ) {
-		if( !this.areConfigsValid ) {
-			return;
-		}
-
+	private void onConfigReloaded( ModConfigEvent.Reloading event ) {
 		this.configs.forEach( IConfigurable::onReload );
 	}
 
 	private void onConfigLoaded( ModConfigEvent.Loading event ) {
-		this.areConfigsValid = true;
+		this.configs.forEach( IConfigurable::onReload );
 	}
 
 	private void registerHelpConfigSpec( final ModLoadingContext modLoadingContext ) {
