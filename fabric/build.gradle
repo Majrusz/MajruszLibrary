@@ -1,0 +1,84 @@
+plugins {
+    id 'fabric-loom'
+    id 'java'
+    id 'maven-publish'
+}
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
+
+base {
+    archivesName = "${mod_id}-fabric-${minecraft_version}-${mod_version}"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+
+    compileOnly project(':common')
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : mod_id,
+                "Specification-Vendor"    : mod_authors,
+                "Specification-Version"   : '4',
+                "Implementation-Title"    : mod_display_name,
+                "Implementation-Version"  : mod_version,
+                "Implementation-Vendor"   : mod_authors,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+loom {
+    runs {
+        named('client') {
+            client()
+            setConfigName('fabric client')
+            ideConfigGenerated(true)
+            runDir('runs/client')
+            programArg('--username=Dev')
+        }
+        named('server') {
+            server()
+            setConfigName('fabric server')
+            ideConfigGenerated(true)
+            runDir('runs/server')
+        }
+    }
+
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.setEncoding('UTF-8')
+    options.release.set(17)
+    source(project(':common').sourceSets.main.allSource)
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+sourcesJar {
+    from project(':common').sourceSets.main.allSource
+}
+
+processResources {
+    from project(':common').sourceSets.main.resources
+    filesMatching('fabric.mod.json') {
+        expand project.properties
+    }
+    outputs.upToDateWhen {
+        false
+    }
+}
+

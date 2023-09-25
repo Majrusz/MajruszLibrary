@@ -1,25 +1,39 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
+build/
+*.ipr
+run/
+*.iws
+out/
+*.iml
+.gradle/
+output/
+bin/
+libs/
+
 .classpath
 .project
+.idea/
+classes/
+.metadata
+.vscode
+.settings
+*.launch
 
-# idea
-out
-*.ipr
-*.iws
-*.iml
-.idea
+# Common
+common/.gradle/
+common/build/
+common/runs/
 
-# gradle
-build
-.gradle
+# Fabric
+fabric/.gradle/
+fabric/build/
+fabric/runs/
 
-# other
-eclipse
-run
+# Forge
+forge/.gradle/
+forge/build/
+forge/runs/
 
-# Files from Forge MDK
-forge*changelog.txt
+# Neoforge
+neoforge/.gradle/
+neoforge/build/
+neoforge/runs/
