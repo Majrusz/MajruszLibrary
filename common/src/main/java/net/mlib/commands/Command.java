@@ -75,6 +75,14 @@ public class Command {
 			return this.addArgument( ()->Commands.argument( name, IntegerArgumentType.integer( min, max ) ) );
 		}
 
+		public < EnumType extends Enum< EnumType > > Builder enumeration( Class< EnumType > enumClass ) {
+			return this.enumeration( enumClass.getSimpleName().toLowerCase(), enumClass );
+		}
+
+		public < EnumType extends Enum< EnumType > > Builder enumeration( String name, Class< EnumType > enumClass ) {
+			return this.addArgument( ()->Commands.argument( name, EnumArgument.enumArgument( enumClass ) ) );
+		}
+
 		public Builder position() {
 			return this.position( DefaultKeys.POSITION );
 		}
@@ -172,9 +180,6 @@ public class Command {
 		}
 
 		private void mergeArguments() {
-			if( this.arguments.size() < 2 )
-				return;
-
 			for( int idx = this.arguments.size(); idx >= 2; --idx ) {
 				ArgumentBuilder< CommandSourceStack, ? > previousArgument = this.arguments.get( idx - 2 );
 				ArgumentBuilder< CommandSourceStack, ? > nextArgument = this.arguments.get( idx - 1 );
@@ -200,6 +205,7 @@ public class Command {
 				}
 				permutations = newPermutations;
 			}
+
 			return permutations;
 		}
 

@@ -10,14 +10,22 @@ public class TestCommand {
 	public TestCommand() {
 		Command.create()
 			.literal( "mycommand" )
+			.execute( this::handle )
+			.enumeration( SomeType.class )
 			.hasPermission( 4 )
 			.execute( this::handle )
 			.register();
 	}
 
 	private int handle( CommandData data ) {
-		MajruszLibrary.HELPER.log( ":D" );
+		MajruszLibrary.HELPER.log( "%s :D", data.getOptionalEnumeration( SomeType.class ).orElse( SomeType.NORMAL ) );
 
 		return 0;
+	}
+
+	public enum SomeType {
+		SMALL,
+		NORMAL,
+		BIG
 	}
 }
