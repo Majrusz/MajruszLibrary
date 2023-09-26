@@ -8,8 +8,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.mlib.commands.EnumArgument;
 import net.mlib.modhelper.ModHelper;
-import net.mlib.registries.RegistryGroup;
-import net.mlib.registries.RegistryObject;
+import net.mlib.modhelper.RegistryGroup;
+import net.mlib.modhelper.RegistryObject;
 import net.mlib.temp.TestCommand;
 
 public class MajruszLibrary {
@@ -17,8 +17,9 @@ public class MajruszLibrary {
 	public static final ModHelper HELPER = ModHelper.create( MOD_ID );
 
 	// Registry Groups
-	public static final RegistryGroup< Item > ITEMS = HELPER.getRegistryHandler().create( BuiltInRegistries.ITEM );
-	public static final RegistryGroup< CreativeModeTab > CREATIVE_MODE_TABS = HELPER.getRegistryHandler().create( BuiltInRegistries.CREATIVE_MODE_TAB );
+	public static final RegistryGroup< ArgumentTypeInfo< ?, ? > > ARGUMENT_TYPES = HELPER.create( BuiltInRegistries.COMMAND_ARGUMENT_TYPE );
+	public static final RegistryGroup< Item > ITEMS = HELPER.create( BuiltInRegistries.ITEM );
+	public static final RegistryGroup< CreativeModeTab > CREATIVE_MODE_TABS = HELPER.create( BuiltInRegistries.CREATIVE_MODE_TAB );
 
 	// Registry Objects
 	public static final RegistryObject< ArgumentTypeInfo< ?, ? > > ENUM_ARGUMENT_TYPE = ARGUMENT_TYPES.create( "enum", EnumArgument::register );

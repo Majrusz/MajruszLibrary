@@ -1,9 +1,9 @@
 package net.mlib.modhelper;
 
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.mlib.annotations.AutoInstance;
 import net.mlib.annotations.PlatformImplementation;
-import net.mlib.registries.RegistryHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,16 +26,16 @@ public class ModHelper {
 		this.registerCallbacks.forEach( Runnable::run );
 	}
 
+	public < Type > RegistryGroup< Type > create( Registry< Type > registry ) {
+		return this.registryHandler.create( registry );
+	}
+
 	public void log( String format, Object... args ) {
 		this.logger.info( format.formatted( args ) );
 	}
 
 	public void logError( String format, Object... args ) {
 		this.logger.error( format.formatted( args ) );
-	}
-
-	public RegistryHandler getRegistryHandler() {
-		return this.registryHandler;
 	}
 
 	public < Type > Type getPlatformImplementation( Class< Type > clazz ) {

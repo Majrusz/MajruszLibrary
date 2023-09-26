@@ -1,11 +1,11 @@
-package net.mlib.registries;
+package net.mlib.modhelper;
 
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.mlib.annotations.PlatformImplementation;
 
 @PlatformImplementation
-public class RegistryPlatformImpl implements RegistryPlatform {
+public class RegistryPlatformImpl implements IRegistryPlatform {
 	DeferredRegister< ? > deferredRegister = null;
 
 	@Override

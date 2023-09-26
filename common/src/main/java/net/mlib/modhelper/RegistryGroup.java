@@ -1,7 +1,6 @@
-package net.mlib.registries;
+package net.mlib.modhelper;
 
 import net.minecraft.core.Registry;
-import net.mlib.modhelper.ModHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ public class RegistryGroup< Type > {
 		return object;
 	}
 
-	void register( RegistryPlatform platform ) {
+	void register( IRegistryPlatform platform ) {
 		platform.register( this );
 
 		this.objects.forEach( object->object.register( platform ) );

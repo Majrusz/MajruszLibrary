@@ -1,4 +1,4 @@
-package net.mlib.registries;
+package net.mlib.modhelper;
 
 import java.util.function.Supplier;
 
@@ -23,7 +23,7 @@ public class RegistryObject< Type > implements Supplier< Type > {
 		return this.value.get();
 	}
 
-	void register( RegistryPlatform platform ) {
+	void register( IRegistryPlatform platform ) {
 		platform.register( this );
 	}
 }
