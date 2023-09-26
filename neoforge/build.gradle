@@ -8,7 +8,7 @@ plugins {
 }
 
 base {
-    archivesName = "${mod_id}-neoforge-${minecraft_version}-${mod_version}"
+    archivesName = "${mod_archives_name}-neoforge-${minecraft_version}-${mod_version}"
 }
 
 minecraft {
