@@ -1,15 +1,18 @@
-package net.mlib.modhelper;
+package net.mlib.registries;
 
 import net.minecraft.core.Registry;
+import net.mlib.modhelper.ModHelper;
+import net.mlib.platform.Services;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RegistryHandler {
+	final static IRegistryPlatform PLATFORM = Services.load( IRegistryPlatform.class );
 	final ModHelper helper;
 	final List< RegistryGroup< ? > > groups = new ArrayList<>();
 
-	RegistryHandler( ModHelper helper ) {
+	public RegistryHandler( ModHelper helper ) {
 		this.helper = helper;
 	}
 
@@ -21,8 +24,6 @@ public class RegistryHandler {
 	}
 
 	public void register() {
-		IRegistryPlatform platform = this.helper.getPlatformImplementation( IRegistryPlatform.class );
-
-		this.groups.forEach( group->group.register( platform ) );
+		this.groups.forEach( RegistryGroup::register );
 	}
 }

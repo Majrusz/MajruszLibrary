@@ -1,10 +1,8 @@
-package net.mlib.modhelper;
+package net.mlib.registries;
 
 import net.minecraft.core.Registry;
-import net.mlib.annotations.PlatformImplementation;
 
-@PlatformImplementation
-public class RegistryPlatformImpl implements IRegistryPlatform {
+public class RegistryFabric implements IRegistryPlatform {
 	@Override
 	public < Type > void register( RegistryGroup< Type > group ) {}
 

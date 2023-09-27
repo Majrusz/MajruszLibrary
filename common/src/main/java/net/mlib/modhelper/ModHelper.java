@@ -3,7 +3,8 @@ package net.mlib.modhelper;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.mlib.annotations.AutoInstance;
-import net.mlib.annotations.PlatformImplementation;
+import net.mlib.registries.RegistryGroup;
+import net.mlib.registries.RegistryHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,10 +37,6 @@ public class ModHelper {
 
 	public void logError( String format, Object... args ) {
 		this.logger.error( format.formatted( args ) );
-	}
-
-	public < Type > Type getPlatformImplementation( Class< Type > clazz ) {
-		return this.classFinder.getInstance( subclazz->clazz.isAssignableFrom( subclazz ) && subclazz.isAnnotationPresent( PlatformImplementation.class ) );
 	}
 
 	public < Type > Type getInstance( Class< Type > clazz ) {

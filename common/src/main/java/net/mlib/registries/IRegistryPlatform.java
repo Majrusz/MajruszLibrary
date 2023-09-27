@@ -1,4 +1,4 @@
-package net.mlib.modhelper;
+package net.mlib.registries;
 
 public interface IRegistryPlatform {
 	< Type > void register( RegistryGroup< Type > group );
