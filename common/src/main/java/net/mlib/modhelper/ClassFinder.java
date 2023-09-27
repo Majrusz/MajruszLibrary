@@ -21,6 +21,9 @@ class ClassFinder {
 	public void findClasses() {
 		this.classes.addAll( this.findClassesInPackage().stream().filter( clazz->!this.classes.contains( clazz ) ).toList() );
 		this.classes.addAll( this.findClassesInJar().stream().filter( clazz->!this.classes.contains( clazz ) ).toList() );
+		if( this.classes.isEmpty() ) {
+			throw new IllegalStateException( "ClassFinder did not find any classes" );
+		}
 	}
 
 	public < Type > Type getInstance( Predicate< Class< ? > > predicate ) {
