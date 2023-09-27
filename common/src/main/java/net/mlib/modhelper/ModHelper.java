@@ -3,6 +3,9 @@ package net.mlib.modhelper;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.mlib.annotations.AutoInstance;
+import net.mlib.data.ISerializable;
+import net.mlib.network.NetworkHandler;
+import net.mlib.network.NetworkObject;
 import net.mlib.registries.RegistryGroup;
 import net.mlib.registries.RegistryHandler;
 import org.slf4j.Logger;
@@ -18,6 +21,7 @@ public class ModHelper {
 	final Logger logger;
 	final ClassFinder classFinder;
 	final RegistryHandler registryHandler;
+	final NetworkHandler networkHandler;
 
 	public static ModHelper create( String modId ) {
 		return new ModHelper( modId );
@@ -29,6 +33,10 @@ public class ModHelper {
 
 	public < Type > RegistryGroup< Type > create( Registry< Type > registry ) {
 		return this.registryHandler.create( registry );
+	}
+
+	public < Type extends ISerializable > NetworkObject< Type > create( String id, Class< Type > clazz ) {
+		return this.networkHandler.create( id, clazz );
 	}
 
 	public void log( String format, Object... args ) {
@@ -68,9 +76,11 @@ public class ModHelper {
 		this.logger = LoggerFactory.getLogger( modId );
 		this.classFinder = new ClassFinder( this );
 		this.registryHandler = new RegistryHandler( this );
+		this.networkHandler = new NetworkHandler( this );
 
 		this.onRegister( this.classFinder::findClasses );
 		this.onRegister( ()->this.instances.add( this.classFinder.getInstances( clazz->clazz.isAnnotationPresent( AutoInstance.class ) ) ) );
 		this.onRegister( this.registryHandler::register );
+		this.onRegister( this.networkHandler::register );
 	}
 }

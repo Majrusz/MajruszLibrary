@@ -8,10 +8,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.mlib.commands.EnumArgument;
 import net.mlib.modhelper.ModHelper;
-import net.mlib.modhelper.RegistryGroup;
-import net.mlib.modhelper.RegistryObject;
+import net.mlib.network.NetworkObject;
 import net.mlib.platform.ISidePlatform;
 import net.mlib.platform.Services;
+import net.mlib.registries.RegistryGroup;
+import net.mlib.registries.RegistryObject;
 import net.mlib.temp.TestCommand;
 
 public class MajruszLibrary {
@@ -39,6 +40,9 @@ public class MajruszLibrary {
 			.displayItems( ( params, output )->output.accept( new ItemStack( THE_ITEM.get() ) ) )
 			.build();
 	} );
+
+	// Network
+	public static final NetworkObject< TestCommand.Message > MESSAGE = HELPER.create( "message", TestCommand.Message.class );
 
 	private MajruszLibrary() {}
 }

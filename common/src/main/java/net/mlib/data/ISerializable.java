@@ -18,25 +18,7 @@ public interface ISerializable {
 
 	void read( Tag tag );
 
-	default void onServer( ServerData serverData ) {}
+	default void onServer( ServerPlayer player ) {}
 
-	default void onClient( ClientData clientData ) {}
-
-	class ServerData {
-		public final MinecraftServer server;
-		public final ServerPlayer player;
-
-		public ServerData( MinecraftServer server, ServerPlayer player ) {
-			this.server = server;
-			this.player = player;
-		}
-	}
-
-	class ClientData {
-		public final Minecraft minecraft;
-
-		public ClientData( Minecraft minecraft ) {
-			this.minecraft = minecraft;
-		}
-	}
+	default void onClient() {}
 }
