@@ -10,11 +10,14 @@ import net.mlib.commands.EnumArgument;
 import net.mlib.modhelper.ModHelper;
 import net.mlib.modhelper.RegistryGroup;
 import net.mlib.modhelper.RegistryObject;
+import net.mlib.platform.ISidePlatform;
+import net.mlib.platform.Services;
 import net.mlib.temp.TestCommand;
 
 public class MajruszLibrary {
 	public static final String MOD_ID = "mlib";
 	public static final ModHelper HELPER = ModHelper.create( MOD_ID );
+	public static final ISidePlatform SIDE = Services.load( ISidePlatform.class );
 
 	// Registry Groups
 	public static final RegistryGroup< ArgumentTypeInfo< ?, ? > > ARGUMENT_TYPES = HELPER.create( BuiltInRegistries.COMMAND_ARGUMENT_TYPE );
