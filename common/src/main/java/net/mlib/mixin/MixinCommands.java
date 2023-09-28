@@ -16,7 +16,10 @@ public abstract class MixinCommands {
 	@Shadow private CommandDispatcher< CommandSourceStack > dispatcher;
 
 	@Shadow( aliases = { "this$0" } )
-	@Inject( method = "<init> (Lnet/minecraft/commands/Commands$CommandSelection;Lnet/minecraft/commands/CommandBuildContext;)V", at = @At( "RETURN" ) )
+	@Inject(
+		method = "<init> (Lnet/minecraft/commands/Commands$CommandSelection;Lnet/minecraft/commands/CommandBuildContext;)V",
+		at = @At( "RETURN" )
+	)
 	private void constructor( Commands.CommandSelection commandSelection, CommandBuildContext context, CallbackInfo callback ) {
 		OnCommandsInitialized.dispatch( this.dispatcher );
 	}

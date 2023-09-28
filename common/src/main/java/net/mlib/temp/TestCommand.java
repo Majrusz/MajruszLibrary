@@ -2,7 +2,6 @@ package net.mlib.temp;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.mlib.MajruszLibrary;
 import net.mlib.annotations.AutoInstance;
 import net.mlib.commands.Command;
@@ -13,14 +12,6 @@ import net.mlib.data.SerializableStructure;
 public class TestCommand {
 	public TestCommand() {
 		Command.create()
-			.literal( "mycommand" )
-			.execute( this::handle )
-			.enumeration( SomeType.class )
-			.hasPermission( 4 )
-			.execute( this::handle )
-			.register();
-
-		Command.create()
 			.literal( "mysend" )
 			.hasPermission( 4 )
 			.integer()
@@ -28,17 +19,11 @@ public class TestCommand {
 			.register();
 	}
 
-	private int handle( CommandData data ) {
-		MajruszLibrary.HELPER.log( "%s :D", data.getOptionalEnumeration( SomeType.class ).orElse( SomeType.NORMAL ) );
-
-		return 0;
-	}
-
 	private int handleMessage( CommandData data ) throws CommandSyntaxException {
 		int value = data.getInteger();
 		MajruszLibrary.HELPER.log( "[SENDER] %d", value );
-		if( data.getOptionalEntityOrPlayer() instanceof Player player ) {
-			MajruszLibrary.MESSAGE.sendToServer( new Message( value ) );
+		if( data.getOptionalEntityOrPlayer() instanceof ServerPlayer player ) {
+			MajruszLibrary.MESSAGE.sendToClients( new Message( value + 1 ) );
 		}
 
 		return 0;
@@ -61,13 +46,6 @@ public class TestCommand {
 			this();
 
 			this.value = value;
-		}
-
-		@Override
-		public void onServer( ServerPlayer player ) {
-			MajruszLibrary.HELPER.log( "[SERVER] %d %s", this.value, player.toString() );
-			this.value++;
-			MajruszLibrary.MESSAGE.sendToClients( this );
 		}
 
 		@Override
