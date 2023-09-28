@@ -39,14 +39,14 @@ jar {
 
 loom {
     runs {
-        named('client') {
+        client {
             client()
             setConfigName('fabric client')
             ideConfigGenerated(true)
             runDir('runs/client')
             programArg('--username=Dev')
         }
-        named('server') {
+        server {
             server()
             setConfigName('fabric server')
             ideConfigGenerated(true)

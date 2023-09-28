@@ -35,7 +35,6 @@ minecraft {
         client {
             workingDirectory project.file('runs/client')
             taskName 'client'
-            args '--username', 'Dev'
         }
 
         clientAlt {
