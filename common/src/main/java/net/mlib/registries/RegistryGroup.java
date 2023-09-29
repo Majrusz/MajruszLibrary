@@ -25,7 +25,7 @@ public class RegistryGroup< Type > {
 	}
 
 	void register() {
-		RegistryHandler.PLATFORM.register( this );
+		Registries.PLATFORM.register( this );
 
 		this.objects.forEach( RegistryObject::register );
 	}

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RegistryHandler {
-	final static IRegistryPlatform PLATFORM = Services.load( IRegistryPlatform.class );
 	final ModHelper helper;
 	final List< RegistryGroup< ? > > groups = new ArrayList<>();
 

@@ -24,6 +24,6 @@ public class RegistryObject< Type > implements Supplier< Type > {
 	}
 
 	void register() {
-		RegistryHandler.PLATFORM.register( this );
+		Registries.PLATFORM.register( this );
 	}
 }
