@@ -1,5 +1,7 @@
 package net.mlib.contexts.base;
 
+import net.mlib.MajruszLibrary;
+
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -24,6 +26,7 @@ public class Contexts< DataType > {
 	}
 
 	public DataType dispatch( DataType data ) {
+		MajruszLibrary.HELPER.log( "CONTEXT %s", data.getClass().getName() );
 		this.forEach( context->context.accept( data ) );
 
 		return data;
