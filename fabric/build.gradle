@@ -63,13 +63,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 java {
-    withSourcesJar()
-    withJavadocJar()
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-}
-
-sourcesJar {
-    from project(':common').sourceSets.main.allSource
 }
 
 processResources {

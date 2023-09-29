@@ -52,8 +52,6 @@ minecraft {
 }
 
 java {
-    withSourcesJar()
-    withJavadocJar()
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
@@ -67,10 +65,6 @@ tasks.withType(JavaCompile).configureEach {
     options.setEncoding('UTF-8')
     options.release.set(17)
     source(project(':common').sourceSets.main.allSource)
-}
-
-sourcesJar {
-    from project(':common').sourceSets.main.allSource
 }
 
 jar {
