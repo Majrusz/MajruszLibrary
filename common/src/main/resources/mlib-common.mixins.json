@@ -6,7 +6,9 @@
   "mixins": [
     "IMixinArgumentTypeInfos",
     "IMixinCriteriaTriggers",
-    "MixinCommands"
+    "MixinAbstractHorse",
+    "MixinCommands",
+    "MixinTamableAnimal"
   ],
   "injectors": {
     "defaultRequire": 1
