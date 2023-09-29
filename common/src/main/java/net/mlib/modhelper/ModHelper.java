@@ -2,6 +2,7 @@ package net.mlib.modhelper;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.mlib.annotations.AutoInstance;
 import net.mlib.data.ISerializable;
 import net.mlib.network.NetworkHandler;
@@ -20,6 +21,7 @@ public class ModHelper {
 	final String modId;
 	final Logger logger;
 	final ClassFinder classFinder;
+	final AdvancementCaller advancementCaller;
 	final RegistryHandler registryHandler;
 	final NetworkHandler networkHandler;
 
@@ -37,6 +39,10 @@ public class ModHelper {
 
 	public < Type extends ISerializable > NetworkObject< Type > create( String id, Class< Type > clazz ) {
 		return this.networkHandler.create( id, clazz );
+	}
+
+	public void triggerAchievement( ServerPlayer player, String id ) {
+		this.advancementCaller.trigger( player, id );
 	}
 
 	public void log( String format, Object... args ) {
@@ -75,6 +81,7 @@ public class ModHelper {
 		this.modId = modId;
 		this.logger = LoggerFactory.getLogger( modId );
 		this.classFinder = new ClassFinder( this );
+		this.advancementCaller = new AdvancementCaller( this );
 		this.registryHandler = new RegistryHandler( this );
 		this.networkHandler = new NetworkHandler( this );
 

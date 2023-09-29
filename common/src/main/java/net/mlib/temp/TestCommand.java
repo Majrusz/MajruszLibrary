@@ -17,6 +17,11 @@ public class TestCommand {
 			.integer()
 			.execute( this::handleMessage )
 			.register();
+
+		Command.create()
+			.literal( "myadvancement" )
+			.execute( this::handleAdvancement )
+			.register();
 	}
 
 	private int handleMessage( CommandData data ) throws CommandSyntaxException {
@@ -24,6 +29,14 @@ public class TestCommand {
 		MajruszLibrary.HELPER.log( "[SENDER] %d", value );
 		if( data.getOptionalEntityOrPlayer() instanceof ServerPlayer player ) {
 			MajruszLibrary.MESSAGE.sendToClients( new Message( value + 1 ) );
+		}
+
+		return 0;
+	}
+
+	private int handleAdvancement( CommandData data ) throws CommandSyntaxException {
+		if( data.getOptionalEntityOrPlayer() instanceof ServerPlayer player ) {
+			MajruszLibrary.HELPER.triggerAchievement( player, "apple" );
 		}
 
 		return 0;

@@ -3,10 +3,9 @@
   "package": "net.mlib.mixin",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
-  "client": [
-  ],
   "mixins": [
     "IMixinArgumentTypeInfos",
+    "IMixinCriteriaTriggers",
     "MixinCommands"
   ],
   "injectors": {
