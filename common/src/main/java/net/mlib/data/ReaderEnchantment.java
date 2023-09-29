@@ -1,15 +1,17 @@
 package net.mlib.data;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.mlib.registries.Registries;
 
 class ReaderEnchantment extends ReaderStringCustom< Enchantment > {
 	@Override
 	public Enchantment convert( String id ) {
-		return null; // TODO: Utility.getEnchantment( id );
+		return Registries.getEnchantment( new ResourceLocation( id ) );
 	}
 
 	@Override
 	public String convert( Enchantment enchantment ) {
-		return null; // TODO: Utility.getRegistryString( enchantment );
+		return Registries.get( enchantment ).toString();
 	}
 }
