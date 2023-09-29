@@ -20,7 +20,7 @@ import net.mlib.contexts.data.IPositionData;
 
 import java.util.function.Consumer;
 
-public class OnLoot {
+public class OnLootGenerated {
 	public static Context< Data > listen( Consumer< Data > consumer ) {
 		return Contexts.get( Data.class ).add( consumer );
 	}

@@ -1,6 +1,5 @@
 package net.mlib.mixin;
 
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import net.mlib.contexts.OnAnimalTamed;
