@@ -59,8 +59,8 @@ public class OnLootGenerated {
 
 	public static class Data implements ILevelData, IPositionData {
 		public final ObjectArrayList< ItemStack > generatedLoot;
-		public final LootContext context;
 		public final ResourceLocation lootId;
+		public final LootContext context;
 		public final BlockState blockState;
 		public final DamageSource damageSource;
 		public final Entity killer;
@@ -71,8 +71,8 @@ public class OnLootGenerated {
 
 		public Data( ObjectArrayList< ItemStack > generatedLoot, ResourceLocation lootId, LootContext context ) {
 			this.generatedLoot = generatedLoot;
-			this.context = context;
 			this.lootId = lootId;
+			this.context = context;
 			this.blockState = this.getParameter( LootContextParams.BLOCK_STATE );
 			this.damageSource = this.getParameter( LootContextParams.DAMAGE_SOURCE );
 			this.killer = this.getParameter( LootContextParams.KILLER_ENTITY );
