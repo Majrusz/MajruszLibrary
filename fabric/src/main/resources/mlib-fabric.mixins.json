@@ -3,9 +3,10 @@
   "package": "net.mlib.mixin.fabric",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
-  "client": [
-  ],
   "mixins": [
+    "MixinLootDataType",
+    "MixinLootTable",
+    "MixinLootTableBuilder"
   ],
   "injectors": {
     "defaultRequire": 1
