@@ -7,7 +7,6 @@ import net.minecraft.world.entity.player.Player;
 import net.mlib.contexts.OnBabySpawned;
 import net.mlib.mixin.IMixinBreedGoal;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -15,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin( Fox.FoxBreedGoal.class )
 public abstract class MixinFoxBreedGoal implements IMixinBreedGoal {
-	@Shadow( aliases = { "this$0" } )
 	@Inject(
 		at = @At(
 			target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntityWithPassengers (Lnet/minecraft/world/entity/Entity;)V",

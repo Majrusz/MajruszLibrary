@@ -15,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinCommands {
 	@Shadow private CommandDispatcher< CommandSourceStack > dispatcher;
 
-	@Shadow( aliases = { "this$0" } )
 	@Inject(
 		at = @At( "RETURN" ),
 		method = "<init> (Lnet/minecraft/commands/Commands$CommandSelection;Lnet/minecraft/commands/CommandBuildContext;)V"

@@ -8,7 +8,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.mlib.contexts.OnLootGenerated;
 import net.mlib.mixininterfaces.fabric.IMixinLootTable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -27,7 +26,6 @@ public abstract class MixinLootTable implements IMixinLootTable {
 		this.mlibId = id;
 	}
 
-	@Shadow( aliases = { "this$0" } )
 	@Inject(
 		at = @At( "RETURN" ),
 		method = "getRandomItemsRaw (Lnet/minecraft/world/level/storage/loot/LootContext;Ljava/util/function/Consumer;)V"
@@ -36,7 +34,6 @@ public abstract class MixinLootTable implements IMixinLootTable {
 		OnLootGenerated.dispatch( this.mlibItems, this.mlibId, context ).generatedLoot.forEach( this.mlibConsumer );
 	}
 
-	@Shadow( aliases = { "this$0" } )
 	@ModifyVariable(
 		at = @At( "HEAD" ),
 		method = "getRandomItemsRaw (Lnet/minecraft/world/level/storage/loot/LootContext;Ljava/util/function/Consumer;)V"
