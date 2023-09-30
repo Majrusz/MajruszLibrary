@@ -53,7 +53,7 @@ loom {
             runDir('runs/server')
         }
     }
-
+    accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
 }
 
 tasks.withType(JavaCompile).configureEach {

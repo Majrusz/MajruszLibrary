@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin( TamableAnimal.class )
-public class MixinTamableAnimal {
+public abstract class MixinTamableAnimal {
 	@Shadow( aliases = { "this$0" } )
 	@Inject(
 		at = @At( "RETURN" ),
