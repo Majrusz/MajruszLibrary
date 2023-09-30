@@ -15,8 +15,8 @@ public class OnBabySpawned {
 		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static void dispatch( Animal parentA, Animal parentB, Player player, AgeableMob child ) {
-		Contexts.get( Data.class ).dispatch( new Data( parentA, parentB, player, child ) );
+	public static Data dispatch( Animal parentA, Animal parentB, Player player, AgeableMob child ) {
+		return Contexts.get( Data.class ).dispatch( new Data( parentA, parentB, player, child ) );
 	}
 
 	public static class Data implements ILevelData {

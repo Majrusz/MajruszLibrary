@@ -14,8 +14,8 @@ public class OnAnimalTamed {
 		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static void dispatch( Animal animal, Player player ) {
-		Contexts.get( Data.class ).dispatch( new Data( animal, player ) );
+	public static Data dispatch( Animal animal, Player player ) {
+		return Contexts.get( Data.class ).dispatch( new Data( animal, player ) );
 	}
 
 	public static class Data implements IEntityData {

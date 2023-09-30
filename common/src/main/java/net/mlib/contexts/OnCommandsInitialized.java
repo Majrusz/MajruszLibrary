@@ -12,8 +12,8 @@ public class OnCommandsInitialized {
 		return Contexts.get( Data.class ).add( consumer );
 	}
 
-	public static void dispatch( CommandDispatcher< CommandSourceStack > dispatcher ) {
-		Contexts.get( Data.class ).dispatch( new Data( dispatcher ) );
+	public static Data dispatch( CommandDispatcher< CommandSourceStack > dispatcher ) {
+		return Contexts.get( Data.class ).dispatch( new Data( dispatcher ) );
 	}
 
 	public static class Data {

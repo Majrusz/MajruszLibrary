@@ -30,31 +30,31 @@ public class OnLootGenerated {
 	}
 
 	public static Condition< Data > hasBlockState() {
-		return new Condition<>( data->data.blockState != null );
+		return Condition.predicate( data->data.blockState != null );
 	}
 
 	public static Condition< Data > hasDamageSource() {
-		return new Condition<>( data->data.damageSource != null );
+		return Condition.predicate( data->data.damageSource != null );
 	}
 
 	public static Condition< Data > hasKiller() {
-		return new Condition<>( data->data.killer != null );
+		return Condition.predicate( data->data.killer != null );
 	}
 
 	public static Condition< Data > hasEntity() {
-		return new Condition<>( data->data.entity != null );
+		return Condition.predicate( data->data.entity != null );
 	}
 
 	public static Condition< Data > hasLastDamagePlayer() {
-		return new Condition<>( data->data.lastDamagePlayer != null );
+		return Condition.predicate( data->data.lastDamagePlayer != null );
 	}
 
 	public static Condition< Data > hasTool() {
-		return new Condition<>( data->data.tool != null );
+		return Condition.predicate( data->data.tool != null );
 	}
 
 	public static Condition< Data > hasOrigin() {
-		return new Condition<>( data->data.origin != null );
+		return Condition.predicate( data->data.origin != null );
 	}
 
 	public static class Data implements ILevelData, IPositionData {
