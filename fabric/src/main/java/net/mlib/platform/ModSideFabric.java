@@ -15,7 +15,7 @@ public class ModSideFabric implements ISidePlatform {
 	}
 
 	@Override
-	public boolean isServer() {
+	public boolean isDedicatedServer() {
 		return FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER;
 	}
 

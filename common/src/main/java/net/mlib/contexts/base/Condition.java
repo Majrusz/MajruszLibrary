@@ -1,6 +1,7 @@
 package net.mlib.contexts.base;
 
 import net.mlib.MajruszLibrary;
+import net.mlib.contexts.data.ILevelData;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -9,16 +10,20 @@ public class Condition< DataType > {
 	final Predicate< DataType > predicate;
 	boolean isNegated = false;
 
-	public static < DataType > Condition< DataType > isServer() {
-		return new Condition< DataType >( data->MajruszLibrary.SIDE.isServer() );
+	public static < DataType > Condition< DataType > hasAuthority() {
+		return new Condition<>( data->MajruszLibrary.SIDE.isAuthority() );
+	}
+
+	public static < DataType extends ILevelData > Condition< DataType > hasLevel() {
+		return new Condition<>( data->data.getLevel() != null );
 	}
 
 	public static < DataType > Condition< DataType > predicate( Predicate< DataType > predicate ) {
-		return new Condition< DataType >( predicate );
+		return new Condition<>( predicate );
 	}
 
 	public static < DataType > Condition< DataType > predicate( Supplier< Boolean > check ) {
-		return new Condition< DataType >( data->check.get() );
+		return new Condition<>( data->check.get() );
 	}
 
 	public Condition< DataType > negate() {

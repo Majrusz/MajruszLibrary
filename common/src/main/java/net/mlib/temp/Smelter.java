@@ -3,7 +3,6 @@ package net.mlib.temp;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.mlib.MajruszLibrary;
 import net.mlib.annotations.AutoInstance;
 import net.mlib.contexts.OnLootGenerated;
 import net.mlib.contexts.base.Condition;
@@ -17,7 +16,8 @@ public class Smelter {
 		OnLootGenerated.listen( this::smelt )
 			.addCondition( OnLootGenerated.hasBlockState() )
 			.addCondition( OnLootGenerated.hasTool() )
-			.addCondition( Condition.isServer() )
+			.addCondition( Condition.hasAuthority() )
+			.addCondition( Condition.hasLevel() )
 			.addCondition( Condition.predicate( data->data.entity instanceof Player player && !player.isCrouching() ) );
 	}
 
@@ -34,7 +34,6 @@ public class Smelter {
 			}
 		}
 
-		MajruszLibrary.HELPER.log( "%.2f", experience );
 		data.generatedLoot.clear();
 		data.generatedLoot.addAll( smeltedLoot );
 	}

@@ -12,9 +12,13 @@ public interface ISidePlatform {
 		}
 	}
 
+	default boolean isAuthority() {
+		return this.getServer() != null; // server can be dedicated or integrated with the client
+	}
+
 	boolean isDevBuild();
 
-	boolean isServer();
+	boolean isDedicatedServer();
 
 	boolean isClient();
 

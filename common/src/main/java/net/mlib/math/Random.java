@@ -16,7 +16,7 @@ public class Random {
 	 thread safe and can be accessed on both server and client at the same time.
 	 */
 	public static RandomSource getThreadSafe() {
-		return MajruszLibrary.SIDE.isServer() ? SERVER : CLIENT;
+		return MajruszLibrary.SIDE.isDedicatedServer() ? SERVER : CLIENT;
 	}
 
 	public static float nextFloat() {

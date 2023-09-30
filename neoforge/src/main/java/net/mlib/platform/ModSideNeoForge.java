@@ -14,7 +14,7 @@ public class ModSideNeoForge implements ISidePlatform {
 	}
 
 	@Override
-	public boolean isServer() {
+	public boolean isDedicatedServer() {
 		return FMLEnvironment.dist == Dist.DEDICATED_SERVER;
 	}
 
