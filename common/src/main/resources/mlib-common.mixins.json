@@ -7,6 +7,7 @@
     "IMixinArgumentTypeInfos",
     "IMixinBreedGoal",
     "IMixinCriteriaTriggers",
+    "IMixinSharedSuggestionProvider",
     "MixinAbstractHorse",
     "MixinAnimal",
     "MixinCommands",
