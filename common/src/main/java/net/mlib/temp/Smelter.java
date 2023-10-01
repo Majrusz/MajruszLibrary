@@ -2,12 +2,14 @@ package net.mlib.temp;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.mlib.annotations.AutoInstance;
 import net.mlib.contexts.OnLootGenerated;
 import net.mlib.contexts.base.Condition;
 import net.mlib.effects.ParticleEmitter;
+import net.mlib.effects.SoundEmitter;
 import net.mlib.items.ItemHelper;
 
 import java.util.Optional;
@@ -36,7 +38,15 @@ public class Smelter {
 				smeltedLoot.add( itemStack );
 			}
 		}
-		ParticleEmitter.of( ParticleTypes.FLAME ).count( 4 ).emit( data.getServerLevel(), data.origin );
+		if( experience > 0.0f ) {
+			SoundEmitter.of( SoundEvents.PLAYER_HURT_ON_FIRE )
+				.volume( SoundEmitter.randomized( 0.25f ) )
+				.pitch( SoundEmitter.randomized( 0.5f ) )
+				.emit( data.getServerLevel(), data.origin );
+			ParticleEmitter.of( ParticleTypes.FLAME )
+				.count( 4 )
+				.emit( data.getServerLevel(), data.origin );
+		}
 
 		data.generatedLoot.clear();
 		data.generatedLoot.addAll( smeltedLoot );
