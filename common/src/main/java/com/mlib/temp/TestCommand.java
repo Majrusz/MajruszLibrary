@@ -1,15 +1,20 @@
 package com.mlib.temp;
 
+import com.mlib.MajruszLibrary;
 import com.mlib.annotations.AutoInstance;
+import com.mlib.commands.Command;
+import com.mlib.commands.CommandData;
+import com.mlib.contexts.OnEntitySpawned;
+import com.mlib.contexts.base.Condition;
 import com.mlib.data.SerializableStructure;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.server.level.ServerPlayer;
-import com.mlib.MajruszLibrary;
-import com.mlib.commands.Command;
-import com.mlib.commands.CommandData;
+import net.minecraft.world.entity.EntityType;
 
 @AutoInstance
 public class TestCommand {
+	int value = 0;
+
 	public TestCommand() {
 		Command.create()
 			.literal( "mysend" )
@@ -20,8 +25,29 @@ public class TestCommand {
 
 		Command.create()
 			.literal( "myadvancement" )
+			.hasPermission( 4 )
 			.execute( this::handleAdvancement )
 			.register();
+
+		Command.create()
+			.literal( "myblock" )
+			.hasPermission( 4 )
+			.integer()
+			.execute( this::handleBlock )
+			.register();
+
+		OnEntitySpawned.listen( OnEntitySpawned.CANCEL )
+			.addCondition( Condition.predicate( data->{
+				if( this.value == 0 ) {
+					return false;
+				} else if( this.value == 1 ) {
+					return data.entity.getType().equals( EntityType.ZOMBIFIED_PIGLIN );
+				} else if( this.value == 2 ) {
+					return data.position.getY() < 50;
+				} else {
+					return true;
+				}
+			} ) );
 	}
 
 	private int handleMessage( CommandData data ) throws CommandSyntaxException {
@@ -38,6 +64,12 @@ public class TestCommand {
 		if( data.getOptionalEntityOrPlayer() instanceof ServerPlayer player ) {
 			MajruszLibrary.HELPER.triggerAchievement( player, "apple" );
 		}
+
+		return 0;
+	}
+
+	private int handleBlock( CommandData data ) throws CommandSyntaxException {
+		this.value = data.getInteger();
 
 		return 0;
 	}
