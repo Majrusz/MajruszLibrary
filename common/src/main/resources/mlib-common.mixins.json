@@ -11,6 +11,7 @@
     "MixinAbstractHorse",
     "MixinAnimal",
     "MixinCommands",
+    "MixinServerLevel",
     "MixinTamableAnimal"
   ],
   "injectors": {
