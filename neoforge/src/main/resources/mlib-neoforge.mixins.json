@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "net.mlib.mixin.neoforge",
+  "package": "com.mlib.mixin.neoforge",
   "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
   "mixins": [

@@ -14,7 +14,7 @@
   "icon": "assets/${mod_id}/${mod_logo}",
   "environment": "*",
   "entrypoints": {
-    "main": [ "net.${mod_id}.Initializer" ]
+    "main": [ "com.${mod_id}.Initializer" ]
   },
   "mixins": [
     "${mod_id}-common.mixins.json",
