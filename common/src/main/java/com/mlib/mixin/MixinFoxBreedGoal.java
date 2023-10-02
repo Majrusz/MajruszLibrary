@@ -1,7 +1,6 @@
-package com.mlib.mixin.fabric;
+package com.mlib.mixin;
 
 import com.mlib.contexts.OnBabySpawned;
-import com.mlib.mixin.IMixinBreedGoal;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Fox;
@@ -12,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Mixin( Fox.FoxBreedGoal.class )
+@Mixin( targets = "net.minecraft.world.entity.animal.Fox$FoxBreedGoal" )
 public abstract class MixinFoxBreedGoal implements IMixinBreedGoal {
 	@Inject(
 		at = @At(
