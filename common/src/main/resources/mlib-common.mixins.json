@@ -12,6 +12,7 @@
     "MixinAnimal",
     "MixinChorusFruitItem",
     "MixinCommands",
+    "MixinDifficultyInstance",
     "MixinFoxBreedGoal",
     "MixinPersistentEntitySectionManager",
     "MixinServerLevel",
