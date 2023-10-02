@@ -4,7 +4,9 @@ import com.mlib.MajruszLibrary;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.commands.Command;
 import com.mlib.commands.CommandData;
+import com.mlib.commands.IParameter;
 import com.mlib.contexts.OnChorusFruitEaten;
+import com.mlib.contexts.OnClampedRegionalDifficultyGet;
 import com.mlib.contexts.OnEntitySpawned;
 import com.mlib.contexts.base.Condition;
 import com.mlib.data.SerializableStructure;
@@ -14,14 +16,17 @@ import net.minecraft.world.entity.EntityType;
 
 @AutoInstance
 public class TestCommand {
+	private static final IParameter< Integer > DEFAULT_INTEGER = Command.integer();
+	private static final IParameter< Float > CRD = Command.number().named( "crd" );
 	int spawnValue = 0;
 	int chorusValue = 0;
+	float crdValue = 0.0f;
 
 	public TestCommand() {
 		Command.create()
 			.literal( "mysend" )
 			.hasPermission( 4 )
-			.integer()
+			.parameter( DEFAULT_INTEGER )
 			.execute( this::handleMessage )
 			.register();
 
@@ -34,7 +39,7 @@ public class TestCommand {
 		Command.create()
 			.literal( "myblock" )
 			.hasPermission( 4 )
-			.integer()
+			.parameter( DEFAULT_INTEGER )
 			.execute( this::handleBlock )
 			.register();
 
@@ -54,18 +59,27 @@ public class TestCommand {
 		Command.create()
 			.literal( "mychorus" )
 			.hasPermission( 4 )
-			.integer()
+			.parameter( DEFAULT_INTEGER )
 			.execute( this::handleChorus )
 			.register();
 
 		OnChorusFruitEaten.listen( OnChorusFruitEaten.Data::cancelTeleport )
 			.addCondition( Condition.predicate( data->this.chorusValue != 0 ) );
+
+		Command.create()
+			.literal( "mycrd" )
+			.hasPermission( 4 )
+			.parameter( CRD )
+			.execute( this::handleCrd )
+			.register();
+
+		OnClampedRegionalDifficultyGet.listen( data->data.value += this.crdValue );
 	}
 
 	private int handleMessage( CommandData data ) throws CommandSyntaxException {
-		int value = data.getInteger();
+		int value = data.get( DEFAULT_INTEGER );
 		MajruszLibrary.HELPER.log( "[SENDER] %d", value );
-		if( data.getOptionalEntityOrPlayer() instanceof ServerPlayer player ) {
+		if( data.getOptional( Command.entity() ).orElse( data.getCaller() ) instanceof ServerPlayer player ) {
 			MajruszLibrary.MESSAGE.sendToClients( new Message( value + 1 ) );
 		}
 
@@ -73,7 +87,7 @@ public class TestCommand {
 	}
 
 	private int handleAdvancement( CommandData data ) throws CommandSyntaxException {
-		if( data.getOptionalEntityOrPlayer() instanceof ServerPlayer player ) {
+		if( data.getOptional( Command.entity() ).orElse( data.getCaller() ) instanceof ServerPlayer player ) {
 			MajruszLibrary.HELPER.triggerAchievement( player, "apple" );
 		}
 
@@ -81,13 +95,19 @@ public class TestCommand {
 	}
 
 	private int handleBlock( CommandData data ) throws CommandSyntaxException {
-		this.spawnValue = data.getInteger();
+		this.spawnValue = data.get( DEFAULT_INTEGER );
 
 		return 0;
 	}
 
 	private int handleChorus( CommandData data ) throws CommandSyntaxException {
-		this.chorusValue = data.getInteger();
+		this.chorusValue = data.get( DEFAULT_INTEGER );
+
+		return 0;
+	}
+
+	private int handleCrd( CommandData data ) throws CommandSyntaxException {
+		this.crdValue = data.get( CRD );
 
 		return 0;
 	}

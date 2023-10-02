@@ -1,231 +1,182 @@
 package com.mlib.commands;
 
-import com.mlib.contexts.OnCommandsInitialized;
+import com.mlib.math.Range;
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.coordinates.Coordinates;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
+import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 public class Command {
-	public static Builder create() {
-		return new Builder();
+	public static CommandBuilder create() {
+		return new CommandBuilder();
 	}
 
 	private Command() {}
 
-	public static class Builder {
-		final List< List< IModification > > modifications;
-		final List< ArgumentBuilder< CommandSourceStack, ? > > arguments;
+	public static IParameter.Named< Integer > integer() {
+		return Command.integer( null );
+	}
 
-		public Builder copy() {
-			Builder copy = new Builder();
-			this.modifications.forEach( modification->copy.modifications.add( new ArrayList<>( modification ) ) );
-			copy.arguments.addAll( this.arguments );
-
-			return copy;
+	public static IParameter.Named< Integer > integer( Range< Integer > range ) {
+		IntegerArgumentType argument;
+		if( range == null ) {
+			argument = IntegerArgumentType.integer();
+		} else if( range.to == null ) {
+			argument = IntegerArgumentType.integer( range.from );
+		} else {
+			argument = IntegerArgumentType.integer( range.from, range.to );
 		}
 
-		public Builder add( Predicate< CommandSourceStack > predicate ) {
-			return this.add( ( Builder builder )->builder.getLastArgument().requires( predicate ) );
-		}
-
-		public Builder addArgument( Supplier< ArgumentBuilder< CommandSourceStack, ? > > argument ) {
-			return this.add( ( Builder builder )->builder.addArgument( argument.get() ) );
-		}
-
-		public Builder literal( String... names ) {
-			List< IModification > modifications = new ArrayList<>();
-			for( String name : names ) {
-				modifications.add( ( Builder builder )->builder.addArgument( Commands.literal( name ) ) );
+		return new IParameter.Named< Integer >() {
+			@Override
+			public CommandBuilder apply( CommandBuilder builder ) {
+				return builder.addArgument( ()->Commands.argument( this.name, argument ) );
 			}
 
-			return this.add( modifications );
+			@Override
+			public Integer get( CommandContext< CommandSourceStack > context ) {
+				return context.getArgument( this.name, Integer.class );
+			}
+		}.named( DefaultKeys.VALUE );
+	}
+
+	public static IParameter.Named< Float > number() {
+		return Command.number( null );
+	}
+
+	public static IParameter.Named< Float > number( Range< Float > range ) {
+		FloatArgumentType argument;
+		if( range == null ) {
+			argument = FloatArgumentType.floatArg();
+		} else if( range.to == null ) {
+			argument = FloatArgumentType.floatArg( range.from );
+		} else {
+			argument = FloatArgumentType.floatArg( range.from, range.to );
 		}
 
-		public Builder integer() {
-			return this.integer( DefaultKeys.INT );
-		}
+		return new IParameter.Named< Float >() {
+			@Override
+			public CommandBuilder apply( CommandBuilder builder ) {
+				return builder.addArgument( ()->Commands.argument( this.name, argument ) );
+			}
 
-		public Builder integer( String name ) {
-			return this.addArgument( ()->Commands.argument( name, IntegerArgumentType.integer() ) );
-		}
+			@Override
+			public Float get( CommandContext< CommandSourceStack > context ) {
+				return context.getArgument( this.name, Float.class );
+			}
+		}.named( DefaultKeys.VALUE );
+	}
 
-		public Builder integer( int min ) {
-			return this.integer( DefaultKeys.INT, min );
-		}
+	public static < EnumType extends Enum< EnumType > > IParameter.Named< EnumType > enumeration( Class< EnumType > clazz ) {
+		return new IParameter.Named< EnumType >() {
+			@Override
+			public CommandBuilder apply( CommandBuilder builder ) {
+				return builder.addArgument( ()->Commands.argument( this.name, EnumArgument.enumArgument( clazz ) ) );
+			}
 
-		public Builder integer( String name, int min ) {
-			return this.addArgument( ()->Commands.argument( name, IntegerArgumentType.integer( min ) ) );
-		}
+			@Override
+			public EnumType get( CommandContext< CommandSourceStack > context ) {
+				return context.getArgument( this.name, clazz );
+			}
+		}.named( clazz.getSimpleName().toLowerCase() );
+	}
 
-		public Builder integer( int min, int max ) {
-			return this.integer( DefaultKeys.INT, min, max );
-		}
+	public static IParameter.Named< Vec3 > position() {
+		return new IParameter.Named< Vec3 >() {
+			@Override
+			public CommandBuilder apply( CommandBuilder builder ) {
+				return builder.addArgument( ()->Commands.argument( this.name, Vec3Argument.vec3() ) );
+			}
 
-		public Builder integer( String name, int min, int max ) {
-			return this.addArgument( ()->Commands.argument( name, IntegerArgumentType.integer( min, max ) ) );
-		}
+			@Override
+			public Vec3 get( CommandContext< CommandSourceStack > context ) {
+				return context.getArgument( this.name, Coordinates.class ).getPosition( context.getSource() );
+			}
+		}.named( DefaultKeys.POSITION );
+	}
 
-		public < EnumType extends Enum< EnumType > > Builder enumeration( Class< EnumType > enumClass ) {
-			return this.enumeration( enumClass.getSimpleName().toLowerCase(), enumClass );
-		}
+	public static IParameter.Named< Entity > entity() {
+		return new IParameter.Named< Entity >() {
+			@Override
+			public CommandBuilder apply( CommandBuilder builder ) {
+				return builder.addArgument( ()->Commands.argument( this.name, EntityArgument.entity() ) );
+			}
 
-		public < EnumType extends Enum< EnumType > > Builder enumeration( String name, Class< EnumType > enumClass ) {
-			return this.addArgument( ()->Commands.argument( name, EnumArgument.enumArgument( enumClass ) ) );
-		}
-
-		public Builder position() {
-			return this.position( DefaultKeys.POSITION );
-		}
-
-		public Builder position( String name ) {
-			return this.addArgument( ()->Commands.argument( name, Vec3Argument.vec3() ) );
-		}
-
-		public Builder entity() {
-			return this.entity( DefaultKeys.ENTITY );
-		}
-
-		public Builder entity( String name ) {
-			return this.addArgument( ()->Commands.argument( name, EntityArgument.entity() ) );
-		}
-
-		public Builder entities() {
-			return this.entities( DefaultKeys.ENTITIES );
-		}
-
-		public Builder entities( String name ) {
-			return this.addArgument( ()->Commands.argument( name, EntityArgument.entities() ) );
-		}
-
-		public Builder anyPosition() {
-			List< IModification > modifications = new ArrayList<>();
-			modifications.add( ( Builder builder )->builder.addArgument( Commands.argument( DefaultKeys.POSITION, Vec3Argument.vec3() ) ) );
-			modifications.add( ( Builder builder )->builder.addArgument( Commands.argument( DefaultKeys.ENTITY, EntityArgument.entity() ) ) );
-			modifications.add( ( Builder builder )->builder.addArgument( Commands.argument( DefaultKeys.ENTITIES, EntityArgument.entities() ) ) );
-
-			return this.add( modifications );
-		}
-
-		public Builder hasPermission( int requiredLevel ) {
-			return this.add( ( CommandSourceStack stack )->stack.hasPermission( requiredLevel ) );
-		}
-
-		public Builder isPlayer() {
-			return this.add( CommandSourceStack::isPlayer );
-		}
-
-		public Builder execute( IExecutable executable ) {
-			return this.add( ( Builder builder )->builder.getLastArgument().executes( context->executable.execute( new CommandData( context ) ) ) );
-		}
-
-		public void register() {
-			OnCommandsInitialized.listen( this::register );
-		}
-
-		private Builder() {
-			this.modifications = new ArrayList<>();
-			this.arguments = new ArrayList<>();
-		}
-
-		private void register( OnCommandsInitialized.Data data ) {
-			List< List< Integer > > permutations = this.generatePermutations();
-			for( List< Integer > permutation : permutations ) {
-				this.clearArguments();
-				for( int idx = 0; idx < permutation.size(); ++idx ) {
-					this.modifications.get( idx ).get( permutation.get( idx ) ).apply( this );
-				}
-				this.mergeArguments();
+			@Override
+			public Entity get( CommandContext< CommandSourceStack > context ) {
 				try {
-					data.dispatcher.register( ( LiteralArgumentBuilder< CommandSourceStack > )this.getFirstArgument() );
-				} catch( Exception exception ) {
-					throw new IllegalArgumentException( "First argument of any command must be a literal" );
+					return context.getArgument( this.name, EntitySelector.class ).findSingleEntity( context.getSource() );
+				} catch( Throwable exception ) {
+					return null;
 				}
 			}
-		}
+		}.named( DefaultKeys.ENTITY );
+	}
 
-		private void addArgument( ArgumentBuilder< CommandSourceStack, ? > argument ) {
-			this.arguments.add( argument );
-		}
-
-		private void clearArguments() {
-			this.arguments.clear();
-		}
-
-		private boolean emptyArguments() {
-			return this.arguments.size() <= 0;
-		}
-
-		private ArgumentBuilder< CommandSourceStack, ? > getFirstArgument() {
-			if( this.emptyArguments() )
-				throw new IllegalArgumentException();
-
-			return this.arguments.get( 0 );
-		}
-
-		private ArgumentBuilder< CommandSourceStack, ? > getLastArgument() {
-			if( this.emptyArguments() )
-				throw new IllegalArgumentException();
-
-			return this.arguments.get( this.arguments.size() - 1 );
-		}
-
-		private void mergeArguments() {
-			for( int idx = this.arguments.size(); idx >= 2; --idx ) {
-				ArgumentBuilder< CommandSourceStack, ? > previousArgument = this.arguments.get( idx - 2 );
-				ArgumentBuilder< CommandSourceStack, ? > nextArgument = this.arguments.get( idx - 1 );
-
-				previousArgument.then( nextArgument );
+	public static IParameter.Named< List< ? extends Entity > > entities() {
+		return new IParameter.Named< List< ? extends Entity > >() {
+			@Override
+			public CommandBuilder apply( CommandBuilder builder ) {
+				return builder.addArgument( ()->Commands.argument( this.name, EntityArgument.entities() ) );
 			}
-		}
 
-		private List< List< Integer > > generatePermutations() {
-			List< List< Integer > > permutations = new ArrayList<>();
-			permutations.add( new ArrayList<>() );
-			for( List< IModification > modification : this.modifications ) {
-				List< List< Integer > > newPermutations = new ArrayList<>();
-				for( int idx = 0; idx < modification.size(); ++idx ) {
-					List< List< Integer > > copy = new ArrayList<>();
-					for( List< Integer > permutation : permutations ) {
-						copy.add( new ArrayList<>( permutation ) );
-					}
-					for( List< Integer > permutation : copy ) {
-						permutation.add( idx );
-					}
-					newPermutations.addAll( copy );
+			@Override
+			public List< ? extends Entity > get( CommandContext< CommandSourceStack > context ) {
+				try {
+					return context.getArgument( this.name, EntitySelector.class ).findEntities( context.getSource() );
+				} catch( Throwable exception ) {
+					return null;
 				}
-				permutations = newPermutations;
+			}
+		}.named( DefaultKeys.ENTITIES );
+	}
+
+	public static IParameter< List< Vec3 > > anyPosition() {
+		return new IParameter<>() {
+			@Override
+			public CommandBuilder apply( CommandBuilder builder ) {
+				List< IModification > modifications = new ArrayList<>();
+				modifications.add( ( CommandBuilder subbuilder )->subbuilder.addArgument( Commands.argument( DefaultKeys.POSITION, Vec3Argument.vec3() ) ) );
+				modifications.add( ( CommandBuilder subbuilder )->subbuilder.addArgument( Commands.argument( DefaultKeys.ENTITY, EntityArgument.entity() ) ) );
+				modifications.add( ( CommandBuilder subbuilder )->subbuilder.addArgument( Commands.argument( DefaultKeys.ENTITIES, EntityArgument.entities() ) ) );
+
+				return builder.add( modifications );
 			}
 
-			return permutations;
-		}
+			@Override
+			public List< Vec3 > get( CommandContext< CommandSourceStack > context ) {
+				List< Vec3 > positions = new ArrayList<>();
+				try {
+					positions.add( context.getArgument( DefaultKeys.POSITION, Coordinates.class ).getPosition( context.getSource() ) );
+				} catch( Throwable ignored ) {}
+				try {
+					positions.add( context.getArgument( DefaultKeys.ENTITY, EntitySelector.class ).findSingleEntity( context.getSource() ).position() );
+				} catch( Throwable ignored ) {}
+				try {
+					context.getArgument( DefaultKeys.ENTITIES, EntitySelector.class )
+						.findEntities( context.getSource() )
+						.forEach( entity->positions.add( entity.position() ) );
+				} catch( Throwable ignored ) {}
 
-		private Builder add( IModification modification ) {
-			List< IModification > modifications = new ArrayList<>();
-			modifications.add( modification );
-
-			return this.add( modifications );
-		}
-
-		private Builder add( List< IModification > modifications ) {
-			this.modifications.add( modifications );
-
-			return this;
-		}
+				return positions;
+			}
+		};
 	}
 
 	@FunctionalInterface
 	public interface IModification {
-		void apply( Builder builder );
+		void apply( CommandBuilder builder );
 	}
 
 	@FunctionalInterface
@@ -236,7 +187,7 @@ public class Command {
 	public static class DefaultKeys {
 		public static final String ENTITIES = "entities";
 		public static final String ENTITY = "entity";
-		public static final String INT = "value";
+		public static final String VALUE = "value";
 		public static final String POSITION = "position";
 	}
 }
