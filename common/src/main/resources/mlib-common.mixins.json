@@ -17,6 +17,7 @@
     "MixinCommands",
     "MixinDifficultyInstance",
     "MixinFoxBreedGoal",
+    "MixinMinecraftServer",
     "MixinPersistentEntitySectionManager",
     "MixinServerLevel",
     "MixinTamableAnimal"
