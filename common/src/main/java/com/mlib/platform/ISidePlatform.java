@@ -12,18 +12,6 @@ public interface ISidePlatform {
 		}
 	}
 
-	default < Type > Supplier< Type > createSideDependent( Supplier< Type > supplier ) {
-		return new Supplier<>() {
-			final Type client = supplier.get();
-			final Type server = supplier.get();
-
-			@Override
-			public Type get() {
-				return ISidePlatform.this.isAuthority() ? this.server : this.client;
-			}
-		};
-	}
-
 	default boolean isAuthority() {
 		return this.getServer() != null; // server can be dedicated or integrated with the client
 	}

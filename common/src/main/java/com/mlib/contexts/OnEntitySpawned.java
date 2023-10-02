@@ -6,6 +6,7 @@ import com.mlib.contexts.data.IEntityData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Consumer;
 
@@ -44,7 +45,8 @@ public class OnEntitySpawned {
 		}
 
 		public boolean isSpawnCancelled() {
-			return this.isSpawnCancelled;
+			return this.isSpawnCancelled
+				&& !( this.entity instanceof Player );
 		}
 	}
 }
