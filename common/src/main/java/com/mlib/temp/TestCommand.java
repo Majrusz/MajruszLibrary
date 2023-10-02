@@ -4,6 +4,7 @@ import com.mlib.MajruszLibrary;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.commands.Command;
 import com.mlib.commands.CommandData;
+import com.mlib.contexts.OnChorusFruitEaten;
 import com.mlib.contexts.OnEntitySpawned;
 import com.mlib.contexts.base.Condition;
 import com.mlib.data.SerializableStructure;
@@ -13,7 +14,8 @@ import net.minecraft.world.entity.EntityType;
 
 @AutoInstance
 public class TestCommand {
-	int value = 0;
+	int spawnValue = 0;
+	int chorusValue = 0;
 
 	public TestCommand() {
 		Command.create()
@@ -36,18 +38,28 @@ public class TestCommand {
 			.execute( this::handleBlock )
 			.register();
 
-		OnEntitySpawned.listen( OnEntitySpawned.CANCEL )
+		OnEntitySpawned.listen( OnEntitySpawned.Data::cancelSpawn )
 			.addCondition( Condition.predicate( data->{
-				if( this.value == 0 ) {
+				if( this.spawnValue == 0 ) {
 					return false;
-				} else if( this.value == 1 ) {
+				} else if( this.spawnValue == 1 ) {
 					return data.entity.getType().equals( EntityType.ZOMBIFIED_PIGLIN );
-				} else if( this.value == 2 ) {
+				} else if( this.spawnValue == 2 ) {
 					return data.position.getY() < 50;
 				} else {
 					return true;
 				}
 			} ) );
+
+		Command.create()
+			.literal( "mychorus" )
+			.hasPermission( 4 )
+			.integer()
+			.execute( this::handleChorus )
+			.register();
+
+		OnChorusFruitEaten.listen( OnChorusFruitEaten.Data::cancelTeleport )
+			.addCondition( Condition.predicate( data->this.chorusValue != 0 ) );
 	}
 
 	private int handleMessage( CommandData data ) throws CommandSyntaxException {
@@ -69,7 +81,13 @@ public class TestCommand {
 	}
 
 	private int handleBlock( CommandData data ) throws CommandSyntaxException {
-		this.value = data.getInteger();
+		this.spawnValue = data.getInteger();
+
+		return 0;
+	}
+
+	private int handleChorus( CommandData data ) throws CommandSyntaxException {
+		this.chorusValue = data.getInteger();
 
 		return 0;
 	}

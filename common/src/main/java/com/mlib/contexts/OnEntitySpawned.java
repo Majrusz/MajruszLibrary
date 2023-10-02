@@ -11,8 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import java.util.function.Consumer;
 
 public class OnEntitySpawned {
-	public static final Consumer< Data > CANCEL = Data::cancelSpawn;
-
 	public static Context< Data > listen( Consumer< Data > consumer ) {
 		return Contexts.get( Data.class ).add( consumer );
 	}

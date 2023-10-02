@@ -10,6 +10,7 @@
     "IMixinSharedSuggestionProvider",
     "MixinAbstractHorse",
     "MixinAnimal",
+    "MixinChorusFruitItem",
     "MixinCommands",
     "MixinFoxBreedGoal",
     "MixinPersistentEntitySectionManager",
