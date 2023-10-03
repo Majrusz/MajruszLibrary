@@ -74,7 +74,7 @@ public abstract class MixinLivingEntity {
 		method = "die (Lnet/minecraft/world/damagesource/DamageSource;)V"
 	)
 	private void die( DamageSource source, CallbackInfo callback ) {
-		if( Contexts.dispatch( new OnEntityDied( source, ( ServerPlayer )( Object )this ) ).isDeathCancelled() ) {
+		if( Contexts.dispatch( new OnEntityDied( source, ( LivingEntity )( Object )this ) ).isDeathCancelled() ) {
 			callback.cancel();
 		}
 	}
