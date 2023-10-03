@@ -1,6 +1,6 @@
 package com.mlib.mixin;
 
-import com.mlib.contexts.OnClientTick;
+import com.mlib.contexts.OnClientTicked;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,6 +15,6 @@ public abstract class MixinMinecraft {
 		method = "tick ()V"
 	)
 	public void tick( CallbackInfo callback ) {
-		Contexts.dispatch( new OnClientTick() );
+		Contexts.dispatch( new OnClientTicked() );
 	}
 }
