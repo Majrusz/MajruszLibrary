@@ -2,12 +2,13 @@ package com.mlib.mixin;
 
 import com.mlib.contexts.OnEntityDamaged;
 import com.mlib.contexts.OnEntityDied;
+import com.mlib.contexts.OnEntityEffectCheck;
 import com.mlib.contexts.OnEntityPreDamaged;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
@@ -76,6 +77,17 @@ public abstract class MixinLivingEntity {
 	private void die( DamageSource source, CallbackInfo callback ) {
 		if( Contexts.dispatch( new OnEntityDied( source, ( LivingEntity )( Object )this ) ).isDeathCancelled() ) {
 			callback.cancel();
+		}
+	}
+
+	@Inject(
+		at = @At( "HEAD" ),
+		cancellable = true,
+		method = "canBeAffected (Lnet/minecraft/world/effect/MobEffectInstance;)Z"
+	)
+	private void canBeAffected( MobEffectInstance effect, CallbackInfoReturnable< Boolean > callback ) {
+		if( Contexts.dispatch( new OnEntityEffectCheck( effect, ( LivingEntity )( Object )this ) ).isEffectCancelled() ) {
+			callback.setReturnValue( false );
 		}
 	}
 
