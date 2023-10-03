@@ -1,6 +1,7 @@
 package com.mlib.mixin;
 
 import com.mlib.contexts.OnBlockPlaced;
+import com.mlib.contexts.base.Contexts;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,6 +17,6 @@ public abstract class MixinServerLevel {
 		method = "sendBlockUpdated (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;I)V"
 	)
 	public void sendBlockUpdated( BlockPos position, BlockState previousState, BlockState newState, int p_46615_, CallbackInfo callback ) {
-		OnBlockPlaced.dispatch( ( ServerLevel )( Object )this, position, newState );
+		Contexts.dispatch( new OnBlockPlaced( ( ServerLevel )( Object )this, position, newState ) );
 	}
 }

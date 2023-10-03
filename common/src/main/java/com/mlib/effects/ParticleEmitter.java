@@ -1,11 +1,11 @@
 package com.mlib.effects;
 
+import com.mlib.math.AnyPos;
+import com.mlib.math.Random;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
-import com.mlib.math.AnyPos;
-import com.mlib.math.Random;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -10,41 +10,35 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Consumer;
 
-public class OnEntitySpawned {
-	public static Context< Data > listen( Consumer< Data > consumer ) {
-		return Contexts.get( Data.class ).add( consumer );
+public class OnEntitySpawned implements IEntityData {
+	public final Entity entity;
+	public final boolean isLoadedFromDisk;
+	public final BlockPos position;
+	public final DifficultyInstance difficulty;
+	private boolean isSpawnCancelled = false;
+
+	public static Context< OnEntitySpawned > listen( Consumer< OnEntitySpawned > consumer ) {
+		return Contexts.get( OnEntitySpawned.class ).add( consumer );
 	}
 
-	public static Data dispatch( Entity entity, boolean isLoadedFromDisk ) {
-		return Contexts.get( Data.class ).dispatch( new Data( entity, isLoadedFromDisk ) );
+	public OnEntitySpawned( Entity entity, boolean isLoadedFromDisk ) {
+		this.entity = entity;
+		this.isLoadedFromDisk = isLoadedFromDisk;
+		this.position = entity.blockPosition();
+		this.difficulty = entity.level().getCurrentDifficultyAt( this.position );
 	}
 
-	public static class Data implements IEntityData {
-		public final Entity entity;
-		public final boolean isLoadedFromDisk;
-		public final BlockPos position;
-		public final DifficultyInstance difficulty;
-		private boolean isSpawnCancelled = false;
+	@Override
+	public Entity getEntity() {
+		return this.entity;
+	}
 
-		public Data( Entity entity, boolean isLoadedFromDisk ) {
-			this.entity = entity;
-			this.isLoadedFromDisk = isLoadedFromDisk;
-			this.position = entity.blockPosition();
-			this.difficulty = entity.level().getCurrentDifficultyAt( this.position );
-		}
+	public void cancelSpawn() {
+		this.isSpawnCancelled = true;
+	}
 
-		@Override
-		public Entity getEntity() {
-			return this.entity;
-		}
-
-		public void cancelSpawn() {
-			this.isSpawnCancelled = true;
-		}
-
-		public boolean isSpawnCancelled() {
-			return this.isSpawnCancelled
-				&& !( this.entity instanceof Player );
-		}
+	public boolean isSpawnCancelled() {
+		return this.isSpawnCancelled
+			&& !( this.entity instanceof Player );
 	}
 }

@@ -43,7 +43,7 @@ public class TestCommand {
 			.execute( this::handleBlock )
 			.register();
 
-		OnEntitySpawned.listen( OnEntitySpawned.Data::cancelSpawn )
+		OnEntitySpawned.listen( OnEntitySpawned::cancelSpawn )
 			.addCondition( Condition.predicate( data->{
 				if( this.spawnValue == 0 ) {
 					return false;
@@ -63,7 +63,7 @@ public class TestCommand {
 			.execute( this::handleChorus )
 			.register();
 
-		OnChorusFruitEaten.listen( OnChorusFruitEaten.Data::cancelTeleport )
+		OnChorusFruitEaten.listen( OnChorusFruitEaten::cancelTeleport )
 			.addCondition( Condition.predicate( data->this.chorusValue != 0 ) );
 
 		Command.create()

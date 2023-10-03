@@ -1,10 +1,10 @@
 package com.mlib.modhelper;
 
 import com.google.gson.JsonObject;
+import com.mlib.mixin.IMixinCriteriaTriggers;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import com.mlib.mixin.IMixinCriteriaTriggers;
 
 class AdvancementCaller extends SimpleCriterionTrigger< AdvancementCaller.Instance > {
 	final ResourceLocation id;

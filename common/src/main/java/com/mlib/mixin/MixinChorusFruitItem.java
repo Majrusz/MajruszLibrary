@@ -1,6 +1,7 @@
 package com.mlib.mixin;
 
 import com.mlib.contexts.OnChorusFruitEaten;
+import com.mlib.contexts.base.Contexts;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ChorusFruitItem;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +24,7 @@ public abstract class MixinChorusFruitItem {
 		method = "finishUsingItem (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;)Lnet/minecraft/world/item/ItemStack;"
 	)
 	private void finishUsingItem( ItemStack itemStack, Level level, LivingEntity entity, CallbackInfoReturnable< ItemStack > callback, ItemStack result ) {
-		if( OnChorusFruitEaten.dispatch( result, level, entity ).isTeleportCancelled() ) {
+		if( Contexts.dispatch( new OnChorusFruitEaten( result, level, entity ) ).isTeleportCancelled() ) {
 			callback.setReturnValue( result );
 		}
 	}

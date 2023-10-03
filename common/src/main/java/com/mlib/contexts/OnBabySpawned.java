@@ -10,31 +10,25 @@ import net.minecraft.world.level.Level;
 
 import java.util.function.Consumer;
 
-public class OnBabySpawned {
-	public static Context< Data > listen( Consumer< Data > consumer ) {
-		return Contexts.get( Data.class ).add( consumer );
+public class OnBabySpawned implements ILevelData {
+	public final Animal parentA;
+	public final Animal parentB;
+	public final Player player;
+	public final AgeableMob child;
+
+	public static Context< OnBabySpawned > listen( Consumer< OnBabySpawned > consumer ) {
+		return Contexts.get( OnBabySpawned.class ).add( consumer );
 	}
 
-	public static Data dispatch( Animal parentA, Animal parentB, Player player, AgeableMob child ) {
-		return Contexts.get( Data.class ).dispatch( new Data( parentA, parentB, player, child ) );
+	public OnBabySpawned( Animal parentA, Animal parentB, Player player, AgeableMob child ) {
+		this.parentA = parentA;
+		this.parentB = parentB;
+		this.player = player;
+		this.child = child;
 	}
 
-	public static class Data implements ILevelData {
-		public final Animal parentA;
-		public final Animal parentB;
-		public final Player player;
-		public final AgeableMob child;
-
-		public Data( Animal parentA, Animal parentB, Player player, AgeableMob child ) {
-			this.parentA = parentA;
-			this.parentB = parentB;
-			this.player = player;
-			this.child = child;
-		}
-
-		@Override
-		public Level getLevel() {
-			return this.child != null ? this.child.level() : null;
-		}
+	@Override
+	public Level getLevel() {
+		return this.child != null ? this.child.level() : null;
 	}
 }

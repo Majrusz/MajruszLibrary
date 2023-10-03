@@ -1,10 +1,11 @@
 package com.mlib.mixin;
 
+import com.mlib.contexts.OnBabySpawned;
+import com.mlib.contexts.base.Contexts;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
-import com.mlib.contexts.OnBabySpawned;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,6 +26,6 @@ public abstract class MixinAnimal {
 		Animal parentA = ( Animal )( Object )this;
 		Player player = parentA.getLoveCause() != null ? parentA.getLoveCause() : parentB.getLoveCause();
 
-		OnBabySpawned.dispatch( parentA, parentB, player, child );
+		Contexts.dispatch( new OnBabySpawned( parentA, parentB, player, child ) );
 	}
 }

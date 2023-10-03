@@ -1,10 +1,8 @@
 package com.mlib.data;
 
 import com.google.gson.JsonElement;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 public interface ISerializable {

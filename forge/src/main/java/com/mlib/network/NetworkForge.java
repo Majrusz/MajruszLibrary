@@ -1,5 +1,6 @@
 package com.mlib.network;
 
+import com.mlib.MajruszLibrary;
 import com.mlib.data.ISerializable;
 import com.mlib.data.SerializableHelper;
 import net.minecraft.server.level.ServerPlayer;
@@ -9,7 +10,6 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
-import com.mlib.MajruszLibrary;
 
 import java.util.List;
 

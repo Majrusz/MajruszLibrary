@@ -65,7 +65,7 @@ public class CommandBuilder {
 		this.arguments = new ArrayList<>();
 	}
 
-	void register( OnCommandsInitialized.Data data ) {
+	void register( OnCommandsInitialized data ) {
 		List< List< Integer > > permutations = this.generatePermutations();
 		for( List< Integer > permutation : permutations ) {
 			this.clearArguments();

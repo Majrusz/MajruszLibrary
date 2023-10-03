@@ -1,6 +1,7 @@
 package com.mlib.mixin;
 
 import com.mlib.contexts.OnAnimalTamed;
+import com.mlib.contexts.base.Contexts;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,6 +16,6 @@ public abstract class MixinAbstractHorse {
 		method = "tameWithName (Lnet/minecraft/world/entity/player/Player;)Z"
 	)
 	public void tameWithName( Player player, CallbackInfoReturnable< Boolean > callback ) {
-		OnAnimalTamed.dispatch( ( AbstractHorse )( Object )this, player );
+		Contexts.dispatch( new OnAnimalTamed( ( AbstractHorse )( Object )this, player ) );
 	}
 }

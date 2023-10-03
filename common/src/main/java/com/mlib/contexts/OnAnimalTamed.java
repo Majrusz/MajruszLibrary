@@ -9,27 +9,21 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Consumer;
 
-public class OnAnimalTamed {
-	public static Context< Data > listen( Consumer< Data > consumer ) {
-		return Contexts.get( Data.class ).add( consumer );
+public class OnAnimalTamed implements IEntityData {
+	public final Animal animal;
+	public final Player tamer;
+
+	public static Context< OnAnimalTamed > listen( Consumer< OnAnimalTamed > consumer ) {
+		return Contexts.get( OnAnimalTamed.class ).add( consumer );
 	}
 
-	public static Data dispatch( Animal animal, Player player ) {
-		return Contexts.get( Data.class ).dispatch( new Data( animal, player ) );
+	public OnAnimalTamed( Animal animal, Player player ) {
+		this.animal = animal;
+		this.tamer = player;
 	}
 
-	public static class Data implements IEntityData {
-		public final Animal animal;
-		public final Player tamer;
-
-		public Data( Animal animal, Player player ) {
-			this.animal = animal;
-			this.tamer = player;
-		}
-
-		@Override
-		public Entity getEntity() {
-			return this.animal;
-		}
+	@Override
+	public Entity getEntity() {
+		return this.animal;
 	}
 }

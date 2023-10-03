@@ -1,6 +1,7 @@
 package com.mlib.mixin;
 
 import com.mlib.contexts.OnBabySpawned;
+import com.mlib.contexts.base.Contexts;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Fox;
@@ -26,6 +27,6 @@ public abstract class MixinFoxBreedGoal implements IMixinBreedGoal {
 		Animal parentB = this.getPartner();
 		Player player = parentA.getLoveCause() != null ? parentA.getLoveCause() : parentB.getLoveCause();
 
-		OnBabySpawned.dispatch( this.getAnimal(), this.getPartner(), player, fox );
+		Contexts.dispatch( new OnBabySpawned( this.getAnimal(), this.getPartner(), player, fox ) );
 	}
 }

@@ -1,7 +1,7 @@
 package com.mlib.contexts.base;
 
-import com.mlib.contexts.data.ILevelData;
 import com.mlib.MajruszLibrary;
+import com.mlib.contexts.data.ILevelData;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;

@@ -1,6 +1,7 @@
 package com.mlib.mixin;
 
 import com.mlib.contexts.OnClampedRegionalDifficultyGet;
+import com.mlib.contexts.base.Contexts;
 import net.minecraft.world.DifficultyInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,8 +16,8 @@ public abstract class MixinDifficultyInstance {
 		method = "getSpecialMultiplier ()F"
 	)
 	private void getSpecialMultiplier( CallbackInfoReturnable< Float > callback ) {
-		DifficultyInstance difficultyInstance = ( DifficultyInstance )( Object )this;
+		OnClampedRegionalDifficultyGet data = Contexts.dispatch( new OnClampedRegionalDifficultyGet( ( ( DifficultyInstance )( Object )this ).getDifficulty(), callback.getReturnValue() ) );
 
-		callback.setReturnValue( OnClampedRegionalDifficultyGet.dispatch( difficultyInstance.getDifficulty(), callback.getReturnValue() ).getClamped() );
+		callback.setReturnValue( data.getClamped() );
 	}
 }

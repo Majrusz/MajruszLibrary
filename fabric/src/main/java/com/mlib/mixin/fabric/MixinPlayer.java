@@ -1,6 +1,7 @@
 package com.mlib.mixin.fabric;
 
 import com.mlib.contexts.OnBreakSpeedGet;
+import com.mlib.contexts.base.Contexts;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,6 +19,6 @@ public abstract class MixinPlayer {
 	public void getDestroySpeed( BlockState blockState, CallbackInfoReturnable< Float > callback ) {
 		Player player = ( Player )( Object )this;
 
-		callback.setReturnValue( OnBreakSpeedGet.dispatch( player, blockState, callback.getReturnValue() ).newSpeed );
+		callback.setReturnValue( Contexts.dispatch( new OnBreakSpeedGet( player, blockState, callback.getReturnValue() ) ).newSpeed );
 	}
 }

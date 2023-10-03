@@ -1,12 +1,5 @@
 package com.mlib;
 
-import com.mlib.temp.TestCommand;
-import net.minecraft.commands.synchronization.ArgumentTypeInfo;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import com.mlib.commands.EnumArgument;
 import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
@@ -14,6 +7,13 @@ import com.mlib.platform.ISidePlatform;
 import com.mlib.platform.Services;
 import com.mlib.registries.RegistryGroup;
 import com.mlib.registries.RegistryObject;
+import com.mlib.temp.TestCommand;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class MajruszLibrary {
 	public static final String MOD_ID = "mlib";

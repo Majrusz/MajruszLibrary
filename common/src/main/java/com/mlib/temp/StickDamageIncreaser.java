@@ -9,12 +9,12 @@ import net.minecraft.world.item.Items;
 public class StickDamageIncreaser {
 	public StickDamageIncreaser() {
 		OnPreDamaged.listen( this::increaseDamage )
-			.addCondition( OnPreDamaged.isDirect() )
+			.addCondition( Condition.predicate( OnPreDamaged::isDirect ) )
 			.addCondition( Condition.predicate( data->data.attacker != null ) )
 			.addCondition( Condition.predicate( data->data.attacker.getMainHandItem().is( Items.STICK ) ) );
 	}
 
-	private void increaseDamage( OnPreDamaged.Data data ) {
+	private void increaseDamage( OnPreDamaged data ) {
 		data.extraDamage += 5.0f;
 		data.spawnMagicParticles = true;
 	}

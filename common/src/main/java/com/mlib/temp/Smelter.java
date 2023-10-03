@@ -1,16 +1,16 @@
 package com.mlib.temp;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.contexts.OnLootGenerated;
 import com.mlib.contexts.base.Condition;
 import com.mlib.effects.ParticleEmitter;
 import com.mlib.effects.SoundEmitter;
 import com.mlib.items.ItemHelper;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
 
@@ -18,15 +18,15 @@ import java.util.Optional;
 public class Smelter {
 	public Smelter() {
 		OnLootGenerated.listen( this::smelt )
-			.addCondition( OnLootGenerated.hasBlockState() )
-			.addCondition( OnLootGenerated.hasOrigin() )
-			.addCondition( OnLootGenerated.hasTool() )
+			.addCondition( Condition.predicate( OnLootGenerated::hasBlockState ) )
+			.addCondition( Condition.predicate( OnLootGenerated::hasOrigin ) )
+			.addCondition( Condition.predicate( OnLootGenerated::hasTool ) )
 			.addCondition( Condition.hasAuthority() )
 			.addCondition( Condition.hasLevel() )
 			.addCondition( Condition.predicate( data->data.entity instanceof Player player && !player.isCrouching() ) );
 	}
 
-	private void smelt( OnLootGenerated.Data data ) {
+	private void smelt( OnLootGenerated data ) {
 		ObjectArrayList< ItemStack > smeltedLoot = new ObjectArrayList<>();
 		float experience = 0.0f;
 		for( ItemStack itemStack : data.generatedLoot ) {

@@ -15,49 +15,46 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class OnCropHarvested {
-	public static Context< Data > listen( Consumer< Data > consumer ) {
-		return Contexts.get( Data.class ).add( consumer );
+public class OnCropHarvested implements IEntityData {
+	public final Player player;
+	public final List< ItemStack > generatedLoot;
+	public final CropBlock crops;
+	public final BlockState blockState;
+	public final ItemStack tool;
+	public final Vec3 origin;
+
+	public static Context< OnCropHarvested > listen( Consumer< OnCropHarvested > consumer ) {
+		return Contexts.get( OnCropHarvested.class ).add( consumer );
 	}
 
-	public static class Data implements IEntityData {
-		public final Player player;
-		public final List< ItemStack > generatedLoot;
-		public final CropBlock crops;
-		public final BlockState blockState;
-		public final ItemStack tool;
-		public final Vec3 origin;
+	public OnCropHarvested( Player player, List< ItemStack > generatedLoot, CropBlock crops, BlockState blockState, ItemStack tool, Vec3 origin ) {
+		this.player = player;
+		this.generatedLoot = generatedLoot;
+		this.crops = crops;
+		this.blockState = blockState;
+		this.tool = tool;
+		this.origin = origin;
+	}
 
-		public Data( Player player, List< ItemStack > generatedLoot, CropBlock crops, BlockState blockState, ItemStack tool, Vec3 origin ) {
-			this.player = player;
-			this.generatedLoot = generatedLoot;
-			this.crops = crops;
-			this.blockState = blockState;
-			this.tool = tool;
-			this.origin = origin;
-		}
-
-		@Override
-		public Entity getEntity() {
-			return this.player;
-		}
+	@Override
+	public Entity getEntity() {
+		return this.player;
 	}
 
 	@AutoInstance
 	public static class Dispatcher {
 		public Dispatcher() {
 			OnLootGenerated.listen( this::dispatchCropEvent )
-				.addCondition( OnLootGenerated.hasBlockState() )
-				.addCondition( OnLootGenerated.hasEntity() )
-				.addCondition( OnLootGenerated.hasTool() )
-				.addCondition( OnLootGenerated.hasOrigin() )
+				.addCondition( Condition.predicate( OnLootGenerated::hasBlockState ) )
+				.addCondition( Condition.predicate( OnLootGenerated::hasEntity ) )
+				.addCondition( Condition.predicate( OnLootGenerated::hasTool ) )
+				.addCondition( Condition.predicate( OnLootGenerated::hasOrigin ) )
 				.addCondition( Condition.predicate( data->data.blockState.getBlock() instanceof CropBlock ) )
 				.addCondition( Condition.predicate( data->data.entity instanceof Player ) );
 		}
 
-		private void dispatchCropEvent( OnLootGenerated.Data data ) {
-			Contexts.get( Data.class )
-				.dispatch( new Data( ( Player )data.entity, data.generatedLoot, ( CropBlock )data.blockState.getBlock(), data.blockState, data.tool, data.origin ) );
+		private void dispatchCropEvent( OnLootGenerated data ) {
+			Contexts.dispatch( new OnCropHarvested( ( Player )data.entity, data.generatedLoot, ( CropBlock )data.blockState.getBlock(), data.blockState, data.tool, data.origin ) );
 		}
 	}
 }

@@ -1,8 +1,8 @@
 package com.mlib.data;
 
+import com.mlib.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
-import com.mlib.registries.Registries;
 
 class ReaderEnchantment extends ReaderStringCustom< Enchantment > {
 	@Override

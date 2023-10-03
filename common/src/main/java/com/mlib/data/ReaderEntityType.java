@@ -1,8 +1,8 @@
 package com.mlib.data;
 
+import com.mlib.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import com.mlib.registries.Registries;
 
 class ReaderEntityType extends ReaderStringCustom< EntityType< ? > > {
 	@Override

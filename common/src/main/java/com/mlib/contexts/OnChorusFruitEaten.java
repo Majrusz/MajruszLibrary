@@ -10,38 +10,32 @@ import net.minecraft.world.level.Level;
 
 import java.util.function.Consumer;
 
-public class OnChorusFruitEaten {
-	public static Context< Data > listen( Consumer< Data > consumer ) {
-		return Contexts.get( Data.class ).add( consumer );
+public class OnChorusFruitEaten implements IEntityData {
+	public final ItemStack itemStack;
+	public final Level level;
+	public final LivingEntity entity;
+	private boolean isTeleportCancelled = false;
+
+	public static Context< OnChorusFruitEaten > listen( Consumer< OnChorusFruitEaten > consumer ) {
+		return Contexts.get( OnChorusFruitEaten.class ).add( consumer );
 	}
 
-	public static Data dispatch( ItemStack itemStack, Level level, LivingEntity entity ) {
-		return Contexts.get( Data.class ).dispatch( new Data( itemStack, level, entity ) );
+	public OnChorusFruitEaten( ItemStack itemStack, Level level, LivingEntity entity ) {
+		this.itemStack = itemStack;
+		this.level = level;
+		this.entity = entity;
 	}
 
-	public static class Data implements IEntityData {
-		public final ItemStack itemStack;
-		public final Level level;
-		public final LivingEntity entity;
-		private boolean isTeleportCancelled = false;
+	@Override
+	public Entity getEntity() {
+		return this.entity;
+	}
 
-		public Data( ItemStack itemStack, Level level, LivingEntity entity ) {
-			this.itemStack = itemStack;
-			this.level = level;
-			this.entity = entity;
-		}
+	public void cancelTeleport() {
+		this.isTeleportCancelled = true;
+	}
 
-		@Override
-		public Entity getEntity() {
-			return this.entity;
-		}
-
-		public void cancelTeleport() {
-			this.isTeleportCancelled = true;
-		}
-
-		public boolean isTeleportCancelled() {
-			return this.isTeleportCancelled;
-		}
+	public boolean isTeleportCancelled() {
+		return this.isTeleportCancelled;
 	}
 }

@@ -1,11 +1,11 @@
 package com.mlib.effects;
 
+import com.mlib.math.Random;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.Vec3;
-import com.mlib.math.Random;
 
 import java.util.HashMap;
 import java.util.Map;

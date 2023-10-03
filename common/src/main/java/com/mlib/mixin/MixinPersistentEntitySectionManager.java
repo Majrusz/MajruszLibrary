@@ -1,6 +1,7 @@
 package com.mlib.mixin;
 
 import com.mlib.contexts.OnEntitySpawned;
+import com.mlib.contexts.base.Contexts;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -37,7 +38,7 @@ public abstract class MixinPersistentEntitySectionManager< Type extends EntityAc
 	public void tick( CallbackInfo callback ) {
 		List< Long > ids = new ArrayList<>();
 		this.mlibPendingContexts.forEach( ( id, context )->{
-			if( OnEntitySpawned.dispatch( context.getFirst(), context.getSecond() ).isSpawnCancelled() ) {
+			if( Contexts.dispatch( new OnEntitySpawned( context.getFirst(), context.getSecond() ) ).isSpawnCancelled() ) {
 				context.getFirst().remove( Entity.RemovalReason.DISCARDED );
 			}
 			ids.add( id );

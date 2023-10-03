@@ -1,6 +1,7 @@
 package com.mlib.mixin;
 
 import com.mlib.contexts.OnServerTick;
+import com.mlib.contexts.base.Contexts;
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +17,6 @@ public abstract class MixinMinecraftServer {
 		method = "tickServer (Ljava/util/function/BooleanSupplier;)V"
 	)
 	public void tickServer( BooleanSupplier haveTime, CallbackInfo callback ) {
-		OnServerTick.dispatch();
+		Contexts.dispatch( new OnServerTick() );
 	}
 }

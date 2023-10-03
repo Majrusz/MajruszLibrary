@@ -10,29 +10,23 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Consumer;
 
-public class OnBlockPlaced {
-	public static Context< Data > listen( Consumer< Data > consumer ) {
-		return Contexts.get( Data.class ).add( consumer );
+public class OnBlockPlaced implements ILevelData {
+	public final ServerLevel level;
+	public final BlockPos position;
+	public final BlockState blockState;
+
+	public static Context< OnBlockPlaced > listen( Consumer< OnBlockPlaced > consumer ) {
+		return Contexts.get( OnBlockPlaced.class ).add( consumer );
 	}
 
-	public static Data dispatch( ServerLevel level, BlockPos position, BlockState blockState ) {
-		return Contexts.get( Data.class ).dispatch( new Data( level, position, blockState ) );
+	public OnBlockPlaced( ServerLevel level, BlockPos position, BlockState blockState ) {
+		this.level = level;
+		this.position = position;
+		this.blockState = blockState;
 	}
 
-	public static class Data implements ILevelData {
-		private final ServerLevel level;
-		private final BlockPos position;
-		private final BlockState blockState;
-
-		public Data( ServerLevel level, BlockPos position, BlockState blockState ) {
-			this.level = level;
-			this.position = position;
-			this.blockState = blockState;
-		}
-
-		@Override
-		public Level getLevel() {
-			return this.level;
-		}
+	@Override
+	public Level getLevel() {
+		return this.level;
 	}
 }

@@ -1,9 +1,9 @@
 package com.mlib.mixin.fabric;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootTable;
 import com.mlib.mixininterfaces.fabric.IMixinLootTable;
 import com.mlib.mixininterfaces.fabric.IMixinLootTableBuilder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

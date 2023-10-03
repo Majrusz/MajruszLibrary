@@ -2,13 +2,13 @@ package com.mlib.modhelper;
 
 import com.mlib.annotations.AutoInstance;
 import com.mlib.data.ISerializable;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import com.mlib.network.NetworkHandler;
 import com.mlib.network.NetworkObject;
 import com.mlib.registries.RegistryGroup;
 import com.mlib.registries.RegistryHandler;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
