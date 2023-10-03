@@ -1,5 +1,6 @@
 package com.mlib.mixin;
 
+import com.mlib.contexts.OnDamaged;
 import com.mlib.contexts.OnPreDamaged;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -10,18 +11,21 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin( LivingEntity.class )
 public abstract class MixinLivingEntity {
 	float mlibLastExtraDamage = 0.0f;
 
-	@Shadow( aliases = { "this$0" } )
-	@Inject( method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At( "HEAD" ), cancellable = true )
+	@Inject(
+		at = @At( "HEAD" ),
+		cancellable = true,
+		method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+	)
 	private void hurt( DamageSource source, float damage, CallbackInfoReturnable< Boolean > callback ) {
 		this.mlibLastExtraDamage = 0.0f;
 		LivingEntity entity = ( LivingEntity )( Object )this;
@@ -38,10 +42,27 @@ public abstract class MixinLivingEntity {
 		}
 	}
 
-	@Shadow( aliases = { "this$0" } )
-	@ModifyVariable( method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At( value = "HEAD", shift = At.Shift.AFTER ), ordinal = 0 )
+	@ModifyVariable(
+		at = @At(
+			shift = At.Shift.AFTER,
+			value = "HEAD"
+		),
+		method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z",
+		ordinal = 0
+	)
 	private float addExtraDamage( float damage ) {
 		return damage + this.mlibLastExtraDamage;
+	}
+
+	@Inject(
+		at = @At(
+			target = "Lnet/minecraft/world/damagesource/CombatTracker;recordDamage (Lnet/minecraft/world/damagesource/DamageSource;F)V",
+			value = "INVOKE"
+		),
+		method = "actuallyHurt (Lnet/minecraft/world/damagesource/DamageSource;F)V"
+	)
+	private void actuallyHurt( DamageSource source, float damage, CallbackInfo callback ) {
+		OnDamaged.dispatch( source, ( LivingEntity )( Object )this, damage );
 	}
 
 	private static void tryToAddMagicParticles( OnPreDamaged.Data data ) {

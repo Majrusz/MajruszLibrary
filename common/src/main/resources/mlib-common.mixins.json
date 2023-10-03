@@ -20,6 +20,7 @@
     "MixinLivingEntity",
     "MixinMinecraftServer",
     "MixinPersistentEntitySectionManager",
+    "MixinPlayer",
     "MixinServerLevel",
     "MixinTamableAnimal"
   ],
