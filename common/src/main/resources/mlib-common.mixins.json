@@ -22,6 +22,7 @@
     "MixinPersistentEntitySectionManager",
     "MixinPlayer",
     "MixinServerLevel",
+    "MixinServerPlayer",
     "MixinTamableAnimal"
   ],
   "injectors": {

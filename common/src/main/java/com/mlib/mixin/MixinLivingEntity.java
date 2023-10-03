@@ -1,9 +1,11 @@
 package com.mlib.mixin;
 
 import com.mlib.contexts.OnDamaged;
+import com.mlib.contexts.OnEntityDied;
 import com.mlib.contexts.OnPreDamaged;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
@@ -64,6 +66,17 @@ public abstract class MixinLivingEntity {
 	)
 	private void actuallyHurt( DamageSource source, float damage, CallbackInfo callback ) {
 		Contexts.dispatch( new OnDamaged( source, ( LivingEntity )( Object )this, damage ) );
+	}
+
+	@Inject(
+		at = @At( "HEAD" ),
+		cancellable = true,
+		method = "die (Lnet/minecraft/world/damagesource/DamageSource;)V"
+	)
+	private void die( DamageSource source, CallbackInfo callback ) {
+		if( Contexts.dispatch( new OnEntityDied( source, ( ServerPlayer )( Object )this ) ).isDeathCancelled() ) {
+			callback.cancel();
+		}
 	}
 
 	private static void tryToAddMagicParticles( OnPreDamaged data ) {
