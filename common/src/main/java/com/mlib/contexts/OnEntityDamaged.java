@@ -9,17 +9,17 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.function.Consumer;
 
-public class OnDamaged implements IEntityData {
+public class OnEntityDamaged implements IEntityData {
 	public final DamageSource source;
 	public final LivingEntity attacker;
 	public final LivingEntity target;
 	public final float damage;
 
-	public static Context< OnDamaged > listen( Consumer< OnDamaged > consumer ) {
-		return Contexts.get( OnDamaged.class ).add( consumer );
+	public static Context< OnEntityDamaged > listen( Consumer< OnEntityDamaged > consumer ) {
+		return Contexts.get( OnEntityDamaged.class ).add( consumer );
 	}
 
-	public OnDamaged( DamageSource source, LivingEntity target, float damage ) {
+	public OnEntityDamaged( DamageSource source, LivingEntity target, float damage ) {
 		this.source = source;
 		this.attacker = this.source.getEntity() instanceof LivingEntity entity ? entity : null;
 		this.target = target;

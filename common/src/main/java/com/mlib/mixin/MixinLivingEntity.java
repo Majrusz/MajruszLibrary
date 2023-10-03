@@ -1,8 +1,8 @@
 package com.mlib.mixin;
 
-import com.mlib.contexts.OnDamaged;
+import com.mlib.contexts.OnEntityDamaged;
 import com.mlib.contexts.OnEntityDied;
-import com.mlib.contexts.OnPreDamaged;
+import com.mlib.contexts.OnEntityPreDamaged;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,7 +36,7 @@ public abstract class MixinLivingEntity {
 			return;
 		}
 
-		OnPreDamaged data = Contexts.dispatch( new OnPreDamaged( source, entity, damage ) );
+		OnEntityPreDamaged data = Contexts.dispatch( new OnEntityPreDamaged( source, entity, damage ) );
 		if( data.isDamageCancelled() ) {
 			callback.setReturnValue( false );
 		} else {
@@ -65,7 +65,7 @@ public abstract class MixinLivingEntity {
 		method = "actuallyHurt (Lnet/minecraft/world/damagesource/DamageSource;F)V"
 	)
 	private void actuallyHurt( DamageSource source, float damage, CallbackInfo callback ) {
-		Contexts.dispatch( new OnDamaged( source, ( LivingEntity )( Object )this, damage ) );
+		Contexts.dispatch( new OnEntityDamaged( source, ( LivingEntity )( Object )this, damage ) );
 	}
 
 	@Inject(
@@ -79,7 +79,7 @@ public abstract class MixinLivingEntity {
 		}
 	}
 
-	private static void tryToAddMagicParticles( OnPreDamaged data ) {
+	private static void tryToAddMagicParticles( OnEntityPreDamaged data ) {
 		if( data.attacker instanceof Player player ) {
 			MobType type = data.source.getEntity() instanceof LivingEntity entity ? entity.getMobType() : MobType.UNDEFINED;
 			if( EnchantmentHelper.getDamageBonus( player.getMainHandItem(), type ) > 0.0f ) {

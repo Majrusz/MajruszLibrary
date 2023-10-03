@@ -1,6 +1,6 @@
 package com.mlib.mixin;
 
-import com.mlib.contexts.OnDamaged;
+import com.mlib.contexts.OnEntityDamaged;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,6 +20,6 @@ public abstract class MixinPlayer {
 		method = "actuallyHurt (Lnet/minecraft/world/damagesource/DamageSource;F)V"
 	)
 	private void actuallyHurt( DamageSource source, float damage, CallbackInfo callback ) {
-		Contexts.dispatch( new OnDamaged( source, ( LivingEntity )( Object )this, damage ) );
+		Contexts.dispatch( new OnEntityDamaged( source, ( LivingEntity )( Object )this, damage ) );
 	}
 }

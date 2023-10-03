@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.function.Consumer;
 
-public class OnPreDamaged implements IEntityData {
+public class OnEntityPreDamaged implements IEntityData {
 	public final DamageSource source;
 	public final LivingEntity attacker;
 	public final LivingEntity target;
@@ -19,11 +19,11 @@ public class OnPreDamaged implements IEntityData {
 	public boolean spawnMagicParticles = false;
 	private boolean isCancelled = false;
 
-	public static Context< OnPreDamaged > listen( Consumer< OnPreDamaged > consumer ) {
-		return Contexts.get( OnPreDamaged.class ).add( consumer );
+	public static Context< OnEntityPreDamaged > listen( Consumer< OnEntityPreDamaged > consumer ) {
+		return Contexts.get( OnEntityPreDamaged.class ).add( consumer );
 	}
 
-	public OnPreDamaged( DamageSource source, LivingEntity target, float damage ) {
+	public OnEntityPreDamaged( DamageSource source, LivingEntity target, float damage ) {
 		this.source = source;
 		this.attacker = this.source.getEntity() instanceof LivingEntity entity ? entity : null;
 		this.target = target;
