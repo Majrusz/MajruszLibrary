@@ -1,6 +1,5 @@
 package com.mlib.contexts.base;
 
-import com.mlib.MajruszLibrary;
 import com.mlib.profiler.ProfilerHelper;
 
 import java.util.*;
@@ -12,9 +11,7 @@ public class Contexts< DataType > {
 	final List< Context< DataType > > contexts = new ArrayList<>();
 
 	public static < DataType > DataType dispatch( DataType data ) {
-		MajruszLibrary.HELPER.log( "CONTEXT %s", data.getClass().getName() );
 		Class< DataType > clazz = ( Class< DataType > )data.getClass();
-
 		ProfilerHelper.profile( clazz.getName(), ()->{
 			Contexts.get( clazz ).forEach( context->context.accept( data ) );
 		} );
