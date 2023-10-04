@@ -16,6 +16,7 @@
     "MixinChorusFruitItem",
     "MixinCommands",
     "MixinDifficultyInstance",
+    "MixinEntity",
     "MixinFoxBreedGoal",
     "MixinLivingEntity",
     "MixinMinecraftServer",
