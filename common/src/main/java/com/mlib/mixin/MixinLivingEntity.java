@@ -1,9 +1,6 @@
 package com.mlib.mixin;
 
-import com.mlib.contexts.OnEntityDamaged;
-import com.mlib.contexts.OnEntityDied;
-import com.mlib.contexts.OnEntityEffectCheck;
-import com.mlib.contexts.OnEntityPreDamaged;
+import com.mlib.contexts.*;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -89,6 +86,14 @@ public abstract class MixinLivingEntity {
 		if( Contexts.dispatch( new OnEntityEffectCheck( effect, ( LivingEntity )( Object )this ) ).isEffectCancelled() ) {
 			callback.setReturnValue( false );
 		}
+	}
+
+	@Inject(
+		at = @At( "TAIL" ),
+		method = "tick ()V"
+	)
+	private void tick( CallbackInfo callback ) {
+		Contexts.dispatch( new OnEntityTicked( ( LivingEntity )( Object )this ) );
 	}
 
 	private static void tryToAddMagicParticles( OnEntityPreDamaged data ) {
