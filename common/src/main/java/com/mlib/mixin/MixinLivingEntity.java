@@ -110,10 +110,10 @@ public abstract class MixinLivingEntity {
 		method = "collectEquipmentChanges ()Ljava/util/Map;"
 	)
 	private void collectEquipmentChanges( CallbackInfoReturnable< Map< EquipmentSlot, ItemStack > > callback, Map< EquipmentSlot, ItemStack > map,
-		EquipmentSlot[] slots, int slotsCount, int idx, EquipmentSlot slot, ItemStack oldItemStack, ItemStack newItemStack
+		EquipmentSlot[] slots, int slotsCount, int idx, EquipmentSlot slot, ItemStack from, ItemStack to
 	) {
-		if( !ItemStack.matches( oldItemStack, newItemStack ) ) {
-			Contexts.dispatch( new OnEntityEquipmentChanged( ( LivingEntity )( Object )this, oldItemStack, newItemStack ) );
+		if( !ItemStack.matches( from, to ) ) {
+			Contexts.dispatch( new OnEntityEquipmentChanged( ( LivingEntity )( Object )this, slot, from, to ) );
 		}
 	}
 
