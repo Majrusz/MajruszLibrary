@@ -26,6 +26,7 @@
     "MixinMinecraftServer",
     "MixinPersistentEntitySectionManager",
     "MixinPlayer",
+    "MixinResultSlot",
     "MixinServerLevel",
     "MixinServerPlayer",
     "MixinTamableAnimal"
