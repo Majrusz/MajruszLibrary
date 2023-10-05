@@ -18,6 +18,7 @@
     "MixinDifficultyInstance",
     "MixinEntity",
     "MixinExplosion",
+    "MixinFishingHook",
     "MixinFoxBreedGoal",
     "MixinLivingEntity",
     "MixinMinecraftServer",
