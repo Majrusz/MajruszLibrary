@@ -12,8 +12,8 @@ import java.util.function.Consumer;
 public class OnBreakSpeedGet implements IEntityData {
 	public final Player player;
 	public final BlockState blockState;
-	public final float originalSpeed;
-	public float newSpeed;
+	public final float original;
+	public float value;
 
 	public static Context< OnBreakSpeedGet > listen( Consumer< OnBreakSpeedGet > consumer ) {
 		return Contexts.get( OnBreakSpeedGet.class ).add( consumer );
@@ -22,8 +22,8 @@ public class OnBreakSpeedGet implements IEntityData {
 	public OnBreakSpeedGet( Player player, BlockState blockState, float speed ) {
 		this.player = player;
 		this.blockState = blockState;
-		this.originalSpeed = speed;
-		this.newSpeed = speed;
+		this.original = speed;
+		this.value = speed;
 	}
 
 	@Override
