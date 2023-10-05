@@ -20,6 +20,7 @@
     "MixinExplosion",
     "MixinFishingHook",
     "MixinFoxBreedGoal",
+    "MixinItemStack",
     "MixinLivingEntity",
     "MixinMinecraftServer",
     "MixinPersistentEntitySectionManager",
