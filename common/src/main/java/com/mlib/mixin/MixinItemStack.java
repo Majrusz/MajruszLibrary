@@ -1,20 +1,37 @@
 package com.mlib.mixin;
 
 import com.mlib.contexts.OnItemAttributeTooltip;
+import com.mlib.contexts.OnItemDamaged;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
 @Mixin( ItemStack.class )
 public abstract class MixinItemStack {
+	@Inject(
+		at = @At( "RETURN" ),
+		cancellable = true,
+		method = "hurt (ILnet/minecraft/util/RandomSource;Lnet/minecraft/server/level/ServerPlayer;)Z"
+	)
+	private void hurt( int damage, RandomSource source, ServerPlayer player, CallbackInfoReturnable< Boolean > callback ) {
+		ItemStack itemStack = ( ItemStack )( Object )this;
+		itemStack.setDamageValue( itemStack.getDamageValue() + Contexts.dispatch( new OnItemDamaged( player, itemStack, damage ) ).getExtraDamage() );
+
+		callback.setReturnValue( itemStack.getDamageValue() >= itemStack.getMaxDamage() );
+	}
+
 	@ModifyVariable(
 		at = @At(
 			ordinal = 1,
