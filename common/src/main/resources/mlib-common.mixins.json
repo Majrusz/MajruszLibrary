@@ -17,6 +17,7 @@
     "MixinCommands",
     "MixinDifficultyInstance",
     "MixinEntity",
+    "MixinExplosion",
     "MixinFoxBreedGoal",
     "MixinLivingEntity",
     "MixinMinecraftServer",
