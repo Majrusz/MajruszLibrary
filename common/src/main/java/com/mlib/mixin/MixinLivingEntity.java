@@ -113,7 +113,7 @@ public abstract class MixinLivingEntity {
 		EquipmentSlot[] slots, int slotsCount, int idx, EquipmentSlot slot, ItemStack from, ItemStack to
 	) {
 		if( !ItemStack.matches( from, to ) ) {
-			Contexts.dispatch( new OnEntityEquipmentChanged( ( LivingEntity )( Object )this, slot, from, to ) );
+			Contexts.dispatch( new OnItemEquipped( ( LivingEntity )( Object )this, slot, from, to ) );
 		}
 	}
 

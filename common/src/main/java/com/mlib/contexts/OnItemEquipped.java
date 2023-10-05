@@ -10,17 +10,17 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Consumer;
 
-public class OnEntityEquipmentChanged implements IEntityData {
+public class OnItemEquipped implements IEntityData {
 	public final LivingEntity entity;
 	public final EquipmentSlot slot;
 	public final ItemStack from;
 	public final ItemStack to;
 
-	public static Context< OnEntityEquipmentChanged > listen( Consumer< OnEntityEquipmentChanged > consumer ) {
-		return Contexts.get( OnEntityEquipmentChanged.class ).add( consumer );
+	public static Context< OnItemEquipped > listen( Consumer< OnItemEquipped > consumer ) {
+		return Contexts.get( OnItemEquipped.class ).add( consumer );
 	}
 
-	public OnEntityEquipmentChanged( LivingEntity entity, EquipmentSlot slot, ItemStack from, ItemStack to ) {
+	public OnItemEquipped( LivingEntity entity, EquipmentSlot slot, ItemStack from, ItemStack to ) {
 		this.entity = entity;
 		this.slot = slot;
 		this.from = from;
