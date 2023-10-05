@@ -2,15 +2,15 @@ package com.mlib.contexts;
 
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
-import com.mlib.contexts.data.ILevelData;
+import com.mlib.contexts.data.IEntityData;
 import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 
 import java.util.function.Consumer;
 
-public class OnBabySpawned implements ILevelData {
+public class OnBabySpawned implements IEntityData {
 	public final Animal parentA;
 	public final Animal parentB;
 	public final Player player;
@@ -28,7 +28,7 @@ public class OnBabySpawned implements ILevelData {
 	}
 
 	@Override
-	public Level getLevel() {
-		return this.child != null ? this.child.level() : null;
+	public Entity getEntity() {
+		return this.child;
 	}
 }
