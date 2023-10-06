@@ -1,4 +1,4 @@
-package com.mlib.loot;
+package com.mlib.items;
 
 import com.mlib.MajruszLibrary;
 import net.minecraft.resources.ResourceLocation;
