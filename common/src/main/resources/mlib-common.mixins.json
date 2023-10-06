@@ -18,6 +18,7 @@
     "MixinCommands",
     "MixinDifficultyInstance",
     "MixinEntity",
+    "MixinExperienceOrb",
     "MixinExplosion",
     "MixinFishingHook",
     "MixinFoxBreedGoal",
