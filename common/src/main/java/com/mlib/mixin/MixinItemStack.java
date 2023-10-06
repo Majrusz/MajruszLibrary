@@ -2,6 +2,7 @@ package com.mlib.mixin;
 
 import com.mlib.contexts.OnItemAttributeTooltip;
 import com.mlib.contexts.OnItemDamaged;
+import com.mlib.contexts.OnItemTooltip;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
@@ -9,7 +10,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -30,6 +33,15 @@ public abstract class MixinItemStack {
 		itemStack.setDamageValue( itemStack.getDamageValue() + Contexts.dispatch( new OnItemDamaged( player, itemStack, damage ) ).getExtraDamage() );
 
 		callback.setReturnValue( itemStack.getDamageValue() >= itemStack.getMaxDamage() );
+	}
+
+	@Inject(
+		at = @At( "RETURN" ),
+		cancellable = true,
+		method = "getTooltipLines (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;"
+	)
+	private void getTooltipLines( Player player, TooltipFlag flag, CallbackInfoReturnable< List< Component > > callback ) {
+		callback.setReturnValue( Contexts.dispatch( new OnItemTooltip( ( ItemStack )( Object )this, callback.getReturnValue(), flag, player ) ).components );
 	}
 
 	@ModifyVariable(

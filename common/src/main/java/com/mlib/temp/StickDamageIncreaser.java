@@ -3,6 +3,7 @@ package com.mlib.temp;
 import com.mlib.annotations.AutoInstance;
 import com.mlib.contexts.OnEntityPreDamaged;
 import com.mlib.contexts.OnItemAttributeTooltip;
+import com.mlib.contexts.OnItemTooltip;
 import com.mlib.contexts.base.Condition;
 import com.mlib.text.TextHelper;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,6 +19,10 @@ public class StickDamageIncreaser {
 
 		OnItemAttributeTooltip.listen( this::addTooltip )
 			.addCondition( Condition.predicate( data->data.itemStack.is( Items.STICK ) ) );
+
+		OnItemTooltip.listen( this::addTooltip )
+			.addCondition( Condition.predicate( data->data.itemStack.is( Items.STICK ) ) )
+			.addCondition( Condition.predicate( OnItemTooltip::isAdvanced ) );
 	}
 
 	private void increaseDamage( OnEntityPreDamaged data ) {
@@ -27,5 +32,9 @@ public class StickDamageIncreaser {
 
 	private void addTooltip( OnItemAttributeTooltip data ) {
 		data.add( EquipmentSlot.MAINHAND, TextHelper.literal( "SUPER DUPER +%d ATTACK DAMAGE".formatted( 5 ) ) );
+	}
+
+	private void addTooltip( OnItemTooltip data ) {
+		data.components.add( TextHelper.literal( "THE ULTIMATE WEAPON" ) );
 	}
 }
