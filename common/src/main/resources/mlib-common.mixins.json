@@ -25,6 +25,7 @@
     "MixinLivingEntity",
     "MixinMinecraftServer",
     "MixinMobCategory",
+    "MixinNaturalSpawner",
     "MixinPersistentEntitySectionManager",
     "MixinPlayer",
     "MixinResultSlot",
