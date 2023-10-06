@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -13,7 +14,7 @@ import java.util.function.Predicate;
 
 public class OnExplosion {
 	public final Explosion explosion;
-	public final LivingEntity entity;
+	public final @Nullable LivingEntity entity;
 	public final float originalRadius;
 	public float radius;
 	public boolean spawnsFire;

@@ -27,6 +27,6 @@ public abstract class MixinFoxBreedGoal implements IMixinBreedGoal {
 		Animal parentB = this.getPartner();
 		Player player = parentA.getLoveCause() != null ? parentA.getLoveCause() : parentB.getLoveCause();
 
-		Contexts.dispatch( new OnBabySpawned( this.getAnimal(), this.getPartner(), player, fox ) );
+		Contexts.dispatch( new OnBabySpawned( this.getAnimal(), this.getPartner(), fox, player ) );
 	}
 }

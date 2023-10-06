@@ -15,6 +15,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -22,13 +23,13 @@ public class OnLootGenerated implements IEntityData {
 	public final ObjectArrayList< ItemStack > generatedLoot;
 	public final ResourceLocation lootId;
 	public final LootContext context;
-	public final BlockState blockState;
-	public final DamageSource damageSource;
-	public final Entity killer;
-	public final Entity entity;
-	public final Player lastDamagePlayer;
-	public final ItemStack tool;
-	public final Vec3 origin;
+	public final @Nullable BlockState blockState;
+	public final @Nullable DamageSource damageSource;
+	public final @Nullable Entity killer;
+	public final @Nullable Entity entity;
+	public final @Nullable Player lastDamagePlayer;
+	public final @Nullable ItemStack tool;
+	public final @Nullable Vec3 origin;
 
 	public static Context< OnLootGenerated > listen( Consumer< OnLootGenerated > consumer ) {
 		return Contexts.get( OnLootGenerated.class ).add( consumer );

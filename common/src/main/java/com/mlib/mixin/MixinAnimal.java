@@ -26,6 +26,6 @@ public abstract class MixinAnimal {
 		Animal parentA = ( Animal )( Object )this;
 		Player player = parentA.getLoveCause() != null ? parentA.getLoveCause() : parentB.getLoveCause();
 
-		Contexts.dispatch( new OnBabySpawned( parentA, parentB, player, child ) );
+		Contexts.dispatch( new OnBabySpawned( parentA, parentB, child, player ) );
 	}
 }

@@ -6,11 +6,12 @@ import com.mlib.contexts.data.ILevelData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public class OnItemDamaged implements ILevelData {
-	public final Player player;
+	public final @Nullable Player player;
 	public final ItemStack itemStack;
 	public final int original;
 	public int value;
@@ -19,7 +20,7 @@ public class OnItemDamaged implements ILevelData {
 		return Contexts.get( OnItemDamaged.class ).add( consumer );
 	}
 
-	public OnItemDamaged( Player player, ItemStack itemStack, int damage ) {
+	public OnItemDamaged( @Nullable Player player, ItemStack itemStack, int damage ) {
 		this.player = player;
 		this.itemStack = itemStack;
 		this.original = damage;

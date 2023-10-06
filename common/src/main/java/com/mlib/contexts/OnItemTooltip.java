@@ -15,7 +15,7 @@ public class OnItemTooltip {
 	public final ItemStack itemStack;
 	public final List< Component > components;
 	public final TooltipFlag flags;
-	@Nullable public final Player player;
+	public final @Nullable Player player;
 
 	public static Context< OnItemTooltip > listen( Consumer< OnItemTooltip > consumer ) {
 		return Contexts.get( OnItemTooltip.class ).add( consumer );

@@ -6,12 +6,13 @@ import com.mlib.contexts.data.IEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public class OnEntityDied implements IEntityData {
 	public final DamageSource source;
-	public final LivingEntity attacker;
+	public final @Nullable LivingEntity attacker;
 	public final LivingEntity target;
 	private boolean isDeathCancelled = false;
 

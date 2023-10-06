@@ -6,12 +6,13 @@ import com.mlib.contexts.data.IEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public class OnFishingTimeGet implements IEntityData {
 	public final FishingHook hook;
-	public final Player player;
+	public final @Nullable Player player;
 	public final int original;
 	public int value;
 
