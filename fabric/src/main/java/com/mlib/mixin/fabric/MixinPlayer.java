@@ -16,7 +16,7 @@ public abstract class MixinPlayer {
 		cancellable = true,
 		method = "getDestroySpeed (Lnet/minecraft/world/level/block/state/BlockState;)F"
 	)
-	public void getDestroySpeed( BlockState blockState, CallbackInfoReturnable< Float > callback ) {
+	private void getDestroySpeed( BlockState blockState, CallbackInfoReturnable< Float > callback ) {
 		Player player = ( Player )( Object )this;
 
 		callback.setReturnValue( Contexts.dispatch( new OnBreakSpeedGet( player, blockState, callback.getReturnValue() ) ).value );

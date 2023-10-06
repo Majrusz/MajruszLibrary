@@ -15,7 +15,7 @@ public abstract class MixinAbstractHorse {
 		at = @At( "RETURN" ),
 		method = "tameWithName (Lnet/minecraft/world/entity/player/Player;)Z"
 	)
-	public void tameWithName( Player player, CallbackInfoReturnable< Boolean > callback ) {
+	private void tameWithName( Player player, CallbackInfoReturnable< Boolean > callback ) {
 		Contexts.dispatch( new OnAnimalTamed( ( AbstractHorse )( Object )this, player ) );
 	}
 }

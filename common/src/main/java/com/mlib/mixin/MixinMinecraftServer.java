@@ -20,7 +20,7 @@ public abstract class MixinMinecraftServer {
 		),
 		method = "tickServer (Ljava/util/function/BooleanSupplier;)V"
 	)
-	public void tickServer( BooleanSupplier haveTime, CallbackInfo callback ) {
+	private void tickServer( BooleanSupplier haveTime, CallbackInfo callback ) {
 		Contexts.dispatch( new OnServerTicked() );
 	}
 }

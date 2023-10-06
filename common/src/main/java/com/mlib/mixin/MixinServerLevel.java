@@ -24,7 +24,7 @@ public abstract class MixinServerLevel {
 		at = @At( "RETURN" ),
 		method = "sendBlockUpdated (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;I)V"
 	)
-	public void sendBlockUpdated( BlockPos position, BlockState previousState, BlockState newState, int p_46615_, CallbackInfo callback ) {
+	private void sendBlockUpdated( BlockPos position, BlockState previousState, BlockState newState, int p_46615_, CallbackInfo callback ) {
 		Contexts.dispatch( new OnBlockPlaced( ( ServerLevel )( Object )this, position, newState ) );
 	}
 

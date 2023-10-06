@@ -22,7 +22,7 @@ public abstract class MixinFoxBreedGoal implements IMixinBreedGoal {
 		locals = LocalCapture.CAPTURE_FAILHARD,
 		method = "breed ()V"
 	)
-	public void breed( CallbackInfo callback, ServerLevel level, Fox fox ) {
+	private void breed( CallbackInfo callback, ServerLevel level, Fox fox ) {
 		Animal parentA = this.getAnimal();
 		Animal parentB = this.getPartner();
 		Player player = parentA.getLoveCause() != null ? parentA.getLoveCause() : parentB.getLoveCause();

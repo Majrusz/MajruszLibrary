@@ -22,7 +22,7 @@ public abstract class MixinLootTableBuilder implements IMixinLootTableBuilder {
 		at = @At( "RETURN" ),
 		method = "build ()Lnet/minecraft/world/level/storage/loot/LootTable;"
 	)
-	public void build( CallbackInfoReturnable< LootTable > callbackInfo ) {
+	private void build( CallbackInfoReturnable< LootTable > callbackInfo ) {
 		( ( IMixinLootTable )callbackInfo.getReturnValue() ).set( this.mlibId );
 	}
 }

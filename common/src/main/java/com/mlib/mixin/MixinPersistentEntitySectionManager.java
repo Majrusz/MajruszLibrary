@@ -25,7 +25,7 @@ public abstract class MixinPersistentEntitySectionManager< Type extends EntityAc
 		at = @At( "RETURN" ),
 		method = "addEntity (Lnet/minecraft/world/level/entity/EntityAccess;Z)Z"
 	)
-	public void addEntity( Type entityAccess, boolean isLoadedFromDisk, CallbackInfoReturnable< Boolean > callback ) {
+	private void addEntity( Type entityAccess, boolean isLoadedFromDisk, CallbackInfoReturnable< Boolean > callback ) {
 		if( callback.getReturnValue() && entityAccess instanceof Entity entity ) {
 			this.mlibPendingContexts.put( entity.getId(), Pair.of( entity, isLoadedFromDisk ) );
 		}
@@ -35,7 +35,7 @@ public abstract class MixinPersistentEntitySectionManager< Type extends EntityAc
 		at = @At( "HEAD" ),
 		method = "tick ()V"
 	)
-	public void tick( CallbackInfo callback ) {
+	private void tick( CallbackInfo callback ) {
 		List< Long > ids = new ArrayList<>();
 		this.mlibPendingContexts.forEach( ( id, context )->{
 			if( Contexts.dispatch( new OnEntitySpawned( context.getFirst(), context.getSecond() ) ).isSpawnCancelled() ) {

@@ -15,7 +15,7 @@ public abstract class MixinTamableAnimal {
 		at = @At( "RETURN" ),
 		method = "tame (Lnet/minecraft/world/entity/player/Player;)V"
 	)
-	public void tame( Player player, CallbackInfo callback ) {
+	private void tame( Player player, CallbackInfo callback ) {
 		Contexts.dispatch( new OnAnimalTamed( ( TamableAnimal )( Object )this, player ) );
 	}
 }

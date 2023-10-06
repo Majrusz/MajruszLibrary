@@ -22,7 +22,7 @@ public abstract class MixinAnimal {
 		locals = LocalCapture.CAPTURE_FAILHARD,
 		method = "spawnChildFromBreeding (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/animal/Animal;)V"
 	)
-	public void spawnChildFromBreeding( ServerLevel level, Animal parentB, CallbackInfo callback, AgeableMob child ) {
+	private void spawnChildFromBreeding( ServerLevel level, Animal parentB, CallbackInfo callback, AgeableMob child ) {
 		Animal parentA = ( Animal )( Object )this;
 		Player player = parentA.getLoveCause() != null ? parentA.getLoveCause() : parentB.getLoveCause();
 

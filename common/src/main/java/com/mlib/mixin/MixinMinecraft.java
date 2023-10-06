@@ -14,7 +14,7 @@ public abstract class MixinMinecraft {
 		at = @At( "TAIL" ),
 		method = "tick ()V"
 	)
-	public void tick( CallbackInfo callback ) {
+	private void tick( CallbackInfo callback ) {
 		Contexts.dispatch( new OnClientTicked() );
 	}
 }
