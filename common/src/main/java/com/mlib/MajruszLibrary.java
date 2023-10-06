@@ -1,12 +1,12 @@
 package com.mlib;
 
-import com.mlib.commands.EnumArgument;
+import com.mlib.command.EnumArgument;
 import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
 import com.mlib.platform.ISidePlatform;
 import com.mlib.platform.Services;
-import com.mlib.registries.RegistryGroup;
-import com.mlib.registries.RegistryObject;
+import com.mlib.registry.RegistryGroup;
+import com.mlib.registry.RegistryObject;
 import com.mlib.temp.TestCommand;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.core.registries.BuiltInRegistries;

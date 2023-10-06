@@ -1,10 +1,10 @@
 package com.mlib.temp;
 
 import com.mlib.MajruszLibrary;
-import com.mlib.annotations.AutoInstance;
-import com.mlib.commands.Command;
-import com.mlib.commands.CommandData;
-import com.mlib.commands.IParameter;
+import com.mlib.annotation.AutoInstance;
+import com.mlib.command.Command;
+import com.mlib.command.CommandData;
+import com.mlib.command.IParameter;
 import com.mlib.contexts.OnChorusFruitEaten;
 import com.mlib.contexts.OnClampedRegionalDifficultyGet;
 import com.mlib.contexts.OnEntitySpawned;

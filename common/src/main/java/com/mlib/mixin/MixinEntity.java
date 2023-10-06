@@ -3,7 +3,7 @@ package com.mlib.mixin;
 import com.mlib.contexts.OnEntityNoiseCheck;
 import com.mlib.contexts.OnEntityNoiseReceived;
 import com.mlib.contexts.base.Contexts;
-import com.mlib.entities.EntityNoiseListener;
+import com.mlib.entity.EntityNoiseListener;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.GameEventTags;

@@ -1,6 +1,6 @@
 package com.mlib.temp;
 
-import com.mlib.annotations.AutoInstance;
+import com.mlib.annotation.AutoInstance;
 import com.mlib.contexts.OnEntityPreDamaged;
 import com.mlib.contexts.OnItemAttributeTooltip;
 import com.mlib.contexts.OnItemTooltip;

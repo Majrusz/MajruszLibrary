@@ -1,6 +1,6 @@
 package com.mlib.temp;
 
-import com.mlib.annotations.AutoInstance;
+import com.mlib.annotation.AutoInstance;
 import com.mlib.contexts.OnItemBrewed;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

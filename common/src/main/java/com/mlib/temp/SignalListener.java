@@ -1,9 +1,9 @@
 package com.mlib.temp;
 
-import com.mlib.annotations.AutoInstance;
+import com.mlib.annotation.AutoInstance;
 import com.mlib.contexts.OnEntityNoiseCheck;
 import com.mlib.contexts.base.Condition;
-import com.mlib.entities.EntityNoiseListener;
+import com.mlib.entity.EntityNoiseListener;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 

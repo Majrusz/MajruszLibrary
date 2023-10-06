@@ -1,6 +1,6 @@
 package com.mlib.data;
 
-import com.mlib.registries.Registries;
+import com.mlib.registry.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.enchantment.Enchantment;
 

@@ -1,11 +1,11 @@
 package com.mlib.temp;
 
-import com.mlib.annotations.AutoInstance;
+import com.mlib.annotation.AutoInstance;
 import com.mlib.contexts.OnLootGenerated;
 import com.mlib.contexts.base.Condition;
-import com.mlib.effects.ParticleEmitter;
-import com.mlib.effects.SoundEmitter;
-import com.mlib.items.ItemHelper;
+import com.mlib.emitter.ParticleEmitter;
+import com.mlib.emitter.SoundEmitter;
+import com.mlib.item.ItemHelper;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;

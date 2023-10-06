@@ -1,6 +1,6 @@
 package com.mlib.temp;
 
-import com.mlib.annotations.AutoInstance;
+import com.mlib.annotation.AutoInstance;
 import com.mlib.contexts.OnExplosion;
 import com.mlib.contexts.base.Condition;
 import net.minecraft.world.entity.monster.Ghast;
