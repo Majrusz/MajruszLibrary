@@ -1,9 +1,9 @@
 package com.mlib.mixin;
 
 import com.mlib.contexts.OnEntityDamaged;
+import com.mlib.contexts.OnPlayerTicked;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,6 +20,14 @@ public abstract class MixinPlayer {
 		method = "actuallyHurt (Lnet/minecraft/world/damagesource/DamageSource;F)V"
 	)
 	private void actuallyHurt( DamageSource source, float damage, CallbackInfo callback ) {
-		Contexts.dispatch( new OnEntityDamaged( source, ( LivingEntity )( Object )this, damage ) );
+		Contexts.dispatch( new OnEntityDamaged( source, ( Player )( Object )this, damage ) );
+	}
+
+	@Inject(
+		at = @At( "TAIL" ),
+		method = "tick ()V"
+	)
+	private void tick( CallbackInfo callback ) {
+		Contexts.dispatch( new OnPlayerTicked( ( Player )( Object )this ) );
 	}
 }
