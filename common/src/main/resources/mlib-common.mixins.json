@@ -29,6 +29,7 @@
     "MixinNaturalSpawner",
     "MixinPersistentEntitySectionManager",
     "MixinPlayer",
+    "MixinPlayerList",
     "MixinResultSlot",
     "MixinServerLevel",
     "MixinServerPlayer",
