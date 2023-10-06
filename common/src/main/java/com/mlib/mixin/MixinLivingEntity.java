@@ -117,6 +117,15 @@ public abstract class MixinLivingEntity {
 		}
 	}
 
+	@Inject(
+		at = @At( "RETURN" ),
+		cancellable = true,
+		method = "getCurrentSwingDuration ()I"
+	)
+	private void getCurrentSwingDuration( CallbackInfoReturnable< Integer > callback ) {
+		callback.setReturnValue( Contexts.dispatch( new OnItemSwingDurationGet( ( LivingEntity )( Object )this, callback.getReturnValue() ).getSwingDuration() ) );
+	}
+
 	private static void tryToAddMagicParticles( OnEntityPreDamaged data ) {
 		if( data.attacker instanceof Player player ) {
 			MobType type = data.source.getEntity() instanceof LivingEntity entity ? entity.getMobType() : MobType.UNDEFINED;
