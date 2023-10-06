@@ -13,6 +13,7 @@
     "IMixinSharedSuggestionProvider",
     "MixinAbstractHorse",
     "MixinAnimal",
+    "MixinBrewingStandBlockEntity",
     "MixinBrushableBlockEntity",
     "MixinChorusFruitItem",
     "MixinCommands",
