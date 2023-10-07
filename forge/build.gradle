@@ -11,6 +11,10 @@ base {
     archivesName = "${mod_archives_name}-forge-${minecraft_version}-${mod_version}"
 }
 
+repositories {
+    maven { url 'https://www.cursemaven.com' }
+}
+
 minecraft {
     mappings channel: 'official', version: minecraft_version
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
