@@ -17,6 +17,10 @@ pluginManagement {
             name = 'MixinSponge'
             url = 'https://repo.spongepowered.org/maven'
         }
+        maven {
+            name = "CurseMaven"
+            url "https://www.cursemaven.com"
+        }
     }
 }
 
