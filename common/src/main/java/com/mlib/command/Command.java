@@ -1,6 +1,7 @@
 package com.mlib.command;
 
 import com.mlib.math.Range;
+import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -74,6 +75,20 @@ public class Command {
 			@Override
 			public Float get( CommandContext< CommandSourceStack > context ) {
 				return context.getArgument( this.name, Float.class );
+			}
+		}.named( DefaultKeys.VALUE );
+	}
+
+	public static IParameter.Named< Boolean > bool() {
+		return new IParameter.Named< Boolean >() {
+			@Override
+			public CommandBuilder apply( CommandBuilder builder ) {
+				return builder.addArgument( ()->Commands.argument( this.name, BoolArgumentType.bool() ) );
+			}
+
+			@Override
+			public Boolean get( CommandContext< CommandSourceStack > context ) {
+				return context.getArgument( this.name, boolean.class );
 			}
 		}.named( DefaultKeys.VALUE );
 	}
