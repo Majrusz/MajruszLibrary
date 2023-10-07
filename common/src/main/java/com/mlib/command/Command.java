@@ -4,6 +4,7 @@ import com.mlib.math.Range;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
@@ -89,6 +90,20 @@ public class Command {
 			@Override
 			public Boolean get( CommandContext< CommandSourceStack > context ) {
 				return context.getArgument( this.name, boolean.class );
+			}
+		}.named( DefaultKeys.VALUE );
+	}
+
+	public static IParameter.Named< String > string() {
+		return new IParameter.Named< String >() {
+			@Override
+			public CommandBuilder apply( CommandBuilder builder ) {
+				return builder.addArgument( ()->Commands.argument( this.name, StringArgumentType.string() ) );
+			}
+
+			@Override
+			public String get( CommandContext< CommandSourceStack > context ) {
+				return context.getArgument( this.name, String.class );
 			}
 		}.named( DefaultKeys.VALUE );
 	}
