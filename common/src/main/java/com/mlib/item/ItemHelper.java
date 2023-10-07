@@ -1,14 +1,20 @@
 package com.mlib.item;
 
+import com.mlib.entity.EntityHelper;
 import com.mlib.math.Random;
 import com.mlib.math.Range;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +39,82 @@ public class ItemHelper {
 		}
 
 		return Optional.empty();
+	}
+
+	public static void giveToPlayer( ItemStack itemStack, Player player, Level level ) {
+		if( !player.getInventory().add( itemStack ) ) {
+			level.addFreshEntity( new ItemEntity( level, player.getX(), player.getY() + 1.0, player.getZ(), itemStack ) );
+		}
+	}
+
+	/** Required because Mob::equipItemIfPossible makes item a guaranteed drop and enables persistence for mob. */
+	public static @Nullable EquipmentSlot equip( Mob mob, ItemStack itemStack ) {
+		if( !mob.canHoldItem( itemStack ) ) {
+			return null;
+		}
+
+		EquipmentSlot equipmentSlot = Mob.getEquipmentSlotForItem( itemStack );
+		equipmentSlot = equipmentSlot.isArmor() ? equipmentSlot : EquipmentSlot.MAINHAND;
+		mob.setItemSlot( equipmentSlot, itemStack );
+
+		return equipmentSlot;
+	}
+
+	public static void consumeItemOnUse( ItemStack itemStack, Player player ) {
+		player.awardStat( Stats.ITEM_USED.get( itemStack.getItem() ) );
+		if( !EntityHelper.isOnCreativeMode( player ) ) {
+			itemStack.shrink( 1 );
+		}
+	}
+
+	public static void addCooldown( Player player, int duration, Item... items ) {
+		for( Item item : items ) {
+			player.getCooldowns().addCooldown( item, duration );
+		}
+	}
+
+	public static boolean isOnCooldown( Player player, Item... items ) {
+		for( Item item : items ) {
+			if( player.getCooldowns().isOnCooldown( item ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
+	public static boolean isShield( Item item ) {
+		return item instanceof ShieldItem;
+	}
+
+	public static boolean isRangedWeapon( Item item ) {
+		return item instanceof BowItem
+			|| item instanceof CrossbowItem;
+	}
+
+	public static boolean isMeleeWeapon( Item item ) {
+		return item instanceof SwordItem
+			|| item instanceof TridentItem
+			|| item instanceof AxeItem;
+	}
+
+	public static boolean isGoldenToolOrArmor( Item item ) {
+		return item instanceof SwordItem swordItem && swordItem.getTier() == Tiers.GOLD
+			|| item instanceof DiggerItem diggerItem && diggerItem.getTier() == Tiers.GOLD
+			|| item instanceof ArmorItem armorItem && armorItem.getMaterial() == ArmorMaterials.GOLD;
+	}
+
+	public static boolean isAnyTool( Item item ) {
+		return item instanceof SwordItem
+			|| item instanceof TridentItem
+			|| item instanceof DiggerItem
+			|| item instanceof BowItem
+			|| item instanceof CrossbowItem;
+	}
+
+	public static boolean isFishingRod( Item item ) {
+		return item instanceof FishingRodItem;
 	}
 
 	public record SmeltResult( ItemStack itemStack, float experience ) {}
