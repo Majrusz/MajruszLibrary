@@ -95,6 +95,10 @@ public class TextHelper {
 		return Component.literal( text );
 	}
 
+	public static MutableComponent literal( String text, Object... arguments ) {
+		return Component.literal( text.formatted( arguments ) );
+	}
+
 	public static MutableComponent translatable( String id, Object... arguments ) {
 		return Component.translatable( id, arguments );
 	}
