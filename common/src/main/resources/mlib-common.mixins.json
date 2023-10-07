@@ -10,8 +10,9 @@
   "mixins": [
     "IMixinArgumentTypeInfos",
     "IMixinBreedGoal",
-    "IMixinEnchantment",
     "IMixinCriteriaTriggers",
+    "IMixinEnchantment",
+    "IMixinServerLevel",
     "IMixinSharedSuggestionProvider",
     "MixinAbstractHorse",
     "MixinAnimal",

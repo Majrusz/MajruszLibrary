@@ -4,6 +4,7 @@ import com.mlib.contexts.OnEntityNoiseCheck;
 import com.mlib.contexts.OnEntityNoiseReceived;
 import com.mlib.contexts.base.Contexts;
 import com.mlib.entity.EntityNoiseListener;
+import com.mlib.mixininterfaces.IMixinEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.GameEventTags;
@@ -21,15 +22,17 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.BiConsumer;
 
 @Mixin( Entity.class )
-public abstract class MixinEntity {
+public abstract class MixinEntity implements IMixinEntity {
 	@Shadow private Level level;
 	private VibrationSystem.User mlibVibrationUser = null;
 	private VibrationSystem.Data mlibVibrationData = null;
 	private DynamicGameEventListener< VibrationSystem.Listener > mlibVibrationListener = null;
+	private int mlibGlowTicks = 0;
 
 	@Inject(
 		at = @At( "TAIL" ),
@@ -58,6 +61,7 @@ public abstract class MixinEntity {
 		method = "tick ()V"
 	)
 	private void tick( CallbackInfo callback ) {
+		this.mlibGlowTicks = Math.max( this.mlibGlowTicks - 1, 0 );
 		if( this.mlibVibrationData != null ) {
 			VibrationSystem.Ticker.tick( this.level, this.mlibVibrationData, this.mlibVibrationUser );
 		}
@@ -71,6 +75,20 @@ public abstract class MixinEntity {
 		if( this.mlibVibrationListener != null && this.level instanceof ServerLevel level ) {
 			consumer.accept( this.mlibVibrationListener, level );
 		}
+	}
+
+	@Inject(
+		at = @At( "RETURN" ),
+		cancellable = true,
+		method = "isCurrentlyGlowing ()Z"
+	)
+	private void isCurrentlyGlowing( CallbackInfoReturnable< Boolean > callback ) {
+		callback.setReturnValue( callback.getReturnValue() || this.mlibGlowTicks > 0 );
+	}
+
+	@Override
+	public void addGlowTicks( int ticks ) {
+		this.mlibGlowTicks += ticks;
 	}
 
 	public static class Config implements VibrationSystem.User {

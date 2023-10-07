@@ -1,6 +1,7 @@
 package com.mlib;
 
 import com.mlib.command.EnumArgument;
+import com.mlib.entity.EntityHelper;
 import com.mlib.item.EquipmentSlots;
 import com.mlib.item.EnchantmentBuilder;
 import com.mlib.modhelper.ModHelper;
@@ -49,6 +50,7 @@ public class MajruszLibrary {
 
 	// Network
 	public static final NetworkObject< TestCommand.Message > MESSAGE = HELPER.create( "message", TestCommand.Message.class );
+	public static final NetworkObject< EntityHelper.EntityGlow > ENTITY_GLOW = HELPER.create( "entity_glow", EntityHelper.EntityGlow.class );
 
 	private MajruszLibrary() {}
 }
