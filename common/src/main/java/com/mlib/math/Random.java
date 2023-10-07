@@ -27,12 +27,20 @@ public class Random {
 		return ( max - min ) * Random.nextFloat() + min;
 	}
 
+	public static float nextFloat( Range< Float > range ) {
+		return Random.nextFloat( range.from, range.to );
+	}
+
 	public static double nextDouble() {
 		return Random.getThreadSafe().nextDouble();
 	}
 
 	public static double nextDouble( double min, double max ) {
 		return ( max - min ) * Random.nextDouble() + min;
+	}
+
+	public static double nextDouble( Range< Double > range ) {
+		return Random.nextDouble( range.from, range.to );
 	}
 
 	public static double nextGaussian() {
@@ -55,6 +63,10 @@ public class Random {
 		}
 
 		return min + Random.nextInt( max - min );
+	}
+
+	public static int nextInt( Range< Integer > range ) {
+		return Random.nextInt( range.from, range.to );
 	}
 
 	public static boolean nextBoolean() {
@@ -96,7 +108,7 @@ public class Random {
 	}
 
 	public static boolean check( double chance ) {
-		return nextDouble() <= chance;
+		return Random.nextDouble() <= chance;
 	}
 
 	/**
