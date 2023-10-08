@@ -13,11 +13,19 @@ import java.util.function.Supplier;
 
 record DataList< Type >( Getter< Type > getter, Setter< Type > setter, IReader< Type > reader ) implements ISerializable {
 	@Override
+	public void write( JsonElement element ) {
+		JsonArray array = element.getAsJsonArray();
+		for( Type value : this.getter.get() ) {
+			array.add( this.reader.writeJson( value ) );
+		}
+	}
+
+	@Override
 	public void read( JsonElement element ) {
-		JsonArray jsonArray = element.getAsJsonArray();
+		JsonArray array = element.getAsJsonArray();
 		List< Type > values = new ArrayList<>();
-		for( JsonElement subelement : jsonArray ) {
-			values.add( this.reader.read( subelement ) );
+		for( JsonElement subelement : array ) {
+			values.add( this.reader.readJson( subelement ) );
 		}
 
 		this.setter.accept( values );
@@ -25,12 +33,12 @@ record DataList< Type >( Getter< Type > getter, Setter< Type > setter, IReader< 
 
 	@Override
 	public void write( FriendlyByteBuf buffer ) {
-		buffer.writeCollection( this.getter.get(), this.reader::write );
+		buffer.writeCollection( this.getter.get(), this.reader::writeBuffer );
 	}
 
 	@Override
 	public void read( FriendlyByteBuf buffer ) {
-		this.setter.accept( buffer.readCollection( ArrayList::new, this.reader::read ) );
+		this.setter.accept( buffer.readCollection( ArrayList::new, this.reader::readBuffer ) );
 	}
 
 	@Override
@@ -38,7 +46,7 @@ record DataList< Type >( Getter< Type > getter, Setter< Type > setter, IReader< 
 		ListTag listTag = ( ListTag )tag;
 		List< Type > values = this.getter.get();
 		for( Type value : values ) {
-			listTag.add( this.reader.write( value ) );
+			listTag.add( this.reader.writeTag( value ) );
 		}
 	}
 
@@ -47,7 +55,7 @@ record DataList< Type >( Getter< Type > getter, Setter< Type > setter, IReader< 
 		ListTag listTag = ( ListTag )tag;
 		List< Type > values = new ArrayList<>();
 		for( Tag subtag : listTag ) {
-			values.add( this.reader.read( subtag ) );
+			values.add( this.reader.readTag( subtag ) );
 		}
 
 		this.setter.accept( values );

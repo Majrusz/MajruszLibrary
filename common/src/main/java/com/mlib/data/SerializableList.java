@@ -1,5 +1,6 @@
 package com.mlib.data;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.ListTag;
@@ -25,6 +26,13 @@ public abstract class SerializableList implements ISerializable {
 	}
 
 	@Override
+	public void write( JsonElement element ) {
+		JsonElement subelement = SerializableHelper.getWriteSubelement( element, this.key, JsonArray::new );
+
+		this.serializable.write( subelement );
+	}
+
+	@Override
 	public void read( JsonElement element ) {
 		JsonElement subelement = SerializableHelper.getReadSubelement( element, this.key );
 		if( subelement == null ) {
@@ -47,9 +55,6 @@ public abstract class SerializableList implements ISerializable {
 	@Override
 	public void write( Tag tag ) {
 		Tag subtag = SerializableHelper.getWriteSubtag( tag, this.key, ListTag::new );
-		if( subtag == null ) {
-			return;
-		}
 
 		this.serializable.write( subtag );
 	}

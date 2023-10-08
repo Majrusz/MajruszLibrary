@@ -6,6 +6,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
 public interface ISerializable {
+	void write( JsonElement element );
+
 	void read( JsonElement element );
 
 	void write( FriendlyByteBuf buffer );

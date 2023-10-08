@@ -1,34 +1,40 @@
 package com.mlib.data;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 
 abstract class ReaderStringCustom< Type > implements IReader< Type > {
 	@Override
-	public Type read( JsonElement element ) {
-		return convert( element.getAsString() );
+	public JsonElement writeJson( Type value ) {
+		return new JsonPrimitive( this.convert( value ) );
 	}
 
 	@Override
-	public void write( FriendlyByteBuf buffer, Type value ) {
-		buffer.writeUtf( convert( value ) );
+	public Type readJson( JsonElement element ) {
+		return this.convert( element.getAsString() );
 	}
 
 	@Override
-	public Type read( FriendlyByteBuf buffer ) {
-		return convert( buffer.readUtf() );
+	public void writeBuffer( FriendlyByteBuf buffer, Type value ) {
+		buffer.writeUtf( this.convert( value ) );
 	}
 
 	@Override
-	public Tag write( Type value ) {
-		return StringTag.valueOf( convert( value ) );
+	public Type readBuffer( FriendlyByteBuf buffer ) {
+		return this.convert( buffer.readUtf() );
 	}
 
 	@Override
-	public Type read( Tag tag ) {
-		return convert( tag.getAsString() );
+	public Tag writeTag( Type value ) {
+		return StringTag.valueOf( this.convert( value ) );
+	}
+
+	@Override
+	public Type readTag( Tag tag ) {
+		return this.convert( tag.getAsString() );
 	}
 
 	public abstract Type convert( String value );

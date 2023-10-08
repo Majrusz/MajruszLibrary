@@ -1,6 +1,7 @@
 package com.mlib.data;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -22,6 +23,13 @@ public abstract class SerializableMap implements ISerializable {
 
 	public SerializableMap() {
 		this( null );
+	}
+
+	@Override
+	public void write( JsonElement element ) {
+		JsonElement subelement = SerializableHelper.getWriteSubelement( element, this.key, JsonObject::new );
+
+		this.serializable.write( subelement );
 	}
 
 	@Override
@@ -47,9 +55,6 @@ public abstract class SerializableMap implements ISerializable {
 	@Override
 	public void write( Tag tag ) {
 		Tag subtag = SerializableHelper.getWriteSubtag( tag, this.key, CompoundTag::new );
-		if( subtag == null ) {
-			return;
-		}
 
 		this.serializable.write( subtag );
 	}

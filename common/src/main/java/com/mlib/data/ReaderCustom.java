@@ -1,6 +1,7 @@
 package com.mlib.data;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,27 +16,32 @@ class ReaderCustom< Type extends ISerializable > implements IReader< Type > {
 	}
 
 	@Override
-	public Type read( JsonElement element ) {
+	public JsonElement writeJson( Type value ) {
+		return SerializableHelper.write( ()->value, new JsonObject() );
+	}
+
+	@Override
+	public Type readJson( JsonElement element ) {
 		return SerializableHelper.read( this.supplier, element );
 	}
 
 	@Override
-	public void write( FriendlyByteBuf buffer, Type value ) {
+	public void writeBuffer( FriendlyByteBuf buffer, Type value ) {
 		value.write( buffer );
 	}
 
 	@Override
-	public Type read( FriendlyByteBuf buffer ) {
+	public Type readBuffer( FriendlyByteBuf buffer ) {
 		return SerializableHelper.read( this.supplier, buffer );
 	}
 
 	@Override
-	public Tag write( Type value ) {
+	public Tag writeTag( Type value ) {
 		return SerializableHelper.write( ()->value, new CompoundTag() );
 	}
 
 	@Override
-	public Type read( Tag tag ) {
+	public Type readTag( Tag tag ) {
 		return SerializableHelper.read( this.supplier, tag );
 	}
 }

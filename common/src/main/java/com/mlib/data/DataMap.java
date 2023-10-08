@@ -13,11 +13,20 @@ import java.util.function.Supplier;
 
 record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< Type > reader ) implements ISerializable {
 	@Override
+	public void write( JsonElement element ) {
+		JsonObject object = element.getAsJsonObject();
+		Map< String, Type > values = this.getter.get();
+		for( String key : values.keySet() ) {
+			object.add( key, this.reader.writeJson( values.get( key ) ) );
+		}
+	}
+
+	@Override
 	public void read( JsonElement element ) {
-		JsonObject jsonObject = element.getAsJsonObject();
+		JsonObject object = element.getAsJsonObject();
 		Map< String, Type > values = new HashMap<>();
-		for( String key : jsonObject.keySet() ) {
-			values.put( key, this.reader.read( jsonObject.get( key ) ) );
+		for( String key : object.keySet() ) {
+			values.put( key, this.reader.readJson( object.get( key ) ) );
 		}
 
 		this.setter.accept( values );
@@ -29,7 +38,7 @@ record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< T
 		buffer.writeVarInt( values.size() );
 		for( String key : values.keySet() ) {
 			buffer.writeUtf( key );
-			this.reader.write( buffer, values.get( key ) );
+			this.reader.writeBuffer( buffer, values.get( key ) );
 		}
 	}
 
@@ -39,7 +48,7 @@ record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< T
 		int size = buffer.readVarInt();
 		for( int idx = 0; idx < size; ++idx ) {
 			String key = buffer.readUtf();
-			values.put( key, this.reader.read( buffer ) );
+			values.put( key, this.reader.readBuffer( buffer ) );
 		}
 
 		this.setter.accept( values );
@@ -50,7 +59,7 @@ record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< T
 		CompoundTag compoundTag = ( CompoundTag )tag;
 		Map< String, Type > values = this.getter.get();
 		for( String key : values.keySet() ) {
-			compoundTag.put( key, this.reader.write( values.get( key ) ) );
+			compoundTag.put( key, this.reader.writeTag( values.get( key ) ) );
 		}
 	}
 
@@ -59,7 +68,7 @@ record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< T
 		CompoundTag compoundTag = ( CompoundTag )tag;
 		Map< String, Type > values = new HashMap<>();
 		for( String key : compoundTag.getAllKeys() ) {
-			values.put( key, this.reader.read( compoundTag.get( key ) ) );
+			values.put( key, this.reader.readTag( compoundTag.get( key ) ) );
 		}
 
 		this.setter.accept( values );

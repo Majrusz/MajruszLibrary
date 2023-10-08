@@ -11,21 +11,31 @@ import java.util.function.Supplier;
 
 record DataObject< Type >( Supplier< Type > getter, Consumer< Type > setter, IReader< Type > reader, String key ) implements ISerializable {
 	@Override
+	public void write( JsonElement element ) {
+		if( this.getter.get() == null ) {
+			return;
+		}
+
+		JsonObject object = element.getAsJsonObject();
+		object.add( this.key, this.reader.writeJson( this.getter.get() ) );
+	}
+
+	@Override
 	public void read( JsonElement element ) {
 		JsonObject object = element.getAsJsonObject();
 		if( object.has( this.key ) ) {
-			this.setter.accept( this.reader.read( object.get( this.key ) ) );
+			this.setter.accept( this.reader.readJson( object.get( this.key ) ) );
 		}
 	}
 
 	@Override
 	public void write( FriendlyByteBuf buffer ) {
-		this.reader.write( buffer, this.getter.get() );
+		this.reader.writeBuffer( buffer, this.getter.get() );
 	}
 
 	@Override
 	public void read( FriendlyByteBuf buffer ) {
-		this.setter.accept( this.reader.read( buffer ) );
+		this.setter.accept( this.reader.readBuffer( buffer ) );
 	}
 
 	@Override
@@ -35,14 +45,14 @@ record DataObject< Type >( Supplier< Type > getter, Consumer< Type > setter, IRe
 		}
 
 		CompoundTag compoundTag = ( CompoundTag )tag;
-		compoundTag.put( this.key, this.reader.write( this.getter.get() ) );
+		compoundTag.put( this.key, this.reader.writeTag( this.getter.get() ) );
 	}
 
 	@Override
 	public void read( Tag tag ) {
 		CompoundTag compoundTag = ( CompoundTag )tag;
 		if( compoundTag.contains( this.key ) ) {
-			this.setter.accept( this.reader.read( compoundTag.get( this.key ) ) );
+			this.setter.accept( this.reader.readTag( compoundTag.get( this.key ) ) );
 		}
 	}
 

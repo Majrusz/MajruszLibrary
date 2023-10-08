@@ -5,13 +5,15 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 
 interface IReader< Type > {
-	Type read( JsonElement element );
+	JsonElement writeJson( Type value );
 
-	void write( FriendlyByteBuf buffer, Type value );
+	Type readJson( JsonElement element );
 
-	Type read( FriendlyByteBuf buffer );
+	void writeBuffer( FriendlyByteBuf buffer, Type value );
 
-	Tag write( Type value );
+	Type readBuffer( FriendlyByteBuf buffer );
 
-	Type read( Tag tag );
+	Tag writeTag( Type value );
+
+	Type readTag( Tag tag );
 }

@@ -31,6 +31,13 @@ public class SerializableHelper {
 		return instance;
 	}
 
+	public static < Type extends ISerializable > JsonElement write( Supplier< Type > supplier, JsonElement element ) {
+		Type instance = supplier.get();
+		instance.write( element );
+
+		return element;
+	}
+
 	public static < Type extends ISerializable > FriendlyByteBuf write( Supplier< Type > supplier, FriendlyByteBuf buffer ) {
 		Type instance = supplier.get();
 		instance.write( buffer );
@@ -50,6 +57,17 @@ public class SerializableHelper {
 		instance.read( tag );
 		consumer.accept( instance );
 		instance.write( tag );
+	}
+
+	static JsonElement getWriteSubelement( JsonElement element, String key, Supplier< JsonElement > newSubelement ) {
+		if( key == null ) {
+			return element;
+		} else {
+			JsonElement subelement = newSubelement.get();
+			element.getAsJsonObject().add( key, subelement );
+
+			return subelement;
+		}
 	}
 
 	static JsonElement getReadSubelement( JsonElement element, String key ) {
