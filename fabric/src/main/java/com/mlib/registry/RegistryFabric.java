@@ -1,5 +1,6 @@
 package com.mlib.registry;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -7,6 +8,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
+
+import java.nio.file.Path;
 
 public class RegistryFabric implements IRegistryPlatform {
 	@Override
@@ -53,5 +56,10 @@ public class RegistryFabric implements IRegistryPlatform {
 	@Override
 	public Enchantment getEnchantment( ResourceLocation id ) {
 		return BuiltInRegistries.ENCHANTMENT.get( id );
+	}
+
+	@Override
+	public Path getConfigPath() {
+		return FabricLoader.getInstance().getConfigDir();
 	}
 }

@@ -6,6 +6,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 
+import java.nio.file.Path;
+
 public interface IRegistryPlatform {
 	< Type > void register( RegistryGroup< Type > group );
 
@@ -24,4 +26,6 @@ public interface IRegistryPlatform {
 	EntityType< ? > getEntityType( ResourceLocation id );
 
 	Enchantment getEnchantment( ResourceLocation id );
+
+	Path getConfigPath();
 }

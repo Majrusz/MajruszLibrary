@@ -6,8 +6,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.nio.file.Path;
 
 public class RegistryNeoForge implements IRegistryPlatform {
 	DeferredRegister< ? > lastDeferredRegister = null;
@@ -57,5 +60,10 @@ public class RegistryNeoForge implements IRegistryPlatform {
 	@Override
 	public Enchantment getEnchantment( ResourceLocation id ) {
 		return ForgeRegistries.ENCHANTMENTS.getValue( id );
+	}
+
+	@Override
+	public Path getConfigPath() {
+		return FMLPaths.CONFIGDIR.get();
 	}
 }

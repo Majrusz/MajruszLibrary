@@ -7,6 +7,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 
+import java.nio.file.Path;
+
 public class Registries {
 	final static IRegistryPlatform PLATFORM = Services.load( IRegistryPlatform.class );
 
@@ -36,5 +38,9 @@ public class Registries {
 
 	public static Enchantment getEnchantment( ResourceLocation id ) {
 		return PLATFORM.getEnchantment( id );
+	}
+
+	public static Path getConfigPath() {
+		return PLATFORM.getConfigPath();
 	}
 }
