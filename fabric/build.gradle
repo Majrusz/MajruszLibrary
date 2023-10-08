@@ -39,6 +39,9 @@ jar {
 }
 
 loom {
+    mixin {
+        defaultRefmapName = "${mod_id}.refmap.json"
+    }
     runs {
         client {
             client()

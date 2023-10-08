@@ -23,7 +23,8 @@ minecraft {
         configureEach {
             property 'forge.logging.console.level', 'debug'
             property 'fml.earlyprogresswindow', 'false'
-            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             singleInstance true
             ideaModule "${rootProject.name}.${project.name}.main"
             args "-mixin.config=${mod_id}-common.mixins.json"
