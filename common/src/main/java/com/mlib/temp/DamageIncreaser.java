@@ -6,26 +6,22 @@ import com.mlib.contexts.OnEntityPreDamaged;
 import com.mlib.contexts.OnItemAttributeTooltip;
 import com.mlib.contexts.OnItemTooltip;
 import com.mlib.contexts.base.Condition;
-import com.mlib.data.JsonListener;
+import com.mlib.data.SerializableList;
 import com.mlib.data.SerializableStructure;
 import com.mlib.registry.Registries;
 import com.mlib.text.TextHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AutoInstance
 public class DamageIncreaser {
-	final JsonListener.Holder< Config > config;
+	private Bonuses bonuses = new Bonuses();
 
 	public DamageIncreaser() {
-		this.config = JsonListener.add( "config", MajruszLibrary.HELPER.getLocation( "config" ), Config.class, Config::new );
-
 		OnEntityPreDamaged.listen( this::increaseDamage )
 			.addCondition( Condition.predicate( OnEntityPreDamaged::isDirect ) )
 			.addCondition( Condition.predicate( data->data.attacker != null ) )
@@ -37,6 +33,8 @@ public class DamageIncreaser {
 		OnItemTooltip.listen( this::addTooltip )
 			.addCondition( Condition.predicate( data->this.get( data.itemStack ) != null ) )
 			.addCondition( Condition.predicate( OnItemTooltip::isAdvanced ) );
+
+		MajruszLibrary.CONFIG.defineCustom( "damage_bonuses", ()->this.bonuses, x->this.bonuses = x, Bonuses::new );
 	}
 
 	private void increaseDamage( OnEntityPreDamaged data ) {
@@ -52,31 +50,41 @@ public class DamageIncreaser {
 		data.components.add( TextHelper.literal( "THE ULTIMATE WEAPON" ) );
 	}
 
-	private @Nullable DamageBonus get( ItemStack itemStack ) {
-		for( DamageBonus damageBonus : this.config.get().damageBonuses ) {
-			if( damageBonus.id.equals( Registries.get( itemStack.getItem() ) ) ) {
-				return damageBonus;
+	private @Nullable DamageIncreaser.Bonus get( ItemStack itemStack ) {
+		for( Bonus bonus : this.bonuses.bonuses ) {
+			if( bonus.id.equals( Registries.get( itemStack.getItem() ) ) ) {
+				return bonus;
 			}
 		}
 
 		return null;
 	}
 
-	private static class Config extends SerializableStructure {
-		List< DamageBonus > damageBonuses = new ArrayList<>();
+	private static class Bonuses extends SerializableList {
+		List< Bonus > bonuses = List.of(
+			new Bonus( "minecraft:apple", 4 ),
+			new Bonus( "minecraft:dried_kelp", 69 )
+		);
 
-		public Config() {
-			this.defineCustom( "damage_bonuses", ()->this.damageBonuses, x->this.damageBonuses = x, DamageBonus::new );
+		public Bonuses() {
+			this.defineCustom( ()->this.bonuses, x->this.bonuses = x, Bonus::new );
 		}
 	}
 
-	private static class DamageBonus extends SerializableStructure {
+	private static class Bonus extends SerializableStructure {
 		ResourceLocation id;
 		int value;
 
-		public DamageBonus() {
+		public Bonus() {
 			this.defineLocation( "id", ()->this.id, x->this.id = x );
 			this.defineInteger( "damage_bonus", ()->this.value, x->this.value = x );
+		}
+
+		public Bonus( String id, int value ) {
+			this();
+
+			this.id = new ResourceLocation( id );
+			this.value = value;
 		}
 	}
 }

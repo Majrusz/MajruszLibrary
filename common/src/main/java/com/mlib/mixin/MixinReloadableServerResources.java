@@ -1,28 +1,31 @@
 package com.mlib.mixin;
 
-import com.mlib.contexts.OnResourceListenersGet;
+import com.mlib.contexts.OnResourcesReloaded;
 import com.mlib.contexts.base.Contexts;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.ReloadableServerResources;
-import net.minecraft.server.packs.resources.PreparableReloadListener;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.flag.FeatureFlagSet;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @Mixin( ReloadableServerResources.class )
 public abstract class MixinReloadableServerResources {
 	@Inject(
 		at = @At( "RETURN" ),
-		cancellable = true,
-		method = "listeners ()Ljava/util/List;"
+		method = "loadResources (Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/core/RegistryAccess$Frozen;Lnet/minecraft/world/flag/FeatureFlagSet;Lnet/minecraft/commands/Commands$CommandSelection;ILjava/util/concurrent/Executor;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;"
 	)
-	private void listeners( CallbackInfoReturnable< List< PreparableReloadListener > > callback ) {
-		List< PreparableReloadListener > listeners = new ArrayList<>( callback.getReturnValue() );
-		listeners.addAll( Contexts.dispatch( new OnResourceListenersGet() ).listeners );
-
-		callback.setReturnValue( listeners );
+	private static void loadResources( ResourceManager $$0, RegistryAccess.Frozen $$1, FeatureFlagSet $$2, Commands.CommandSelection $$3, int $$4, Executor $$5,
+		Executor $$6, CallbackInfoReturnable< CompletableFuture< ReloadableServerResources > > callback
+	) {
+		callback.getReturnValue().whenComplete( ( resources, exception )->{
+			Contexts.dispatch( new OnResourcesReloaded() );
+		} );
 	}
 }

@@ -69,6 +69,16 @@ public abstract class SerializableList implements ISerializable {
 		this.serializable.read( subtag );
 	}
 
+	@Override
+	public JsonElement getDefaultJson() {
+		return new JsonArray();
+	}
+
+	@Override
+	public Tag getDefaultTag() {
+		return new ListTag();
+	}
+
 	public void defineBlockPos( DataList.Getter< BlockPos > getter, DataList.Setter< BlockPos > setter ) {
 		this.serializable = new DataList<>( getter, setter, new ReaderBlockPos() );
 	}

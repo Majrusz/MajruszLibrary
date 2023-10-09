@@ -1,6 +1,8 @@
 package com.mlib.modhelper;
 
 import com.mlib.annotation.AutoInstance;
+import com.mlib.contexts.OnResourcesReloaded;
+import com.mlib.data.Config;
 import com.mlib.data.ISerializable;
 import com.mlib.network.NetworkHandler;
 import com.mlib.network.NetworkObject;
@@ -39,6 +41,15 @@ public class ModHelper {
 
 	public < Type extends ISerializable > NetworkObject< Type > create( String id, Class< Type > clazz ) {
 		return this.networkHandler.create( id, clazz );
+	}
+
+	public Config createConfig( String name ) {
+		Config config = Config.create( name );
+
+		this.onRegister( config::reload );
+		OnResourcesReloaded.listen( data->config.reload() );
+
+		return config;
 	}
 
 	public void triggerAchievement( ServerPlayer player, String id ) {

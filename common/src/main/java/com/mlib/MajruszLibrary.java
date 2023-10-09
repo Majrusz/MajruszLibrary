@@ -1,9 +1,10 @@
 package com.mlib;
 
 import com.mlib.command.EnumArgument;
+import com.mlib.data.Config;
 import com.mlib.entity.EntityHelper;
-import com.mlib.item.EquipmentSlots;
 import com.mlib.item.EnchantmentBuilder;
+import com.mlib.item.EquipmentSlots;
 import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
 import com.mlib.platform.ISidePlatform;
@@ -24,6 +25,9 @@ public class MajruszLibrary {
 	public static final String MOD_ID = "mlib";
 	public static final ModHelper HELPER = ModHelper.create( MOD_ID );
 	public static final ISidePlatform SIDE = Services.load( ISidePlatform.class );
+
+	// Configs
+	public static final Config CONFIG = HELPER.createConfig( "majrusz-library-common" );
 
 	// Registry Groups
 	public static final RegistryGroup< ArgumentTypeInfo< ?, ? > > ARGUMENT_TYPES = HELPER.create( BuiltInRegistries.COMMAND_ARGUMENT_TYPE );
