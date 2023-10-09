@@ -12,19 +12,13 @@ public class NetworkObject< Type extends ISerializable > {
 	final NetworkHandler networkHandler;
 	final ResourceLocation id;
 	final Class< Type > clazz;
-	final Supplier< Type > newInstance;
+	final Supplier< Type > instance;
 
-	public NetworkObject( NetworkHandler networkHandler, ResourceLocation id, Class< Type > clazz ) {
+	public NetworkObject( NetworkHandler networkHandler, ResourceLocation id, Class< Type > clazz, Supplier< Type > instance ) {
 		this.networkHandler = networkHandler;
 		this.id = id;
 		this.clazz = clazz;
-		this.newInstance = ()->{
-			try {
-				return clazz.getConstructor().newInstance();
-			} catch( Exception exception ) {
-				throw new IllegalArgumentException();
-			}
-		};
+		this.instance = instance;
 	}
 
 	public void sendToClients( Type message ) {

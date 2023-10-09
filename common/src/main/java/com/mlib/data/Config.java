@@ -2,24 +2,20 @@ package com.mlib.data;
 
 import com.google.gson.*;
 import com.mlib.MajruszLibrary;
+import com.mlib.contexts.OnPlayerLoggedIn;
+import com.mlib.contexts.OnResourcesReloaded;
+import com.mlib.modhelper.ModHelper;
+import com.mlib.network.NetworkObject;
 import com.mlib.registry.Registries;
 import net.minecraft.world.level.storage.loot.Deserializers;
 
 import java.io.*;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class Config extends SerializableStructure {
 	private final File file;
 	private final Gson gson;
-
-	public static Config create( String name ) {
-		return new Config( name );
-	}
-
-	public void reload() {
-		this.load();
-		this.save();
-	}
 
 	public void save() {
 		try {
@@ -51,6 +47,61 @@ public class Config extends SerializableStructure {
 			.registerTypeAdapter( Config.class, new TypeAdapter<>( ()->this ) )
 			.setPrettyPrinting()
 			.create();
+	}
+
+	public static class Builder {
+		private final ModHelper helper;
+		private String name;
+		private boolean isAutoSyncEnabled;
+
+		public Builder( ModHelper helper ) {
+			this.helper = helper;
+		}
+
+		public Builder named( String name ) {
+			this.name = name;
+
+			return this;
+		}
+
+		public Builder autoSync() {
+			this.isAutoSyncEnabled = true;
+
+			return this;
+		}
+
+		public Config create() {
+			String name = this.name != null ? this.name : this.helper.getModId();
+			Config config = new Config( name );
+			NetworkObject< Config > network = this.isAutoSyncEnabled ? this.helper.create( name.replace( "-", "_" ), Config.class, ()->config ) : null;
+
+			this.helper.onRegister( ()->{
+				config.load();
+				config.save();
+			} );
+
+			OnResourcesReloaded.listen( data->{
+				if( MajruszLibrary.SIDE.isAuthority() ) {
+					config.load();
+					config.save();
+				}
+				if( MajruszLibrary.SIDE.isDedicatedServer() && network != null ) {
+					network.sendToClients( config );
+				}
+			} );
+
+			OnPlayerLoggedIn.listen( data->{
+				if( MajruszLibrary.SIDE.isAuthority() ) {
+					config.load();
+					config.save();
+				}
+				if( MajruszLibrary.SIDE.isDedicatedServer() && network != null ) {
+					network.sendToClients( List.of( data.player ), config );
+				}
+			} );
+
+			return config;
+		}
 	}
 
 	private static class TypeAdapter< Type extends ISerializable > implements JsonDeserializer< Type >, JsonSerializer< Type > {

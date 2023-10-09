@@ -41,7 +41,7 @@ public class NetworkForge implements INetworkPlatform {
 			this.idx++,
 			object.clazz,
 			ISerializable::write,
-			( buffer )->SerializableHelper.read( object.newInstance, buffer ),
+			( buffer )->SerializableHelper.read( object.instance, buffer ),
 			( serializable, contextSupplier )->{
 				NetworkEvent.Context context = contextSupplier.get();
 				context.enqueueWork( ()->{
@@ -49,7 +49,7 @@ public class NetworkForge implements INetworkPlatform {
 					if( sender != null ) {
 						serializable.onServer( sender );
 					} else {
-						MajruszLibrary.SIDE.runOnClient( ()->serializable::onClient );
+						serializable.onClient();
 					}
 				} );
 				context.setPacketHandled( true );

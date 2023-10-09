@@ -40,7 +40,7 @@ public class NetworkFabric implements INetworkPlatform {
 	private void registerOnServer( List< NetworkObject< ? > > objects ) {
 		objects.forEach( object->{
 			ServerPlayNetworking.registerGlobalReceiver( object.id, ( MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buffer, PacketSender responseSender )->{
-				ISerializable serializable = SerializableHelper.read( object.newInstance, buffer );
+				ISerializable serializable = SerializableHelper.read( object.instance, buffer );
 				server.execute( ()->serializable.onServer( player ) );
 			} );
 		} );
@@ -50,7 +50,7 @@ public class NetworkFabric implements INetworkPlatform {
 	private void registerOnClient( List< NetworkObject< ? > > objects ) {
 		objects.forEach( object->{
 			ClientPlayNetworking.registerGlobalReceiver( object.id, ( Minecraft client, ClientPacketListener handler, FriendlyByteBuf buffer, PacketSender responseSender )->{
-				ISerializable serializable = SerializableHelper.read( object.newInstance, buffer );
+				ISerializable serializable = SerializableHelper.read( object.instance, buffer );
 				client.execute( serializable::onClient );
 			} );
 		} );

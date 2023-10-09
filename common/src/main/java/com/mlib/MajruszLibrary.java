@@ -27,7 +27,7 @@ public class MajruszLibrary {
 	public static final ISidePlatform SIDE = Services.load( ISidePlatform.class );
 
 	// Configs
-	public static final Config CONFIG = HELPER.createConfig( "majrusz-library-common" );
+	public static final Config CONFIG = HELPER.config().named( "majrusz-library" ).autoSync().create();
 
 	// Registry Groups
 	public static final RegistryGroup< ArgumentTypeInfo< ?, ? > > ARGUMENT_TYPES = HELPER.create( BuiltInRegistries.COMMAND_ARGUMENT_TYPE );

@@ -1,7 +1,6 @@
 package com.mlib.modhelper;
 
 import com.mlib.annotation.AutoInstance;
-import com.mlib.contexts.OnResourcesReloaded;
 import com.mlib.data.Config;
 import com.mlib.data.ISerializable;
 import com.mlib.network.NetworkHandler;
@@ -16,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ModHelper {
 	final List< Runnable > registerCallbacks = new ArrayList<>();
@@ -39,17 +39,22 @@ public class ModHelper {
 		return this.registryHandler.create( registry );
 	}
 
-	public < Type extends ISerializable > NetworkObject< Type > create( String id, Class< Type > clazz ) {
-		return this.networkHandler.create( id, clazz );
+	public < Type extends ISerializable > NetworkObject< Type > create( String id, Class< Type > clazz, Supplier< Type > instance ) {
+		return this.networkHandler.create( id, clazz, instance );
 	}
 
-	public Config createConfig( String name ) {
-		Config config = Config.create( name );
+	public < Type extends ISerializable > NetworkObject< Type > create( String id, Class< Type > clazz ) {
+		return this.create( id, clazz, ()->{
+			try {
+				return clazz.getConstructor().newInstance();
+			} catch( Exception exception ) {
+				throw new IllegalArgumentException();
+			}
+		} );
+	}
 
-		this.onRegister( config::reload );
-		OnResourcesReloaded.listen( data->config.reload() );
-
-		return config;
+	public Config.Builder config() {
+		return new Config.Builder( this );
 	}
 
 	public void triggerAchievement( ServerPlayer player, String id ) {
@@ -84,7 +89,7 @@ public class ModHelper {
 		return this.getLocation( id ).toString();
 	}
 
-	void onRegister( Runnable callback ) {
+	public void onRegister( Runnable callback ) {
 		this.registerCallbacks.add( callback );
 	}
 
