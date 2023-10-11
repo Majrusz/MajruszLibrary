@@ -2,6 +2,7 @@ package com.mlib.entity;
 
 import com.mlib.MajruszLibrary;
 import com.mlib.data.SerializableStructure;
+import com.mlib.level.LevelHelper;
 import com.mlib.math.AnyPos;
 import com.mlib.math.AnyRot;
 import com.mlib.mixin.IMixinServerLevel;
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -67,8 +67,8 @@ public class EntityHelper {
 		return ( ( IMixinServerLevel )level ).getEntityManager().isLoaded( uuid );
 	}
 
-	public static boolean isMobGriefingEnabled( Level level ) {
-		return level.getGameRules().getBoolean( GameRules.RULE_MOBGRIEFING );
+	public static boolean isOutside( Entity entity ) {
+		return entity.level().canSeeSky( entity.blockPosition() );
 	}
 
 	public static double getHealthRatio( LivingEntity entity ) {
@@ -106,7 +106,7 @@ public class EntityHelper {
 	}
 
 	public static boolean destroyBlocks( Entity entity, AABB aabb, BiPredicate< BlockPos, BlockState > predicate ) {
-		if( !EntityHelper.isMobGriefingEnabled( entity.level() ) ) {
+		if( !LevelHelper.isMobGriefingEnabled( entity.level() ) ) {
 			return false;
 		}
 
