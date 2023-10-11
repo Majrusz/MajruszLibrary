@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.Level;
 
 public class ModSideFabric implements ISidePlatform {
 	public static MinecraftServer SERVER;
@@ -33,5 +34,11 @@ public class ModSideFabric implements ISidePlatform {
 	@Environment( EnvType.CLIENT )
 	public Minecraft getMinecraft() {
 		return Minecraft.getInstance();
+	}
+
+	@Override
+	@Environment( EnvType.CLIENT )
+	public Level getClientLevel() {
+		return this.getMinecraft().level;
 	}
 }

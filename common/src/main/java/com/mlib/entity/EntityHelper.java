@@ -192,10 +192,7 @@ public class EntityHelper {
 
 		@Override
 		public void onClient() {
-			Level level = MajruszLibrary.SIDE.getMinecraft().level;
-			if( level != null ) {
-				( ( IMixinEntity )level.getEntity( this.entityId ) ).addGlowTicks( this.ticks );
-			}
+			( ( IMixinEntity )( MajruszLibrary.SIDE.getClientLevel().getEntity( this.entityId ) ) ).addGlowTicks( this.ticks );
 		}
 	}
 }

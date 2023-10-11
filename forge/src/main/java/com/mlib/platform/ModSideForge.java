@@ -2,6 +2,7 @@ package com.mlib.platform;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -32,5 +33,11 @@ public class ModSideForge implements ISidePlatform {
 	@OnlyIn( Dist.CLIENT )
 	public Minecraft getMinecraft() {
 		return Minecraft.getInstance();
+	}
+
+	@Override
+	@OnlyIn( Dist.CLIENT )
+	public Level getClientLevel() {
+		return this.getMinecraft().level;
 	}
 }

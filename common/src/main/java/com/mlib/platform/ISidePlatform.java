@@ -2,6 +2,7 @@ package com.mlib.platform;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.level.Level;
 
 import java.util.function.Supplier;
 
@@ -38,4 +39,6 @@ public interface ISidePlatform {
 	MinecraftServer getServer();
 
 	Minecraft getMinecraft();
+
+	Level getClientLevel();
 }
