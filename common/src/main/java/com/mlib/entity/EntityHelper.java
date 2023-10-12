@@ -73,6 +73,10 @@ public class EntityHelper {
 		return entity.level().canSeeSky( entity.blockPosition() );
 	}
 
+	public static String getPlayerUUID( Player player ) {
+		return String.valueOf( player.getUUID() );
+	}
+
 	public static double getHealthRatio( LivingEntity entity ) {
 		return Mth.clamp( entity.getHealth() / entity.getMaxHealth(), 0.0, 1.0 );
 	}
