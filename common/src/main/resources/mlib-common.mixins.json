@@ -6,6 +6,7 @@
   "refmap": "mlib.refmap.json",
   "client": [
     "MixinGuiGraphics",
+    "MixinKeyboardHandler",
     "MixinMinecraft"
   ],
   "mixins": [
