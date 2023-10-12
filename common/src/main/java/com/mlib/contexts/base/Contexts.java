@@ -13,7 +13,9 @@ public class Contexts< DataType > {
 	public static < DataType > DataType dispatch( DataType data ) {
 		Class< DataType > clazz = ( Class< DataType > )data.getClass();
 		ProfilerHelper.profile( clazz.getName(), ()->{
-			Contexts.get( clazz ).forEach( context->context.accept( data ) );
+			for( Context< DataType > context : Contexts.get( clazz ).contexts ) {
+				context.accept( data );
+			}
 		} );
 
 		return data;
@@ -32,10 +34,6 @@ public class Contexts< DataType > {
 		this.contexts.add( context );
 
 		return context;
-	}
-
-	public void forEach( Consumer< Context< DataType > > consumer ) {
-		this.contexts.forEach( consumer );
 	}
 
 	private Contexts() {}

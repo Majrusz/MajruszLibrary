@@ -24,9 +24,13 @@ public class Context< DataType > {
 	}
 
 	public void accept( DataType data ) {
-		if( this.conditions.stream().allMatch( condition->condition.check( data ) ) ) {
-			this.consumer.accept( data );
+		for( Condition< DataType > condition : this.conditions ) {
+			if( !condition.check( data ) ) {
+				return;
+			}
 		}
+
+		this.consumer.accept( data );
 	}
 
 	public List< Condition< DataType > > getConditions() {
