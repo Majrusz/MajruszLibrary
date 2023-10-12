@@ -1,10 +1,9 @@
 package com.mlib.time;
 
-import com.mlib.MajruszLibrary;
 import com.mlib.annotation.AutoInstance;
 import com.mlib.contexts.OnClientTicked;
 import com.mlib.contexts.OnServerTicked;
-import net.minecraft.client.Minecraft;
+import com.mlib.platform.Platform;
 
 public class TimeHelper {
 	private static final int TICKS_IN_SECOND = 20;
@@ -45,7 +44,7 @@ public class TimeHelper {
 	}
 
 	public static float getPartialTicks() {
-		return MajruszLibrary.SIDE.get( ()->()->Minecraft.getInstance().getFrameTime(), ()->()->0.0f );
+		return Platform.get( ()->()->Platform.getMinecraft().getFrameTime(), ()->()->0.0f );
 	}
 
 	@AutoInstance

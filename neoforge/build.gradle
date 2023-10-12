@@ -15,6 +15,33 @@ repositories {
     maven { url 'https://www.cursemaven.com' }
 }
 
+def commonSrcDir = "${project.buildDir}/classes/generated/main"
+
+project(':common') {
+    task replaceNeoForgeAnnotations(type: Copy) {
+        from 'src/main/java'
+        into commonSrcDir
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        filter {
+            String line ->  line.replaceAll('com.mlib.annotation.Dist', 'net.minecraftforge.api.distmarker.Dist')
+                    .replaceAll('com.mlib.annotation.OnlyIn', 'net.minecraftforge.api.distmarker.OnlyIn')
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        dependsOn replaceNeoForgeAnnotations
+    }
+}
+
+task compileNeoForgeAnnotations(type: JavaCompile) {
+    classpath = sourceSets.main.compileClasspath
+    source = fileTree(commonSrcDir)
+    destinationDir = file("${project.buildDir}/classes/java/main")
+}
+
+compileJava.dependsOn compileNeoForgeAnnotations
+
 minecraft {
     mappings channel: 'official', version: minecraft_version
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -69,7 +96,6 @@ dependencies {
 tasks.withType(JavaCompile).configureEach {
     options.setEncoding('UTF-8')
     options.release.set(17)
-    source(project(':common').sourceSets.main.allSource)
 }
 
 jar {

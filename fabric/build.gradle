@@ -15,6 +15,35 @@ repositories {
     maven { url 'https://www.cursemaven.com' }
 }
 
+def commonSrcDir = "${project.buildDir}/classes/generated/main"
+
+project(':common') {
+    task replaceFabricAnnotations(type: Copy) {
+        from 'src/main/java'
+        into commonSrcDir
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        filter {
+            String line ->  line.replaceAll('@OnlyIn', '@Environment')
+                    .replaceAll('Dist.CLIENT', 'EnvType.CLIENT')
+                    .replaceAll('com.mlib.annotation.Dist', 'net.fabricmc.api.EnvType')
+                    .replaceAll('com.mlib.annotation.OnlyIn', 'net.fabricmc.api.Environment')
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        dependsOn replaceFabricAnnotations
+    }
+}
+
+task compileFabricAnnotations(type: JavaCompile) {
+    classpath = sourceSets.main.compileClasspath
+    source = fileTree(commonSrcDir)
+    destinationDir = file("${project.buildDir}/classes/java/main")
+}
+
+compileJava.dependsOn compileFabricAnnotations
+
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.officialMojangMappings()
@@ -62,7 +91,6 @@ loom {
 tasks.withType(JavaCompile).configureEach {
     options.setEncoding('UTF-8')
     options.release.set(17)
-    source(project(':common').sourceSets.main.allSource)
 }
 
 java {

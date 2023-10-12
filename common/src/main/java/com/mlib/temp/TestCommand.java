@@ -2,6 +2,8 @@ package com.mlib.temp;
 
 import com.mlib.MajruszLibrary;
 import com.mlib.annotation.AutoInstance;
+import com.mlib.annotation.Dist;
+import com.mlib.annotation.OnlyIn;
 import com.mlib.command.Command;
 import com.mlib.command.CommandData;
 import com.mlib.command.IParameter;
@@ -132,6 +134,7 @@ public class TestCommand {
 		}
 
 		@Override
+		@OnlyIn( Dist.CLIENT )
 		public void onClient() {
 			MajruszLibrary.HELPER.log( "[CLIENT] %d", this.value );
 		}

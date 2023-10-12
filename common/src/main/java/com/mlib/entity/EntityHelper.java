@@ -1,12 +1,14 @@
 package com.mlib.entity;
 
-import com.mlib.MajruszLibrary;
+import com.mlib.annotation.Dist;
+import com.mlib.annotation.OnlyIn;
 import com.mlib.data.SerializableStructure;
 import com.mlib.level.LevelHelper;
 import com.mlib.math.AnyPos;
 import com.mlib.math.AnyRot;
 import com.mlib.mixin.IMixinServerLevel;
 import com.mlib.mixininterfaces.IMixinEntity;
+import com.mlib.platform.Platform;
 import com.mlib.time.TimeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -191,8 +193,9 @@ public class EntityHelper {
 		}
 
 		@Override
+		@OnlyIn( Dist.CLIENT )
 		public void onClient() {
-			( ( IMixinEntity )( MajruszLibrary.SIDE.getClientLevel().getEntity( this.entityId ) ) ).addGlowTicks( this.ticks );
+			( ( IMixinEntity )( Platform.getLocalLevel().getEntity( this.entityId ) ) ).addGlowTicks( this.ticks );
 		}
 	}
 }

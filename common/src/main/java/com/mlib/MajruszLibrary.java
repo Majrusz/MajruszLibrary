@@ -7,8 +7,6 @@ import com.mlib.item.EnchantmentBuilder;
 import com.mlib.item.EquipmentSlots;
 import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
-import com.mlib.platform.ISidePlatform;
-import com.mlib.platform.Services;
 import com.mlib.registry.RegistryGroup;
 import com.mlib.registry.RegistryObject;
 import com.mlib.temp.TestCommand;
@@ -24,7 +22,6 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 public class MajruszLibrary {
 	public static final String MOD_ID = "mlib";
 	public static final ModHelper HELPER = ModHelper.create( MOD_ID );
-	public static final ISidePlatform SIDE = Services.load( ISidePlatform.class );
 
 	// Configs
 	public static final Config CONFIG = HELPER.config().named( "majrusz-library" ).autoSync().create();

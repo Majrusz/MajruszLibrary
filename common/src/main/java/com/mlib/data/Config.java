@@ -6,6 +6,7 @@ import com.mlib.contexts.OnPlayerLoggedIn;
 import com.mlib.contexts.OnResourcesReloaded;
 import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
+import com.mlib.platform.Platform;
 import com.mlib.registry.Registries;
 import net.minecraft.world.level.storage.loot.Deserializers;
 
@@ -81,21 +82,21 @@ public class Config extends SerializableStructure {
 			} );
 
 			OnResourcesReloaded.listen( data->{
-				if( MajruszLibrary.SIDE.isAuthority() ) {
+				if( Platform.isAuthority() ) {
 					config.load();
 					config.save();
 				}
-				if( MajruszLibrary.SIDE.isDedicatedServer() && network != null ) {
+				if( Platform.isDedicatedServer() && network != null ) {
 					network.sendToClients( config );
 				}
 			} );
 
 			OnPlayerLoggedIn.listen( data->{
-				if( MajruszLibrary.SIDE.isAuthority() ) {
+				if( Platform.isAuthority() ) {
 					config.load();
 					config.save();
 				}
-				if( MajruszLibrary.SIDE.isDedicatedServer() && network != null ) {
+				if( Platform.isDedicatedServer() && network != null ) {
 					network.sendToClients( List.of( data.player ), config );
 				}
 			} );

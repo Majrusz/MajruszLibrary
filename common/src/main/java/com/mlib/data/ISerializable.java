@@ -2,6 +2,8 @@ package com.mlib.data;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mlib.annotation.Dist;
+import com.mlib.annotation.OnlyIn;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -30,5 +32,6 @@ public interface ISerializable {
 
 	default void onServer( ServerPlayer player ) {}
 
+	@OnlyIn( Dist.CLIENT )
 	default void onClient() {}
 }

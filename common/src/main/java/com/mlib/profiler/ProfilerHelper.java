@@ -1,6 +1,6 @@
 package com.mlib.profiler;
 
-import com.mlib.MajruszLibrary;
+import com.mlib.platform.Platform;
 import net.minecraft.util.profiling.InactiveProfiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 
@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 
 public class ProfilerHelper {
 	public static ProfilerFiller getProfiler() {
-		return MajruszLibrary.SIDE.get(
-			()->()->MajruszLibrary.SIDE.getMinecraft().getProfiler(),
-			()->()->MajruszLibrary.SIDE.getServer() != null ? MajruszLibrary.SIDE.getServer().getProfiler() : InactiveProfiler.INSTANCE
+		return Platform.get(
+			()->()->Platform.getMinecraft().getProfiler(),
+			()->()->Platform.getServer() != null ? Platform.getServer().getProfiler() : InactiveProfiler.INSTANCE
 		);
 	}
 

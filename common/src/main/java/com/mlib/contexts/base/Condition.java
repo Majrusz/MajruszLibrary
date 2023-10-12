@@ -1,7 +1,7 @@
 package com.mlib.contexts.base;
 
-import com.mlib.MajruszLibrary;
 import com.mlib.contexts.data.ILevelData;
+import com.mlib.platform.Platform;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -11,7 +11,7 @@ public class Condition< DataType > {
 	boolean isNegated = false;
 
 	public static < DataType > Condition< DataType > hasAuthority() {
-		return new Condition<>( data->MajruszLibrary.SIDE.isAuthority() );
+		return new Condition<>( data->Platform.isAuthority() );
 	}
 
 	public static < DataType extends ILevelData > Condition< DataType > hasLevel() {

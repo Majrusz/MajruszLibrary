@@ -1,6 +1,6 @@
 package com.mlib.math;
 
-import com.mlib.MajruszLibrary;
+import com.mlib.platform.Platform;
 import net.minecraft.util.RandomSource;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class Random {
 	 thread safe and can be accessed on both server and client at the same time.
 	 */
 	public static RandomSource getThreadSafe() {
-		return MajruszLibrary.SIDE.isLogicalClient() ? CLIENT : SERVER;
+		return Platform.isLogicalClient() ? CLIENT : SERVER;
 	}
 
 	public static float nextFloat() {
