@@ -1,6 +1,6 @@
 package com.mlib.mixin;
 
-import com.mlib.contexts.OnKeyPressed;
+import com.mlib.contexts.OnKeyStateChanged;
 import com.mlib.contexts.base.Contexts;
 import com.mlib.platform.Platform;
 import net.minecraft.client.KeyboardHandler;
@@ -17,7 +17,7 @@ public abstract class MixinKeyboardHandler {
 	)
 	private void keyPress( long windowId, int key, int scanCode, int action, int modifiers, CallbackInfo callback ) {
 		if( Platform.getMinecraft().getWindow().getWindow() == windowId ) {
-			Contexts.dispatch( new OnKeyPressed( key, scanCode, action, modifiers ) );
+			Contexts.dispatch( new OnKeyStateChanged( key, scanCode, action, modifiers ) );
 		}
 	}
 }

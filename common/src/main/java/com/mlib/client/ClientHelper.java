@@ -3,7 +3,7 @@ package com.mlib.client;
 import com.mlib.annotation.AutoInstance;
 import com.mlib.annotation.Dist;
 import com.mlib.annotation.OnlyIn;
-import com.mlib.contexts.OnKeyPressed;
+import com.mlib.contexts.OnKeyStateChanged;
 
 @OnlyIn( Dist.CLIENT )
 public class ClientHelper {
@@ -38,7 +38,7 @@ public class ClientHelper {
 	@AutoInstance
 	public static class Updater {
 		public Updater() {
-			OnKeyPressed.listen( data->{
+			OnKeyStateChanged.listen( data->{
 				switch( data.key ) {
 					case 340 -> SHIFT_ACTION = data.action;
 					case 341 -> CTRL_ACTION = data.action;
