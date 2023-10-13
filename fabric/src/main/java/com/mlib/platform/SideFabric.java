@@ -4,7 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 
-public class PlatformFabric implements IPlatform {
+public class SideFabric implements ISidePlatform {
 	public static MinecraftServer SERVER;
 
 	@Override

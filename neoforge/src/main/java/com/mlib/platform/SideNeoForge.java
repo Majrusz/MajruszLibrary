@@ -5,7 +5,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-public class PlatformNeoForge implements IPlatform {
+public class SideNeoForge implements ISidePlatform {
 	@Override
 	public boolean isDevBuild() {
 		return !FMLEnvironment.production;

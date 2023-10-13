@@ -2,7 +2,7 @@ package com.mlib.platform;
 
 import net.minecraft.server.MinecraftServer;
 
-public interface IPlatform {
+public interface ISidePlatform {
 	boolean isDevBuild();
 
 	boolean isDedicatedServer();

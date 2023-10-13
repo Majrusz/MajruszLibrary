@@ -3,7 +3,7 @@ package com.mlib.time;
 import com.mlib.annotation.AutoInstance;
 import com.mlib.contexts.OnClientTicked;
 import com.mlib.contexts.OnServerTicked;
-import com.mlib.platform.Platform;
+import com.mlib.platform.Side;
 
 public class TimeHelper {
 	private static final int TICKS_IN_SECOND = 20;
@@ -44,7 +44,7 @@ public class TimeHelper {
 	}
 
 	public static float getPartialTicks() {
-		return Platform.get( ()->()->Platform.getMinecraft().getFrameTime(), ()->()->0.0f );
+		return Side.get( ()->()->Side.getMinecraft().getFrameTime(), ()->()->0.0f );
 	}
 
 	@AutoInstance

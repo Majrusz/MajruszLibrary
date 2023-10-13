@@ -1,7 +1,7 @@
 package com.mlib.network;
 
 import com.mlib.data.ISerializable;
-import com.mlib.platform.Platform;
+import com.mlib.platform.Side;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -22,7 +22,7 @@ public class NetworkObject< Type extends ISerializable > {
 	}
 
 	public void sendToClients( Type message ) {
-		NetworkHandler.PLATFORM.sendToClients( this, message, Platform.getServer().getPlayerList().getPlayers() );
+		NetworkHandler.PLATFORM.sendToClients( this, message, Side.getServer().getPlayerList().getPlayers() );
 	}
 
 	public void sendToClients( List< ServerPlayer > players, Type message ) {

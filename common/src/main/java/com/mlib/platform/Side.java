@@ -9,19 +9,19 @@ import net.minecraft.server.MinecraftServer;
 
 import java.util.function.Supplier;
 
-public class Platform {
-	private static final IPlatform PLATFORM = Services.load( IPlatform.class );
+public class Side {
+	private static final ISidePlatform PLATFORM = Services.load( ISidePlatform.class );
 
 	public static void run( Supplier< Runnable > logicalClient, Supplier< Runnable > logicalServer ) {
-		( Platform.isLogicalClient() ? logicalClient : logicalServer ).get().run();
+		( Side.isLogicalClient() ? logicalClient : logicalServer ).get().run();
 	}
 
 	public static < Type > Type get( Supplier< Supplier< Type > > logicalClient, Supplier< Supplier< Type > > logicalServer ) {
-		return ( Platform.isLogicalClient() ? logicalClient : logicalServer ).get().get();
+		return ( Side.isLogicalClient() ? logicalClient : logicalServer ).get().get();
 	}
 
 	public static void runOnClient( Supplier< Runnable > supplier ) {
-		if( Platform.isClient() ) {
+		if( Side.isClient() ) {
 			supplier.get().run();
 		}
 	}
@@ -31,12 +31,12 @@ public class Platform {
 	}
 
 	public static boolean isLogicalClient() {
-		return Platform.isClient()
-			&& Platform.getMinecraft().isSameThread();
+		return Side.isClient()
+			&& Side.getMinecraft().isSameThread();
 	}
 
 	public static boolean isLogicalServer() {
-		return !Platform.isLogicalClient();
+		return !Side.isLogicalClient();
 	}
 
 	public static boolean isDevBuild() {

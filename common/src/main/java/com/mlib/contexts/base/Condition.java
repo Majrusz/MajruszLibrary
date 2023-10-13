@@ -1,7 +1,7 @@
 package com.mlib.contexts.base;
 
 import com.mlib.contexts.data.ILevelData;
-import com.mlib.platform.Platform;
+import com.mlib.platform.Side;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -11,11 +11,11 @@ public class Condition< DataType > {
 	boolean isNegated = false;
 
 	public static < DataType > Condition< DataType > hasAuthority() {
-		return new Condition<>( data->Platform.isAuthority() );
+		return new Condition<>( data->Side.isAuthority() );
 	}
 
 	public static < DataType extends ILevelData > Condition< DataType > isLogicalServer() {
-		return new Condition<>( data->Platform.isLogicalServer() );
+		return new Condition<>( data->Side.isLogicalServer() );
 	}
 
 	public static < DataType extends ILevelData > Condition< DataType > hasLevel() {

@@ -5,7 +5,7 @@ import com.mlib.annotation.AutoInstance;
 import com.mlib.contexts.OnItemBrewed;
 import com.mlib.contexts.OnItemDecorationsRendered;
 import com.mlib.contexts.base.Condition;
-import com.mlib.platform.Platform;
+import com.mlib.platform.Side;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -16,7 +16,7 @@ public class ReplacePotions {
 			return itemStack.isEmpty() ? itemStack : new ItemStack( Items.APPLE );
 		} ).toList() ) );
 
-		Platform.runOnClient( ()->()->{
+		Side.runOnClient( ()->()->{
 			OnItemDecorationsRendered.listen( this::renderDecorations )
 				.addCondition( Condition.predicate( data->data.itemStack.is( Items.APPLE ) ) );
 		} );

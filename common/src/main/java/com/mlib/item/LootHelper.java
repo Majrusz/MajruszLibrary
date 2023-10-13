@@ -1,6 +1,6 @@
 package com.mlib.item;
 
-import com.mlib.platform.Platform;
+import com.mlib.platform.Side;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public class LootHelper {
 	public static LootTable getLootTable( ResourceLocation id ) {
-		return Platform.getServer()
+		return Side.getServer()
 			.getLootData()
 			.getLootTable( id );
 	}

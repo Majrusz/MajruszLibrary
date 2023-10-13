@@ -1,6 +1,6 @@
 package com.mlib.profiler;
 
-import com.mlib.platform.Platform;
+import com.mlib.platform.Side;
 import net.minecraft.util.profiling.InactiveProfiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 
@@ -8,9 +8,9 @@ import java.util.function.Supplier;
 
 public class ProfilerHelper {
 	public static ProfilerFiller getProfiler() {
-		return Platform.get(
-			()->()->Platform.getMinecraft().getProfiler(),
-			()->()->Platform.getServer() != null ? Platform.getServer().getProfiler() : InactiveProfiler.INSTANCE
+		return Side.get(
+			()->()->Side.getMinecraft().getProfiler(),
+			()->()->Side.getServer() != null ? Side.getServer().getProfiler() : InactiveProfiler.INSTANCE
 		);
 	}
 

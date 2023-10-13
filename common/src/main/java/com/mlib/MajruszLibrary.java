@@ -10,7 +10,7 @@ import com.mlib.item.CustomEnchantment;
 import com.mlib.item.EquipmentSlots;
 import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
-import com.mlib.platform.Platform;
+import com.mlib.platform.Side;
 import com.mlib.registry.RegistryGroup;
 import com.mlib.registry.RegistryObject;
 import com.mlib.temp.TestCommand;
@@ -65,7 +65,7 @@ public class MajruszLibrary {
 	private MajruszLibrary() {}
 
 	static {
-		Platform.runOnClient( ()->MajruszLibrary::register );
+		Side.runOnClient( ()->MajruszLibrary::register );
 	}
 
 	@OnlyIn( Dist.CLIENT )

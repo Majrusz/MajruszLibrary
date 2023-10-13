@@ -2,7 +2,7 @@ package com.mlib.network;
 
 import com.mlib.data.ISerializable;
 import com.mlib.data.SerializableHelper;
-import com.mlib.platform.Platform;
+import com.mlib.platform.Side;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -22,7 +22,7 @@ public class NetworkFabric implements INetworkPlatform {
 	@Override
 	public void register( List< NetworkObject< ? > > objects ) {
 		this.registerOnServer( objects );
-		Platform.runOnClient( ()->()->this.registerOnClient( objects ) );
+		Side.runOnClient( ()->()->this.registerOnClient( objects ) );
 	}
 
 	@Override

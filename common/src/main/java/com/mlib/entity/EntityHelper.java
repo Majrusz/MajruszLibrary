@@ -8,7 +8,7 @@ import com.mlib.math.AnyPos;
 import com.mlib.math.AnyRot;
 import com.mlib.mixin.IMixinServerLevel;
 import com.mlib.mixininterfaces.IMixinEntity;
-import com.mlib.platform.Platform;
+import com.mlib.platform.Side;
 import com.mlib.time.TimeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -199,7 +199,7 @@ public class EntityHelper {
 		@Override
 		@OnlyIn( Dist.CLIENT )
 		public void onClient() {
-			( ( IMixinEntity )( Platform.getLocalLevel().getEntity( this.entityId ) ) ).addGlowTicks( this.ticks );
+			( ( IMixinEntity )( Side.getLocalLevel().getEntity( this.entityId ) ) ).addGlowTicks( this.ticks );
 		}
 	}
 }
