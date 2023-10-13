@@ -35,6 +35,10 @@ public class Platform {
 			&& Platform.getMinecraft().isSameThread();
 	}
 
+	public static boolean isLogicalServer() {
+		return !Platform.isLogicalClient();
+	}
+
 	public static boolean isDevBuild() {
 		return PLATFORM.isDevBuild();
 	}

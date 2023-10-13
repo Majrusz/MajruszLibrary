@@ -14,6 +14,10 @@ public class Condition< DataType > {
 		return new Condition<>( data->Platform.isAuthority() );
 	}
 
+	public static < DataType extends ILevelData > Condition< DataType > isLogicalServer() {
+		return new Condition<>( data->Platform.isLogicalServer() );
+	}
+
 	public static < DataType extends ILevelData > Condition< DataType > hasLevel() {
 		return new Condition<>( data->data.getLevel() != null );
 	}
