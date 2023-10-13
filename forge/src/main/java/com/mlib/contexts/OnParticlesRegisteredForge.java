@@ -8,7 +8,7 @@ import net.minecraft.core.particles.ParticleType;
 
 import java.util.function.Function;
 
-public class OnParticlesRegisteredPlatformNeoForge implements OnParticlesRegistered.IPlatform {
+public class OnParticlesRegisteredForge implements OnParticlesRegistered.IPlatform {
 	@Override
 	public < Type extends ParticleOptions > void register( ParticleEngine engine, ParticleType< Type > type,
 		Function< SpriteSet, ParticleProvider< Type > > factory
