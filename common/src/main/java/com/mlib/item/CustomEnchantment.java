@@ -7,13 +7,13 @@ import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 import java.util.List;
 
-public class EnchantmentBuilder extends Enchantment {
+public class CustomEnchantment extends Enchantment {
 	private boolean isCurse = false;
 	private int maxLevel = 1;
 	private CostFormula minLevelCost = level->10;
 	private CostFormula maxLevelCost = level->50;
 
-	public EnchantmentBuilder() {
+	public CustomEnchantment() {
 		super( null, null, null );
 	}
 
@@ -42,43 +42,43 @@ public class EnchantmentBuilder extends Enchantment {
 		return this.isCurse;
 	}
 
-	public EnchantmentBuilder slots( List< EquipmentSlot > slots ) {
+	public CustomEnchantment slots( List< EquipmentSlot > slots ) {
 		( ( IMixinEnchantment )this ).setSlots( slots.toArray( EquipmentSlot[]::new ) );
 
 		return this;
 	}
 
-	public EnchantmentBuilder rarity( Rarity rarity ) {
+	public CustomEnchantment rarity( Rarity rarity ) {
 		( ( IMixinEnchantment )this ).setRarity( rarity );
 
 		return this;
 	}
 
-	public EnchantmentBuilder category( EnchantmentCategory category ) {
+	public CustomEnchantment category( EnchantmentCategory category ) {
 		( ( IMixinEnchantment )this ).setCategory( category );
 
 		return this;
 	}
 
-	public EnchantmentBuilder curse() {
+	public CustomEnchantment curse() {
 		this.isCurse = true;
 
 		return this;
 	}
 
-	public EnchantmentBuilder maxLevel( int level ) {
+	public CustomEnchantment maxLevel( int level ) {
 		this.maxLevel = level;
 
 		return this;
 	}
 
-	public EnchantmentBuilder minLevelCost( CostFormula formula ) {
+	public CustomEnchantment minLevelCost( CostFormula formula ) {
 		this.minLevelCost = formula;
 
 		return this;
 	}
 
-	public EnchantmentBuilder maxLevelCost( CostFormula formula ) {
+	public CustomEnchantment maxLevelCost( CostFormula formula ) {
 		this.maxLevelCost = formula;
 
 		return this;

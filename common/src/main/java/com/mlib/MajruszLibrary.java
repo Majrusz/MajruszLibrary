@@ -6,7 +6,7 @@ import com.mlib.command.EnumArgument;
 import com.mlib.contexts.OnParticlesRegistered;
 import com.mlib.data.Config;
 import com.mlib.entity.EntityHelper;
-import com.mlib.item.EnchantmentBuilder;
+import com.mlib.item.CustomEnchantment;
 import com.mlib.item.EquipmentSlots;
 import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
@@ -51,7 +51,7 @@ public class MajruszLibrary {
 			.displayItems( ( params, output )->output.accept( new ItemStack( THE_ITEM.get() ) ) )
 			.build();
 	} );
-	public static final RegistryObject< Enchantment > THE_ENCHANTMENT = ENCHANTMENTS.create( "the_enchantment", ()->new EnchantmentBuilder()
+	public static final RegistryObject< Enchantment > THE_ENCHANTMENT = ENCHANTMENTS.create( "the_enchantment", ()->new CustomEnchantment()
 		.category( EnchantmentCategory.BOW )
 		.slots( EquipmentSlots.HANDS )
 		.rarity( Enchantment.Rarity.RARE )
