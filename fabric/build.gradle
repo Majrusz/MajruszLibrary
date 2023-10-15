@@ -36,14 +36,6 @@ project(':common') {
     }
 }
 
-task compileFabricAnnotations(type: JavaCompile) {
-    classpath = sourceSets.main.compileClasspath
-    source = fileTree(commonSrcDir)
-    destinationDir = file("${project.buildDir}/classes/java/main")
-}
-
-compileJava.dependsOn compileFabricAnnotations
-
 dependencies {
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.officialMojangMappings()
@@ -92,6 +84,7 @@ loom {
 tasks.withType(JavaCompile).configureEach {
     options.setEncoding('UTF-8')
     options.release.set(17)
+    source(commonSrcDir)
 }
 
 java {

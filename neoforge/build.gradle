@@ -34,14 +34,6 @@ project(':common') {
     }
 }
 
-task compileNeoForgeAnnotations(type: JavaCompile) {
-    classpath = sourceSets.main.compileClasspath
-    source = fileTree(commonSrcDir)
-    destinationDir = file("${project.buildDir}/classes/java/main")
-}
-
-compileJava.dependsOn compileNeoForgeAnnotations
-
 minecraft {
     mappings channel: 'official', version: minecraft_version
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -96,6 +88,7 @@ dependencies {
 tasks.withType(JavaCompile).configureEach {
     options.setEncoding('UTF-8')
     options.release.set(17)
+    source(commonSrcDir)
 }
 
 jar {
