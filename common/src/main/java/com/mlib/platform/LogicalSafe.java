@@ -1,11 +1,16 @@
 package com.mlib.platform;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class LogicalSafe< Type > implements Supplier< Type > {
 	private Type client;
 	private Type server;
+
+	public static < Type > LogicalSafe< Type > of( Supplier< Type > value ) {
+		return LogicalSafe.of( value.get(), value.get() );
+	}
 
 	public static < Type > LogicalSafe< Type > of( Type client, Type server ) {
 		return new LogicalSafe<>( client, server );
@@ -34,6 +39,10 @@ public class LogicalSafe< Type > implements Supplier< Type > {
 		} else {
 			this.server = function.apply( this.server );
 		}
+	}
+
+	public void run( Consumer< Type > consumer ) {
+		consumer.accept( this.get() );
 	}
 
 	private LogicalSafe( Type client, Type server ) {
