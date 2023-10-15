@@ -7,9 +7,8 @@ public class LogicalSafe< Type > implements Supplier< Type > {
 	private Type client;
 	private Type server;
 
-	public LogicalSafe( Type client, Type server ) {
-		this.client = client;
-		this.server = server;
+	public static < Type > LogicalSafe< Type > of( Type client, Type server ) {
+		return new LogicalSafe<>( client, server );
 	}
 
 	@Override
@@ -35,5 +34,10 @@ public class LogicalSafe< Type > implements Supplier< Type > {
 		} else {
 			this.server = function.apply( this.server );
 		}
+	}
+
+	private LogicalSafe( Type client, Type server ) {
+		this.client = client;
+		this.server = server;
 	}
 }
