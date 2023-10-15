@@ -6,7 +6,6 @@ import net.minecraft.network.chat.MutableComponent;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
 import java.util.TreeMap;
 
 public class TextHelper {
@@ -107,11 +106,7 @@ public class TextHelper {
 		return Component.empty();
 	}
 
-	public static void addEmptyLine( List< Component > components ) {
-		components.add( Component.literal( " " ) );
-	}
-
-	public static void addMoreDetailsText( List< Component > components ) {
-		components.add( Component.translatable( "mlib.items.advanced_hint" ).withStyle( ChatFormatting.GRAY ) );
+	public static MutableComponent moreDetailsComponent() {
+		return Component.translatable( "mlib.items.advanced_hint" ).withStyle( ChatFormatting.GRAY );
 	}
 }
