@@ -20,6 +20,7 @@ import java.util.List;
 @AutoInstance
 public class DamageIncreaser {
 	private Bonuses bonuses = new Bonuses();
+	private Test test = new Test();
 
 	public DamageIncreaser() {
 		OnEntityPreDamaged.listen( this::increaseDamage )
@@ -35,6 +36,7 @@ public class DamageIncreaser {
 			.addCondition( Condition.predicate( OnItemTooltip::isAdvanced ) );
 
 		MajruszLibrary.CONFIG.defineCustom( "damage_bonuses", ()->this.bonuses, x->this.bonuses = x, Bonuses::new );
+		MajruszLibrary.CONFIG.defineCustom( "test", ()->this.test, x->this.test = x, Test::new );
 	}
 
 	private void increaseDamage( OnEntityPreDamaged data ) {
@@ -58,6 +60,16 @@ public class DamageIncreaser {
 		}
 
 		return null;
+	}
+
+	public static class Test extends SerializableStructure {
+		int value = -1;
+
+		public Test() {
+			this.defineInteger( "num", ()->this.value, x->this.value = x );
+
+			MajruszLibrary.CONFIG.makeExtensible( this );
+		}
 	}
 
 	private static class Bonuses extends SerializableList {

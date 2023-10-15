@@ -8,13 +8,18 @@ import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
 import com.mlib.platform.Side;
 import com.mlib.registry.Registries;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.level.storage.loot.Deserializers;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class Config extends SerializableStructure {
+	private final Object2ObjectMap< Class< ? >, List< Consumer< ? extends SerializableStructure > > > modifications = new Object2ObjectOpenHashMap<>();
 	private final File file;
 	private final Gson gson;
 
@@ -40,6 +45,18 @@ public class Config extends SerializableStructure {
 		} catch( Exception exception ) {
 			MajruszLibrary.HELPER.logError( exception.toString() );
 		}
+	}
+
+	public < Type extends SerializableStructure > void makeExtensible( Type value ) {
+		if( !this.modifications.containsKey( value.getClass() ) ) {
+			return;
+		}
+
+		this.modifications.get( value.getClass() ).forEach( modification->( ( Consumer< Type > )modification ).accept( value ) );
+	}
+
+	public < Type extends SerializableStructure > void extend( Class< Type > clazz, Consumer< Type > consumer ) {
+		this.modifications.computeIfAbsent( clazz, subclazz->new ArrayList<>() ).add( consumer );
 	}
 
 	private Config( String name ) {

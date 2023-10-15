@@ -1,5 +1,6 @@
 package com.mlib.temp;
 
+import com.mlib.MajruszLibrary;
 import com.mlib.annotation.AutoInstance;
 import com.mlib.contexts.OnLootGenerated;
 import com.mlib.contexts.base.Condition;
@@ -16,6 +17,8 @@ import java.util.Optional;
 
 @AutoInstance
 public class Smelter {
+	int dmg = 1;
+
 	public Smelter() {
 		OnLootGenerated.listen( this::smelt )
 			.addCondition( Condition.predicate( OnLootGenerated::hasBlockState ) )
@@ -24,6 +27,10 @@ public class Smelter {
 			.addCondition( Condition.hasAuthority() )
 			.addCondition( Condition.hasLevel() )
 			.addCondition( Condition.predicate( data->data.entity instanceof Player player && !player.isCrouching() ) );
+
+		MajruszLibrary.CONFIG.extend( DamageIncreaser.Test.class, subconfig->{
+			subconfig.defineInteger( "dmg", ()->this.dmg, x->this.dmg = x );
+		} );
 	}
 
 	private void smelt( OnLootGenerated data ) {
