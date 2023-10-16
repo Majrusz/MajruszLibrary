@@ -171,7 +171,7 @@ public class LevelHelper {
 	}
 
 	public static < Type extends Number & Comparable< Type > > Optional< BlockPos > findBlockPosOnGround( Level level, Vec3 position, Type yOffset ) {
-		return LevelHelper.findBlockPosOnGround( level, position.x, new Range<>( position.y - yOffset.doubleValue(), position.y + yOffset.doubleValue() ), position.z );
+		return LevelHelper.findBlockPosOnGround( level, position.x, Range.of( position.y - yOffset.doubleValue(), position.y + yOffset.doubleValue() ), position.z );
 	}
 
 	public static < Type extends Number & Comparable< Type > > Optional< BlockPos > findBlockPosOnGround( Level level, Type x, Range< Type > y, Type z ) {

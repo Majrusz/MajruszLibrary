@@ -2,14 +2,25 @@ package com.mlib.math;
 
 import net.minecraft.util.Mth;
 
-public class Range< Type extends Number & Comparable< Type > > {
-	public static Range< Double > CHANCE = new Range<>( 0.0, 1.0 );
+import java.util.function.Predicate;
+
+public class Range< Type extends Number & Comparable< Type > > implements Predicate< Type > {
+	public static Range< Double > CHANCE = Range.of( 0.0, 1.0 );
 	public Type from;
 	public Type to;
 
-	public Range( Type from, Type to ) {
-		this.from = from;
-		this.to = to;
+	public static < Type extends Number & Comparable< Type > > Range< Type > of( Type from, Type to ) {
+		return new Range<>( from, to );
+	}
+
+	@Override
+	public String toString() {
+		return String.format( "%s ~ %s", this.from, this.to );
+	}
+
+	@Override
+	public boolean test( Type value ) {
+		return this.within( value );
 	}
 
 	public boolean within( Type value ) {
@@ -28,8 +39,8 @@ public class Range< Type extends Number & Comparable< Type > > {
 		return Mth.lerp( ratio, this.from.doubleValue(), this.to.doubleValue() );
 	}
 
-	@Override
-	public String toString() {
-		return String.format( "%s ~ %s", this.from, this.to );
+	private Range( Type from, Type to ) {
+		this.from = from;
+		this.to = to;
 	}
 }

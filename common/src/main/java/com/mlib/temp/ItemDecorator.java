@@ -14,8 +14,8 @@ import net.minecraft.world.entity.player.Player;
 public class ItemDecorator {
 	static final IParameter< Boolean > VANILLA_CHANCE = Command.bool().named( "vanilla_chance" );
 	static final IParameter< Boolean > TREASURE = Command.bool().named( "is_treasure" );
-	static final IParameter< Float > DAMAGE_RATIO = Command.number( new Range<>( 0.0f, 1.0f ) ).named( "damage_ratio" );
-	static final IParameter< Float > CRD = Command.number( new Range<>( 0.0f, 1.0f ) ).named( "crd" );
+	static final IParameter< Float > DAMAGE_RATIO = Command.number( Range.of( 0.0f, 1.0f ) ).named( "damage_ratio" );
+	static final IParameter< Float > CRD = Command.number( Range.of( 0.0f, 1.0f ) ).named( "crd" );
 	static final IParameter< String > MESSAGE = Command.string().named( "message" );
 
 	public ItemDecorator() {

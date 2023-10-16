@@ -11,7 +11,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 @AutoInstance
 public class SpawnRateChanger {
-	static final IParameter< Float > SPAWN_RATE = Command.number( new Range<>( 0.0f, 10.0f ) ).named( "spawn_rate" );
+	static final IParameter< Float > SPAWN_RATE = Command.number( Range.of( 0.0f, 10.0f ) ).named( "spawn_rate" );
 	float spawnRate = 1.0f;
 
 	public SpawnRateChanger() {
