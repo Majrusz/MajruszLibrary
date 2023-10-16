@@ -12,6 +12,7 @@ import com.mlib.platform.Side;
 import com.mlib.time.TimeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -71,6 +72,10 @@ public class EntityHelper {
 
 	public static boolean isOutside( Entity entity ) {
 		return entity.level().canSeeSky( entity.blockPosition() );
+	}
+
+	public static boolean isIn( Entity entity, ResourceKey< Level > level ) {
+		return entity.level().dimension().equals( level );
 	}
 
 	public static String getPlayerUUID( Player player ) {

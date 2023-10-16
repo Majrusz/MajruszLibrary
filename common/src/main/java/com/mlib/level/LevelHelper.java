@@ -8,7 +8,6 @@ import com.mlib.math.Range;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -31,10 +30,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.Optional;
 
 public class LevelHelper {
-	public static boolean isEntityIn( Entity entity, ResourceKey< Level > worldRegistryKey ) {
-		return entity.level().dimension() == worldRegistryKey;
-	}
-
 	public static DifficultyInstance getDifficultyAt( Level level, BlockPos position ) {
 		return level.getCurrentDifficultyAt( position );
 	}
