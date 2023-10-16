@@ -107,8 +107,12 @@ public class Random {
 		return Random.next( elements.entrySet() );
 	}
 
+	public static boolean check( float chance ) {
+		return Random.nextFloat() < chance;
+	}
+
 	public static boolean check( double chance ) {
-		return Random.nextDouble() <= chance;
+		return Random.nextDouble() < chance;
 	}
 
 	/**
