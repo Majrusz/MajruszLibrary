@@ -4,6 +4,7 @@ import com.mlib.annotation.AutoInstance;
 import com.mlib.collection.CollectionHelper;
 import com.mlib.contexts.OnClientTicked;
 import com.mlib.contexts.OnServerTicked;
+import com.mlib.contexts.base.Priority;
 import com.mlib.platform.LogicalSafe;
 import com.mlib.platform.Side;
 import com.mlib.time.delays.Delay;
@@ -81,9 +82,11 @@ public class TimeHelper {
 	@AutoInstance
 	public static class Updater {
 		public Updater() {
-			OnClientTicked.listen( data->this.update() );
+			OnClientTicked.listen( data->this.update() )
+				.priority( Priority.HIGHEST );
 
-			OnServerTicked.listen( data->this.update() );
+			OnServerTicked.listen( data->this.update() )
+				.priority( Priority.HIGHEST );
 		}
 
 		private void update() {
