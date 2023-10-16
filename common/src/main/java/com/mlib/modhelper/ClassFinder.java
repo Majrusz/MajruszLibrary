@@ -19,8 +19,9 @@ class ClassFinder {
 	}
 
 	public void findClasses() {
-		this.classes.addAll( this.findClassesInPackage().stream().filter( clazz->!this.classes.contains( clazz ) ).toList() );
-		this.classes.addAll( this.findClassesInJar().stream().filter( clazz->!this.classes.contains( clazz ) ).toList() );
+		this.addUnique( this.findClassesInPackage() );
+		this.addUnique( this.findClassesInJar( "mods" ) );
+		this.addUnique( this.findClassesInJar( "libs" ) );
 		if( this.classes.isEmpty() ) {
 			throw new IllegalStateException( "ClassFinder did not find any classes" );
 		}
@@ -76,9 +77,9 @@ class ClassFinder {
 		return classes;
 	}
 
-	private List< Class< ? > > findClassesInJar() {
+	private List< Class< ? > > findClassesInJar( String directory ) {
 		List< Class< ? > > classes = new ArrayList<>();
-		File mods = Paths.get( "./mods" ).toFile();
+		File mods = Paths.get( "./%s".formatted( directory ) ).toFile();
 		if( !mods.isDirectory() ) {
 			return classes;
 		}
@@ -108,5 +109,9 @@ class ClassFinder {
 		}
 
 		return classes;
+	}
+
+	private void addUnique( List< Class< ? > > classes ) {
+		this.classes.addAll( classes.stream().filter( clazz->!this.classes.contains( clazz ) ).toList() );
 	}
 }
