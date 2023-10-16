@@ -25,6 +25,6 @@ public class NetworkHandler {
 	}
 
 	public void register() {
-		PLATFORM.register( this.objects );
+		PLATFORM.register( this.helper, this.objects );
 	}
 }

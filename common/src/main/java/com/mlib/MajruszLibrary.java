@@ -31,7 +31,7 @@ public class MajruszLibrary {
 	public static final ModHelper HELPER = ModHelper.create( MOD_ID );
 
 	// Configs
-	public static final Config CONFIG = HELPER.config().named( "majrusz-library" ).autoSync().create();
+	public static final Config CONFIG = HELPER.config().autoSync().create();
 
 	// Registry Groups
 	public static final RegistryGroup< ArgumentTypeInfo< ?, ? > > ARGUMENT_TYPES = HELPER.create( BuiltInRegistries.COMMAND_ARGUMENT_TYPE );
@@ -56,7 +56,7 @@ public class MajruszLibrary {
 		.slots( EquipmentSlots.HANDS )
 		.rarity( Enchantment.Rarity.RARE )
 	);
-	public static final RegistryObject< ParticleType< ? > > THE_PARTICLE = PARTICLES.create( "the_particle", ()->new SimpleParticleType( true ) {} );
+	public static final RegistryObject< SimpleParticleType > THE_PARTICLE = PARTICLES.create( "the_particle", ()->new SimpleParticleType( true ) {} );
 
 	// Network
 	public static final NetworkObject< TestCommand.Message > MESSAGE = HELPER.create( "message", TestCommand.Message.class );

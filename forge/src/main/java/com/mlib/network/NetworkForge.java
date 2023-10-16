@@ -1,8 +1,8 @@
 package com.mlib.network;
 
-import com.mlib.MajruszLibrary;
 import com.mlib.data.ISerializable;
 import com.mlib.data.SerializableHelper;
+import com.mlib.modhelper.ModHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -19,9 +19,9 @@ public class NetworkForge implements INetworkPlatform {
 	int idx = 0;
 
 	@Override
-	public void register( List< NetworkObject< ? > > objects ) {
+	public void register( ModHelper helper, List< NetworkObject< ? > > objects ) {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener( ( final FMLCommonSetupEvent event )->{
-			this.channel = NetworkRegistry.newSimpleChannel( MajruszLibrary.HELPER.getLocation( "main" ), ()->this.protocolVersion, this.protocolVersion::equals, this.protocolVersion::equals );
+			this.channel = NetworkRegistry.newSimpleChannel( helper.getLocation( "main" ), ()->this.protocolVersion, this.protocolVersion::equals, this.protocolVersion::equals );
 			objects.forEach( this::register );
 		} );
 	}

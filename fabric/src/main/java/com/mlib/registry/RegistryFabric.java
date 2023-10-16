@@ -19,7 +19,7 @@ public class RegistryFabric implements IRegistryPlatform {
 	public < Type > void register( RegistryObject< Type > object ) {
 		Type value = object.newInstance.get();
 
-		Registry.register( object.group.registry, object.group.helper.getLocation( object.id ), value );
+		Registry.register( ( Registry< ? super Type > )object.group.registry, object.group.helper.getLocation( object.id ), value );
 		object.set( ()->value );
 	}
 

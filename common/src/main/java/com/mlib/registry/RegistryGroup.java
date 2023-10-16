@@ -17,8 +17,8 @@ public class RegistryGroup< Type > {
 		this.registry = registry;
 	}
 
-	public RegistryObject< Type > create( String id, Supplier< Type > supplier ) {
-		RegistryObject< Type > object = new RegistryObject<>( this, id, supplier );
+	public < ObjectType extends Type > RegistryObject< ObjectType > create( String id, Supplier< ObjectType > supplier ) {
+		RegistryObject< ObjectType > object = new RegistryObject<>( this, id, supplier );
 		this.objects.add( object );
 
 		return object;

@@ -2,6 +2,7 @@ package com.mlib.network;
 
 import com.mlib.data.ISerializable;
 import com.mlib.data.SerializableHelper;
+import com.mlib.modhelper.ModHelper;
 import com.mlib.platform.Side;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class NetworkFabric implements INetworkPlatform {
 	@Override
-	public void register( List< NetworkObject< ? > > objects ) {
+	public void register( ModHelper helper, List< NetworkObject< ? > > objects ) {
 		this.registerOnServer( objects );
 		Side.runOnClient( ()->()->this.registerOnClient( objects ) );
 	}
