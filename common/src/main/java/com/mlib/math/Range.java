@@ -5,7 +5,7 @@ import net.minecraft.util.Mth;
 import java.util.function.Predicate;
 
 public class Range< Type extends Number & Comparable< Type > > implements Predicate< Type > {
-	public static Range< Double > CHANCE = Range.of( 0.0, 1.0 );
+	public static Range< Float > CHANCE = Range.of( 0.0f, 1.0f );
 	public Type from;
 	public Type to;
 
