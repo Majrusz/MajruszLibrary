@@ -30,6 +30,7 @@
     "MixinExplosion",
     "MixinFishingHook",
     "MixinFoxBreedGoal",
+    "MixinItem",
     "MixinItemStack",
     "MixinLivingEntity",
     "MixinMinecraftServer",
@@ -39,7 +40,6 @@
     "MixinPlayer",
     "MixinPlayerList",
     "MixinReloadableServerResources",
-    "MixinResultSlot",
     "MixinServerLevel",
     "MixinServerPlayer",
     "MixinTamableAnimal"
