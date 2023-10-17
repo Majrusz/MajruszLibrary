@@ -10,9 +10,11 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.Coordinates;
 import net.minecraft.commands.arguments.coordinates.Vec3Argument;
 import net.minecraft.commands.arguments.selector.EntitySelector;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
@@ -104,6 +106,20 @@ public class Command {
 			@Override
 			public String get( CommandContext< CommandSourceStack > context ) {
 				return context.getArgument( this.name, String.class );
+			}
+		}.named( DefaultKeys.VALUE );
+	}
+
+	public static IParameter.Hinted< ResourceLocation > resource() {
+		return new IParameter.Hinted< ResourceLocation >() {
+			@Override
+			public CommandBuilder apply( CommandBuilder builder ) {
+				return builder.addArgument( ()->Commands.argument( this.name, ResourceLocationArgument.id() ).suggests( this.suggestions ) );
+			}
+
+			@Override
+			public ResourceLocation get( CommandContext< CommandSourceStack > context ) {
+				return context.getArgument( this.name, ResourceLocation.class );
 			}
 		}.named( DefaultKeys.VALUE );
 	}
