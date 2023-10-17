@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ModHelper {
@@ -53,8 +54,12 @@ public class ModHelper {
 		} );
 	}
 
-	public Config.Builder config() {
-		return new Config.Builder( this );
+	public Config.Builder< Config > config() {
+		return new Config.Builder<>( this, name->new Config( name ) {} );
+	}
+
+	public < Type extends Config > Config.Builder< Type > config( Function< String, Type > instance ) {
+		return new Config.Builder<>( this, instance );
 	}
 
 	public void triggerAchievement( ServerPlayer player, String id ) {

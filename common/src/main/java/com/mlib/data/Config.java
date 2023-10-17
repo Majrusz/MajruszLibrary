@@ -8,18 +8,14 @@ import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
 import com.mlib.platform.Side;
 import com.mlib.registry.Registries;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.world.level.storage.loot.Deserializers;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Config extends SerializableStructure {
-	private final Object2ObjectMap< Class< ? >, List< Consumer< ? extends SerializableStructure > > > modifications = new Object2ObjectOpenHashMap<>();
 	private final File file;
 	private final Gson gson;
 
@@ -40,57 +36,47 @@ public class Config extends SerializableStructure {
 		try {
 			if( this.file.exists() ) {
 				Reader reader = new InputStreamReader( new FileInputStream( this.file ) );
-				this.gson.fromJson( reader, Config.class );
+				this.gson.fromJson( reader, this.getClass() );
 			}
 		} catch( Exception exception ) {
 			MajruszLibrary.HELPER.logError( exception.toString() );
 		}
 	}
 
-	public < Type extends SerializableStructure > void makeExtensible( Type value ) {
-		if( !this.modifications.containsKey( value.getClass() ) ) {
-			return;
-		}
-
-		this.modifications.get( value.getClass() ).forEach( modification->( ( Consumer< Type > )modification ).accept( value ) );
-	}
-
-	public < Type extends SerializableStructure > void extend( Class< Type > clazz, Consumer< Type > consumer ) {
-		this.modifications.computeIfAbsent( clazz, subclazz->new ArrayList<>() ).add( consumer );
-	}
-
-	private Config( String name ) {
+	protected Config( String name ) {
 		this.file = Registries.getConfigPath().resolve( "%s.json".formatted( name ) ).toFile();
 		this.gson = Deserializers.createFunctionSerializer()
-			.registerTypeAdapter( Config.class, new TypeAdapter<>( ()->this ) )
+			.registerTypeAdapter( this.getClass(), new TypeAdapter<>( ()->this ) )
 			.setPrettyPrinting()
 			.create();
 	}
 
-	public static class Builder {
+	public static class Builder< Type extends Config > {
 		private final ModHelper helper;
+		private final Function< String, Type > instance;
 		private String name;
 		private boolean isAutoSyncEnabled;
 
-		public Builder( ModHelper helper ) {
+		public Builder( ModHelper helper, Function< String, Type > instance ) {
 			this.helper = helper;
+			this.instance = instance;
 		}
 
-		public Builder named( String name ) {
+		public Builder< Type > named( String name ) {
 			this.name = name;
 
 			return this;
 		}
 
-		public Builder autoSync() {
+		public Builder< Type > autoSync() {
 			this.isAutoSyncEnabled = true;
 
 			return this;
 		}
 
-		public Config create() {
+		public Type create() {
 			String name = this.name != null ? this.name : this.helper.getModId();
-			Config config = new Config( name );
+			Type config = this.instance.apply( name );
 			NetworkObject< Config > network = this.isAutoSyncEnabled ? this.helper.create( name.replace( "-", "_" ), Config.class, ()->config ) : null;
 
 			this.helper.onRegister( ()->{

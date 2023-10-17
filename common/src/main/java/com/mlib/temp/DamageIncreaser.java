@@ -67,8 +67,6 @@ public class DamageIncreaser {
 
 		public Test() {
 			this.defineInteger( "num", ()->this.value, x->this.value = x );
-
-			MajruszLibrary.CONFIG.makeExtensible( this );
 		}
 	}
 

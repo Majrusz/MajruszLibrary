@@ -27,10 +27,6 @@ public class Smelter {
 			.addCondition( data->data.origin != null )
 			.addCondition( data->data.tool != null )
 			.addCondition( data->data.entity instanceof Player player && !player.isCrouching() );
-
-		MajruszLibrary.CONFIG.extend( DamageIncreaser.Test.class, subconfig->{
-			subconfig.defineInteger( "dmg", ()->this.dmg, x->this.dmg = x );
-		} );
 	}
 
 	private void smelt( OnLootGenerated data ) {
