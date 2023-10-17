@@ -63,34 +63,6 @@ public class OnLootGenerated implements IEntityData {
 		return this.origin != null ? this.origin : new Vec3( 0.0, 0.0, 0.0 );
 	}
 
-	public boolean hasBlockState() {
-		return this.blockState != null;
-	}
-
-	public boolean hasDamageSource() {
-		return this.damageSource != null;
-	}
-
-	public boolean hasKiller() {
-		return this.killer != null;
-	}
-
-	public boolean hasEntity() {
-		return this.entity != null;
-	}
-
-	public boolean hasLastDamagePlayer() {
-		return this.lastDamagePlayer != null;
-	}
-
-	public boolean hasTool() {
-		return this.tool != null;
-	}
-
-	public boolean hasOrigin() {
-		return this.origin != null;
-	}
-
 	private < Type > Type getParameter( LootContextParam< Type > parameter ) {
 		return this.context.getParamOrNull( parameter );
 	}

@@ -21,12 +21,12 @@ public class Smelter {
 
 	public Smelter() {
 		OnLootGenerated.listen( this::smelt )
-			.addCondition( Condition.predicate( OnLootGenerated::hasBlockState ) )
-			.addCondition( Condition.predicate( OnLootGenerated::hasOrigin ) )
-			.addCondition( Condition.predicate( OnLootGenerated::hasTool ) )
 			.addCondition( Condition.hasAuthority() )
 			.addCondition( Condition.hasLevel() )
-			.addCondition( Condition.predicate( data->data.entity instanceof Player player && !player.isCrouching() ) );
+			.addCondition( data->data.blockState != null )
+			.addCondition( data->data.origin != null )
+			.addCondition( data->data.tool != null )
+			.addCondition( data->data.entity instanceof Player player && !player.isCrouching() );
 
 		MajruszLibrary.CONFIG.extend( DamageIncreaser.Test.class, subconfig->{
 			subconfig.defineInteger( "dmg", ()->this.dmg, x->this.dmg = x );

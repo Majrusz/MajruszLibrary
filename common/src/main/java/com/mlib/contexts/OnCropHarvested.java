@@ -1,7 +1,6 @@
 package com.mlib.contexts;
 
 import com.mlib.annotation.AutoInstance;
-import com.mlib.contexts.base.Condition;
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
 import com.mlib.contexts.data.IEntityData;
@@ -45,12 +44,10 @@ public class OnCropHarvested implements IEntityData {
 	public static class Dispatcher {
 		public Dispatcher() {
 			OnLootGenerated.listen( this::dispatchCropEvent )
-				.addCondition( Condition.predicate( OnLootGenerated::hasBlockState ) )
-				.addCondition( Condition.predicate( OnLootGenerated::hasEntity ) )
-				.addCondition( Condition.predicate( OnLootGenerated::hasTool ) )
-				.addCondition( Condition.predicate( OnLootGenerated::hasOrigin ) )
-				.addCondition( Condition.predicate( data->data.blockState.getBlock() instanceof CropBlock ) )
-				.addCondition( Condition.predicate( data->data.entity instanceof Player ) );
+				.addCondition( data->data.blockState != null && data.blockState.getBlock() instanceof CropBlock )
+				.addCondition( data->data.entity instanceof Player )
+				.addCondition( data->data.tool != null )
+				.addCondition( data->data.origin != null );
 		}
 
 		private void dispatchCropEvent( OnLootGenerated data ) {
