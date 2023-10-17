@@ -2,6 +2,7 @@ package com.mlib.data;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mlib.math.Range;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public abstract class SerializableStructure implements ISerializable {
+public class SerializableStructure implements ISerializable {
 	final String key;
 	final List< ISerializable > serializables = new ArrayList<>();
 
@@ -167,6 +168,10 @@ public abstract class SerializableStructure implements ISerializable {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderFloat() ) ), key ) );
 	}
 
+	public void defineFloatRange( String key, DataObject.Getter< Range< Float > > getter, DataObject.Setter< Range< Float > > setter ) {
+		this.serializables.add( new DataObject<>( getter, setter, new ReaderRange<>( new ReaderFloat() ), key ) );
+	}
+
 	public void defineInteger( String key, DataObject.Getter< Integer > getter, DataObject.Setter< Integer > setter ) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderInteger(), key ) );
 	}
@@ -177,6 +182,10 @@ public abstract class SerializableStructure implements ISerializable {
 
 	public void defineInteger( String key, DataMap.Getter< Integer > getter, DataMap.Setter< Integer > setter ) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderInteger() ) ), key ) );
+	}
+
+	public void defineIntegerRange( String key, DataObject.Getter< Range< Integer > > getter, DataObject.Setter< Range< Integer > > setter ) {
+		this.serializables.add( new DataObject<>( getter, setter, new ReaderRange<>( new ReaderInteger() ), key ) );
 	}
 
 	public void defineLocation( String key, DataObject.Getter< ResourceLocation > getter, DataObject.Setter< ResourceLocation > setter ) {

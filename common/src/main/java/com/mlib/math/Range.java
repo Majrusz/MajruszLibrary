@@ -13,6 +13,10 @@ public class Range< Type extends Number & Comparable< Type > > implements Predic
 		return new Range<>( from, to );
 	}
 
+	public static < Type extends Number & Comparable< Type > > Range< Type > validated( Type from, Type to ) {
+		return new Range<>( to.compareTo( from ) < 0 ? to : from, to );
+	}
+
 	@Override
 	public String toString() {
 		return String.format( "%s ~ %s", this.from, this.to );
@@ -29,6 +33,10 @@ public class Range< Type extends Number & Comparable< Type > > implements Predic
 
 	public Type clamp( Type value ) {
 		return this.from.compareTo( value ) > 0 ? this.from : ( this.to.compareTo( value ) < 0 ? this.to : value );
+	}
+
+	public Range< Type > clamp( Range< Type > value ) {
+		return Range.of( this.clamp( value.from ), this.clamp( value.to ) );
 	}
 
 	public float lerp( float ratio ) {
