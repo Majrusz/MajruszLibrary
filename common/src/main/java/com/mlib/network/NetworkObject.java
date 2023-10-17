@@ -21,12 +21,16 @@ public class NetworkObject< Type extends ISerializable > {
 		this.instance = instance;
 	}
 
-	public void sendToClients( Type message ) {
-		NetworkHandler.PLATFORM.sendToClients( this, message, Side.getServer().getPlayerList().getPlayers() );
-	}
-
 	public void sendToClients( List< ServerPlayer > players, Type message ) {
 		NetworkHandler.PLATFORM.sendToClients( this, message, players );
+	}
+
+	public void sendToClients( Type message ) {
+		this.sendToClients( Side.getServer().getPlayerList().getPlayers(), message );
+	}
+
+	public void sendToClient( ServerPlayer player, Type message ) {
+		this.sendToClients( List.of( player ), message );
 	}
 
 	public void sendToServer( Type message ) {
