@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class Context< DataType > {
 	final Contexts< DataType > contexts;
@@ -20,6 +22,14 @@ public class Context< DataType > {
 		this.conditions.add( condition );
 
 		return this;
+	}
+
+	public Context< DataType > addCondition( Predicate< DataType > predicate ) {
+		return this.addCondition( Condition.predicate( predicate ) );
+	}
+
+	public Context< DataType > addCondition( Supplier< Boolean > supplier ) {
+		return this.addCondition( Condition.predicate( data->supplier.get() ) );
 	}
 
 	public Context< DataType > priority( Priority priority ) {
