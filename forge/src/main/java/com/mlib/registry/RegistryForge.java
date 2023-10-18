@@ -4,7 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
@@ -28,38 +27,63 @@ public class RegistryForge implements IRegistryPlatform {
 	}
 
 	@Override
-	public ResourceLocation get( Item item ) {
-		return ForgeRegistries.ITEMS.getKey( item );
+	public IAccessor< Item > getItems() {
+		return new IAccessor<>() {
+			@Override
+			public ResourceLocation get( Item value ) {
+				return ForgeRegistries.ITEMS.getKey( value );
+			}
+
+			@Override
+			public Item get( ResourceLocation id ) {
+				return ForgeRegistries.ITEMS.getValue( id );
+			}
+
+			@Override
+			public Iterable< Item > get() {
+				return ForgeRegistries.ITEMS;
+			}
+		};
 	}
 
 	@Override
-	public ResourceLocation get( EntityType< ? > entityType ) {
-		return ForgeRegistries.ENTITY_TYPES.getKey( entityType );
+	public IAccessor< Enchantment > getEnchantments() {
+		return new IAccessor<>() {
+			@Override
+			public ResourceLocation get( Enchantment value ) {
+				return ForgeRegistries.ENCHANTMENTS.getKey( value );
+			}
+
+			@Override
+			public Enchantment get( ResourceLocation id ) {
+				return ForgeRegistries.ENCHANTMENTS.getValue( id );
+			}
+
+			@Override
+			public Iterable< Enchantment > get() {
+				return ForgeRegistries.ENCHANTMENTS;
+			}
+		};
 	}
 
 	@Override
-	public ResourceLocation get( Enchantment enchantment ) {
-		return ForgeRegistries.ENCHANTMENTS.getKey( enchantment );
-	}
+	public IAccessor< EntityType< ? > > getEntityTypes() {
+		return new IAccessor<>() {
+			@Override
+			public ResourceLocation get( EntityType< ? > value ) {
+				return ForgeRegistries.ENTITY_TYPES.getKey( value );
+			}
 
-	@Override
-	public ResourceLocation get( Level level ) {
-		return level.dimension().location();
-	}
+			@Override
+			public EntityType< ? > get( ResourceLocation id ) {
+				return ForgeRegistries.ENTITY_TYPES.getValue( id );
+			}
 
-	@Override
-	public Item getItem( ResourceLocation id ) {
-		return ForgeRegistries.ITEMS.getValue( id );
-	}
-
-	@Override
-	public EntityType< ? > getEntityType( ResourceLocation id ) {
-		return ForgeRegistries.ENTITY_TYPES.getValue( id );
-	}
-
-	@Override
-	public Enchantment getEnchantment( ResourceLocation id ) {
-		return ForgeRegistries.ENCHANTMENTS.getValue( id );
+			@Override
+			public Iterable< EntityType< ? > > get() {
+				return ForgeRegistries.ENTITY_TYPES;
+			}
+		};
 	}
 
 	@Override

@@ -13,19 +13,19 @@ public interface IRegistryPlatform {
 
 	< Type > void register( RegistryObject< Type > object );
 
-	ResourceLocation get( Item item );
+	IAccessor< Item > getItems();
 
-	ResourceLocation get( EntityType< ? > entityType );
+	IAccessor< Enchantment > getEnchantments();
 
-	ResourceLocation get( Enchantment enchantment );
-
-	ResourceLocation get( Level level );
-
-	Item getItem( ResourceLocation id );
-
-	EntityType< ? > getEntityType( ResourceLocation id );
-
-	Enchantment getEnchantment( ResourceLocation id );
+	IAccessor< EntityType< ? > > getEntityTypes();
 
 	Path getConfigPath();
+
+	interface IAccessor< Type > {
+		ResourceLocation get( Type value );
+
+		Type get( ResourceLocation id );
+
+		Iterable< Type > get();
+	}
 }
