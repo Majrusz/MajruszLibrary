@@ -24,6 +24,7 @@
     "MixinBrushableBlockEntity",
     "MixinChorusFruitItem",
     "MixinCommands",
+    "MixinDedicatedServer",
     "MixinDifficultyInstance",
     "MixinEntity",
     "MixinExperienceOrb",
