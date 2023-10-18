@@ -17,6 +17,8 @@ repositories {
 
 def commonSrcDir = "${project.buildDir}/classes/generated/main"
 
+project.delete(fileTree(dir: commonSrcDir))
+
 project(':common') {
     task replaceFabricAnnotations(type: Copy) {
         from 'src/main/java'
