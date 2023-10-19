@@ -20,13 +20,17 @@ public class SoundEmitter {
 	Supplier< Float > pitch;
 
 	static {
-		PROPERTIES.put( SoundEvents.BONE_MEAL_USE, new Properties( SoundSource.PLAYERS ) );
-		PROPERTIES.put( SoundEvents.GENERIC_DRINK, new Properties( SoundSource.PLAYERS ) );
-		PROPERTIES.put( SoundEvents.ENCHANTMENT_TABLE_USE, new Properties( SoundSource.PLAYERS ) );
-		PROPERTIES.put( SoundEvents.ENDERMAN_TELEPORT, new Properties( SoundSource.PLAYERS ) );
-		PROPERTIES.put( SoundEvents.WARDEN_HEARTBEAT, new Properties( SoundSource.PLAYERS ) );
-		PROPERTIES.put( SoundEvents.ITEM_BREAK, new Properties( SoundSource.PLAYERS ) );
-		PROPERTIES.put( SoundEvents.ITEM_PICKUP, new Properties( SoundSource.PLAYERS ) );
+		SoundEmitter.setDefault( SoundEvents.BONE_MEAL_USE, new Properties( SoundSource.PLAYERS ) );
+		SoundEmitter.setDefault( SoundEvents.GENERIC_DRINK, new Properties( SoundSource.PLAYERS ) );
+		SoundEmitter.setDefault( SoundEvents.ENCHANTMENT_TABLE_USE, new Properties( SoundSource.PLAYERS ) );
+		SoundEmitter.setDefault( SoundEvents.ENDERMAN_TELEPORT, new Properties( SoundSource.PLAYERS ) );
+		SoundEmitter.setDefault( SoundEvents.WARDEN_HEARTBEAT, new Properties( SoundSource.PLAYERS ) );
+		SoundEmitter.setDefault( SoundEvents.ITEM_BREAK, new Properties( SoundSource.PLAYERS ) );
+		SoundEmitter.setDefault( SoundEvents.ITEM_PICKUP, new Properties( SoundSource.PLAYERS ) );
+	}
+
+	public static void setDefault( SoundEvent event, Properties properties ) {
+		PROPERTIES.put( event, properties );
 	}
 
 	public static SoundEmitter of( Supplier< ? extends SoundEvent > event ) {
@@ -74,7 +78,7 @@ public class SoundEmitter {
 		this.pitch = properties.pitch;
 	}
 
-	private record Properties( SoundSource source, Supplier< Float > volume, Supplier< Float > pitch ) {
+	public record Properties( SoundSource source, Supplier< Float > volume, Supplier< Float > pitch ) {
 		public Properties( SoundSource source ) {
 			this( source, SoundEmitter.randomized( 0.7f ), SoundEmitter.randomized( 1.0f ) );
 		}

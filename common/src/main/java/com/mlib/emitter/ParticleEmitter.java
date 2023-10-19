@@ -20,12 +20,16 @@ public class ParticleEmitter {
 	int count = 1;
 
 	static {
-		PROPERTIES.put( ParticleTypes.PORTAL, new Properties( ParticleEmitter.offset( 0.5f ), ParticleEmitter.speed( -1.0f, 0.0f ) ) );
-		PROPERTIES.put( ParticleTypes.FLAME, new Properties( ParticleEmitter.offset( 0.15f ), ParticleEmitter.speed( 0.0025f, 0.01f ) ) );
-		PROPERTIES.put( ParticleTypes.SMOKE, new Properties( ParticleEmitter.offset( 0.25f ), ParticleEmitter.speed( 0.0025f, 0.01f ) ) );
-		PROPERTIES.put( ParticleTypes.SONIC_BOOM, new Properties( ()->Vec3.ZERO, ()->0.0f ) );
-		PROPERTIES.put( ParticleTypes.SOUL, new Properties( ParticleEmitter.offset( 0.5f ), ParticleEmitter.speed( 0.005f, 0.02f ) ) );
-		PROPERTIES.put( ParticleTypes.WITCH, new Properties( ParticleEmitter.offset( 0.5f ), ParticleEmitter.speed( 0.0025f, 0.01f ) ) );
+		ParticleEmitter.setDefault( ParticleTypes.PORTAL, new Properties( ParticleEmitter.offset( 0.5f ), ParticleEmitter.speed( -1.0f, 0.0f ) ) );
+		ParticleEmitter.setDefault( ParticleTypes.FLAME, new Properties( ParticleEmitter.offset( 0.15f ), ParticleEmitter.speed( 0.0025f, 0.01f ) ) );
+		ParticleEmitter.setDefault( ParticleTypes.SMOKE, new Properties( ParticleEmitter.offset( 0.25f ), ParticleEmitter.speed( 0.0025f, 0.01f ) ) );
+		ParticleEmitter.setDefault( ParticleTypes.SONIC_BOOM, new Properties( ()->Vec3.ZERO, ()->0.0f ) );
+		ParticleEmitter.setDefault( ParticleTypes.SOUL, new Properties( ParticleEmitter.offset( 0.5f ), ParticleEmitter.speed( 0.005f, 0.02f ) ) );
+		ParticleEmitter.setDefault( ParticleTypes.WITCH, new Properties( ParticleEmitter.offset( 0.5f ), ParticleEmitter.speed( 0.0025f, 0.01f ) ) );
+	}
+
+	public static void setDefault( SimpleParticleType type, Properties properties ) {
+		PROPERTIES.put( type, properties );
 	}
 
 	public static ParticleEmitter of( Supplier< ? extends SimpleParticleType > type ) {
@@ -86,5 +90,5 @@ public class ParticleEmitter {
 		this.speed = properties.speed;
 	}
 
-	private record Properties( Supplier< Vec3 > offset, Supplier< Float > speed ) {}
+	public record Properties( Supplier< Vec3 > offset, Supplier< Float > speed ) {}
 }
