@@ -29,8 +29,8 @@ public class AttributeHandler {
 		this.operation = operation;
 	}
 
-	public static boolean hasAttribute( LivingEntity entity, Attribute attribute ) {
-		return entity.getAttributes().hasAttribute( attribute );
+	public boolean hasAttribute( LivingEntity entity ) {
+		return entity.getAttributes().hasAttribute( this.attribute.get() );
 	}
 
 	public boolean hasValueChanged( AttributeInstance attributeInstance ) {
