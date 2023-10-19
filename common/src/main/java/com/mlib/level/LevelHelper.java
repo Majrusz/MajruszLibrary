@@ -193,6 +193,19 @@ public class LevelHelper {
 		return Optional.empty();
 	}
 
+	public static BlockPos getPositionOverFluid( Level level, BlockPos position ) {
+		BlockPos offset = new BlockPos( position );
+		int y = position.getY();
+		while( y++ < level.getMaxBuildHeight() ) {
+			offset = AnyPos.from( position.getX(), y, position.getZ() ).block();
+			if( level.getBlockState( offset ).getFluidState().isEmpty() ) {
+				break;
+			}
+		}
+
+		return offset;
+	}
+
 	public static class SpawnPoint {
 		public final ServerLevel level;
 		public final Vec3 position;
