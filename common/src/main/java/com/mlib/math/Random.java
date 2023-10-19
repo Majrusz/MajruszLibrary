@@ -69,6 +69,10 @@ public class Random {
 		return Random.nextInt( range.from, range.to );
 	}
 
+	public static int nextSign() {
+		return Random.nextBoolean() ? 1 : -1;
+	}
+
 	public static boolean nextBoolean() {
 		return Random.getThreadSafe().nextBoolean();
 	}
