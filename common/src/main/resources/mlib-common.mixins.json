@@ -24,6 +24,7 @@
     "MixinBrushableBlockEntity",
     "MixinChorusFruitItem",
     "MixinCommands",
+    "MixinCreativeModeTab",
     "MixinDedicatedServer",
     "MixinDifficultyInstance",
     "MixinEntity",
