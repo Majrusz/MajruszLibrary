@@ -28,6 +28,10 @@ public abstract class MixinBrushableBlockEntity {
 		method = "dropContent (Lnet/minecraft/world/entity/player/Player;)V"
 	)
 	private void dropContent( Player player, CallbackInfo callback ) {
+		if( this.mlibLocation == null ) {
+			return;
+		}
+
 		Contexts.dispatch( new OnItemBrushed( player, this.mlibLocation, this.item, this.hitDirection, ( BrushableBlockEntity )( Object )this ) );
 	}
 
