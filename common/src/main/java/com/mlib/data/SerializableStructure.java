@@ -96,6 +96,10 @@ public class SerializableStructure implements ISerializable {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderBoolean() ) ), key ) );
 	}
 
+	public < Type extends ISerializable > void defineCustom( String key, DataObject.Getter< Type > getter ) {
+		this.serializables.add( new DataObject<>( getter, x->{}, new ReaderCustom<>( getter ), key ) );
+	}
+
 	public < Type extends ISerializable > void defineCustom( String key, DataObject.Getter< Type > getter, DataObject.Setter< Type > setter,
 		Supplier< Type > newInstance
 	) {
