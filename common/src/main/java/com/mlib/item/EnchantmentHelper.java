@@ -1,8 +1,7 @@
 package com.mlib.item;
 
+import com.mlib.data.Serializable;
 import com.mlib.data.SerializableHelper;
-import com.mlib.data.SerializableList;
-import com.mlib.data.SerializableStructure;
 import com.mlib.registry.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -96,17 +95,15 @@ public class EnchantmentHelper {
 		return SerializableHelper.read( EnchantmentsDef::new, Optional.ofNullable( itemStack.getTag() ).orElse( new CompoundTag() ) );
 	}
 
-	public static class EnchantmentsDef extends SerializableList {
+	public static class EnchantmentsDef extends Serializable {
 		public List< EnchantmentDef > enchantments = new ArrayList<>();
 
 		public EnchantmentsDef() {
-			super( "Enchantments" );
-
-			this.defineCustom( ()->this.enchantments, x->this.enchantments = x, EnchantmentDef::new );
+			this.defineCustom( "Enchantments", ()->this.enchantments, x->this.enchantments = x, EnchantmentDef::new );
 		}
 	}
 
-	public static class EnchantmentDef extends SerializableStructure {
+	public static class EnchantmentDef extends Serializable {
 		public ResourceLocation id;
 		public int level;
 

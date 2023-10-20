@@ -17,7 +17,7 @@ class ReaderCustom< Type extends ISerializable > implements IReader< Type > {
 
 	@Override
 	public JsonElement writeJson( Type value ) {
-		return SerializableHelper.write( ()->value, value.getDefaultJson() );
+		return SerializableHelper.write( ()->value, new JsonObject() );
 	}
 
 	@Override
@@ -37,7 +37,7 @@ class ReaderCustom< Type extends ISerializable > implements IReader< Type > {
 
 	@Override
 	public Tag writeTag( Type value ) {
-		return SerializableHelper.write( ()->value, value.getDefaultTag() );
+		return SerializableHelper.write( ()->value, new CompoundTag() );
 	}
 
 	@Override

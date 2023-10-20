@@ -1,10 +1,8 @@
 package com.mlib.data;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.mlib.math.Range;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -14,35 +12,20 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class SerializableStructure implements ISerializable {
-	final String key;
+public class Serializable implements ISerializable {
 	final List< ISerializable > serializables = new ArrayList<>();
-
-	public SerializableStructure( String key ) {
-		this.key = key;
-	}
-
-	public SerializableStructure() {
-		this( null );
-	}
 
 	@Override
 	public void write( JsonElement element ) {
-		JsonElement subelement = SerializableHelper.getWriteSubelement( element, this.key, JsonObject::new );
-
-		this.serializables.forEach( serializable->serializable.write( subelement ) );
+		this.serializables.forEach( serializable->serializable.write( element ) );
 	}
 
 	@Override
 	public void read( JsonElement element ) {
-		JsonElement subelement = SerializableHelper.getReadSubelement( element, this.key );
-		if( subelement == null ) {
-			return;
-		}
-
-		this.serializables.forEach( serializable->serializable.read( subelement ) );
+		this.serializables.forEach( serializable->serializable.read( element ) );
 	}
 
 	@Override
@@ -57,19 +40,12 @@ public class SerializableStructure implements ISerializable {
 
 	@Override
 	public void write( Tag tag ) {
-		Tag subtag = SerializableHelper.getWriteSubtag( tag, this.key, CompoundTag::new );
-
-		this.serializables.forEach( serializable->serializable.write( subtag ) );
+		this.serializables.forEach( serializable->serializable.write( tag ) );
 	}
 
 	@Override
 	public void read( Tag tag ) {
-		Tag subtag = SerializableHelper.getReadSubtag( tag, this.key );
-		if( subtag == null ) {
-			return;
-		}
-
-		this.serializables.forEach( serializable->serializable.read( subtag ) );
+		this.serializables.forEach( serializable->serializable.read( tag ) );
 	}
 
 	public void defineBlockPos( String key, DataObject.Getter< BlockPos > getter, DataObject.Setter< BlockPos > setter ) {
@@ -94,6 +70,13 @@ public class SerializableStructure implements ISerializable {
 
 	public void defineBoolean( String key, DataMap.Getter< Boolean > getter, DataMap.Setter< Boolean > setter ) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderBoolean() ) ), key ) );
+	}
+
+	public void defineCustom( String key, Consumer< Serializable > consumer ) {
+		Serializable structure = new Serializable();
+		consumer.accept( structure );
+
+		this.defineCustom( key, ()->structure );
 	}
 
 	public < Type extends ISerializable > void defineCustom( String key, DataObject.Getter< Type > getter ) {

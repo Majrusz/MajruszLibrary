@@ -2,7 +2,7 @@ package com.mlib.entity;
 
 import com.mlib.annotation.Dist;
 import com.mlib.annotation.OnlyIn;
-import com.mlib.data.SerializableStructure;
+import com.mlib.data.Serializable;
 import com.mlib.level.LevelHelper;
 import com.mlib.math.AnyPos;
 import com.mlib.math.AnyRot;
@@ -185,7 +185,7 @@ public class EntityHelper {
 		}
 	}
 
-	public static class EntityGlow extends SerializableStructure {
+	public static class EntityGlow extends Serializable {
 		int entityId = 0;
 		int ticks = 0;
 
