@@ -13,7 +13,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public abstract class SerializableMap implements ISerializable {
+public class SerializableMap implements ISerializable {
 	final String key;
 	ISerializable serializable = null;
 
