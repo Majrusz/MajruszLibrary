@@ -29,7 +29,7 @@ public class Condition< DataType > {
 		return new Condition<>( data->Side.isAuthority() );
 	}
 
-	public static < DataType extends ILevelData > Condition< DataType > isLogicalServer() {
+	public static < DataType > Condition< DataType > isLogicalServer() {
 		return new Condition<>( data->Side.isLogicalServer() );
 	}
 
