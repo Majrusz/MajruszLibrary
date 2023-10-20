@@ -23,6 +23,10 @@ public class RegistryObject< Type > implements Supplier< Type > {
 		return this.value.get();
 	}
 
+	public String getId() {
+		return this.id;
+	}
+
 	void register() {
 		Registries.PLATFORM.register( this );
 	}
