@@ -123,7 +123,7 @@ public abstract class MixinLivingEntity {
 		method = "getCurrentSwingDuration ()I"
 	)
 	private void getCurrentSwingDuration( CallbackInfoReturnable< Integer > callback ) {
-		callback.setReturnValue( Contexts.dispatch( new OnItemSwingDurationGet( ( LivingEntity )( Object )this, callback.getReturnValue() ).getSwingDuration() ) );
+		callback.setReturnValue( Contexts.dispatch( new OnItemSwingDurationGet( ( LivingEntity )( Object )this, callback.getReturnValue() ) ).getSwingDuration() );
 	}
 
 	private static void tryToAddMagicParticles( OnEntityPreDamaged data ) {

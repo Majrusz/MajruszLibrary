@@ -29,6 +29,6 @@ public class OnItemSwingDurationGet implements IEntityData {
 	}
 
 	public int getSwingDuration() {
-		return Math.max( this.value, 1 );
+		return Math.max( this.value, 2 );
 	}
 }
