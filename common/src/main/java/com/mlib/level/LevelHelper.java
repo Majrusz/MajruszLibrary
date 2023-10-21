@@ -26,6 +26,7 @@ import net.minecraft.world.level.storage.ServerLevelData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -204,6 +205,10 @@ public class LevelHelper {
 		}
 
 		return offset;
+	}
+
+	public static @Nullable Player getNearestPlayer( Level level, BlockPos position, float maxDistance ) {
+		return level.getNearestPlayer( position.getX(), position.getY(), position.getZ(), maxDistance, false );
 	}
 
 	public static class SpawnPoint {
