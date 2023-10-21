@@ -37,6 +37,7 @@
     "MixinLivingEntity",
     "MixinMinecraftServer",
     "MixinMobCategory",
+    "MixinMultiPlayerGameMode",
     "MixinNaturalSpawner",
     "MixinPersistentEntitySectionManager",
     "MixinPlayer",
@@ -44,6 +45,7 @@
     "MixinReloadableServerResources",
     "MixinServerLevel",
     "MixinServerPlayer",
+    "MixinServerPlayerGameMode",
     "MixinTamableAnimal"
   ],
   "injectors": {
