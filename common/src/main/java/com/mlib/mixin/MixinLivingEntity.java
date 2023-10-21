@@ -2,6 +2,7 @@ package com.mlib.mixin;
 
 import com.mlib.contexts.*;
 import com.mlib.contexts.base.Contexts;
+import com.mlib.mixininterfaces.IMixinLivingEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -24,8 +26,14 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.Map;
 
 @Mixin( LivingEntity.class )
-public abstract class MixinLivingEntity {
+public abstract class MixinLivingEntity implements IMixinLivingEntity {
 	float mlibLastExtraDamage = 0.0f;
+	float mlibSwimSpeedMultiplier = 1.0f;
+
+	@Override
+	public float getSwimSpeedMultiplier() {
+		return this.mlibSwimSpeedMultiplier;
+	}
 
 	@Inject(
 		at = @At( "HEAD" ),
@@ -99,6 +107,8 @@ public abstract class MixinLivingEntity {
 	)
 	private void tick( CallbackInfo callback ) {
 		Contexts.dispatch( new OnEntityTicked( ( LivingEntity )( Object )this ) );
+
+		this.mlibSwimSpeedMultiplier = Contexts.dispatch( new OnEntitySwimSpeedMultiplierGet( ( LivingEntity )( Object )this, 1.0f ) ).getMultiplier();
 	}
 
 	@Inject(
