@@ -17,7 +17,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -27,7 +26,7 @@ import java.util.Map;
 
 @Mixin( LivingEntity.class )
 public abstract class MixinLivingEntity implements IMixinLivingEntity {
-	float mlibLastExtraDamage = 0.0f;
+	float mlibLastDamage = 0.0f;
 	float mlibSwimSpeedMultiplier = 1.0f;
 
 	@Override
@@ -41,7 +40,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z"
 	)
 	private void hurt( DamageSource source, float damage, CallbackInfoReturnable< Boolean > callback ) {
-		this.mlibLastExtraDamage = 0.0f;
+		this.mlibLastDamage = 0.0f;
 		LivingEntity entity = ( LivingEntity )( Object )this;
 		if( damage == 0.0f || willBeCancelled( source, entity ) ) {
 			return;
@@ -51,7 +50,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		if( data.isDamageCancelled() ) {
 			callback.setReturnValue( false );
 		} else {
-			this.mlibLastExtraDamage = data.extraDamage;
+			this.mlibLastDamage = data.damage;
 			tryToAddMagicParticles( data );
 		}
 	}
@@ -64,13 +63,14 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z",
 		ordinal = 0
 	)
-	private float addExtraDamage( float damage ) {
-		return damage + this.mlibLastExtraDamage;
+	private float replacePreDamage( float damage ) {
+		return this.mlibLastDamage;
 	}
 
 	@Inject(
 		at = @At(
 			target = "Lnet/minecraft/world/damagesource/CombatTracker;recordDamage (Lnet/minecraft/world/damagesource/DamageSource;F)V",
+			shift = At.Shift.BEFORE,
 			value = "INVOKE"
 		),
 		method = "actuallyHurt (Lnet/minecraft/world/damagesource/DamageSource;F)V"
@@ -133,7 +133,8 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		method = "getCurrentSwingDuration ()I"
 	)
 	private void getCurrentSwingDuration( CallbackInfoReturnable< Integer > callback ) {
-		callback.setReturnValue( Contexts.dispatch( new OnItemSwingDurationGet( ( LivingEntity )( Object )this, callback.getReturnValue() ) ).getSwingDuration() );
+		callback.setReturnValue( Contexts.dispatch( new OnItemSwingDurationGet( ( LivingEntity )( Object )this, callback.getReturnValue() ) )
+			.getSwingDuration() );
 	}
 
 	private static void tryToAddMagicParticles( OnEntityPreDamaged data ) {

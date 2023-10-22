@@ -13,8 +13,8 @@ public class OnEntityPreDamaged implements IEntityData {
 	public final DamageSource source;
 	public final LivingEntity attacker;
 	public final LivingEntity target;
-	public final float damage;
-	public float extraDamage = 0;
+	public final float original;
+	public float damage;
 	public boolean spawnCriticalParticles = false;
 	public boolean spawnMagicParticles = false;
 	private boolean isCancelled = false;
@@ -27,6 +27,7 @@ public class OnEntityPreDamaged implements IEntityData {
 		this.source = source;
 		this.attacker = this.source.getEntity() instanceof LivingEntity entity ? entity : null;
 		this.target = target;
+		this.original = damage;
 		this.damage = damage;
 	}
 
@@ -40,7 +41,8 @@ public class OnEntityPreDamaged implements IEntityData {
 	}
 
 	public boolean isDamageCancelled() {
-		return this.isCancelled;
+		return this.isCancelled
+			|| this.damage <= 0.0f;
 	}
 
 	public boolean isDirect() {
