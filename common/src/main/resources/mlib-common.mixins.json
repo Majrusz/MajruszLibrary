@@ -8,6 +8,7 @@
     "MixinGuiGraphics",
     "MixinKeyboardHandler",
     "MixinMinecraft",
+    "MixinMultiPlayerGameMode",
     "MixinParticleEngine",
     "MixinSingleQuadParticle"
   ],
@@ -37,7 +38,6 @@
     "MixinLivingEntity",
     "MixinMinecraftServer",
     "MixinMobCategory",
-    "MixinMultiPlayerGameMode",
     "MixinNaturalSpawner",
     "MixinPersistentEntitySectionManager",
     "MixinPlayer",
