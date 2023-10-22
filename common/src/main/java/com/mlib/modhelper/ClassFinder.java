@@ -59,7 +59,7 @@ class ClassFinder {
 	private List< Class< ? > > findClassesInPackage( File file, String packageName ) {
 		List< Class< ? > > classes = new ArrayList<>();
 		for( File subfile : file.listFiles() ) {
-			if( subfile.getName().contains( "mixin" ) ) {
+			if( subfile.getName().contains( "mixin" ) || subfile.getName().contains( "client" ) ) {
 				continue;
 			}
 
@@ -94,7 +94,7 @@ class ClassFinder {
 				Enumeration< JarEntry > entries = modJar.entries();
 				while( entries.hasMoreElements() ) {
 					JarEntry jarEntry = entries.nextElement();
-					if( jarEntry.getName().contains( "mixin" ) ) {
+					if( jarEntry.getName().contains( "mixin" ) || jarEntry.getName().contains( "client" ) ) {
 						continue;
 					}
 
