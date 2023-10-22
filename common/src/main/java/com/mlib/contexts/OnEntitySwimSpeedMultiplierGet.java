@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 public class OnEntitySwimSpeedMultiplierGet {
 	public final LivingEntity entity;
 	public final float original;
-	public float value;
+	public float multiplier;
 
 	public static Context< OnEntitySwimSpeedMultiplierGet > listen( Consumer< OnEntitySwimSpeedMultiplierGet > consumer ) {
 		return Contexts.get( OnEntitySwimSpeedMultiplierGet.class ).add( consumer );
@@ -18,10 +18,10 @@ public class OnEntitySwimSpeedMultiplierGet {
 	public OnEntitySwimSpeedMultiplierGet( LivingEntity entity, float multiplier ) {
 		this.entity = entity;
 		this.original = multiplier;
-		this.value = multiplier;
+		this.multiplier = multiplier;
 	}
 
 	public float getMultiplier() {
-		return Math.max( 0.0f, this.value );
+		return Math.max( 0.0f, this.multiplier );
 	}
 }

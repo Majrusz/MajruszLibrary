@@ -14,17 +14,17 @@ public class OnFishingTimeGet implements IEntityData {
 	public final FishingHook hook;
 	public final @Nullable Player player;
 	public final int original;
-	public int value;
+	public int time;
 
 	public static Context< OnFishingTimeGet > listen( Consumer< OnFishingTimeGet > consumer ) {
 		return Contexts.get( OnFishingTimeGet.class ).add( consumer );
 	}
 
-	public OnFishingTimeGet( FishingHook hook, int value ) {
+	public OnFishingTimeGet( FishingHook hook, int time ) {
 		this.hook = hook;
 		this.player = hook.getPlayerOwner();
-		this.original = value;
-		this.value = value;
+		this.original = time;
+		this.time = time;
 	}
 
 	@Override
@@ -33,6 +33,6 @@ public class OnFishingTimeGet implements IEntityData {
 	}
 
 	public int getTicks() {
-		return Math.max( this.value, 1 );
+		return Math.max( this.time, 1 );
 	}
 }

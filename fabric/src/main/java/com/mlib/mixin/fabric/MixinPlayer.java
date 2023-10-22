@@ -19,6 +19,6 @@ public abstract class MixinPlayer {
 	private void getDestroySpeed( BlockState blockState, CallbackInfoReturnable< Float > callback ) {
 		Player player = ( Player )( Object )this;
 
-		callback.setReturnValue( Contexts.dispatch( new OnBreakSpeedGet( player, blockState, callback.getReturnValue() ) ).value );
+		callback.setReturnValue( Contexts.dispatch( new OnBreakSpeedGet( player, blockState, callback.getReturnValue() ) ).speed );
 	}
 }

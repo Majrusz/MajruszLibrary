@@ -9,6 +9,6 @@ import net.minecraftforge.fml.common.Mod;
 public class OnBreakSpeedGetNeoForge {
 	@SubscribeEvent
 	public static void onBreakSpeed( PlayerEvent.BreakSpeed event ) {
-		event.setNewSpeed( Contexts.dispatch( new OnBreakSpeedGet( event.getEntity(), event.getState(), event.getNewSpeed() ) ).value );
+		event.setNewSpeed( Contexts.dispatch( new OnBreakSpeedGet( event.getEntity(), event.getState(), event.getNewSpeed() ) ).speed );
 	}
 }

@@ -11,7 +11,7 @@ public class OnExpOrbPickedUp {
 	public final Player player;
 	public final ExperienceOrb orb;
 	public final int original;
-	public int value;
+	public int experience;
 
 	public static Context< OnExpOrbPickedUp > listen( Consumer< OnExpOrbPickedUp > consumer ) {
 		return Contexts.get( OnExpOrbPickedUp.class ).add( consumer );
@@ -21,10 +21,10 @@ public class OnExpOrbPickedUp {
 		this.player = player;
 		this.orb = orb;
 		this.original = experience;
-		this.value = experience;
+		this.experience = experience;
 	}
 
 	public int getExperience() {
-		return this.value;
+		return this.experience;
 	}
 }

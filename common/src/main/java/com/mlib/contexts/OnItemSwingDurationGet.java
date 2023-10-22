@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 public class OnItemSwingDurationGet implements IEntityData {
 	public final LivingEntity entity;
 	public final int original;
-	public int value;
+	public int duration;
 
 	public static Context< OnItemSwingDurationGet > listen( Consumer< OnItemSwingDurationGet > consumer ) {
 		return Contexts.get( OnItemSwingDurationGet.class ).add( consumer );
@@ -20,7 +20,7 @@ public class OnItemSwingDurationGet implements IEntityData {
 	public OnItemSwingDurationGet( LivingEntity entity, int duration ) {
 		this.entity = entity;
 		this.original = duration;
-		this.value = duration;
+		this.duration = duration;
 	}
 
 	@Override
@@ -29,6 +29,6 @@ public class OnItemSwingDurationGet implements IEntityData {
 	}
 
 	public int getSwingDuration() {
-		return Math.max( this.value, 2 );
+		return Math.max( this.duration, 2 );
 	}
 }

@@ -13,7 +13,7 @@ public class OnBreakSpeedGet implements IEntityData {
 	public final Player player;
 	public final BlockState blockState;
 	public final float original;
-	public float value;
+	public float speed;
 
 	public static Context< OnBreakSpeedGet > listen( Consumer< OnBreakSpeedGet > consumer ) {
 		return Contexts.get( OnBreakSpeedGet.class ).add( consumer );
@@ -23,7 +23,7 @@ public class OnBreakSpeedGet implements IEntityData {
 		this.player = player;
 		this.blockState = blockState;
 		this.original = speed;
-		this.value = speed;
+		this.speed = speed;
 	}
 
 	@Override

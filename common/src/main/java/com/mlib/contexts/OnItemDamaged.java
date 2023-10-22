@@ -14,7 +14,7 @@ public class OnItemDamaged implements ILevelData {
 	public final @Nullable Player player;
 	public final ItemStack itemStack;
 	public final int original;
-	public int value;
+	public int damage;
 
 	public static Context< OnItemDamaged > listen( Consumer< OnItemDamaged > consumer ) {
 		return Contexts.get( OnItemDamaged.class ).add( consumer );
@@ -24,7 +24,7 @@ public class OnItemDamaged implements ILevelData {
 		this.player = player;
 		this.itemStack = itemStack;
 		this.original = damage;
-		this.value = damage;
+		this.damage = damage;
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class OnItemDamaged implements ILevelData {
 	}
 
 	public int getExtraDamage() {
-		return this.value - this.original;
+		return this.damage - this.original;
 	}
 
 	public boolean isAboutToBroke() {
