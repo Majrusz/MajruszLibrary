@@ -18,7 +18,7 @@ public abstract class MixinVillager {
 		method = "updateSpecialPrices (Lnet/minecraft/world/entity/player/Player;)V"
 	)
 	private void updateSpecialPrices( Player player, CallbackInfo callback ) {
-		Contexts.dispatch( new OnTradesUpdated( player, ( ( Villager )( Object )this ).getOffers() ) );
+		Contexts.dispatch( new OnTradesUpdated( ( ( Villager )( Object )this ), player ) );
 	}
 
 	@Inject(
