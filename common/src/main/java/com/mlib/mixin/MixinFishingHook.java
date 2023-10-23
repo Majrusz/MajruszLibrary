@@ -22,8 +22,6 @@ public abstract class MixinFishingHook {
 		method = "catchingFish (Lnet/minecraft/core/BlockPos;)V"
 	)
 	private void catchingFish( FishingHook hook, int timeUntilLured ) {
-		if( timeUntilLured > 0 ) {
-			this.timeUntilLured = Contexts.dispatch( new OnFishingTimeGet( hook, timeUntilLured ) ).getTicks();
-		}
+		this.timeUntilLured = Contexts.dispatch( new OnFishingTimeGet( hook, timeUntilLured ) ).getTicks();
 	}
 }
