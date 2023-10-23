@@ -34,6 +34,7 @@ public abstract class MixinServerPlayerGameMode {
 
 	@Inject(
 		at = @At( "HEAD" ),
+		cancellable = true,
 		method = "useItemOn (Lnet/minecraft/server/level/ServerPlayer;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;"
 	)
 	private void useItemOn( ServerPlayer player, Level level, ItemStack itemStack, InteractionHand hand, BlockHitResult result,
