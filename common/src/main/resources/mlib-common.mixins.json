@@ -46,7 +46,8 @@
     "MixinServerLevel",
     "MixinServerPlayer",
     "MixinServerPlayerGameMode",
-    "MixinTamableAnimal"
+    "MixinTamableAnimal",
+    "MixinVillager"
   ],
   "injectors": {
     "defaultRequire": 1
