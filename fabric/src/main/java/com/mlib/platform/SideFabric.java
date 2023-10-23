@@ -23,6 +23,12 @@ public class SideFabric implements ISidePlatform {
 	}
 
 	@Override
+	public boolean canLoadClassOnServer( String annotations ) {
+		return !annotations.contains( "Lnet/fabricmc/api/EnvType;" )
+			|| !annotations.contains( "CLIENT" );
+	}
+
+	@Override
 	public MinecraftServer getServer() {
 		return SERVER;
 	}

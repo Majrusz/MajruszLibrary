@@ -75,12 +75,14 @@ public abstract class CustomParticle extends TextureSheetParticle implements IMi
 		}
 
 		@FunctionalInterface
+		@OnlyIn( Dist.CLIENT )
 		public interface IFactory {
 			CustomParticle create( ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet );
 		}
 	}
 
 	@FunctionalInterface
+	@OnlyIn( Dist.CLIENT )
 	public interface IFormula< Type > {
 		Type apply( Type type );
 	}

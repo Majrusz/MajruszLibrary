@@ -1,11 +1,15 @@
 package com.mlib.modhelper;
 
+import com.mlib.platform.Side;
+
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -59,13 +63,12 @@ class ClassFinder {
 	private List< Class< ? > > findClassesInPackage( File file, String packageName ) {
 		List< Class< ? > > classes = new ArrayList<>();
 		for( File subfile : file.listFiles() ) {
-			if( subfile.getName().contains( "mixin" ) || subfile.getName().contains( "client" ) ) {
-				continue;
-			}
-
 			if( subfile.isFile() && subfile.getName().endsWith( ".class" ) ) {
 				try {
-					classes.add( Class.forName( "%s.%s".formatted( packageName, subfile.getName().replace( ".class", "" ) ) ) );
+					Class< ? > clazz = this.tryToLoad( "%s.%s".formatted( packageName, subfile.getName().replace( ".class", "" ) ) );
+					if( clazz != null ) {
+						classes.add( clazz );
+					}
 				} catch( Exception exception ) {
 					this.helper.logError( "Failed to find class: %s", exception.toString() );
 				}
@@ -94,21 +97,40 @@ class ClassFinder {
 				Enumeration< JarEntry > entries = modJar.entries();
 				while( entries.hasMoreElements() ) {
 					JarEntry jarEntry = entries.nextElement();
-					if( jarEntry.getName().contains( "mixin" ) || jarEntry.getName().contains( "client" ) ) {
-						continue;
-					}
-
 					if( jarEntry.getName().endsWith( ".class" ) ) {
-						Class< ? > clazz = Class.forName( jarEntry.getName().replace( "/", "." ).replace( ".class", "" ) );
-						classes.add( clazz );
+						Class< ? > clazz = this.tryToLoad( jarEntry.getName().replace( "/", "." ).replace( ".class", "" ) );
+						if( clazz != null ) {
+							classes.add( clazz );
+						}
 					}
 				}
 			} catch( Exception exception ) {
-				this.helper.logError( "Failed to find class: %s", exception );
+				this.helper.logError( "Failed to find class: %s", exception.toString() );
 			}
 		}
 
 		return classes;
+	}
+
+	private Class< ? > tryToLoad( String name ) throws ClassNotFoundException {
+		if( name.contains( "mixin" ) ) {
+			return null;
+		}
+
+		if( Side.isDedicatedServer() ) {
+			InputStream stream = this.getClass().getClassLoader().getResourceAsStream( "%s.class".formatted( name.replace( ".", "/" ) ) );
+			String bytes = new Scanner( stream ).useDelimiter( "\\A" ).next();
+			int startIdx = bytes.indexOf( ".java" );
+			int endIdx = bytes.indexOf( "(", startIdx );
+			if( startIdx != -1 && endIdx == -1 ) {
+				endIdx = bytes.length();
+			}
+			if( startIdx < endIdx && !Side.canLoadClassOnServer( bytes.substring( startIdx, endIdx ) ) ) {
+				return null;
+			}
+		}
+
+		return Class.forName( name );
 	}
 
 	private void addUnique( List< Class< ? > > classes ) {

@@ -9,5 +9,7 @@ public interface ISidePlatform {
 
 	boolean isClient();
 
+	boolean canLoadClassOnServer( String annotations );
+
 	MinecraftServer getServer();
 }

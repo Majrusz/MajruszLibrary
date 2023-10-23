@@ -51,6 +51,10 @@ public class Side {
 		return PLATFORM.isClient();
 	}
 
+	public static boolean canLoadClassOnServer( String annotations ) {
+		return PLATFORM.canLoadClassOnServer( annotations );
+	}
+
 	public static MinecraftServer getServer() {
 		return PLATFORM.getServer();
 	}

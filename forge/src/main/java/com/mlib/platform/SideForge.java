@@ -22,6 +22,12 @@ public class SideForge implements ISidePlatform {
 	}
 
 	@Override
+	public boolean canLoadClassOnServer( String annotations ) {
+		return !annotations.contains( "Lnet/minecraftforge/api/distmarker/Dist;" )
+			|| !annotations.contains( "CLIENT" );
+	}
+
+	@Override
 	public MinecraftServer getServer() {
 		return ServerLifecycleHooks.getCurrentServer();
 	}

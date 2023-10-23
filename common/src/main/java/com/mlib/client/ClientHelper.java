@@ -36,6 +36,7 @@ public class ClientHelper {
 	}
 
 	@AutoInstance
+	@OnlyIn( Dist.CLIENT )
 	public static class Updater {
 		public Updater() {
 			OnKeyStateChanged.listen( data->{
