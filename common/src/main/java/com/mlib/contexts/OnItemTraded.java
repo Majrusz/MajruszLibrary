@@ -2,6 +2,8 @@ package com.mlib.contexts;
 
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
+import com.mlib.contexts.data.IEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -9,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class OnItemTraded {
+public class OnItemTraded implements IEntityData {
 	public final Villager villager;
 	public final @Nullable Player player;
 	public final MerchantOffer offer;
@@ -22,5 +24,10 @@ public class OnItemTraded {
 		this.villager = villager;
 		this.player = villager.getTradingPlayer();
 		this.offer = offer;
+	}
+
+	@Override
+	public Entity getEntity() {
+		return this.villager;
 	}
 }

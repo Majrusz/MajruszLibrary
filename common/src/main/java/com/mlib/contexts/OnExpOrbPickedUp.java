@@ -2,12 +2,14 @@ package com.mlib.contexts;
 
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
+import com.mlib.contexts.data.IEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.function.Consumer;
 
-public class OnExpOrbPickedUp {
+public class OnExpOrbPickedUp implements IEntityData {
 	public final Player player;
 	public final ExperienceOrb orb;
 	public final int original;
@@ -22,6 +24,11 @@ public class OnExpOrbPickedUp {
 		this.orb = orb;
 		this.original = experience;
 		this.experience = experience;
+	}
+
+	@Override
+	public Entity getEntity() {
+		return this.player;
 	}
 
 	public int getExperience() {
