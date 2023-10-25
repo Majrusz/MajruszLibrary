@@ -3,9 +3,11 @@ package com.mlib.math;
 import com.mlib.platform.Side;
 import net.minecraft.util.RandomSource;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 public class Random {
 	static final RandomSource CLIENT = RandomSource.create();
@@ -103,6 +105,10 @@ public class Random {
 		return elements.size() > 0 ? elements.get( Random.nextInt( elements.size() ) ) : null;
 	}
 
+	public static < Type > List< Type > next( List< Type > elements, int count ) {
+		return Random.getRandomIndices( elements.size() ).stream().limit( count ).map( elements::get ).toList();
+	}
+
 	public static < Type > Type next( Set< Type > elements ) {
 		return ( Type )Random.next( elements.toArray() );
 	}
@@ -127,5 +133,12 @@ public class Random {
 		int roundedValue = ( int )value;
 
 		return roundedValue + ( Random.check( value - roundedValue ) ? 1 : 0 );
+	}
+
+	private static List< Integer > getRandomIndices( int size ) {
+		List< Integer > indices = IntStream.iterate( 0, i->i + 1 ).limit( size ).boxed().toList();
+		Collections.shuffle( indices );
+
+		return indices;
 	}
 }
