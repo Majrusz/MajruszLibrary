@@ -3,6 +3,7 @@ package com.mlib.mixin;
 import com.mlib.contexts.OnEntityDamaged;
 import com.mlib.contexts.OnPlayerInteracted;
 import com.mlib.contexts.OnPlayerTicked;
+import com.mlib.contexts.OnPlayerWakedUp;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -49,5 +50,13 @@ public abstract class MixinPlayer {
 		if( data.isInteractionCancelled() ) {
 			callback.setReturnValue( data.getResult() );
 		}
+	}
+
+	@Inject(
+		at = @At( "TAIL" ),
+		method = "stopSleepInBed (ZZ)V"
+	)
+	public void stopSleepInBed( boolean $$0, boolean wasSleepStoppedManually, CallbackInfo callback ) {
+		Contexts.dispatch( new OnPlayerWakedUp( ( Player )( Object )this, wasSleepStoppedManually ) );
 	}
 }
