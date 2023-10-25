@@ -1,6 +1,7 @@
 package com.mlib.registry;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -42,6 +43,26 @@ public class RegistryNeoForge implements IRegistryPlatform {
 			@Override
 			public Iterable< Item > get() {
 				return ForgeRegistries.ITEMS;
+			}
+		};
+	}
+
+	@Override
+	public IAccessor< MobEffect > getEffects() {
+		return new IAccessor<>() {
+			@Override
+			public ResourceLocation get( MobEffect value ) {
+				return ForgeRegistries.MOB_EFFECTS.getKey( value );
+			}
+
+			@Override
+			public MobEffect get( ResourceLocation id ) {
+				return ForgeRegistries.MOB_EFFECTS.getValue( id );
+			}
+
+			@Override
+			public Iterable< MobEffect > get() {
+				return ForgeRegistries.MOB_EFFECTS;
 			}
 		};
 	}

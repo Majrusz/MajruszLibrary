@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.enchantment.Enchantment;
 
@@ -99,6 +100,18 @@ public class Serializable implements ISerializable {
 		Supplier< Type > newInstance
 	) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderCustom<>( newInstance ) ) ), key ) );
+	}
+
+	public void defineEffect( String key, DataObject.Getter< MobEffect > getter, DataObject.Setter< MobEffect > setter ) {
+		this.serializables.add( new DataObject<>( getter, setter, new ReaderMobEffect(), key ) );
+	}
+
+	public void defineEffect( String key, DataList.Getter< MobEffect > getter, DataList.Setter< MobEffect > setter ) {
+		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderMobEffect() ) ), key ) );
+	}
+
+	public void defineEffect( String key, DataMap.Getter< MobEffect > getter, DataMap.Setter< MobEffect > setter ) {
+		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderMobEffect() ) ), key ) );
 	}
 
 	public void defineEnchantment( String key, DataObject.Getter< Enchantment > getter, DataObject.Setter< Enchantment > setter ) {

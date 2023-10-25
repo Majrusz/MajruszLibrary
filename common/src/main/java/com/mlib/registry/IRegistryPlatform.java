@@ -1,6 +1,7 @@
 package com.mlib.registry;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -14,6 +15,8 @@ public interface IRegistryPlatform {
 	< Type > void register( RegistryObject< Type > object );
 
 	IAccessor< Item > getItems();
+
+	IAccessor< MobEffect > getEffects();
 
 	IAccessor< Enchantment > getEnchantments();
 
