@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Random {
@@ -136,7 +137,7 @@ public class Random {
 	}
 
 	private static List< Integer > getRandomIndices( int size ) {
-		List< Integer > indices = IntStream.iterate( 0, i->i + 1 ).limit( size ).boxed().toList();
+		List< Integer > indices = IntStream.iterate( 0, i->i + 1 ).limit( size ).boxed().collect( Collectors.toList() );
 		Collections.shuffle( indices );
 
 		return indices;
