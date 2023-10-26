@@ -87,8 +87,8 @@ public class LevelHelper {
 		Vec3 position = AnyPos.from( target.position() ).add( Random.nextDouble( -offset, offset ), 0.0, Random.nextDouble( -offset, offset ) ).vec3();
 		BlockPos blockPos = LevelHelper.findBlockPosOnGround( level, position, 3 ).orElse( null );
 		if( blockPos != null && target.randomTeleport( blockPos.getX(), blockPos.getY(), blockPos.getZ(), true ) ) {
-			SoundEmitter.of( SoundEvents.ENDERMAN_TELEPORT ).emit( level, position );
-			ParticleEmitter.of( ParticleTypes.PORTAL ).count( 10 ).emit( level, position );
+			SoundEmitter.of( SoundEvents.ENDERMAN_TELEPORT ).position( position ).emit( level );
+			ParticleEmitter.of( ParticleTypes.PORTAL ).count( 10 ).position( position ).emit( level );
 			return true;
 		} else {
 			return false;

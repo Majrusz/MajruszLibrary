@@ -16,6 +16,7 @@ public class ParticleEmitter {
 	static final Properties DEFAULT_PROPERTIES = new Properties( ParticleEmitter.offset( 0.25f ), ParticleEmitter.speed( 0.025f, 0.1f ) );
 	static final Map< Object, Properties > PROPERTIES = new HashMap<>();
 	private final SimpleParticleType type;
+	private Supplier< Vec3 > position = ()->Vec3.ZERO;
 	private Supplier< Vec3 > offset;
 	private Supplier< Float > speed;
 	private int count = 1;
@@ -50,24 +51,32 @@ public class ParticleEmitter {
 		return ()->Random.nextFloat( min, max );
 	}
 
-	public void emit( ServerLevel level, Vec3 position ) {
-		int count = Math.round( this.count * this.countMultiplier );
-		Vec3 offset = this.offset.get();
-		level.sendParticles( this.type, position.x, position.y, position.z, count, offset.x, offset.y, offset.z, this.speed.get() );
+	public void emit( ServerLevel level ) {
+		this.emit( level, this.position.get(), this.offset.get(), Math.round( this.count * this.countMultiplier ) );
 	}
 
-	public void emitLine( ServerLevel level, Vec3 start, Vec3 end ) {
+	public void emitLine( ServerLevel level, Vec3 end ) {
+		Vec3 start = this.position.get();
 		int count = Math.round( this.count * this.countMultiplier );
 		AnyPos direction = AnyPos.from( end ).sub( start );
 		if( count == 1 ) {
-			this.emit( level, AnyPos.from( start ).add( direction.div( 2 ) ).vec3() );
+			this.emit( level, AnyPos.from( start ).add( direction.div( 2 ) ).vec3(), this.offset.get(), 1 );
+			return;
 		}
 
-		for( int idx = 0; idx < count; idx++ ) {
-			Vec3 offset = this.offset.get();
-			Vec3 position = AnyPos.from( start ).add( direction.mul( idx / ( count - 1.0f ) ) ).vec3();
-			level.sendParticles( this.type, position.x, position.y, position.z, count, offset.x, offset.y, offset.z, this.speed.get() );
+		for( int idx = 0; idx < count; ++idx ) {
+			this.emit( level, AnyPos.from( start ).add( direction.mul( idx / ( count - 1.0f ) ) ).vec3(), this.offset.get(), 1 );
 		}
+	}
+
+	public ParticleEmitter position( Supplier< Vec3 > position ) {
+		this.position = position;
+
+		return this;
+	}
+
+	public ParticleEmitter position( Vec3 position ) {
+		return this.position( ()->position );
 	}
 
 	public ParticleEmitter offset( Supplier< Vec3 > offset ) {
@@ -76,10 +85,18 @@ public class ParticleEmitter {
 		return this;
 	}
 
+	public ParticleEmitter offset( Vec3 offset ) {
+		return this.offset( ()->offset );
+	}
+
 	public ParticleEmitter speed( Supplier< Float > speed ) {
 		this.speed = speed;
 
 		return this;
+	}
+
+	public ParticleEmitter speed( float speed ) {
+		return this.speed( ()->speed );
 	}
 
 	public ParticleEmitter count( int count ) {
@@ -91,6 +108,7 @@ public class ParticleEmitter {
 	public ParticleEmitter sizeBased( Entity entity ) {
 		float width = entity.getBbWidth();
 		float height = entity.getBbHeight();
+		this.position = ()->AnyPos.from( entity.position() ).add( 0.0, 0.5 * height, 0.0 ).vec3();
 		this.offset = ()->AnyPos.from( width, height, width ).mul( 0.5 ).vec3();
 		this.countMultiplier = Math.round( ( 1.0f + width + height ) );
 
@@ -101,6 +119,10 @@ public class ParticleEmitter {
 		this.type = type;
 		this.offset = properties.offset;
 		this.speed = properties.speed;
+	}
+
+	private void emit( ServerLevel level, Vec3 position, Vec3 offset, int count ) {
+		level.sendParticles( this.type, position.x, position.y, position.z, count, offset.x, offset.y, offset.z, this.speed.get() );
 	}
 
 	public record Properties( Supplier< Vec3 > offset, Supplier< Float > speed ) {}

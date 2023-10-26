@@ -14,10 +14,11 @@ import java.util.function.Supplier;
 public class SoundEmitter {
 	static final Properties DEFAULT_PROPERTIES = new Properties( SoundSource.AMBIENT );
 	static final Map< Object, Properties > PROPERTIES = new HashMap<>();
-	final SoundEvent event;
-	SoundSource source;
-	Supplier< Float > volume;
-	Supplier< Float > pitch;
+	private final SoundEvent event;
+	private SoundSource source;
+	private Supplier< Vec3 > position = ()->Vec3.ZERO;
+	private Supplier< Float > volume;
+	private Supplier< Float > pitch;
 
 	static {
 		SoundEmitter.setDefault( SoundEvents.BONE_MEAL_USE, new Properties( SoundSource.PLAYERS ) );
@@ -49,7 +50,8 @@ public class SoundEmitter {
 		return SoundEmitter.randomized( value * 0.8f, value * 1.2f );
 	}
 
-	public void emit( ServerLevel level, Vec3 position ) {
+	public void emit( ServerLevel level ) {
+		Vec3 position = this.position.get();
 		level.playSound( null, position.x, position.y, position.z, this.event, this.source, this.volume.get(), this.pitch.get() );
 	}
 
@@ -59,16 +61,34 @@ public class SoundEmitter {
 		return this;
 	}
 
+	public SoundEmitter position( Supplier< Vec3 > position ) {
+		this.position = position;
+
+		return this;
+	}
+
+	public SoundEmitter position( Vec3 position ) {
+		return this.position( ()->position );
+	}
+
 	public SoundEmitter volume( Supplier< Float > volume ) {
 		this.volume = volume;
 
 		return this;
 	}
 
+	public SoundEmitter volume( float volume ) {
+		return this.volume( ()->volume );
+	}
+
 	public SoundEmitter pitch( Supplier< Float > pitch ) {
 		this.pitch = pitch;
 
 		return this;
+	}
+
+	public SoundEmitter pitch( float pitch ) {
+		return this.pitch( ()->pitch );
 	}
 
 	private SoundEmitter( SoundEvent event, Properties properties ) {
