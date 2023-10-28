@@ -1,39 +1,19 @@
-build/
-*.ipr
-run/
-*.iws
-out/
-*.iml
-.gradle/
-output/
-bin/
-libs/
-
-.classpath
-.project
-.idea/
-classes/
-.metadata
-.vscode
-.settings
 *.launch
+*.iml
+*.ipr
+*.iws
 
-# Common
-common/.gradle/
-common/build/
-common/runs/
+.gradle/
+.classpath/
+.project/
+.idea/
+.metadata/
+.vscode/
+.settings/
 
-# Fabric
-fabric/.gradle/
-fabric/build/
-fabric/runs/
-
-# Forge
-forge/.gradle/
-forge/build/
-forge/runs/
-
-# Neoforge
-neoforge/.gradle/
-neoforge/build/
-neoforge/runs/
+bin/
+build/
+classes/
+out/
+output/
+runs/
