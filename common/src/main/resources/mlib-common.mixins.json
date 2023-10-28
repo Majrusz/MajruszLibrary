@@ -48,7 +48,8 @@
     "MixinServerPlayer",
     "MixinServerPlayerGameMode",
     "MixinTamableAnimal",
-    "MixinVillager"
+    "MixinVillager",
+    "MixinWanderingTrader"
   ],
   "injectors": {
     "defaultRequire": 1
