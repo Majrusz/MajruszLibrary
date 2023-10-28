@@ -32,6 +32,7 @@ public class Contexts< DataType > {
 		synchronized( this ) {
 			this.contexts.add( context );
 		}
+		this.sort();
 
 		return context;
 	}
