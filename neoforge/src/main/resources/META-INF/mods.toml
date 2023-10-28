@@ -10,7 +10,7 @@ issueTrackerURL = "${mod_issues}"
     displayURL = "${mod_homepage}"
     authors = "${mod_authors}"
     description = "${mod_description}"
-    updateJSONURL = "${neoforge_update_url}"
+    updateJSONURL = "${mod_update}"
     credits = "${mod_credits}"
     logoFile = "${mod_logo}"
 
