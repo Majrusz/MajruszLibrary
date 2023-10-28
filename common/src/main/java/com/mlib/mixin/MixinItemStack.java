@@ -18,10 +18,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
 
-@Mixin( ItemStack.class )
+@Mixin( value = ItemStack.class, priority = 1100 )
 public abstract class MixinItemStack {
 	@Inject(
 		at = @At( "RETURN" ),
@@ -36,12 +37,17 @@ public abstract class MixinItemStack {
 	}
 
 	@Inject(
-		at = @At( "RETURN" ),
-		cancellable = true,
+		at = @At(
+			ordinal = 4,
+			shift = At.Shift.BEFORE,
+			target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip (ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z",
+			value = "INVOKE"
+		),
+		locals = LocalCapture.CAPTURE_FAILHARD,
 		method = "getTooltipLines (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;"
 	)
-	private void getTooltipLines( Player player, TooltipFlag flag, CallbackInfoReturnable< List< Component > > callback ) {
-		callback.setReturnValue( Contexts.dispatch( new OnItemTooltip( ( ItemStack )( Object )this, callback.getReturnValue(), flag, player ) ).components );
+	private void getTooltipLines( Player player, TooltipFlag flag, CallbackInfoReturnable< List< Component > > callback, List< Component > components ) {
+		Contexts.dispatch( new OnItemTooltip( ( ItemStack )( Object )this, components, flag, player ) );
 	}
 
 	@ModifyVariable(
