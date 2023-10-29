@@ -27,6 +27,7 @@ public class ModHelper {
 	final AdvancementCaller advancementCaller;
 	final RegistryHandler registryHandler;
 	final NetworkHandler networkHandler;
+	final VersionChecker versionChecker;
 
 	public static ModHelper create( String modId ) {
 		return new ModHelper( modId );
@@ -105,10 +106,12 @@ public class ModHelper {
 		this.advancementCaller = new AdvancementCaller( this );
 		this.registryHandler = new RegistryHandler( this );
 		this.networkHandler = new NetworkHandler( this );
+		this.versionChecker = new VersionChecker( this );
 
 		this.onRegister( this.classFinder::findClasses );
 		this.onRegister( ()->this.instances.add( this.classFinder.getInstances( clazz->clazz.isAnnotationPresent( AutoInstance.class ) ) ) );
 		this.onRegister( this.registryHandler::register );
 		this.onRegister( this.networkHandler::register );
+		this.onRegister( this.versionChecker::register );
 	}
 }

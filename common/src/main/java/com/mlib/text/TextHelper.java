@@ -1,12 +1,12 @@
 package com.mlib.text;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.TreeMap;
+import java.util.function.UnaryOperator;
 
 public class TextHelper {
 	static final int DEFAULT_SCALE = 2;
@@ -107,6 +107,11 @@ public class TextHelper {
 	}
 
 	public static MutableComponent moreDetailsComponent() {
-		return Component.translatable( "mlib.items.advanced_hint" ).withStyle( ChatFormatting.GRAY );
+		return Component.translatable( "mlib.advanced_hint" ).withStyle( ChatFormatting.GRAY );
+	}
+
+	public static UnaryOperator< Style > createURL( String url ) {
+		return style->style.withClickEvent( new ClickEvent( ClickEvent.Action.OPEN_URL, url ) )
+			.withHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, TextHelper.literal( url ).withStyle( ChatFormatting.GRAY ) ) );
 	}
 }
