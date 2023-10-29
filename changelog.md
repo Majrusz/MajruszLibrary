@@ -1,1 +1,2 @@
 - reworked whole mod to support multiple platforms
+- added chat notifications when mods are not up-to-date
