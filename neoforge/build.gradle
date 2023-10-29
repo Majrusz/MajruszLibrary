@@ -146,7 +146,7 @@ task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
     def file = upload(curseforge_project_id, file("build/libs/${mod_archives_name}-neoforge-${minecraft_version}-${mod_version}.jar"))
     file.displayName = "${mod_archives_name}-neoforge-${minecraft_version}-${mod_version}"
     file.changelog = changelogText
-    file.changelogType = "markdown"
+    file.changelogType = 'markdown'
     file.addModLoader('NeoForge')
     file.addGameVersion(minecraft_version)
     file.addGameVersion('Client', 'Server')
