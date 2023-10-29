@@ -1,0 +1,6 @@
+{
+  "commands.mlib.arguments.enum.invalid": "Typ wyliczyniowy musi być jednym z %1$s, a był %2$s",
+  "mlib.advanced_hint": "Wciśnij SHIFT po więcej informacji...",
+  "mlib.update_available": "Nowe aktualizacje są dostępne:",
+  "mlib.update_versions": "%1$s (aktualnie: %2$s)"
+}
