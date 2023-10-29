@@ -26,10 +26,6 @@ public class Side {
 		}
 	}
 
-	public static boolean isAuthority() {
-		return PLATFORM.getServer() != null; // server can be dedicated or integrated with the client
-	}
-
 	public static boolean isLogicalClient() {
 		return Side.isClient()
 			&& Side.getMinecraft().isSameThread();

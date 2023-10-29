@@ -25,10 +25,6 @@ public class Condition< DataType > {
 	final Predicate< DataType > predicate;
 	boolean isNegated = false;
 
-	public static < DataType > Condition< DataType > hasAuthority() {
-		return new Condition<>( data->Side.isAuthority() );
-	}
-
 	public static < DataType > Condition< DataType > isLogicalServer() {
 		return new Condition<>( data->Side.isLogicalServer() );
 	}

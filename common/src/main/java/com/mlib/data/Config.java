@@ -85,7 +85,7 @@ public class Config extends Serializable {
 			} );
 
 			OnResourcesReloaded.listen( data->{
-				if( Side.isAuthority() ) {
+				if( Side.isLogicalServer() ) {
 					config.load();
 					config.save();
 				}
@@ -95,7 +95,7 @@ public class Config extends Serializable {
 			} );
 
 			OnPlayerLoggedIn.listen( data->{
-				if( Side.isAuthority() ) {
+				if( Side.isLogicalServer() ) {
 					config.load();
 					config.save();
 				}
