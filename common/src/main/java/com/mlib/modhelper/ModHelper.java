@@ -56,7 +56,7 @@ public class ModHelper {
 	}
 
 	public Config.Builder< Config > config() {
-		return new Config.Builder<>( this, name->new Config( name ) {} );
+		return new Config.Builder<>( this, Config::new );
 	}
 
 	public < Type extends Config > Config.Builder< Type > config( Function< String, Type > instance ) {

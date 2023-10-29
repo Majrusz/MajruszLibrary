@@ -19,6 +19,14 @@ public class Config extends Serializable {
 	private final File file;
 	private final Gson gson;
 
+	public Config( String name ) {
+		this.file = Registries.getConfigPath().resolve( "%s.json".formatted( name ) ).toFile();
+		this.gson = Deserializers.createFunctionSerializer()
+			.registerTypeAdapter( this.getClass(), new TypeAdapter<>( ()->this ) )
+			.setPrettyPrinting()
+			.create();
+	}
+
 	public void save() {
 		try {
 			if( this.file.exists() || this.file.createNewFile() ) {
@@ -41,14 +49,6 @@ public class Config extends Serializable {
 		} catch( Exception exception ) {
 			MajruszLibrary.HELPER.logError( exception.toString() );
 		}
-	}
-
-	protected Config( String name ) {
-		this.file = Registries.getConfigPath().resolve( "%s.json".formatted( name ) ).toFile();
-		this.gson = Deserializers.createFunctionSerializer()
-			.registerTypeAdapter( this.getClass(), new TypeAdapter<>( ()->this ) )
-			.setPrettyPrinting()
-			.create();
 	}
 
 	public static class Builder< Type extends Config > {
@@ -77,7 +77,7 @@ public class Config extends Serializable {
 		public Type create() {
 			String name = this.name != null ? this.name : this.helper.getModId();
 			Type config = this.instance.apply( name );
-			NetworkObject< Config > network = this.isAutoSyncEnabled ? this.helper.create( name.replace( "-", "_" ), Config.class, ()->config ) : null;
+			NetworkObject< Type > network = this.isAutoSyncEnabled ? this.helper.create( name.replace( "-", "_" ), ( Class< Type > )config.getClass(), ()->config ) : null;
 
 			this.helper.onRegister( ()->{
 				config.load();

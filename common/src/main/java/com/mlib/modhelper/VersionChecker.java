@@ -1,6 +1,8 @@
 package com.mlib.modhelper;
 
 import com.google.gson.*;
+import com.mlib.MajruszLibrary;
+import com.mlib.annotation.AutoInstance;
 import com.mlib.contexts.OnPlayerLoggedIn;
 import com.mlib.data.ISerializable;
 import com.mlib.data.Serializable;
@@ -23,16 +25,9 @@ import java.util.regex.Pattern;
 
 class VersionChecker {
 	private static final Pattern VERSION = Pattern.compile( "(\\d+)\\.(\\d+)\\.(\\d+)" );
-	private static final List< Component > COMPONENTS = Collections.synchronizedList( new ArrayList<>() );
 	final ModHelper helper;
 	final Gson gson;
 	final Data data = new Data();
-
-	static {
-		OnPlayerLoggedIn.listen( VersionChecker::sendUpdateMessages )
-			.addCondition( data->COMPONENTS.size() > 0 )
-			.addCondition( data->Side.isLogicalServer() && !Side.isDedicatedServer() || data.player.hasPermissions( 4 ) );
-	}
 
 	public VersionChecker( ModHelper helper ) {
 		this.helper = helper;
@@ -81,7 +76,7 @@ class VersionChecker {
 		MutableComponent versions = TextHelper.translatable( "mlib.update_versions", name, this.data.currentVersion )
 			.withStyle( ChatFormatting.GRAY );
 
-		COMPONENTS.add( versions );
+		Sender.COMPONENTS.add( versions );
 	}
 
 	private boolean isUpdateAvailable() {
@@ -104,9 +99,24 @@ class VersionChecker {
 			|| latestMajor == currentMajor && latestMinor == currentMinor && latestPatch > currentPatch;
 	}
 
-	private static void sendUpdateMessages( OnPlayerLoggedIn data ) {
-		data.player.sendSystemMessage( TextHelper.translatable( "mlib.update_available" ) );
-		COMPONENTS.forEach( data.player::sendSystemMessage );
+	@AutoInstance
+	public static class Sender {
+		static final List< Component > COMPONENTS = Collections.synchronizedList( new ArrayList<>() );
+		private boolean isEnabled = true;
+
+		public Sender() {
+			OnPlayerLoggedIn.listen( this::sendUpdateMessages )
+				.addCondition( data->this.isEnabled )
+				.addCondition( data->COMPONENTS.size() > 0 )
+				.addCondition( data->Side.isLogicalServer() && !Side.isDedicatedServer() || data.player.hasPermissions( 4 ) );
+
+			MajruszLibrary.CONFIG.defineBoolean( "send_new_available_updates_message", ()->this.isEnabled, x->this.isEnabled = x );
+		}
+
+		private void sendUpdateMessages( OnPlayerLoggedIn data ) {
+			data.player.sendSystemMessage( TextHelper.translatable( "mlib.update_available" ) );
+			COMPONENTS.forEach( data.player::sendSystemMessage );
+		}
 	}
 
 	private static class Data extends Serializable {

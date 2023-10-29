@@ -1,6 +1,7 @@
 package com.mlib;
 
 import com.mlib.command.EnumArgument;
+import com.mlib.data.Config;
 import com.mlib.entity.EntityHelper;
 import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
@@ -12,6 +13,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 public class MajruszLibrary {
 	public static final String MOD_ID = "mlib";
 	public static final ModHelper HELPER = ModHelper.create( MOD_ID );
+
+	// Configs
+	public static final Config CONFIG = HELPER.config().named( "majruszlibrary" ).autoSync().create();
 
 	// Registry Groups
 	public static final RegistryGroup< ArgumentTypeInfo< ?, ? > > ARGUMENT_TYPES = HELPER.create( BuiltInRegistries.COMMAND_ARGUMENT_TYPE );
