@@ -115,7 +115,7 @@ modrinth {
     versionType.set('release')
     uploadFile.set(file("build/libs/${mod_archives_name}-fabric-${minecraft_version}-${mod_version}.jar"))
     gameVersions.set([minecraft_version])
-    loaders.set(['fabric'])
+    loaders.set(['fabric', 'quilt'])
 }
 
 task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
@@ -127,7 +127,7 @@ task curseforge(type: net.darkhax.curseforgegradle.TaskPublishCurseForge) {
     file.displayName = "${mod_archives_name}-fabric-${minecraft_version}-${mod_version}"
     file.changelog = changelogText
     file.changelogType = "markdown"
-    file.addModLoader('Fabric')
+    file.addModLoader('Fabric', 'Quilt')
     file.addGameVersion(minecraft_version)
     file.addGameVersion('Client', 'Server')
     file.addJavaVersion('Java 17')
