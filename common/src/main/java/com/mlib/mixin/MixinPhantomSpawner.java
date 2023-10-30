@@ -22,7 +22,7 @@ public abstract class MixinPhantomSpawner {
 	@ModifyVariable(
 		at = @At( "STORE" ),
 		method = "tick (Lnet/minecraft/server/level/ServerLevel;ZZ)I",
-		name = "l" // for some magic reason ordinal = 3 does not work on fabric
+		name = { "l", "$$15" } // for some magic reason ordinal = 3 does not work on fabric
 	)
 	private int getPhantomsCount( int count ) {
 		return Contexts.dispatch( new OnInsomniaPhantomsCountGet( this.mlibLastPlayer, count ) ).getCount();

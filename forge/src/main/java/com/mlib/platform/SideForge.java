@@ -23,7 +23,8 @@ public class SideForge implements ISidePlatform {
 
 	@Override
 	public boolean canLoadClassOnServer( String annotations ) {
-		return !annotations.contains( "Lnet/minecraftforge/api/distmarker/Dist;" )
+		return !annotations.contains( "Lcom/mlib/annotation/Dist;" )
+			&& !annotations.contains( "Lnet/minecraftforge/api/distmarker/Dist;" )
 			|| !annotations.contains( "CLIENT" );
 	}
 

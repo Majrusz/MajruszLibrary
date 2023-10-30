@@ -5,6 +5,7 @@ import com.mlib.data.Config;
 import com.mlib.data.ISerializable;
 import com.mlib.network.NetworkHandler;
 import com.mlib.network.NetworkObject;
+import com.mlib.platform.Services;
 import com.mlib.registry.RegistryGroup;
 import com.mlib.registry.RegistryHandler;
 import net.minecraft.core.Registry;
@@ -28,6 +29,7 @@ public class ModHelper {
 	final RegistryHandler registryHandler;
 	final NetworkHandler networkHandler;
 	final VersionChecker versionChecker;
+	final IDataPlatform data = Services.loadOptional( IDataPlatform.class ).orElse( null );
 
 	public static ModHelper create( String modId ) {
 		return new ModHelper( modId );
@@ -73,6 +75,10 @@ public class ModHelper {
 
 	public void logError( String format, Object... args ) {
 		this.logger.error( format.formatted( args ) );
+	}
+
+	public < Type extends IDataPlatform > Type getData( Class< Type > clazz ) {
+		return clazz.cast( this.data );
 	}
 
 	public < Type > Type getInstance( Class< Type > clazz ) {

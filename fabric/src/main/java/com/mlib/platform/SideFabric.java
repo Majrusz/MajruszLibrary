@@ -24,7 +24,8 @@ public class SideFabric implements ISidePlatform {
 
 	@Override
 	public boolean canLoadClassOnServer( String annotations ) {
-		return !annotations.contains( "Lnet/fabricmc/api/EnvType;" )
+		return !annotations.contains( "Lcom/mlib/annotation/Dist;" )
+			&& !annotations.contains( "Lnet/fabricmc/api/EnvType;" )
 			|| !annotations.contains( "CLIENT" );
 	}
 

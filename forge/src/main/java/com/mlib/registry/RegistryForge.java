@@ -1,5 +1,6 @@
 package com.mlib.registry;
 
+import com.mlib.modhelper.DataForge;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
@@ -13,17 +14,17 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.nio.file.Path;
 
 public class RegistryForge implements IRegistryPlatform {
-	DeferredRegister< ? > lastDeferredRegister = null;
-
 	@Override
 	public < Type > void register( RegistryGroup< Type > group ) {
-		this.lastDeferredRegister = DeferredRegister.create( group.registry.key(), group.helper.getModId() );
-		this.lastDeferredRegister.register( FMLJavaModLoadingContext.get().getModEventBus() );
+		DataForge data = group.helper.getData( DataForge.class );
+		data.lastDeferredRegister = DeferredRegister.create( group.registry.key(), group.helper.getModId() );
+		data.lastDeferredRegister.register( FMLJavaModLoadingContext.get().getModEventBus() );
 	}
 
 	@Override
 	public < Type > void register( RegistryObject< Type > object ) {
-		net.minecraftforge.registries.RegistryObject< Type > forgeObject = ( ( DeferredRegister< Type > )this.lastDeferredRegister ).register( object.id, object.newInstance );
+		DataForge data = object.group.helper.getData( DataForge.class );
+		net.minecraftforge.registries.RegistryObject< Type > forgeObject = ( ( DeferredRegister< Type > )data.lastDeferredRegister ).register( object.id, object.newInstance );
 		object.set( forgeObject );
 	}
 

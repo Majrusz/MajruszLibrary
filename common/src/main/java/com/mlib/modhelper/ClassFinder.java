@@ -121,7 +121,7 @@ class ClassFinder {
 			InputStream stream = this.getClass().getClassLoader().getResourceAsStream( "%s.class".formatted( name.replace( ".", "/" ) ) );
 			String bytes = new Scanner( stream ).useDelimiter( "\\A" ).next();
 			int startIdx = bytes.indexOf( ".java" );
-			int endIdx = bytes.indexOf( "(", startIdx );
+			int endIdx = bytes.indexOf( ")", startIdx );
 			if( startIdx != -1 && endIdx == -1 ) {
 				endIdx = bytes.length();
 			}
