@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.mlib.mixin.neoforge",
+  "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "mixins": [
+    "MixinFishingHook",
+    "MixinLootTable"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,18 +1,18 @@
 ## What is Majrusz Library? [![](http://cf.way2muchnoise.eu/full_majrusz-library_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/majrusz-library)
-**Majrusz Library** is a Minecraft Forge modification which shares common code for some of my modifications.
+**Majrusz Library** is a Minecraft modification which shares common code for my other modifications.
+
+## Dependent modifications
+- [Majrusz's Enchantments](https://github.com/Majrusz/MajruszsEnchantmentsMod)
+- [Majrusz's Progressive Difficulty](https://github.com/Majrusz/MajruszsProgressiveDifficultyMod)
+- [Majrusz's Accessories](https://github.com/Majrusz/MajruszsAccessories)
+
+## Supported platforms
+- [Forge](https://files.minecraftforge.net/net/minecraftforge/forge/)
+- [NeoForge](https://neoforged.net) _(since 6.0.0)_
+- [Fabric](https://fabricmc.net) _(since 6.0.0)_
+- [Quilt](https://quiltmc.org) _(since 6.0.0)_
 
 ## Where is Majrusz Library officially available?
+- [Modrinth](https://modrinth.com/mod/majrusz-library)
 - [Curse Forge](https://www.curseforge.com/minecraft/mc-mods/majrusz-library)
 - [Planet Minecraft](https://www.planetminecraft.com/mod/majrusz-library/)
-- [Modrinth](https://modrinth.com/mod/majrusz-library)
-
-## Current Library Releases (Source Code)
-- [v4.4.0 for Minecraft 1.20](https://github.com/Majrusz/MajruszLibrary/tree/1.20.X)
-- [v4.4.0 for Minecraft 1.19.3](https://github.com/Majrusz/MajruszLibrary/tree/1.19.X) *(not supported anymore)*
-- [v2.7.3 for Minecraft 1.18.2](https://github.com/Majrusz/MajruszLibrary/tree/1.18.X) *(not supported anymore)*
-- [v2.6.0 for Minecraft 1.17.1](https://github.com/Majrusz/MajruszLibrary/tree/1.17.1) *(not supported anymore)*
-- [v2.0.1 for Minecraft 1.16.5](https://github.com/Majrusz/MajruszLibrary/tree/1.16.4) *(not supported anymore)*
-
-## Technologies
-- Java 8
-- [Minecraft Forge API](https://github.com/MinecraftForge/MinecraftForge)
