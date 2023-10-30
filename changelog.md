@@ -1,2 +1,0 @@
-- fixed compatibility crash with Sodium
-- fixed crash with `lootId` being null
