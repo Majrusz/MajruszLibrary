@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 @Mixin( LivingEntity.class )
 public abstract class MixinLivingEntity implements IMixinLivingEntity {
+	private @Shadow int useItemRemaining;
 	float mlibLastDamage = 0.0f;
 	float mlibSwimSpeedMultiplier = 1.0f;
 
@@ -135,6 +137,16 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 	private void getCurrentSwingDuration( CallbackInfoReturnable< Integer > callback ) {
 		callback.setReturnValue( Contexts.dispatch( new OnItemSwingDurationGet( ( LivingEntity )( Object )this, callback.getReturnValue() ) )
 			.getSwingDuration() );
+	}
+
+	@Inject(
+		at = @At( "HEAD" ),
+		method = "updateUsingItem (Lnet/minecraft/world/item/ItemStack;)V"
+	)
+	private void updateUsingItem( ItemStack itemStack, CallbackInfo callback ) {
+		OnItemUseTicked data = Contexts.dispatch( new OnItemUseTicked( ( LivingEntity )( Object )this, itemStack, itemStack.getUseDuration(), this.useItemRemaining ) );
+
+		this.useItemRemaining = data.getDuration();
 	}
 
 	private static void tryToAddMagicParticles( OnEntityPreDamaged data ) {
