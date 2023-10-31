@@ -16,9 +16,10 @@ public class CustomEnchantment extends Enchantment {
 	private CostFormula minLevelCost = level->10;
 	private CostFormula maxLevelCost = level->50;
 	private Predicate< Enchantment > compatibility = enchantment->true;
+	private Predicate< ItemStack > enchantability = itemStack->false;
 
 	public CustomEnchantment() {
-		super( null, null, null );
+		super( null, EnchantmentCategory.BREAKABLE, null );
 	}
 
 	@Override
@@ -39,7 +40,7 @@ public class CustomEnchantment extends Enchantment {
 	@Override
 	public boolean canEnchant( ItemStack itemStack ) {
 		return this.isEnabled()
-			&& super.canEnchant( itemStack );
+			&& this.enchantability.test( itemStack );
 	}
 
 	@Override
@@ -85,7 +86,7 @@ public class CustomEnchantment extends Enchantment {
 	public CustomEnchantment category( EnchantmentCategory category ) {
 		( ( IMixinEnchantment )this ).setCategory( category );
 
-		return this;
+		return this.enchantability( itemStack->category.canEnchant( itemStack.getItem() ) );
 	}
 
 	public CustomEnchantment curse() {
@@ -114,6 +115,12 @@ public class CustomEnchantment extends Enchantment {
 
 	public CustomEnchantment compatibility( Predicate< Enchantment > predicate ) {
 		this.compatibility = predicate;
+
+		return this;
+	}
+
+	public CustomEnchantment enchantability( Predicate< ItemStack > predicate ) {
+		this.enchantability = predicate;
 
 		return this;
 	}
