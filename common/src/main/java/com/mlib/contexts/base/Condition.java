@@ -72,7 +72,7 @@ public class Condition< DataType > {
 		return Condition.cooldown( ()->seconds );
 	}
 
-	public static < DataType > Condition< DataType > hasEnchantment( Supplier< Enchantment > enchantment, Function< DataType, LivingEntity > entity ) {
+	public static < DataType > Condition< DataType > hasEnchantment( Supplier< ? extends Enchantment > enchantment, Function< DataType, LivingEntity > entity ) {
 		return new Condition<>( data->entity.apply( data ) != null && EnchantmentHelper.has( enchantment, entity.apply( data ) ) );
 	}
 
@@ -80,7 +80,7 @@ public class Condition< DataType > {
 		return Condition.hasEnchantment( ()->enchantment, entity );
 	}
 
-	public static < DataType > Condition< DataType > hasEffect( Supplier< MobEffect > effect, Function< DataType, LivingEntity > entity ) {
+	public static < DataType > Condition< DataType > hasEffect( Supplier< ? extends MobEffect > effect, Function< DataType, LivingEntity > entity ) {
 		return new Condition<>( data->entity.apply( data ) != null && entity.apply( data ).hasEffect( effect.get() ) );
 	}
 
@@ -96,7 +96,7 @@ public class Condition< DataType > {
 		return new Condition<>( data->entity.apply( data ) != null && entity.apply( data ).onGround() );
 	}
 
-	public static < DataType > Condition< DataType > isCooldownOver( Function< DataType, Player > player, Supplier< Item > item ) {
+	public static < DataType > Condition< DataType > isCooldownOver( Function< DataType, Player > player, Supplier< ? extends Item > item ) {
 		return new Condition<>( data->player.apply( data ) != null && !player.apply( data ).getCooldowns().isOnCooldown( item.get() ) );
 	}
 
