@@ -35,9 +35,9 @@ public class OnLootGenerated implements IEntityData {
 		return Contexts.get( OnLootGenerated.class ).add( consumer );
 	}
 
-	public OnLootGenerated( ObjectArrayList< ItemStack > generatedLoot, ResourceLocation lootId, LootContext context ) {
+	public OnLootGenerated( ObjectArrayList< ItemStack > generatedLoot, @Nullable ResourceLocation lootId, LootContext context ) {
 		this.generatedLoot = generatedLoot;
-		this.lootId = lootId;
+		this.lootId = lootId != null ? lootId : new ResourceLocation( "empty" );
 		this.context = context;
 		this.blockState = this.getParameter( LootContextParams.BLOCK_STATE );
 		this.damageSource = this.getParameter( LootContextParams.DAMAGE_SOURCE );
