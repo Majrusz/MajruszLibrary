@@ -1,0 +1,1 @@
+- fixed compatibility crash with Sodium
