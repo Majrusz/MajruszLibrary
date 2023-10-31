@@ -15,12 +15,12 @@ base {
 repositories {
     mavenCentral()
     maven {
-        name = "CurseForge"
+        name = 'CurseForge'
         url 'https://www.cursemaven.com'
     }
     maven {
-        name = "Modrinth"
-        url = "https://api.modrinth.com/maven"
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
     }
 }
 
