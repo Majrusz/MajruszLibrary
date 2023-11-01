@@ -9,6 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,6 +26,9 @@ public abstract class MixinExplosion implements IMixinExplosion {
 	private @Shadow @Mutable float radius;
 	private @Shadow Level level;
 	private @Shadow ObjectArrayList< BlockPos > toBlow;
+	private @Shadow double x;
+	private @Shadow double y;
+	private @Shadow double z;
 	private OnExploded mlibContext = null;
 
 	@Override
@@ -49,7 +53,7 @@ public abstract class MixinExplosion implements IMixinExplosion {
 		method = "explode ()V"
 	)
 	private void explode( CallbackInfo callback ) {
-		this.mlibContext = Contexts.dispatch( new OnExploded( ( Explosion )( Object )this, this.level, this.radius, this.fire ) );
+		this.mlibContext = Contexts.dispatch( new OnExploded( ( Explosion )( Object )this, this.level, new Vec3( this.x, this.y, this.z ), this.radius, this.fire ) );
 		if( this.mlibContext.isExplosionCancelled() ) {
 			callback.cancel();
 		} else {

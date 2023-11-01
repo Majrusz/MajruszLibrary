@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.function.Predicate;
 public class OnExploded implements ILevelData {
 	public final Explosion explosion;
 	public final Level level;
+	public final Vec3 position;
 	public final @Nullable LivingEntity entity;
 	public final float originalRadius;
 	public float radius;
@@ -29,9 +31,10 @@ public class OnExploded implements ILevelData {
 		return Contexts.get( OnExploded.class ).add( consumer );
 	}
 
-	public OnExploded( Explosion explosion, Level level, float radius, boolean spawnsFire ) {
+	public OnExploded( Explosion explosion, Level level, Vec3 position, float radius, boolean spawnsFire ) {
 		this.explosion = explosion;
 		this.level = level;
+		this.position = position;
 		this.entity = explosion.getIndirectSourceEntity();
 		this.originalRadius = radius;
 		this.radius = radius;
