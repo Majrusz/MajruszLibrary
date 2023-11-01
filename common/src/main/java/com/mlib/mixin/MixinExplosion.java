@@ -1,6 +1,6 @@
 package com.mlib.mixin;
 
-import com.mlib.contexts.OnExplosion;
+import com.mlib.contexts.OnExploded;
 import com.mlib.contexts.base.Contexts;
 import com.mlib.mixininterfaces.IMixinExplosion;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -25,7 +25,7 @@ public abstract class MixinExplosion implements IMixinExplosion {
 	private @Shadow @Mutable float radius;
 	private @Shadow Level level;
 	private @Shadow ObjectArrayList< BlockPos > toBlow;
-	private OnExplosion mlibContext = null;
+	private OnExploded mlibContext = null;
 
 	@Override
 	public float getRadius() {
@@ -49,7 +49,7 @@ public abstract class MixinExplosion implements IMixinExplosion {
 		method = "explode ()V"
 	)
 	private void explode( CallbackInfo callback ) {
-		this.mlibContext = Contexts.dispatch( new OnExplosion( ( Explosion )( Object )this, this.level, this.radius, this.fire ) );
+		this.mlibContext = Contexts.dispatch( new OnExploded( ( Explosion )( Object )this, this.level, this.radius, this.fire ) );
 		if( this.mlibContext.isExplosionCancelled() ) {
 			callback.cancel();
 		} else {

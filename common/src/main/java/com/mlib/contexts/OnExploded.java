@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class OnExplosion implements ILevelData {
+public class OnExploded implements ILevelData {
 	public final Explosion explosion;
 	public final Level level;
 	public final @Nullable LivingEntity entity;
@@ -25,11 +25,11 @@ public class OnExplosion implements ILevelData {
 	private Predicate< Entity > entityFilter = entity->false;
 	private boolean isExplosionCancelled = false;
 
-	public static Context< OnExplosion > listen( Consumer< OnExplosion > consumer ) {
-		return Contexts.get( OnExplosion.class ).add( consumer );
+	public static Context< OnExploded > listen( Consumer< OnExploded > consumer ) {
+		return Contexts.get( OnExploded.class ).add( consumer );
 	}
 
-	public OnExplosion( Explosion explosion, Level level, float radius, boolean spawnsFire ) {
+	public OnExploded( Explosion explosion, Level level, float radius, boolean spawnsFire ) {
 		this.explosion = explosion;
 		this.level = level;
 		this.entity = explosion.getIndirectSourceEntity();
