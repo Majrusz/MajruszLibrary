@@ -6,6 +6,7 @@ import com.mlib.math.Range;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -45,6 +46,10 @@ public class ItemHelper {
 		if( !player.getInventory().add( itemStack ) ) {
 			level.addFreshEntity( new ItemEntity( level, player.getX(), player.getY() + 1.0, player.getZ(), itemStack ) );
 		}
+	}
+
+	public static void damage( LivingEntity entity, EquipmentSlot slot, int damage ) {
+		entity.getItemBySlot( slot ).hurtAndBreak( damage, entity, subentity->subentity.broadcastBreakEvent( slot ) );
 	}
 
 	/** Required because Mob::equipItemIfPossible makes item a guaranteed drop and enables persistence for mob. */
