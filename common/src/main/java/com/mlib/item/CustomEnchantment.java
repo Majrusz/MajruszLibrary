@@ -133,6 +133,10 @@ public class CustomEnchantment extends Enchantment {
 		return this.isEnabled;
 	}
 
+	public boolean canEnchantUsingEnchantingTable( ItemStack itemStack ) {
+		return this.canEnchant( itemStack );
+	}
+
 	@FunctionalInterface
 	public interface CostFormula {
 		int getLevelCost( int level );

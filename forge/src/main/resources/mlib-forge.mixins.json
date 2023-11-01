@@ -5,7 +5,6 @@
   "minVersion": "0.8",
   "refmap": "mlib.refmap.json",
   "mixins": [
-    "MixinEnchantment",
     "MixinFishingHook",
     "MixinLootTable"
   ],
