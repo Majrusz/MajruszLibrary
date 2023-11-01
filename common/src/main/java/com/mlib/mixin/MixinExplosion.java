@@ -21,9 +21,10 @@ import java.util.List;
 
 @Mixin( Explosion.class )
 public abstract class MixinExplosion implements IMixinExplosion {
-	@Mutable @Shadow private boolean fire;
-	@Mutable @Shadow private float radius;
-	@Shadow private ObjectArrayList< BlockPos > toBlow;
+	private @Shadow @Mutable boolean fire;
+	private @Shadow @Mutable float radius;
+	private @Shadow Level level;
+	private @Shadow ObjectArrayList< BlockPos > toBlow;
 	private OnExplosion mlibContext = null;
 
 	@Override
@@ -48,7 +49,7 @@ public abstract class MixinExplosion implements IMixinExplosion {
 		method = "explode ()V"
 	)
 	private void explode( CallbackInfo callback ) {
-		this.mlibContext = Contexts.dispatch( new OnExplosion( ( Explosion )( Object )this, this.radius, this.fire ) );
+		this.mlibContext = Contexts.dispatch( new OnExplosion( ( Explosion )( Object )this, this.level, this.radius, this.fire ) );
 		if( this.mlibContext.isExplosionCancelled() ) {
 			callback.cancel();
 		} else {
