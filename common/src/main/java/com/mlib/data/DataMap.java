@@ -8,6 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -16,7 +17,7 @@ record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< T
 	public void write( JsonElement element ) {
 		JsonObject object = element.getAsJsonObject();
 		Map< String, Type > values = this.getter.get();
-		for( String key : values.keySet() ) {
+		for( String key : new TreeSet<>( values.keySet() ) ) {
 			object.add( key, this.reader.writeJson( values.get( key ) ) );
 		}
 	}
@@ -36,7 +37,7 @@ record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< T
 	public void write( FriendlyByteBuf buffer ) {
 		Map< String, Type > values = this.getter.get();
 		buffer.writeVarInt( values.size() );
-		for( String key : values.keySet() ) {
+		for( String key : new TreeSet<>( values.keySet() ) ) {
 			buffer.writeUtf( key );
 			this.reader.writeBuffer( buffer, values.get( key ) );
 		}
@@ -58,7 +59,7 @@ record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< T
 	public void write( Tag tag ) {
 		CompoundTag compoundTag = ( CompoundTag )tag;
 		Map< String, Type > values = this.getter.get();
-		for( String key : values.keySet() ) {
+		for( String key : new TreeSet<>( values.keySet() ) ) {
 			compoundTag.put( key, this.reader.writeTag( values.get( key ) ) );
 		}
 	}

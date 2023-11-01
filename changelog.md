@@ -1,0 +1,1 @@
+- added key sorting for maps in configuration files
