@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class ItemHelper {
 	private static final float MINECRAFT_WEAPON_ENCHANT_CHANCE = 0.25f;
@@ -76,6 +77,14 @@ public class ItemHelper {
 		for( Item item : items ) {
 			player.getCooldowns().addCooldown( item, duration );
 		}
+	}
+
+	public static ItemStack getHandItem( LivingEntity entity, Predicate< ItemStack > predicate ) {
+		return predicate.test( entity.getMainHandItem() ) ? entity.getMainHandItem() : entity.getOffhandItem();
+	}
+
+	public static ItemStack getCurrentlyUsedItem( LivingEntity entity ) {
+		return entity.isUsingItem() ? entity.getItemInHand( entity.getUsedItemHand() ) : ItemStack.EMPTY;
 	}
 
 	public static boolean isOnCooldown( Player player, Item... items ) {
