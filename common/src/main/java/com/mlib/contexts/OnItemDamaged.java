@@ -37,6 +37,6 @@ public class OnItemDamaged implements ILevelData {
 	}
 
 	public boolean isAboutToBroke() {
-		return this.itemStack.getDamageValue() + this.damage >= this.itemStack.getMaxDamage();
+		return this.itemStack.getDamageValue() + this.getExtraDamage() >= this.itemStack.getMaxDamage();
 	}
 }

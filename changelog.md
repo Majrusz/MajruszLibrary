@@ -1,1 +1,2 @@
 - added key sorting for maps in configuration files
+- fixed bug with item durability modifications not working properly
