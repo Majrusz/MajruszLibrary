@@ -86,7 +86,13 @@ public class CustomEnchantment extends Enchantment {
 	public CustomEnchantment category( EnchantmentCategory category ) {
 		( ( IMixinEnchantment )this ).setCategory( category );
 
-		return this.enchantability( itemStack->category.canEnchant( itemStack.getItem() ) );
+		return this.category( itemStack->category.canEnchant( itemStack.getItem() ) );
+	}
+
+	public CustomEnchantment category( Predicate< ItemStack > predicate ) {
+		this.enchantability = predicate;
+
+		return this;
 	}
 
 	public CustomEnchantment curse() {
@@ -115,12 +121,6 @@ public class CustomEnchantment extends Enchantment {
 
 	public CustomEnchantment compatibility( Predicate< Enchantment > predicate ) {
 		this.compatibility = predicate;
-
-		return this;
-	}
-
-	public CustomEnchantment enchantability( Predicate< ItemStack > predicate ) {
-		this.enchantability = predicate;
 
 		return this;
 	}
