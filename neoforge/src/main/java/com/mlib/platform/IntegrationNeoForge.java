@@ -1,6 +1,6 @@
 package com.mlib.platform;
 
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 import java.net.URL;
 import java.util.Optional;

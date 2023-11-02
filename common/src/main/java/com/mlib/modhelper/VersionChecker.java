@@ -13,7 +13,6 @@ import com.mlib.text.TextHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.level.storage.loot.Deserializers;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -31,7 +30,7 @@ class VersionChecker {
 
 	public VersionChecker( ModHelper helper ) {
 		this.helper = helper;
-		this.gson = Deserializers.createFunctionSerializer()
+		this.gson = new GsonBuilder()
 			.registerTypeAdapter( Data.class, new TypeAdapter<>( ()->this.data ) )
 			.setPrettyPrinting()
 			.create();

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinMinecraft {
 	@Inject(
 		at = @At( "HEAD" ),
-		method = "onGameLoadFinished ()V"
+		method = "onGameLoadFinished (Lnet/minecraft/client/Minecraft$GameLoadCookie;)V"
 	)
 	private void onGameLoadFinished( CallbackInfo callback ) {
 		Contexts.dispatch( new OnGameInitialized() );

@@ -8,7 +8,6 @@ import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
 import com.mlib.platform.Side;
 import com.mlib.registry.Registries;
-import net.minecraft.world.level.storage.loot.Deserializers;
 
 import java.io.*;
 import java.util.List;
@@ -21,7 +20,7 @@ public class Config extends Serializable {
 
 	public Config( String name ) {
 		this.file = Registries.getConfigPath().resolve( "%s.json".formatted( name ) ).toFile();
-		this.gson = Deserializers.createFunctionSerializer()
+		this.gson = new GsonBuilder()
 			.registerTypeAdapter( this.getClass(), new TypeAdapter<>( ()->this ) )
 			.setPrettyPrinting()
 			.create();

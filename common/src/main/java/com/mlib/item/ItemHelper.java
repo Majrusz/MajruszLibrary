@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -29,10 +30,10 @@ public class ItemHelper {
 	}
 
 	public static Optional< SmeltResult > tryToSmelt( Level level, ItemStack itemStack ) {
-		Optional< SmeltingRecipe > recipe = level.getRecipeManager().getRecipeFor( RecipeType.SMELTING, new SimpleContainer( itemStack ), level );
+		Optional< RecipeHolder< SmeltingRecipe > > recipe = level.getRecipeManager().getRecipeFor( RecipeType.SMELTING, new SimpleContainer( itemStack ), level );
 		if( recipe.isPresent() ) {
-			float experience = recipe.get().getExperience() * itemStack.getCount();
-			ItemStack result = recipe.get().getResultItem( level.registryAccess() ).copy();
+			float experience = recipe.get().value().getExperience() * itemStack.getCount();
+			ItemStack result = recipe.get().value().getResultItem( level.registryAccess() ).copy();
 			result.setCount( result.getCount() * itemStack.getCount() );
 
 			return Optional.of( new SmeltResult( result, experience ) );

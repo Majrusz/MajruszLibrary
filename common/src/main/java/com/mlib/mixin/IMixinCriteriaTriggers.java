@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin( CriteriaTriggers.class )
 public interface IMixinCriteriaTriggers {
 	@Invoker( "register" )
-	static < Type extends CriterionTrigger< ? > > Type register( Type trigger ) {
+	static < Type extends CriterionTrigger< ? > > Type register( String id, Type trigger ) {
 		throw new AssertionError();
 	}
 }

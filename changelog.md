@@ -1,2 +1,1 @@
-- fixed compatibility crash with Sodium
-- fixed crash with `lootId` being null
+- ported mod to 1.20.2

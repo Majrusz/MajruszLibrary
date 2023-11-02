@@ -14,7 +14,7 @@ issueTrackerURL = "${mod_issues}"
     logoFile = "${mod_logo}"
 
 [[dependencies.${ mod_id }]]
-    modId = "forge"
+    modId = "neoforge"
     mandatory = true
     versionRange = "${neoforge_version_range}"
     ordering = "NONE"

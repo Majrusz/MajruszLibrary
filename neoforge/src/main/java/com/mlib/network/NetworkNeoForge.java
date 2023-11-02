@@ -4,12 +4,11 @@ import com.mlib.data.ISerializable;
 import com.mlib.data.SerializableHelper;
 import com.mlib.modhelper.ModHelper;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.neoforge.network.NetworkRegistry;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 
 import java.util.List;
 
@@ -42,8 +41,7 @@ public class NetworkNeoForge implements INetworkPlatform {
 			object.clazz,
 			ISerializable::write,
 			( buffer )->SerializableHelper.read( object.instance, buffer ),
-			( serializable, contextSupplier )->{
-				NetworkEvent.Context context = contextSupplier.get();
+			( serializable, context )->{
 				context.enqueueWork( ()->{
 					ServerPlayer sender = context.getSender();
 					if( sender != null ) {

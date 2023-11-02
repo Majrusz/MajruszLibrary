@@ -3,10 +3,10 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
+    id 'net.neoforged.gradle.userdev' version '7.0.5'
     id 'net.darkhax.curseforgegradle'
     id 'com.modrinth.minotaur'
-    id 'org.spongepowered.mixin'
+    id 'net.neoforged.gradle.mixin' version '[7.0.5,)'
 }
 
 base {
@@ -15,12 +15,12 @@ base {
 
 repositories {
     maven {
-        name = "CurseForge"
+        name = 'CurseForge'
         url 'https://www.cursemaven.com'
     }
     maven {
-        name = "Modrinth"
-        url = "https://api.modrinth.com/maven"
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
     }
 }
 
@@ -36,8 +36,8 @@ project(':common') {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         filter {
-            String line ->  line.replaceAll('com.mlib.annotation.Dist', 'net.minecraftforge.api.distmarker.Dist')
-                    .replaceAll('com.mlib.annotation.OnlyIn', 'net.minecraftforge.api.distmarker.OnlyIn')
+            String line ->  line.replaceAll('com.mlib.annotation.Dist', 'net.neoforged.api.distmarker.Dist')
+                    .replaceAll('com.mlib.annotation.OnlyIn', 'net.neoforged.api.distmarker.OnlyIn')
         }
     }
 
@@ -46,44 +46,31 @@ project(':common') {
     }
 }
 
-minecraft {
-    mappings channel: 'official', version: minecraft_version
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    copyIdeResources = true
-    runs {
-        configureEach {
-            property 'forge.logging.console.level', 'debug'
-            property 'fml.earlyprogresswindow', 'false'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            singleInstance true
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args "-mixin.config=${mod_id}-common.mixins.json"
-            args "-mixin.config=${mod_id}-neoforge.mixins.json"
-            mods {
-                "${mod_id}" {
-                    source sourceSets.main
-                    source project(':common').sourceSets.main
-                }
-            }
-        }
+sourceSets.main.java {
+    srcDir commonSrcDir
+}
 
-        client {
-            workingDirectory project.file('runs/client')
-            taskName 'client'
-        }
+runs {
+    configureEach {
+        systemProperty 'forge.logging.console.level', 'debug'
+        systemProperty 'fml.earlyprogresswindow', 'false'
+        systemProperty 'mixin.env.remapRefMap', 'true'
+        systemProperty 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+        singleInstance true
+        // ideaModule "${rootProject.name}.${project.name}.main"
+        // args "-mixin.config=${mod_id}-common.mixins.json"
+        // args "-mixin.config=${mod_id}-neoforge.mixins.json"
+        modSources.add(project.sourceSets.main)
+    }
 
-        clientAlt {
-            parent minecraft.runs.client
-            workingDirectory project.file('runs/client2')
-            taskName 'client2'
-            args '--username', 'Dev2'
-        }
+    client {
+        workingDirectory project.file('runs/client')
+        named 'client'
+    }
 
-        server {
-            workingDirectory project.file('runs/server')
-            taskName 'server'
-        }
+    server {
+        workingDirectory project.file('runs/server')
+        named 'server'
     }
 }
 
@@ -92,15 +79,13 @@ java {
 }
 
 dependencies {
-    minecraft "net.neoforged:forge:${neoforge_version}"
+    implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly project(':common')
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.setEncoding('UTF-8')
     options.release.set(17)
-    source(commonSrcDir)
 }
 
 jar {
@@ -118,7 +103,7 @@ jar {
 }
 
 mixin {
-    add sourceSets.main, "${mod_id}.refmap.json"
+    //add sourceSets.main, "${mod_id}.refmap.json"
     config "${mod_id}-common.mixins.json"
     config "${mod_id}-neoforge.mixins.json"
 }

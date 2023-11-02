@@ -1,9 +1,9 @@
 package com.mlib.platform;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public class SideNeoForge implements ISidePlatform {
 	@Override
@@ -24,7 +24,7 @@ public class SideNeoForge implements ISidePlatform {
 	@Override
 	public boolean canLoadClassOnServer( String annotations ) {
 		return !annotations.contains( "Lcom/mlib/annotation/Dist;" )
-			&& !annotations.contains( "Lnet/minecraftforge/api/distmarker/Dist;" )
+			&& !annotations.contains( "Lnet/neoforged/api/distmarker/Dist;" )
 			|| !annotations.contains( "CLIENT" );
 	}
 

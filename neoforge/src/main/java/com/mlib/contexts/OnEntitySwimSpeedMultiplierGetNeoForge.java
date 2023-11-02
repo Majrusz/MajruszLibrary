@@ -4,11 +4,11 @@ import com.mlib.annotation.AutoInstance;
 import com.mlib.entity.AttributeHandler;
 import com.mlib.mixininterfaces.IMixinLivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraftforge.common.ForgeMod;
+import net.neoforged.neoforge.common.NeoForgeMod;
 
 @AutoInstance
 public class OnEntitySwimSpeedMultiplierGetNeoForge {
-	private final AttributeHandler attribute = new AttributeHandler( "majrusz_library_swim_speed", ForgeMod.SWIM_SPEED::get, AttributeModifier.Operation.MULTIPLY_TOTAL );
+	private final AttributeHandler attribute = new AttributeHandler( "majrusz_library_swim_speed", NeoForgeMod.SWIM_SPEED::get, AttributeModifier.Operation.MULTIPLY_TOTAL );
 
 	public OnEntitySwimSpeedMultiplierGetNeoForge() {
 		OnEntityTicked.listen( data->{

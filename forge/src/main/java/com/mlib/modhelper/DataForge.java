@@ -1,6 +1,6 @@
 package com.mlib.modhelper;
 
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.SimpleChannel;
 import net.minecraftforge.registries.DeferredRegister;
 
 public class DataForge implements IDataPlatform {

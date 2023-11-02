@@ -1,9 +1,9 @@
 package com.mlib.contexts;
 
 import com.mlib.contexts.base.Contexts;
-import net.minecraftforge.event.entity.living.EnderManAngerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.living.EnderManAngerEvent;
 
 @Mod.EventBusSubscriber
 public class OnEnderManAngeredNeoForge {
