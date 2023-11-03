@@ -204,7 +204,7 @@ public class EntityHelper {
 		@Override
 		@OnlyIn( Dist.CLIENT )
 		public void onClient() {
-			( ( IMixinEntity )( Side.getLocalLevel().getEntity( this.entityId ) ) ).addGlowTicks( this.ticks );
+			( ( IMixinEntity )( Side.getLocalLevel().getEntity( this.entityId ) ) ).mlib$addGlowTicks( this.ticks );
 		}
 	}
 }

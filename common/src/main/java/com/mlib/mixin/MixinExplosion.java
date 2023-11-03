@@ -32,17 +32,17 @@ public abstract class MixinExplosion implements IMixinExplosion {
 	private OnExploded mlibContext = null;
 
 	@Override
-	public float getRadius() {
+	public float mlib$getRadius() {
 		return this.radius;
 	}
 
 	@Override
-	public boolean getSpawnsFire() {
+	public boolean mlib$getSpawnsFire() {
 		return this.fire;
 	}
 
 	@Override
-	public boolean isExplosionCancelled() {
+	public boolean mlib$isExplosionCancelled() {
 		return this.mlibContext != null
 			&& this.mlibContext.isExplosionCancelled();
 	}
@@ -68,7 +68,7 @@ public abstract class MixinExplosion implements IMixinExplosion {
 		method = "finalizeExplosion (Z)V"
 	)
 	private void finalizeExplosion( boolean $$1, CallbackInfo callback ) {
-		if( this.isExplosionCancelled() ) {
+		if( this.mlib$isExplosionCancelled() ) {
 			callback.cancel();
 		}
 	}

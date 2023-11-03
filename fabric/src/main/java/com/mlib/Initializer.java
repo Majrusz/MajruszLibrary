@@ -11,7 +11,7 @@ public class Initializer implements ModInitializer {
 	public void onInitialize() {
 		ServerLifecycleEvents.SERVER_STARTED.register( server->SideFabric.SERVER = server );
 		ServerLifecycleEvents.SERVER_STOPPED.register( server->SideFabric.SERVER = null );
-		LootTableEvents.MODIFY.register( ( resourceManager, lootManager, id, builder, source )->( ( IMixinLootTableBuilder )builder ).set( id ) );
+		LootTableEvents.MODIFY.register( ( resourceManager, lootManager, id, builder, source )->( ( IMixinLootTableBuilder )builder ).mlib$set( id ) );
 		MajruszLibrary.HELPER.register();
 	}
 }

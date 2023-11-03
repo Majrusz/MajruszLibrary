@@ -41,9 +41,9 @@ public abstract class MixinServerLevel {
 		boolean spawnsFire, Level.ExplosionInteraction interaction, CallbackInfoReturnable< Explosion > callback, Explosion explosion
 	) {
 		IMixinExplosion mixinExplosion = ( IMixinExplosion )explosion;
-		radius = mixinExplosion.getRadius();
-		spawnsFire = mixinExplosion.getSpawnsFire();
-		if( mixinExplosion.isExplosionCancelled() ) {
+		radius = mixinExplosion.mlib$getRadius();
+		spawnsFire = mixinExplosion.mlib$getSpawnsFire();
+		if( mixinExplosion.mlib$isExplosionCancelled() ) {
 			callback.setReturnValue( explosion );
 		}
 	}

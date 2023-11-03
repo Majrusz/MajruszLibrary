@@ -18,13 +18,13 @@ import java.util.function.Consumer;
 
 @Mixin( LootTable.class )
 public abstract class MixinLootTable implements IMixinLootTable {
-	ResourceLocation mlibId = null;
-	Consumer< ItemStack > mlibConsumer = itemStack->{};
-	ObjectArrayList< ItemStack > mlibItems = new ObjectArrayList<>();
+	ResourceLocation mlib$id = null;
+	Consumer< ItemStack > mlib$consumer = itemStack->{};
+	ObjectArrayList< ItemStack > mlib$items = new ObjectArrayList<>();
 
 	@Override
-	public void set( ResourceLocation id ) {
-		this.mlibId = id;
+	public void mlib$set( ResourceLocation id ) {
+		this.mlib$id = id;
 	}
 
 	@Inject(
@@ -32,7 +32,7 @@ public abstract class MixinLootTable implements IMixinLootTable {
 		method = "getRandomItemsRaw (Lnet/minecraft/world/level/storage/loot/LootContext;Ljava/util/function/Consumer;)V"
 	)
 	private void getRandomItemsRaw( LootContext context, Consumer< ItemStack > consumer, CallbackInfo callback ) {
-		Contexts.dispatch( new OnLootGenerated( this.mlibItems, this.mlibId, context ) ).generatedLoot.forEach( this.mlibConsumer );
+		Contexts.dispatch( new OnLootGenerated( this.mlib$items, this.mlib$id, context ) ).generatedLoot.forEach( this.mlib$consumer );
 	}
 
 	@ModifyVariable(
@@ -40,9 +40,9 @@ public abstract class MixinLootTable implements IMixinLootTable {
 		method = "getRandomItemsRaw (Lnet/minecraft/world/level/storage/loot/LootContext;Ljava/util/function/Consumer;)V"
 	)
 	private Consumer< ItemStack > getRandomItemsRaw( Consumer< ItemStack > consumer ) {
-		this.mlibConsumer = consumer;
-		this.mlibItems = new ObjectArrayList<>();
+		this.mlib$consumer = consumer;
+		this.mlib$items = new ObjectArrayList<>();
 
-		return this.mlibItems::add;
+		return this.mlib$items::add;
 	}
 }

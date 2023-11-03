@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin( FishingHook.class )
 public abstract class MixinFishingHook {
-	@Shadow private int timeUntilLured;
+	private @Shadow int timeUntilLured;
 
 	@Redirect(
 		at = @At(

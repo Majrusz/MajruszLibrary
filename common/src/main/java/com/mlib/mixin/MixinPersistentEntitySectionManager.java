@@ -19,7 +19,7 @@ import java.util.List;
 
 @Mixin( PersistentEntitySectionManager.class )
 public abstract class MixinPersistentEntitySectionManager< Type extends EntityAccess > {
-	private final Long2ObjectMap< Pair< Entity, Boolean > > mlibPendingContexts = new Long2ObjectOpenHashMap<>();
+	private final Long2ObjectMap< Pair< Entity, Boolean > > mlib$pendingContexts = new Long2ObjectOpenHashMap<>();
 
 	@Inject(
 		at = @At( "RETURN" ),
@@ -27,7 +27,7 @@ public abstract class MixinPersistentEntitySectionManager< Type extends EntityAc
 	)
 	private void addEntity( Type entityAccess, boolean isLoadedFromDisk, CallbackInfoReturnable< Boolean > callback ) {
 		if( callback.getReturnValue() && entityAccess instanceof Entity entity ) {
-			this.mlibPendingContexts.put( entity.getId(), Pair.of( entity, isLoadedFromDisk ) );
+			this.mlib$pendingContexts.put( entity.getId(), Pair.of( entity, isLoadedFromDisk ) );
 		}
 	}
 
@@ -37,12 +37,12 @@ public abstract class MixinPersistentEntitySectionManager< Type extends EntityAc
 	)
 	private void tick( CallbackInfo callback ) {
 		List< Long > ids = new ArrayList<>();
-		this.mlibPendingContexts.forEach( ( id, context )->{
+		this.mlib$pendingContexts.forEach( ( id, context )->{
 			if( Contexts.dispatch( new OnEntitySpawned( context.getFirst(), context.getSecond() ) ).isSpawnCancelled() ) {
 				context.getFirst().remove( Entity.RemovalReason.DISCARDED );
 			}
 			ids.add( id );
 		} );
-		ids.forEach( this.mlibPendingContexts::remove );
+		ids.forEach( this.mlib$pendingContexts::remove );
 	}
 }

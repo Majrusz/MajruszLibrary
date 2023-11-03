@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin( LootTable.Builder.class )
 public abstract class MixinLootTableBuilder implements IMixinLootTableBuilder {
-	ResourceLocation mlibId = null;
+	ResourceLocation mlib$id = null;
 
 	@Override
-	public void set( ResourceLocation id ) {
-		this.mlibId = id;
+	public void mlib$set( ResourceLocation id ) {
+		this.mlib$id = id;
 	}
 
 	@Inject(
@@ -23,6 +23,6 @@ public abstract class MixinLootTableBuilder implements IMixinLootTableBuilder {
 		method = "build ()Lnet/minecraft/world/level/storage/loot/LootTable;"
 	)
 	private void build( CallbackInfoReturnable< LootTable > callbackInfo ) {
-		( ( IMixinLootTable )callbackInfo.getReturnValue() ).set( this.mlibId );
+		( ( IMixinLootTable )callbackInfo.getReturnValue() ).mlib$set( this.mlib$id );
 	}
 }

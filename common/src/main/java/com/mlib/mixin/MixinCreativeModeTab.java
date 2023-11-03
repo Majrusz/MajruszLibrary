@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin( CreativeModeTab.class )
 public abstract class MixinCreativeModeTab {
-	@Shadow @Final private Component displayName;
+	private @Shadow @Final Component displayName;
 
 	@Inject(
 		at = @At( "RETURN" ),

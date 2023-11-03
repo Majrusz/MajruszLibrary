@@ -18,15 +18,15 @@ import java.util.List;
 
 @Mixin( EnchantmentHelper.class )
 public abstract class MixinEnchantmentHelper {
-	private static ItemStack MLIB_LAST_ITEM_STACK = null;
-	private static Enchantment MLIB_LAST_ENCHANTMENT = null;
+	private static ItemStack MLIB$LAST_ITEM_STACK = null;
+	private static Enchantment MLIB$LAST_ENCHANTMENT = null;
 
 	@ModifyVariable(
 		at = @At( "STORE" ),
 		method = "getAvailableEnchantmentResults (ILnet/minecraft/world/item/ItemStack;Z)Ljava/util/List;"
 	)
 	private static Enchantment getEnchantment( Enchantment enchantment ) {
-		MLIB_LAST_ENCHANTMENT = enchantment;
+		MLIB$LAST_ENCHANTMENT = enchantment;
 
 		return enchantment;
 	}
@@ -38,7 +38,7 @@ public abstract class MixinEnchantmentHelper {
 	private static void getAvailableEnchantmentResults( int $$0, ItemStack itemStack, boolean $$2,
 		CallbackInfoReturnable< List< EnchantmentInstance > > callback
 	) {
-		MLIB_LAST_ITEM_STACK = itemStack;
+		MLIB$LAST_ITEM_STACK = itemStack;
 	}
 
 	@Redirect(
@@ -49,8 +49,8 @@ public abstract class MixinEnchantmentHelper {
 		method = "getAvailableEnchantmentResults (ILnet/minecraft/world/item/ItemStack;Z)Ljava/util/List;"
 	)
 	private static boolean canEnchantUsingEnchantingTable( EnchantmentCategory category, Item item ) {
-		return MLIB_LAST_ENCHANTMENT instanceof CustomEnchantment enchantment
-			? enchantment.canEnchantUsingEnchantingTable( MLIB_LAST_ITEM_STACK )
+		return MLIB$LAST_ENCHANTMENT instanceof CustomEnchantment enchantment
+			? enchantment.canEnchantUsingEnchantingTable( MLIB$LAST_ITEM_STACK )
 			: category.canEnchant( item );
 	}
 }

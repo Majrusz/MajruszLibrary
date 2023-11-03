@@ -28,12 +28,12 @@ import java.util.Map;
 @Mixin( LivingEntity.class )
 public abstract class MixinLivingEntity implements IMixinLivingEntity {
 	private @Shadow int useItemRemaining;
-	float mlibLastDamage = 0.0f;
-	float mlibSwimSpeedMultiplier = 1.0f;
+	float mlib$lastDamage = 0.0f;
+	float mlib$swimSpeedMultiplier = 1.0f;
 
 	@Override
-	public float getSwimSpeedMultiplier() {
-		return this.mlibSwimSpeedMultiplier;
+	public float mlib$getSwimSpeedMultiplier() {
+		return this.mlib$swimSpeedMultiplier;
 	}
 
 	@Inject(
@@ -42,9 +42,9 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z"
 	)
 	private void hurt( DamageSource source, float damage, CallbackInfoReturnable< Boolean > callback ) {
-		this.mlibLastDamage = 0.0f;
+		this.mlib$lastDamage = 0.0f;
 		LivingEntity entity = ( LivingEntity )( Object )this;
-		if( damage == 0.0f || willBeCancelled( source, entity ) ) {
+		if( damage == 0.0f || mlib$willBeCancelled( source, entity ) ) {
 			return;
 		}
 
@@ -52,8 +52,8 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		if( data.isDamageCancelled() ) {
 			callback.setReturnValue( false );
 		} else {
-			this.mlibLastDamage = data.damage;
-			tryToAddMagicParticles( data );
+			this.mlib$lastDamage = data.damage;
+			mlib$tryToAddMagicParticles( data );
 		}
 	}
 
@@ -66,7 +66,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		ordinal = 0
 	)
 	private float replacePreDamage( float damage ) {
-		return this.mlibLastDamage;
+		return this.mlib$lastDamage;
 	}
 
 	@Inject(
@@ -110,7 +110,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 	private void tick( CallbackInfo callback ) {
 		Contexts.dispatch( new OnEntityTicked( ( LivingEntity )( Object )this ) );
 
-		this.mlibSwimSpeedMultiplier = Contexts.dispatch( new OnEntitySwimSpeedMultiplierGet( ( LivingEntity )( Object )this, 1.0f ) ).getMultiplier();
+		this.mlib$swimSpeedMultiplier = Contexts.dispatch( new OnEntitySwimSpeedMultiplierGet( ( LivingEntity )( Object )this, 1.0f ) ).getMultiplier();
 	}
 
 	@Inject(
@@ -149,7 +149,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		this.useItemRemaining = data.getDuration();
 	}
 
-	private static void tryToAddMagicParticles( OnEntityPreDamaged data ) {
+	private static void mlib$tryToAddMagicParticles( OnEntityPreDamaged data ) {
 		if( data.attacker instanceof Player player ) {
 			MobType type = data.source.getEntity() instanceof LivingEntity entity ? entity.getMobType() : MobType.UNDEFINED;
 			if( EnchantmentHelper.getDamageBonus( player.getMainHandItem(), type ) > 0.0f ) {
@@ -165,7 +165,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		}
 	}
 
-	private static boolean willBeCancelled( DamageSource source, LivingEntity target ) {
+	private static boolean mlib$willBeCancelled( DamageSource source, LivingEntity target ) {
 		boolean isInvulnerable = target.isInvulnerableTo( source );
 		boolean isClientSide = !( target.level() instanceof ServerLevel );
 		boolean isDeadOrDying = target.isDeadOrDying();
