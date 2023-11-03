@@ -109,7 +109,7 @@ public class ParticleEmitter {
 		float width = entity.getBbWidth();
 		float height = entity.getBbHeight();
 		this.position = ()->AnyPos.from( entity.position() ).add( 0.0, 0.5 * height, 0.0 ).vec3();
-		this.offset = ()->AnyPos.from( width, height, width ).mul( 0.5 ).vec3();
+		this.offset = ()->AnyPos.from( width, height, width ).mul( 0.5, 0.25, 0.5 ).vec3();
 		this.countMultiplier = Math.round( ( 1.0f + width + height ) );
 
 		return this;
