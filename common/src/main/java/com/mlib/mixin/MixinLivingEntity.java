@@ -44,7 +44,11 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 	private void hurt( DamageSource source, float damage, CallbackInfoReturnable< Boolean > callback ) {
 		this.mlib$lastDamage = 0.0f;
 		LivingEntity entity = ( LivingEntity )( Object )this;
-		if( damage == 0.0f || mlib$willBeCancelled( source, entity ) ) {
+		if( mlib$willBeCancelled( source, entity ) ) {
+			return;
+		}
+		if( damage == 0.0f || entity.isDamageSourceBlocked( source ) ) {
+			Contexts.dispatch( new OnEntityDamageBlocked( source, entity ) );
 			return;
 		}
 
