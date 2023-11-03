@@ -20,7 +20,7 @@ public class RegistryFabric implements IRegistryPlatform {
 		Type value = object.newInstance.get();
 
 		Registry.register( ( Registry< ? super Type > )object.group.registry, object.group.helper.getLocation( object.id ), value );
-		object.set( ()->value );
+		object.set( ()->value, ()->true );
 	}
 
 	@Override
