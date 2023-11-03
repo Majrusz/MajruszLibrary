@@ -54,6 +54,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 
 		OnEntityPreDamaged data = Contexts.dispatch( new OnEntityPreDamaged( source, entity, damage ) );
 		if( data.isDamageCancelled() ) {
+			data.target.invulnerableTime = 20;
 			callback.setReturnValue( false );
 		} else {
 			this.mlib$lastDamage = data.damage;
