@@ -27,6 +27,7 @@
     "MixinCreativeModeTab",
     "MixinDedicatedServer",
     "MixinDifficultyInstance",
+    "MixinEnchantmentHelper",
     "MixinEntity",
     "MixinExperienceOrb",
     "MixinExplosion",
