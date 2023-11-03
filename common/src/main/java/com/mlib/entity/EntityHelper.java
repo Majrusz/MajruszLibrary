@@ -3,6 +3,8 @@ package com.mlib.entity;
 import com.mlib.annotation.Dist;
 import com.mlib.annotation.OnlyIn;
 import com.mlib.data.Serializable;
+import com.mlib.emitter.ParticleEmitter;
+import com.mlib.emitter.SoundEmitter;
 import com.mlib.level.LevelHelper;
 import com.mlib.math.AnyPos;
 import com.mlib.math.AnyRot;
@@ -15,8 +17,9 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.AbstractIllager;
@@ -38,11 +41,22 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class EntityHelper {
-	public static void cheatDeath( LivingEntity entity, float healthRatio, boolean shouldPlayEffects ) {
-		entity.setHealth( entity.getMaxHealth() * healthRatio );
-		if( shouldPlayEffects && entity.level() instanceof ServerLevel level ) {
-			level.sendParticles( ParticleTypes.TOTEM_OF_UNDYING, entity.getX(), entity.getY( 0.75 ), entity.getZ(), 64, 0.25, 0.5, 0.25, 0.5 );
-			level.playSound( null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, SoundSource.AMBIENT, 1.0f, 1.0f );
+	public static void cheatDeath( LivingEntity entity ) {
+		entity.setHealth( 1.0f );
+		entity.removeAllEffects();
+		entity.addEffect( new MobEffectInstance( MobEffects.REGENERATION, 900, 1 ) );
+		entity.addEffect( new MobEffectInstance( MobEffects.ABSORPTION, 100, 1 ) );
+		entity.addEffect( new MobEffectInstance( MobEffects.FIRE_RESISTANCE, 800, 0 ) );
+		if( entity.level() instanceof ServerLevel level ) {
+			ParticleEmitter.of( ParticleTypes.TOTEM_OF_UNDYING )
+				.sizeBased( entity )
+				.count( 32 )
+				.offset( new Vec3( 0.25, 0.5, 0.25 ) )
+				.emit( level );
+
+			SoundEmitter.of( SoundEvents.TOTEM_USE )
+				.position( entity.position() )
+				.emit( level );
 		}
 	}
 
