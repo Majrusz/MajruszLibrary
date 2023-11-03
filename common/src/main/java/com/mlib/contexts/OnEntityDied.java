@@ -2,6 +2,7 @@ package com.mlib.contexts;
 
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
+import com.mlib.contexts.data.ICancellableData;
 import com.mlib.contexts.data.IEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class OnEntityDied implements IEntityData {
+public class OnEntityDied implements ICancellableData, IEntityData {
 	public final DamageSource source;
 	public final @Nullable LivingEntity attacker;
 	public final LivingEntity target;
@@ -24,6 +25,11 @@ public class OnEntityDied implements IEntityData {
 		this.source = source;
 		this.attacker = this.source.getEntity() instanceof LivingEntity entity ? entity : null;
 		this.target = target;
+	}
+
+	@Override
+	public boolean isExecutionStopped() {
+		return this.isDeathCancelled();
 	}
 
 	@Override

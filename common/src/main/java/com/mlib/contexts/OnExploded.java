@@ -2,6 +2,7 @@ package com.mlib.contexts;
 
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
+import com.mlib.contexts.data.ICancellableData;
 import com.mlib.contexts.data.ILevelData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class OnExploded implements ILevelData {
+public class OnExploded implements ICancellableData, ILevelData {
 	public final Explosion explosion;
 	public final Level level;
 	public final Vec3 position;
@@ -39,6 +40,11 @@ public class OnExploded implements ILevelData {
 		this.originalRadius = radius;
 		this.radius = radius;
 		this.spawnsFire = spawnsFire;
+	}
+
+	@Override
+	public boolean isExecutionStopped() {
+		return this.isExplosionCancelled();
 	}
 
 	@Override

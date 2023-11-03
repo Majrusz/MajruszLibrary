@@ -2,6 +2,7 @@ package com.mlib.contexts;
 
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
+import com.mlib.contexts.data.ICancellableData;
 import com.mlib.contexts.data.IEntityData;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class OnPlayerInteracted implements IEntityData {
+public class OnPlayerInteracted implements ICancellableData, IEntityData {
 	public final Player player;
 	public final ItemStack itemStack;
 	public final InteractionHand hand;
@@ -47,6 +48,11 @@ public class OnPlayerInteracted implements IEntityData {
 		this.hand = hand;
 		this.entity = null;
 		this.blockResult = blockResult;
+	}
+
+	@Override
+	public boolean isExecutionStopped() {
+		return this.isInteractionCancelled();
 	}
 
 	@Override

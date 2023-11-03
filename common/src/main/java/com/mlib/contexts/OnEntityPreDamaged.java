@@ -2,6 +2,7 @@ package com.mlib.contexts;
 
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
+import com.mlib.contexts.data.ICancellableData;
 import com.mlib.contexts.data.IEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -9,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.function.Consumer;
 
-public class OnEntityPreDamaged implements IEntityData {
+public class OnEntityPreDamaged implements ICancellableData, IEntityData {
 	public final DamageSource source;
 	public final LivingEntity attacker;
 	public final LivingEntity target;
@@ -29,6 +30,11 @@ public class OnEntityPreDamaged implements IEntityData {
 		this.target = target;
 		this.original = damage;
 		this.damage = damage;
+	}
+
+	@Override
+	public boolean isExecutionStopped() {
+		return this.isDamageCancelled();
 	}
 
 	@Override
