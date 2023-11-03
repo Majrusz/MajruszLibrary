@@ -3,12 +3,14 @@ package com.mlib.contexts;
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
 import com.mlib.contexts.data.IEntityData;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
 import java.util.function.Consumer;
 
 public class OnLootingLevelGet implements IEntityData {
+	public final DamageSource source;
 	public final LivingEntity entity;
 	public final int original;
 	public int level;
@@ -18,9 +20,12 @@ public class OnLootingLevelGet implements IEntityData {
 	}
 
 	public OnLootingLevelGet( LivingEntity entity, int level ) {
+		this.source = Cache.SOURCE;
 		this.entity = entity;
 		this.original = level;
 		this.level = level;
+
+		Cache.SOURCE = null;
 	}
 
 	@Override
@@ -30,5 +35,9 @@ public class OnLootingLevelGet implements IEntityData {
 
 	public int getLootingLevel() {
 		return Math.max( this.level, 0 );
+	}
+
+	public static class Cache {
+		public static DamageSource SOURCE = null;
 	}
 }

@@ -37,6 +37,8 @@
     "MixinItem",
     "MixinItemStack",
     "MixinLivingEntity",
+    "MixinLootingEnchantFunction",
+    "MixinLootItemRandomChanceWithLootingCondition",
     "MixinMinecraftServer",
     "MixinMobCategory",
     "MixinNaturalSpawner",

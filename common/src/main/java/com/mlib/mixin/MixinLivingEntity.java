@@ -149,6 +149,14 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		this.useItemRemaining = data.getDuration();
 	}
 
+	@Inject(
+		at = @At( "HEAD" ),
+		method = "dropAllDeathLoot (Lnet/minecraft/world/damagesource/DamageSource;)V"
+	)
+	private void dropAllDeathLoot( DamageSource source, CallbackInfo callback ) {
+		OnLootingLevelGet.Cache.SOURCE = source;
+	}
+
 	private static void mlib$tryToAddMagicParticles( OnEntityPreDamaged data ) {
 		if( data.attacker instanceof Player player ) {
 			MobType type = data.source.getEntity() instanceof LivingEntity entity ? entity.getMobType() : MobType.UNDEFINED;
