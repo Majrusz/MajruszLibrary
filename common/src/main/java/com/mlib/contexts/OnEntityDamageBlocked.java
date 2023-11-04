@@ -28,4 +28,8 @@ public class OnEntityDamageBlocked implements IEntityData {
 	public Entity getEntity() {
 		return this.target;
 	}
+
+	public boolean isDirect() {
+		return !this.source.isIndirect();
+	}
 }

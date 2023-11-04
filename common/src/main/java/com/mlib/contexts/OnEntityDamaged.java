@@ -33,6 +33,6 @@ public class OnEntityDamaged implements IEntityData {
 	}
 
 	public boolean isDirect() {
-		return this.source.getDirectEntity() == this.attacker;
+		return !this.source.isIndirect();
 	}
 }
