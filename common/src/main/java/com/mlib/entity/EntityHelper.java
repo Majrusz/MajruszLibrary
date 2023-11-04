@@ -200,25 +200,57 @@ public class EntityHelper {
 	}
 
 	public static class EntityGlow extends Serializable {
-		int entityId = 0;
-		int ticks = 0;
+		int entityId;
+		int ticks;
 
-		public EntityGlow( Entity entity, int ticks ) {
-			this();
+		public EntityGlow( int entityId, int ticks ) {
+			this.defineInteger( "id", ()->this.entityId, x->this.entityId = x );
+			this.defineInteger( "ticks", ()->this.ticks, x->this.ticks = x );
 
-			this.entityId = entity.getId();
+			this.entityId = entityId;
 			this.ticks = ticks;
 		}
 
+		public EntityGlow( Entity entity, int ticks ) {
+			this( entity.getId(), ticks );
+		}
+
 		public EntityGlow() {
-			this.defineInteger( "id", ()->this.entityId, x->this.entityId = x );
-			this.defineInteger( "ticks", ()->this.ticks, x->this.ticks = x );
+			this( 0, 0 );
 		}
 
 		@Override
 		@OnlyIn( Dist.CLIENT )
 		public void onClient() {
 			( ( IMixinEntity )( Side.getLocalLevel().getEntity( this.entityId ) ) ).mlib$addGlowTicks( this.ticks );
+		}
+	}
+
+	public static class EntityInvisible extends Serializable {
+		int entityId;
+		int ticks;
+
+		public EntityInvisible( int entityId, int ticks ) {
+			this.defineInteger( "id", ()->this.entityId, x->this.entityId = x );
+			this.defineInteger( "ticks", ()->this.ticks, x->this.ticks = x );
+
+			this.entityId = entityId;
+			this.ticks = ticks;
+		}
+
+		public EntityInvisible( Entity entity, int ticks ) {
+			this( entity.getId(), ticks );
+		}
+
+		public EntityInvisible() {
+			this( 0, 0 );
+		}
+
+		@Override
+		@OnlyIn( Dist.CLIENT )
+		public void onClient() {
+			IMixinEntity entity = ( ( IMixinEntity )( Side.getLocalLevel().getEntity( this.entityId ) ) );
+			entity.mlib$addInvisibleTicks( this.ticks );
 		}
 	}
 }

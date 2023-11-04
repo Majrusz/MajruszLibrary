@@ -25,6 +25,7 @@ public class MajruszLibrary {
 
 	// Network
 	public static final NetworkObject< EntityHelper.EntityGlow > ENTITY_GLOW = HELPER.create( "entity_glow", EntityHelper.EntityGlow.class );
+	public static final NetworkObject< EntityHelper.EntityInvisible > ENTITY_INVISIBLE = HELPER.create( "entity_invisible", EntityHelper.EntityInvisible.class );
 
 	private MajruszLibrary() {}
 }
