@@ -6,11 +6,12 @@ import com.mlib.contexts.data.IEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public class OnLootingLevelGet implements IEntityData {
-	public final DamageSource source;
+	public final @Nullable DamageSource source;
 	public final LivingEntity entity;
 	public final int original;
 	public int level;
