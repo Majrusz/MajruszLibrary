@@ -1,12 +1,10 @@
 package com.mlib.modhelper;
 
 import com.google.gson.*;
-import com.mlib.MajruszLibrary;
 import com.mlib.annotation.AutoInstance;
 import com.mlib.contexts.OnPlayerLoggedIn;
-import com.mlib.data.ISerializable;
-import com.mlib.data.Serializable;
-import com.mlib.data.SerializableHelper;
+import com.mlib.data.Config;
+import com.mlib.data.Serializables;
 import com.mlib.platform.Integration;
 import com.mlib.platform.Side;
 import com.mlib.text.TextHelper;
@@ -110,7 +108,8 @@ class VersionChecker {
 				.addCondition( data->COMPONENTS.size() > 0 )
 				.addCondition( data->Side.isLogicalServer() && !Side.isDedicatedServer() || data.player.hasPermissions( 4 ) );
 
-			MajruszLibrary.CONFIG.defineBoolean( "send_new_available_updates_message", ()->this.isEnabled, x->this.isEnabled = x );
+			Serializables.get( Config.class )
+				.defineBoolean( "send_new_available_updates_message", s->this.isEnabled, ( s, x )->this.isEnabled = x );
 		}
 
 		private void sendUpdateMessages( OnPlayerLoggedIn data ) {
@@ -119,28 +118,23 @@ class VersionChecker {
 		}
 	}
 
-	private static class Data extends Serializable {
+	private static class Data {
+		static {
+			Serializables.get( Data.class )
+				.defineString( "homepage", s->s.homepage, ( s, v )->s.homepage = v )
+				.defineStringMap( "promos", s->s.versions, ( s, v )->s.versions = v );
+		}
+
 		String currentVersion;
 		String latestVersion;
 		String homepage;
 		Map< String, String > versions = new HashMap<>();
-
-		public Data() {
-			this.defineString( "homepage", ()->this.homepage, x->this.homepage = x );
-			this.defineString( "promos", ()->this.versions, x->this.versions = x );
-		}
 	}
 
-	private static class TypeAdapter< Type extends ISerializable > implements JsonDeserializer< Type > {
-		final Supplier< Type > instance;
-
-		public TypeAdapter( Supplier< Type > instance ) {
-			this.instance = instance;
-		}
-
+	private record TypeAdapter< Type >( Supplier< Type > instance ) implements JsonDeserializer< Type > {
 		@Override
-		public Type deserialize( JsonElement element, java.lang.reflect.Type type, JsonDeserializationContext context ) throws JsonParseException {
-			return SerializableHelper.read( this.instance, element );
+		public Type deserialize( JsonElement json, java.lang.reflect.Type type, JsonDeserializationContext context ) throws JsonParseException {
+			return Serializables.read( this.instance.get(), json );
 		}
 	}
 }

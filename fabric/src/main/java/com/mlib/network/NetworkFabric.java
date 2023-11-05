@@ -1,7 +1,6 @@
 package com.mlib.network;
 
-import com.mlib.data.ISerializable;
-import com.mlib.data.SerializableHelper;
+import com.mlib.data.Serializables;
 import com.mlib.modhelper.ModHelper;
 import com.mlib.platform.Side;
 import net.fabricmc.api.EnvType;
@@ -22,38 +21,32 @@ import java.util.List;
 public class NetworkFabric implements INetworkPlatform {
 	@Override
 	public void register( ModHelper helper, List< NetworkObject< ? > > objects ) {
-		this.registerOnServer( objects );
-		Side.runOnClient( ()->()->this.registerOnClient( objects ) );
+		objects.forEach( this::registerOnServer );
+		Side.runOnClient( ()->()->objects.forEach( this::registerOnClient ) );
 	}
 
 	@Override
-	public < Type extends ISerializable > void sendToServer( NetworkObject< Type > object, Type message ) {
-		ClientPlayNetworking.send( object.id, SerializableHelper.write( ()->message, PacketByteBufs.create() ) );
+	public < Type > void sendToServer( NetworkObject< Type > object, Type message ) {
+		ClientPlayNetworking.send( object.id, Serializables.write( message, PacketByteBufs.create() ) );
 	}
 
 	@Override
-	public < Type extends ISerializable > void sendToClients( NetworkObject< Type > object, Type message, List< ServerPlayer > players ) {
+	public < Type > void sendToClients( NetworkObject< Type > object, Type message, List< ServerPlayer > players ) {
 		players.forEach( player->{
-			ServerPlayNetworking.send( player, object.id, SerializableHelper.write( ()->message, PacketByteBufs.create() ) );
+			ServerPlayNetworking.send( player, object.id, Serializables.write( message, PacketByteBufs.create() ) );
 		} );
 	}
 
-	private void registerOnServer( List< NetworkObject< ? > > objects ) {
-		objects.forEach( object->{
-			ServerPlayNetworking.registerGlobalReceiver( object.id, ( MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buffer, PacketSender responseSender )->{
-				ISerializable serializable = SerializableHelper.read( object.instance, buffer );
-				server.execute( ()->serializable.onServer( player ) );
-			} );
+	private < Type > void registerOnServer( NetworkObject< Type > object ) {
+		ServerPlayNetworking.registerGlobalReceiver( object.id, ( MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buffer, PacketSender responseSender )->{
+			object.broadcastOnServer( Serializables.read( object.instance.get(), buffer ), player );
 		} );
 	}
 
 	@Environment( EnvType.CLIENT )
-	private void registerOnClient( List< NetworkObject< ? > > objects ) {
-		objects.forEach( object->{
-			ClientPlayNetworking.registerGlobalReceiver( object.id, ( Minecraft client, ClientPacketListener handler, FriendlyByteBuf buffer, PacketSender responseSender )->{
-				ISerializable serializable = SerializableHelper.read( object.instance, buffer );
-				client.execute( serializable::onClient );
-			} );
+	private < Type > void registerOnClient( NetworkObject< Type > object ) {
+		ClientPlayNetworking.registerGlobalReceiver( object.id, ( Minecraft client, ClientPacketListener handler, FriendlyByteBuf buffer, PacketSender responseSender )->{
+			object.broadcastOnClient( Serializables.read( object.instance.get(), buffer ) );
 		} );
 	}
 }

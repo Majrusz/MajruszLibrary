@@ -1,7 +1,6 @@
 package com.mlib.item;
 
-import com.mlib.data.Serializable;
-import com.mlib.data.SerializableHelper;
+import com.mlib.data.Serializables;
 import com.mlib.registry.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -65,14 +64,14 @@ public class EnchantmentHelper {
 					return false;
 				} else {
 					enchantmentDef.level++;
-					SerializableHelper.write( ()->enchantmentsDef, itemStack.getOrCreateTag() );
+					Serializables.write( enchantmentsDef, itemStack.getOrCreateTag() );
 					return true;
 				}
 			}
 		}
 
 		enchantmentsDef.enchantments.add( new EnchantmentDef( id, 1 ) );
-		SerializableHelper.write( ()->enchantmentsDef, itemStack.getOrCreateTag() );
+		Serializables.write( enchantmentsDef, itemStack.getOrCreateTag() );
 		return true;
 	}
 
@@ -82,7 +81,7 @@ public class EnchantmentHelper {
 		for( int idx = 0; idx < enchantmentsDef.enchantments.size(); ++idx ) {
 			if( id.equals( enchantmentsDef.enchantments.get( idx ).id ) ) {
 				enchantmentsDef.enchantments.remove( idx );
-				SerializableHelper.write( ()->enchantmentsDef, itemStack.getTag() );
+				Serializables.write( enchantmentsDef, itemStack.getTag() );
 				return true;
 			}
 		}
@@ -91,31 +90,33 @@ public class EnchantmentHelper {
 	}
 
 	public static EnchantmentsDef read( ItemStack itemStack ) {
-		return SerializableHelper.read( EnchantmentsDef::new, Optional.ofNullable( itemStack.getTag() ).orElse( new CompoundTag() ) );
+		return Serializables.read( new EnchantmentsDef(), Optional.ofNullable( itemStack.getTag() ).orElse( new CompoundTag() ) );
 	}
 
-	public static class EnchantmentsDef extends Serializable {
-		public List< EnchantmentDef > enchantments = new ArrayList<>();
-
-		public EnchantmentsDef() {
-			this.defineCustom( "Enchantments", ()->this.enchantments, x->this.enchantments = x, EnchantmentDef::new );
+	public static class EnchantmentsDef {
+		static {
+			Serializables.get( EnchantmentsDef.class )
+				.defineCustomList( "Enchantments", s->s.enchantments, ( s, v )->s.enchantments = v, EnchantmentDef::new );
 		}
+
+		public List< EnchantmentDef > enchantments = new ArrayList<>();
 	}
 
-	public static class EnchantmentDef extends Serializable {
+	public static class EnchantmentDef {
+		static {
+			Serializables.get( EnchantmentDef.class )
+				.defineLocation( "id", s->s.id, ( s, v )->s.id = v )
+				.defineInteger( "lvl", s->s.level, ( s, v )->s.level = v );
+		}
+
 		public ResourceLocation id;
 		public int level;
 
-		public EnchantmentDef() {
-			this.defineLocation( "id", ()->this.id, x->this.id = x );
-			this.defineInteger( "lvl", ()->this.level, x->this.level = x );
-		}
-
 		public EnchantmentDef( ResourceLocation id, int level ) {
-			this();
-
 			this.id = id;
 			this.level = level;
 		}
+
+		public EnchantmentDef() {}
 	}
 }

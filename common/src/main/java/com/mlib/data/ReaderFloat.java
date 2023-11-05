@@ -14,8 +14,8 @@ class ReaderFloat implements IReader< Float > {
 	}
 
 	@Override
-	public Float readJson( JsonElement element ) {
-		return element.getAsFloat();
+	public Float readJson( JsonElement json ) {
+		return json.getAsFloat();
 	}
 
 	@Override

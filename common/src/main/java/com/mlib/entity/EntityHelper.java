@@ -1,8 +1,9 @@
 package com.mlib.entity;
 
+import com.mlib.MajruszLibrary;
 import com.mlib.annotation.Dist;
 import com.mlib.annotation.OnlyIn;
-import com.mlib.data.Serializable;
+import com.mlib.data.Serializables;
 import com.mlib.emitter.ParticleEmitter;
 import com.mlib.emitter.SoundEmitter;
 import com.mlib.level.LevelHelper;
@@ -199,14 +200,19 @@ public class EntityHelper {
 		}
 	}
 
-	public static class EntityGlow extends Serializable {
+	public static class EntityGlow {
+		static {
+			Serializables.get( EntityGlow.class )
+				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
+				.defineInteger( "ticks", s->s.ticks, ( s, v )->s.ticks = v );
+
+			MajruszLibrary.ENTITY_GLOW.addClientCallback( EntityGlow::onClient );
+		}
+
 		int entityId;
 		int ticks;
 
 		public EntityGlow( int entityId, int ticks ) {
-			this.defineInteger( "id", ()->this.entityId, x->this.entityId = x );
-			this.defineInteger( "ticks", ()->this.ticks, x->this.ticks = x );
-
 			this.entityId = entityId;
 			this.ticks = ticks;
 		}
@@ -219,21 +225,25 @@ public class EntityHelper {
 			this( 0, 0 );
 		}
 
-		@Override
 		@OnlyIn( Dist.CLIENT )
-		public void onClient() {
-			( ( IMixinEntity )( Side.getLocalLevel().getEntity( this.entityId ) ) ).mlib$addGlowTicks( this.ticks );
+		private static void onClient( EntityGlow data ) {
+			( ( IMixinEntity )( Side.getLocalLevel().getEntity( data.entityId ) ) ).mlib$addGlowTicks( data.ticks );
 		}
 	}
 
-	public static class EntityInvisible extends Serializable {
+	public static class EntityInvisible {
+		static {
+			Serializables.get( EntityGlow.class )
+				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
+				.defineInteger( "ticks", s->s.ticks, ( s, v )->s.ticks = v );
+
+			MajruszLibrary.ENTITY_INVISIBLE.addClientCallback( EntityInvisible::onClient );
+		}
+
 		int entityId;
 		int ticks;
 
 		public EntityInvisible( int entityId, int ticks ) {
-			this.defineInteger( "id", ()->this.entityId, x->this.entityId = x );
-			this.defineInteger( "ticks", ()->this.ticks, x->this.ticks = x );
-
 			this.entityId = entityId;
 			this.ticks = ticks;
 		}
@@ -246,11 +256,10 @@ public class EntityHelper {
 			this( 0, 0 );
 		}
 
-		@Override
 		@OnlyIn( Dist.CLIENT )
-		public void onClient() {
-			IMixinEntity entity = ( ( IMixinEntity )( Side.getLocalLevel().getEntity( this.entityId ) ) );
-			entity.mlib$addInvisibleTicks( this.ticks );
+		private static void onClient( EntityInvisible data ) {
+			IMixinEntity entity = ( ( IMixinEntity )( Side.getLocalLevel().getEntity( data.entityId ) ) );
+			entity.mlib$addInvisibleTicks( data.ticks );
 		}
 	}
 }

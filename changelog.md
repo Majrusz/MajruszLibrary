@@ -1,2 +1,3 @@
 - added key sorting for maps in configuration files
+- reworked serializable structures to support composition over inheritance (breaking change)
 - fixed bug with item durability modifications not working properly

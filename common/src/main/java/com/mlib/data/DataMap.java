@@ -9,33 +9,39 @@ import net.minecraft.network.FriendlyByteBuf;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
-record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< Type > reader ) implements ISerializable {
+record DataMap< ObjectType, ValueType >(
+	Getter< ObjectType, ValueType > getter, Setter< ObjectType, ValueType > setter, IReader< ValueType > reader, String key
+) implements ISerializable< ObjectType > {
 	@Override
-	public void write( JsonElement element ) {
-		JsonObject object = element.getAsJsonObject();
-		Map< String, Type > values = this.getter.get();
+	public void write( ObjectType object, JsonElement json ) {
+		JsonObject jsonObject = new JsonObject();
+		Map< String, ValueType > values = this.getter.apply( object );
 		for( String key : new TreeSet<>( values.keySet() ) ) {
-			object.add( key, this.reader.writeJson( values.get( key ) ) );
+			jsonObject.add( key, this.reader.writeJson( values.get( key ) ) );
+		}
+		json.getAsJsonObject().add( this.key, jsonObject );
+	}
+
+	@Override
+	public void read( ObjectType object, JsonElement json ) {
+		JsonObject jsonObject = json.getAsJsonObject();
+		if( jsonObject.has( this.key ) ) {
+			JsonObject subjsonObject = jsonObject.getAsJsonObject( this.key );
+			Map< String, ValueType > values = new HashMap<>();
+			for( String key : subjsonObject.keySet() ) {
+				values.put( key, this.reader.readJson( subjsonObject.get( key ) ) );
+			}
+
+			this.setter.accept( object, values );
 		}
 	}
 
 	@Override
-	public void read( JsonElement element ) {
-		JsonObject object = element.getAsJsonObject();
-		Map< String, Type > values = new HashMap<>();
-		for( String key : object.keySet() ) {
-			values.put( key, this.reader.readJson( object.get( key ) ) );
-		}
-
-		this.setter.accept( values );
-	}
-
-	@Override
-	public void write( FriendlyByteBuf buffer ) {
-		Map< String, Type > values = this.getter.get();
+	public void write( ObjectType object, FriendlyByteBuf buffer ) {
+		Map< String, ValueType > values = this.getter.apply( object );
 		buffer.writeVarInt( values.size() );
 		for( String key : new TreeSet<>( values.keySet() ) ) {
 			buffer.writeUtf( key );
@@ -44,38 +50,42 @@ record DataMap< Type >( Getter< Type > getter, Setter< Type > setter, IReader< T
 	}
 
 	@Override
-	public void read( FriendlyByteBuf buffer ) {
-		Map< String, Type > values = new HashMap<>();
+	public void read( ObjectType object, FriendlyByteBuf buffer ) {
+		Map< String, ValueType > values = new HashMap<>();
 		int size = buffer.readVarInt();
 		for( int idx = 0; idx < size; ++idx ) {
 			String key = buffer.readUtf();
 			values.put( key, this.reader.readBuffer( buffer ) );
 		}
 
-		this.setter.accept( values );
+		this.setter.accept( object, values );
 	}
 
 	@Override
-	public void write( Tag tag ) {
-		CompoundTag compoundTag = ( CompoundTag )tag;
-		Map< String, Type > values = this.getter.get();
+	public void write( ObjectType object, Tag tag ) {
+		CompoundTag compoundTag = new CompoundTag();
+		Map< String, ValueType > values = this.getter.apply( object );
 		for( String key : new TreeSet<>( values.keySet() ) ) {
 			compoundTag.put( key, this.reader.writeTag( values.get( key ) ) );
 		}
+		( ( CompoundTag )tag ).put( this.key, compoundTag );
 	}
 
 	@Override
-	public void read( Tag tag ) {
+	public void read( ObjectType object, Tag tag ) {
 		CompoundTag compoundTag = ( CompoundTag )tag;
-		Map< String, Type > values = new HashMap<>();
-		for( String key : compoundTag.getAllKeys() ) {
-			values.put( key, this.reader.readTag( compoundTag.get( key ) ) );
-		}
+		if( compoundTag.contains( this.key ) ) {
+			CompoundTag subcompoundTag = new CompoundTag();
+			Map< String, ValueType > values = new HashMap<>();
+			for( String key : subcompoundTag.getAllKeys() ) {
+				values.put( key, this.reader.readTag( subcompoundTag.get( key ) ) );
+			}
 
-		this.setter.accept( values );
+			this.setter.accept( object, values );
+		}
 	}
 
-	public interface Getter< Type > extends Supplier< Map< String, Type > > {}
+	public interface Getter< ObjectType, ValueType > extends Function< ObjectType, Map< String, ValueType > > {}
 
-	public interface Setter< Type > extends Consumer< Map< String, Type > > {}
+	public interface Setter< ObjectType, ValueType > extends BiConsumer< ObjectType, Map< String, ValueType > > {}
 }

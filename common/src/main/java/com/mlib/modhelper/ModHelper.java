@@ -43,11 +43,11 @@ public class ModHelper {
 		return this.registryHandler.create( registry );
 	}
 
-	public < Type extends ISerializable > NetworkObject< Type > create( String id, Class< Type > clazz, Supplier< Type > instance ) {
+	public < Type > NetworkObject< Type > create( String id, Class< Type > clazz, Supplier< Type > instance ) {
 		return this.networkHandler.create( id, clazz, instance );
 	}
 
-	public < Type extends ISerializable > NetworkObject< Type > create( String id, Class< Type > clazz ) {
+	public < Type > NetworkObject< Type > create( String id, Class< Type > clazz ) {
 		return this.create( id, clazz, ()->{
 			try {
 				return clazz.getConstructor().newInstance();

@@ -13,8 +13,8 @@ class ReaderString implements IReader< String > {
 	}
 
 	@Override
-	public String readJson( JsonElement element ) {
-		return element.getAsString();
+	public String readJson( JsonElement json ) {
+		return json.getAsString();
 	}
 
 	@Override

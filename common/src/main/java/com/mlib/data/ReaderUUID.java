@@ -15,8 +15,8 @@ class ReaderUUID implements IReader< UUID > {
 	}
 
 	@Override
-	public UUID readJson( JsonElement element ) {
-		return UUID.fromString( element.getAsString() );
+	public UUID readJson( JsonElement json ) {
+		return UUID.fromString( json.getAsString() );
 	}
 
 	@Override

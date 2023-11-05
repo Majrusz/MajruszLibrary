@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class Config extends Serializable {
+public class Config {
 	private final File file;
 	private final Gson gson;
 
@@ -108,21 +108,15 @@ public class Config extends Serializable {
 		}
 	}
 
-	private static class TypeAdapter< Type extends ISerializable > implements JsonDeserializer< Type >, JsonSerializer< Type > {
-		final Supplier< Type > instance;
-
-		public TypeAdapter( Supplier< Type > instance ) {
-			this.instance = instance;
-		}
-
+	private record TypeAdapter< Type >( Supplier< Type > instance ) implements JsonDeserializer< Type >, JsonSerializer< Type > {
 		@Override
-		public Type deserialize( JsonElement element, java.lang.reflect.Type type, JsonDeserializationContext context ) throws JsonParseException {
-			return SerializableHelper.read( this.instance, element );
+		public Type deserialize( JsonElement json, java.lang.reflect.Type type, JsonDeserializationContext context ) throws JsonParseException {
+			return Serializables.read( this.instance.get(), json );
 		}
 
 		@Override
 		public JsonElement serialize( Type value, java.lang.reflect.Type type, JsonSerializationContext context ) {
-			return SerializableHelper.write( ()->value, new JsonObject() );
+			return Serializables.write( value, new JsonObject() );
 		}
 	}
 }
