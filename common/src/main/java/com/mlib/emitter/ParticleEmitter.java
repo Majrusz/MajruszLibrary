@@ -2,6 +2,7 @@ package com.mlib.emitter;
 
 import com.mlib.math.AnyPos;
 import com.mlib.math.Random;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +16,7 @@ import java.util.function.Supplier;
 public class ParticleEmitter {
 	static final Properties DEFAULT_PROPERTIES = new Properties( ParticleEmitter.offset( 0.25f ), ParticleEmitter.speed( 0.025f, 0.1f ) );
 	static final Map< Object, Properties > PROPERTIES = new HashMap<>();
-	private final SimpleParticleType type;
+	private final Supplier< ? extends ParticleOptions > type;
 	private Supplier< Vec3 > position = ()->Vec3.ZERO;
 	private Supplier< Vec3 > offset;
 	private Supplier< Float > speed;
@@ -35,11 +36,11 @@ public class ParticleEmitter {
 		PROPERTIES.put( type, properties );
 	}
 
-	public static ParticleEmitter of( Supplier< ? extends SimpleParticleType > type ) {
-		return new ParticleEmitter( type.get(), PROPERTIES.getOrDefault( type.get(), DEFAULT_PROPERTIES ) );
+	public static ParticleEmitter of( Supplier< ? extends ParticleOptions > type ) {
+		return new ParticleEmitter( type, PROPERTIES.getOrDefault( type.get(), DEFAULT_PROPERTIES ) );
 	}
 
-	public static ParticleEmitter of( SimpleParticleType type ) {
+	public static ParticleEmitter of( ParticleOptions type ) {
 		return ParticleEmitter.of( ()->type );
 	}
 
@@ -115,14 +116,14 @@ public class ParticleEmitter {
 		return this;
 	}
 
-	private ParticleEmitter( SimpleParticleType type, Properties properties ) {
+	private ParticleEmitter( Supplier< ? extends ParticleOptions > type, Properties properties ) {
 		this.type = type;
 		this.offset = properties.offset;
 		this.speed = properties.speed;
 	}
 
 	private void emit( ServerLevel level, Vec3 position, Vec3 offset, int count ) {
-		level.sendParticles( this.type, position.x, position.y, position.z, count, offset.x, offset.y, offset.z, this.speed.get() );
+		level.sendParticles( this.type.get(), position.x, position.y, position.z, count, offset.x, offset.y, offset.z, this.speed.get() );
 	}
 
 	public record Properties( Supplier< Vec3 > offset, Supplier< Float > speed ) {}
