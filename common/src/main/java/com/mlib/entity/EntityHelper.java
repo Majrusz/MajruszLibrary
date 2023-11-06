@@ -233,7 +233,7 @@ public class EntityHelper {
 
 	public static class EntityInvisible {
 		static {
-			Serializables.get( EntityGlow.class )
+			Serializables.get( EntityInvisible.class )
 				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
 				.defineInteger( "ticks", s->s.ticks, ( s, v )->s.ticks = v );
 
