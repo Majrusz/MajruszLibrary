@@ -49,6 +49,15 @@ public final class Serializable< Type > implements ISerializable< Type > {
 		this.serializables.forEach( serializable->serializable.read( object, tag ) );
 	}
 
+	public Serializable< Type > define( String key, Consumer< Serializable< Type > > consumer ) {
+		Serializable< Type > structure = new Serializable<>();
+		consumer.accept( structure );
+
+		this.serializables.add( new DataSerializable<>( s->structure, key ) );
+
+		return this;
+	}
+
 	public Serializable< Type > defineBlockPos( String key, DataObject.Getter< Type, BlockPos > getter, DataObject.Setter< Type, BlockPos > setter ) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderBlockPos(), key ) );
 
@@ -81,15 +90,6 @@ public final class Serializable< Type > implements ISerializable< Type > {
 
 	public Serializable< Type > defineBooleanMap( String key, DataMap.Getter< Type, Boolean > getter, DataMap.Setter< Type, Boolean > setter ) {
 		this.serializables.add( new DataMap<>( getter, setter, new ReaderBoolean(), key ) );
-
-		return this;
-	}
-
-	public Serializable< Type > defineCustom( String key, Consumer< Serializable< ? > > consumer ) {
-		Serializable< ? > structure = new Serializable<>();
-		consumer.accept( structure );
-
-		this.defineCustom( key, ()->structure );
 
 		return this;
 	}
