@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 public abstract class Config {
 	private final File file;
 	private final Gson gson;
+	private final Serializable< ? > serializable;
 
 	public Config( String name ) {
 		this.file = Registries.getConfigPath().resolve( "%s.json".formatted( name ) ).toFile();
@@ -25,6 +26,7 @@ public abstract class Config {
 			.registerTypeAdapter( this.getClass(), new TypeAdapter<>( ()->this ) )
 			.setPrettyPrinting()
 			.create();
+		this.serializable = Serializables.get( this.getClass() );
 	}
 
 	public void save() {
