@@ -3,8 +3,8 @@ package com.mlib.emitter;
 import com.mlib.math.AnyPos;
 import com.mlib.math.Random;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
@@ -32,12 +32,12 @@ public class ParticleEmitter {
 		ParticleEmitter.setDefault( ParticleTypes.WITCH, new Properties( ParticleEmitter.offset( 0.5f ), ParticleEmitter.speed( 0.0025f, 0.01f ) ) );
 	}
 
-	public static void setDefault( SimpleParticleType type, Properties properties ) {
+	public static void setDefault( ParticleType< ? > type, Properties properties ) {
 		PROPERTIES.put( type, properties );
 	}
 
 	public static ParticleEmitter of( Supplier< ? extends ParticleOptions > type ) {
-		return new ParticleEmitter( type, PROPERTIES.getOrDefault( type.get(), DEFAULT_PROPERTIES ) );
+		return new ParticleEmitter( type, PROPERTIES.getOrDefault( type.get().getType(), DEFAULT_PROPERTIES ) );
 	}
 
 	public static ParticleEmitter of( ParticleOptions type ) {
