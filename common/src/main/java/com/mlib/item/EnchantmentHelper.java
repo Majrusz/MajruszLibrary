@@ -4,6 +4,7 @@ import com.mlib.data.Serializables;
 import com.mlib.registry.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -42,6 +43,15 @@ public class EnchantmentHelper {
 		int sum = 0;
 		for( ItemStack itemStack : enchantment.get().getSlotItems( entity ).values() ) {
 			sum += EnchantmentHelper.getLevel( enchantment, itemStack );
+		}
+
+		return sum;
+	}
+
+	public static int getLevelSum( Supplier< ? extends Enchantment > enchantment, LivingEntity entity, Iterable< EquipmentSlot > slots ) {
+		int sum = 0;
+		for( EquipmentSlot slot : slots ) {
+			sum += EnchantmentHelper.getLevel( enchantment, entity.getItemBySlot( slot ) );
 		}
 
 		return sum;
