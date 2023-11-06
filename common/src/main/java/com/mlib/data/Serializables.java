@@ -18,51 +18,51 @@ public final class Serializables {
 	}
 
 	public static < Type > Type read( Type object, JsonElement json ) {
-		Serializables.getUnsafe( object.getClass() ).read( object, json );
+		Serializables.getUnsafe( object ).read( object, json );
 
 		return object;
 	}
 
 	public static < Type > Type read( Type object, FriendlyByteBuf buffer ) {
-		Serializables.getUnsafe( object.getClass() ).read( object, buffer );
+		Serializables.getUnsafe( object ).read( object, buffer );
 
 		return object;
 	}
 
 	public static < Type > Type read( Type object, Tag tag ) {
-		Serializables.getUnsafe( object.getClass() ).read( object, tag );
+		Serializables.getUnsafe( object ).read( object, tag );
 
 		return object;
 	}
 
 	public static < Type > JsonElement write( Type object, JsonElement json ) {
-		Serializables.getUnsafe( object.getClass() ).write( object, json );
+		Serializables.getUnsafe( object ).write( object, json );
 
 		return json;
 	}
 
 	public static < Type > FriendlyByteBuf write( Type object, FriendlyByteBuf buffer ) {
-		Serializables.getUnsafe( object.getClass() ).write( object, buffer );
+		Serializables.getUnsafe( object ).write( object, buffer );
 
 		return buffer;
 	}
 
 	public static < Type, TagType extends Tag > TagType write( Type object, TagType tag ) {
-		Serializables.getUnsafe( object.getClass() ).write( object, tag );
+		Serializables.getUnsafe( object ).write( object, tag );
 
 		return tag;
 	}
 
 	public static < Type > void modify( Type object, Tag tag, Consumer< Type > consumer ) {
-		Serializable< Type > serializable = Serializables.getUnsafe( object.getClass() );
+		Serializable< Type > serializable = Serializables.getUnsafe( object );
 
 		serializable.read( object, tag );
 		consumer.accept( object );
 		serializable.write( object, tag );
 	}
 
-	private static < Type > Serializable< Type > getUnsafe( Class< ? > clazz ) {
-		return ( Serializable< Type > )SERIALIZABLES.get( clazz );
+	private static < Type > Serializable< Type > getUnsafe( Type object ) {
+		return ( Serializable< Type > )( object instanceof Serializable< ? > serializable ? serializable : SERIALIZABLES.get( object.getClass() ) );
 	}
 
 	private Serializables() {}

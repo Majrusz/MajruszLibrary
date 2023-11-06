@@ -2,7 +2,6 @@ package com.mlib.modhelper;
 
 import com.mlib.annotation.AutoInstance;
 import com.mlib.data.Config;
-import com.mlib.data.ISerializable;
 import com.mlib.network.NetworkHandler;
 import com.mlib.network.NetworkObject;
 import com.mlib.platform.Services;
@@ -55,10 +54,6 @@ public class ModHelper {
 				throw new IllegalArgumentException();
 			}
 		} );
-	}
-
-	public Config.Builder< Config > config() {
-		return new Config.Builder<>( this, Config::new );
 	}
 
 	public < Type extends Config > Config.Builder< Type > config( Function< String, Type > instance ) {

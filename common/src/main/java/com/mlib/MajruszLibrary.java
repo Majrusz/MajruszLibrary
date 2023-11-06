@@ -15,7 +15,7 @@ public class MajruszLibrary {
 	public static final ModHelper HELPER = ModHelper.create( MOD_ID );
 
 	// Configs
-	public static final Config CONFIG = HELPER.config().named( "majruszlibrary" ).autoSync().create();
+	public static final Config CONFIG = HELPER.config( name->new Config( name ) {} ).named( "majruszlibrary" ).autoSync().create();
 
 	// Registry Groups
 	public static final RegistryGroup< ArgumentTypeInfo< ?, ? > > ARGUMENT_TYPES = HELPER.create( BuiltInRegistries.COMMAND_ARGUMENT_TYPE );
