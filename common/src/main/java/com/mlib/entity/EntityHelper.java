@@ -206,7 +206,7 @@ public class EntityHelper {
 				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
 				.defineInteger( "ticks", s->s.ticks, ( s, v )->s.ticks = v );
 
-			MajruszLibrary.ENTITY_GLOW.addClientCallback( EntityGlow::onClient );
+			Side.runOnClient( ()->()->MajruszLibrary.ENTITY_GLOW.addClientCallback( EntityGlow::onClient ) );
 		}
 
 		int entityId;
@@ -237,7 +237,7 @@ public class EntityHelper {
 				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
 				.defineInteger( "ticks", s->s.ticks, ( s, v )->s.ticks = v );
 
-			MajruszLibrary.ENTITY_INVISIBLE.addClientCallback( EntityInvisible::onClient );
+			Side.runOnClient( ()->()->MajruszLibrary.ENTITY_INVISIBLE.addClientCallback( EntityInvisible::onClient ) );
 		}
 
 		int entityId;
