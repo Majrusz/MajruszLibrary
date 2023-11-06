@@ -102,7 +102,7 @@ public class DefaultMap< Type > implements Map< String, Type > {
 	}
 
 	private DefaultMap( Object2ObjectOpenHashMap< String, Type > map ) {
-		this.defaultValue = map.containsKey( DEFAULT_ID ) ? map.get( DEFAULT_ID ) : map.get( "default" ); // TODO: remove, temporary solution to not break compatibility
+		this.defaultValue = map.get( DEFAULT_ID );
 		this.map = map;
 
 		if( this.defaultValue == null ) {
