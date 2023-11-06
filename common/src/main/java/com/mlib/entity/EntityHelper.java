@@ -1,8 +1,11 @@
 package com.mlib.entity;
 
+import com.mlib.MajruszLibrary;
 import com.mlib.annotation.Dist;
 import com.mlib.annotation.OnlyIn;
-import com.mlib.data.Serializable;
+import com.mlib.data.Serializables;
+import com.mlib.emitter.ParticleEmitter;
+import com.mlib.emitter.SoundEmitter;
 import com.mlib.level.LevelHelper;
 import com.mlib.math.AnyPos;
 import com.mlib.math.AnyRot;
@@ -15,8 +18,9 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.AbstractIllager;
@@ -38,11 +42,22 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class EntityHelper {
-	public static void cheatDeath( LivingEntity entity, float healthRatio, boolean shouldPlayEffects ) {
-		entity.setHealth( entity.getMaxHealth() * healthRatio );
-		if( shouldPlayEffects && entity.level() instanceof ServerLevel level ) {
-			level.sendParticles( ParticleTypes.TOTEM_OF_UNDYING, entity.getX(), entity.getY( 0.75 ), entity.getZ(), 64, 0.25, 0.5, 0.25, 0.5 );
-			level.playSound( null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.TOTEM_USE, SoundSource.AMBIENT, 1.0f, 1.0f );
+	public static void cheatDeath( LivingEntity entity ) {
+		entity.setHealth( 1.0f );
+		entity.removeAllEffects();
+		entity.addEffect( new MobEffectInstance( MobEffects.REGENERATION, 900, 1 ) );
+		entity.addEffect( new MobEffectInstance( MobEffects.ABSORPTION, 100, 1 ) );
+		entity.addEffect( new MobEffectInstance( MobEffects.FIRE_RESISTANCE, 800, 0 ) );
+		if( entity.level() instanceof ServerLevel level ) {
+			ParticleEmitter.of( ParticleTypes.TOTEM_OF_UNDYING )
+				.sizeBased( entity )
+				.count( 32 )
+				.offset( new Vec3( 0.25, 0.5, 0.25 ) )
+				.emit( level );
+
+			SoundEmitter.of( SoundEvents.TOTEM_USE )
+				.position( entity.position() )
+				.emit( level );
 		}
 	}
 
@@ -185,26 +200,66 @@ public class EntityHelper {
 		}
 	}
 
-	public static class EntityGlow extends Serializable {
-		int entityId = 0;
-		int ticks = 0;
+	public static class EntityGlow {
+		static {
+			Serializables.get( EntityGlow.class )
+				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
+				.defineInteger( "ticks", s->s.ticks, ( s, v )->s.ticks = v );
 
-		public EntityGlow( Entity entity, int ticks ) {
-			this();
+			Side.runOnClient( ()->()->MajruszLibrary.ENTITY_GLOW.addClientCallback( EntityGlow::onClient ) );
+		}
 
-			this.entityId = entity.getId();
+		int entityId;
+		int ticks;
+
+		public EntityGlow( int entityId, int ticks ) {
+			this.entityId = entityId;
 			this.ticks = ticks;
 		}
 
-		public EntityGlow() {
-			this.defineInteger( "id", ()->this.entityId, x->this.entityId = x );
-			this.defineInteger( "ticks", ()->this.ticks, x->this.ticks = x );
+		public EntityGlow( Entity entity, int ticks ) {
+			this( entity.getId(), ticks );
 		}
 
-		@Override
+		public EntityGlow() {
+			this( 0, 0 );
+		}
+
 		@OnlyIn( Dist.CLIENT )
-		public void onClient() {
-			( ( IMixinEntity )( Side.getLocalLevel().getEntity( this.entityId ) ) ).addGlowTicks( this.ticks );
+		private static void onClient( EntityGlow data ) {
+			( ( IMixinEntity )( Side.getLocalLevel().getEntity( data.entityId ) ) ).mlib$addGlowTicks( data.ticks );
+		}
+	}
+
+	public static class EntityInvisible {
+		static {
+			Serializables.get( EntityInvisible.class )
+				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
+				.defineInteger( "ticks", s->s.ticks, ( s, v )->s.ticks = v );
+
+			Side.runOnClient( ()->()->MajruszLibrary.ENTITY_INVISIBLE.addClientCallback( EntityInvisible::onClient ) );
+		}
+
+		int entityId;
+		int ticks;
+
+		public EntityInvisible( int entityId, int ticks ) {
+			this.entityId = entityId;
+			this.ticks = ticks;
+		}
+
+		public EntityInvisible( Entity entity, int ticks ) {
+			this( entity.getId(), ticks );
+		}
+
+		public EntityInvisible() {
+			this( 0, 0 );
+		}
+
+		@OnlyIn( Dist.CLIENT )
+		private static void onClient( EntityInvisible data ) {
+			IMixinEntity entity = ( ( IMixinEntity )( Side.getLocalLevel().getEntity( data.entityId ) ) );
+			entity.mlib$addInvisibleTicks( data.ticks );
 		}
 	}
 }

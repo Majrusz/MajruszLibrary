@@ -13,8 +13,8 @@ abstract class ReaderStringCustom< Type > implements IReader< Type > {
 	}
 
 	@Override
-	public Type readJson( JsonElement element ) {
-		return this.convert( element.getAsString() );
+	public Type readJson( JsonElement json ) {
+		return this.convert( json.getAsString() );
 	}
 
 	@Override

@@ -32,11 +32,11 @@ public abstract class MixinNaturalSpawner {
 
 		int extraMobsCount = mobsCount - 1;
 		for( int idx = 0; idx < extraMobsCount; ++idx ) {
-			NaturalSpawner.spawnCategoryForPosition( category, level, chunk, getRandomSpawnPos( level, chunk ), predicate, spawnCallback );
+			NaturalSpawner.spawnCategoryForPosition( category, level, chunk, mlib$getRandomSpawnPos( level, chunk ), predicate, spawnCallback );
 		}
 	}
 
-	private static BlockPos getRandomSpawnPos( ServerLevel level, LevelChunk chunk ) {
+	private static BlockPos mlib$getRandomSpawnPos( ServerLevel level, LevelChunk chunk ) {
 		ChunkPos chunkpos = chunk.getPos();
 		int x = chunkpos.getMinBlockX() + Random.nextInt( 16 );
 		int z = chunkpos.getMinBlockZ() + Random.nextInt( 16 );

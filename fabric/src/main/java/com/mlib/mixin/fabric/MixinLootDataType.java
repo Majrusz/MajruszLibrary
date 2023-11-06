@@ -20,7 +20,7 @@ public abstract class MixinLootDataType< T > {
 	private void deserialize( ResourceLocation id, JsonElement json, CallbackInfoReturnable< Optional< T > > callback ) {
 		Optional< T > optional = callback.getReturnValue();
 		if( optional.isPresent() && optional.get() instanceof IMixinLootTable lootTable ) {
-			lootTable.set( id );
+			lootTable.mlib$set( id );
 		}
 	}
 }

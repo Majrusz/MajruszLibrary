@@ -66,10 +66,10 @@ public abstract class MixinItemStack {
 				continue;
 			}
 
-			int insertIdx = this.getInsertIdx( components, slot );
+			int insertIdx = this.mlib$getInsertIdx( components, slot );
 			if( insertIdx == -1 ) {
 				components.add( CommonComponents.EMPTY );
-				components.add( Component.translatable( this.getModifierId( slot ) ).withStyle( ChatFormatting.GRAY ) );
+				components.add( Component.translatable( this.mlib$getModifierId( slot ) ).withStyle( ChatFormatting.GRAY ) );
 				components.addAll( slotComponents );
 			} else {
 				components.addAll( insertIdx, slotComponents );
@@ -79,9 +79,9 @@ public abstract class MixinItemStack {
 		return components;
 	}
 
-	private int getInsertIdx( List< Component > components, EquipmentSlot slot ) {
+	private int mlib$getInsertIdx( List< Component > components, EquipmentSlot slot ) {
 		for( int idx = 0; idx < components.size(); ++idx ) {
-			if( !components.get( idx ).toString().contains( this.getModifierId( slot ) ) ) {
+			if( !components.get( idx ).toString().contains( this.mlib$getModifierId( slot ) ) ) {
 				continue;
 			}
 
@@ -97,7 +97,7 @@ public abstract class MixinItemStack {
 		return -1;
 	}
 
-	private String getModifierId( EquipmentSlot slot ) {
+	private String mlib$getModifierId( EquipmentSlot slot ) {
 		return String.format( "item.modifiers.%s", slot.getName() );
 	}
 }

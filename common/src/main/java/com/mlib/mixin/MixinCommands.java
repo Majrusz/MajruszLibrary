@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin( Commands.class )
 public abstract class MixinCommands {
-	@Shadow private CommandDispatcher< CommandSourceStack > dispatcher;
+	private @Shadow CommandDispatcher< CommandSourceStack > dispatcher;
 
 	@Inject(
 		at = @At( "RETURN" ),

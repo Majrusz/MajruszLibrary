@@ -14,8 +14,8 @@ class ReaderInteger implements IReader< Integer > {
 	}
 
 	@Override
-	public Integer readJson( JsonElement element ) {
-		return element.getAsInt();
+	public Integer readJson( JsonElement json ) {
+		return json.getAsInt();
 	}
 
 	@Override

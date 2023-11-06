@@ -2,16 +2,18 @@ package com.mlib.contexts;
 
 import com.mlib.contexts.base.Context;
 import com.mlib.contexts.base.Contexts;
+import com.mlib.contexts.data.ICancellableData;
 import com.mlib.contexts.data.IEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class OnEntityPreDamaged implements IEntityData {
+public class OnEntityPreDamaged implements ICancellableData, IEntityData {
 	public final DamageSource source;
-	public final LivingEntity attacker;
+	public final @Nullable LivingEntity attacker;
 	public final LivingEntity target;
 	public final float original;
 	public float damage;
@@ -32,6 +34,11 @@ public class OnEntityPreDamaged implements IEntityData {
 	}
 
 	@Override
+	public boolean isExecutionStopped() {
+		return this.isDamageCancelled();
+	}
+
+	@Override
 	public Entity getEntity() {
 		return this.target;
 	}
@@ -46,7 +53,7 @@ public class OnEntityPreDamaged implements IEntityData {
 	}
 
 	public boolean isDirect() {
-		return this.source.getDirectEntity() == this.attacker;
+		return !this.source.isIndirect();
 	}
 
 	public boolean willTakeFullDamage() {

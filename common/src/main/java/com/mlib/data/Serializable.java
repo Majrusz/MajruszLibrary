@@ -16,211 +16,307 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class Serializable implements ISerializable {
-	final List< ISerializable > serializables = new ArrayList<>();
+public final class Serializable< Type > implements ISerializable< Type > {
+	final List< ISerializable< Type > > serializables = new ArrayList<>();
 
 	@Override
-	public void write( JsonElement element ) {
-		this.serializables.forEach( serializable->serializable.write( element ) );
-	}
-
-	@Override
-	public void read( JsonElement element ) {
-		this.serializables.forEach( serializable->serializable.read( element ) );
+	public void write( Type object, JsonElement json ) {
+		this.serializables.forEach( serializable->serializable.write( object, json ) );
 	}
 
 	@Override
-	public void write( FriendlyByteBuf buffer ) {
-		this.serializables.forEach( serializable->serializable.write( buffer ) );
+	public void read( Type object, JsonElement json ) {
+		this.serializables.forEach( serializable->serializable.read( object, json ) );
 	}
 
 	@Override
-	public void read( FriendlyByteBuf buffer ) {
-		this.serializables.forEach( serializable->serializable.read( buffer ) );
+	public void write( Type object, FriendlyByteBuf buffer ) {
+		this.serializables.forEach( serializable->serializable.write( object, buffer ) );
 	}
 
 	@Override
-	public void write( Tag tag ) {
-		this.serializables.forEach( serializable->serializable.write( tag ) );
+	public void read( Type object, FriendlyByteBuf buffer ) {
+		this.serializables.forEach( serializable->serializable.read( object, buffer ) );
 	}
 
 	@Override
-	public void read( Tag tag ) {
-		this.serializables.forEach( serializable->serializable.read( tag ) );
+	public void write( Type object, Tag tag ) {
+		this.serializables.forEach( serializable->serializable.write( object, tag ) );
 	}
 
-	public void defineBlockPos( String key, DataObject.Getter< BlockPos > getter, DataObject.Setter< BlockPos > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderBlockPos(), key ) );
+	@Override
+	public void read( Type object, Tag tag ) {
+		this.serializables.forEach( serializable->serializable.read( object, tag ) );
 	}
 
-	public void defineBlockPos( String key, DataList.Getter< BlockPos > getter, DataList.Setter< BlockPos > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderBlockPos() ) ), key ) );
-	}
-
-	public void defineBlockPos( String key, DataMap.Getter< BlockPos > getter, DataMap.Setter< BlockPos > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderBlockPos() ) ), key ) );
-	}
-
-	public void defineBoolean( String key, DataObject.Getter< Boolean > getter, DataObject.Setter< Boolean > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderBoolean(), key ) );
-	}
-
-	public void defineBoolean( String key, DataList.Getter< Boolean > getter, DataList.Setter< Boolean > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderBoolean() ) ), key ) );
-	}
-
-	public void defineBoolean( String key, DataMap.Getter< Boolean > getter, DataMap.Setter< Boolean > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderBoolean() ) ), key ) );
-	}
-
-	public void defineCustom( String key, Consumer< Serializable > consumer ) {
-		Serializable structure = new Serializable();
+	public Serializable< Type > define( String key, Consumer< Serializable< Type > > consumer ) {
+		Serializable< Type > structure = new Serializable<>();
 		consumer.accept( structure );
 
-		this.defineCustom( key, ()->structure );
+		this.serializables.add( new DataSerializable<>( s->structure, key ) );
+
+		return this;
 	}
 
-	public < Type extends ISerializable > void defineCustom( String key, DataObject.Getter< Type > getter ) {
-		this.serializables.add( new DataObject<>( getter, x->{}, new ReaderCustom<>( getter ), key ) );
+	public Serializable< Type > defineBlockPos( String key, DataObject.Getter< Type, BlockPos > getter, DataObject.Setter< Type, BlockPos > setter ) {
+		this.serializables.add( new DataObject<>( getter, setter, new ReaderBlockPos(), key ) );
+
+		return this;
 	}
 
-	public < Type extends ISerializable > void defineCustom( String key, DataObject.Getter< Type > getter, DataObject.Setter< Type > setter,
-		Supplier< Type > newInstance
+	public Serializable< Type > defineBlockPosList( String key, DataList.Getter< Type, BlockPos > getter, DataList.Setter< Type, BlockPos > setter ) {
+		this.serializables.add( new DataList<>( getter, setter, new ReaderBlockPos(), key ) );
+
+		return this;
+	}
+
+	public Serializable< Type > defineBlockPosMap( String key, DataMap.Getter< Type, BlockPos > getter, DataMap.Setter< Type, BlockPos > setter ) {
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderBlockPos(), key ) );
+
+		return this;
+	}
+
+	public Serializable< Type > defineBoolean( String key, DataObject.Getter< Type, Boolean > getter, DataObject.Setter< Type, Boolean > setter ) {
+		this.serializables.add( new DataObject<>( getter, setter, new ReaderBoolean(), key ) );
+
+		return this;
+	}
+
+	public Serializable< Type > defineBooleanList( String key, DataList.Getter< Type, Boolean > getter, DataList.Setter< Type, Boolean > setter ) {
+		this.serializables.add( new DataList<>( getter, setter, new ReaderBoolean(), key ) );
+
+		return this;
+	}
+
+	public Serializable< Type > defineBooleanMap( String key, DataMap.Getter< Type, Boolean > getter, DataMap.Setter< Type, Boolean > setter ) {
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderBoolean(), key ) );
+
+		return this;
+	}
+
+	public < ObjectType > Serializable< Type > defineCustom( String key, Supplier< ObjectType > instance ) {
+		this.serializables.add( new DataObject<>( s->instance.get(), ( s, v )->{}, new ReaderCustom<>( instance ), key ) );
+
+		return this;
+	}
+
+	public < ObjectType > Serializable< Type > defineCustom( String key, DataObject.Getter< Type, ObjectType > getter,
+		DataObject.Setter< Type, ObjectType > setter, Supplier< ObjectType > instance
 	) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderCustom<>( newInstance ), key ) );
+		this.serializables.add( new DataObject<>( getter, setter, new ReaderCustom<>( instance ), key ) );
+
+		return this;
 	}
 
-	public < Type extends ISerializable > void defineCustom( String key, DataList.Getter< Type > getter, DataList.Setter< Type > setter,
-		Supplier< Type > newInstance
+	public < ObjectType > Serializable< Type > defineCustomList( String key, DataList.Getter< Type, ObjectType > getter,
+		DataList.Setter< Type, ObjectType > setter, Supplier< ObjectType > instance
 	) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderCustom<>( newInstance ) ) ), key ) );
+		this.serializables.add( new DataList<>( getter, setter, new ReaderCustom<>( instance ), key ) );
+
+		return this;
 	}
 
-	public < Type extends ISerializable > void defineCustom( String key, DataMap.Getter< Type > getter, DataMap.Setter< Type > setter,
-		Supplier< Type > newInstance
+	public < ObjectType > Serializable< Type > defineCustomMap( String key, DataMap.Getter< Type, ObjectType > getter,
+		DataMap.Setter< Type, ObjectType > setter, Supplier< ObjectType > instance
 	) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderCustom<>( newInstance ) ) ), key ) );
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderCustom<>( instance ), key ) );
+
+		return this;
 	}
 
-	public void defineEffect( String key, DataObject.Getter< MobEffect > getter, DataObject.Setter< MobEffect > setter ) {
+	public Serializable< Type > defineEffect( String key, DataObject.Getter< Type, MobEffect > getter, DataObject.Setter< Type, MobEffect > setter ) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderMobEffect(), key ) );
+
+		return this;
 	}
 
-	public void defineEffect( String key, DataList.Getter< MobEffect > getter, DataList.Setter< MobEffect > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderMobEffect() ) ), key ) );
+	public Serializable< Type > defineEffectList( String key, DataList.Getter< Type, MobEffect > getter, DataList.Setter< Type, MobEffect > setter ) {
+		this.serializables.add( new DataList<>( getter, setter, new ReaderMobEffect(), key ) );
+
+		return this;
 	}
 
-	public void defineEffect( String key, DataMap.Getter< MobEffect > getter, DataMap.Setter< MobEffect > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderMobEffect() ) ), key ) );
+	public Serializable< Type > defineEffectMap( String key, DataMap.Getter< Type, MobEffect > getter, DataMap.Setter< Type, MobEffect > setter ) {
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderMobEffect(), key ) );
+
+		return this;
 	}
 
-	public void defineEnchantment( String key, DataObject.Getter< Enchantment > getter, DataObject.Setter< Enchantment > setter ) {
+	public Serializable< Type > defineEnchantment( String key, DataObject.Getter< Type, Enchantment > getter, DataObject.Setter< Type, Enchantment > setter ) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderEnchantment(), key ) );
+
+		return this;
 	}
 
-	public void defineEnchantment( String key, DataList.Getter< Enchantment > getter, DataList.Setter< Enchantment > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderEnchantment() ) ), key ) );
+	public Serializable< Type > defineEnchantmentList( String key, DataList.Getter< Type, Enchantment > getter, DataList.Setter< Type, Enchantment > setter ) {
+		this.serializables.add( new DataList<>( getter, setter, new ReaderEnchantment(), key ) );
+
+		return this;
 	}
 
-	public void defineEnchantment( String key, DataMap.Getter< Enchantment > getter, DataMap.Setter< Enchantment > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderEnchantment() ) ), key ) );
+	public Serializable< Type > defineEnchantmentMap( String key, DataMap.Getter< Type, Enchantment > getter, DataMap.Setter< Type, Enchantment > setter ) {
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderEnchantment(), key ) );
+
+		return this;
 	}
 
-	public void defineEntityType( String key, DataObject.Getter< EntityType< ? > > getter, DataObject.Setter< EntityType< ? > > setter ) {
+	public Serializable< Type > defineEntityType( String key, DataObject.Getter< Type, EntityType< ? > > getter,
+		DataObject.Setter< Type, EntityType< ? > > setter
+	) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderEntityType(), key ) );
+
+		return this;
 	}
 
-	public void defineEntityType( String key, DataList.Getter< EntityType< ? > > getter, DataList.Setter< EntityType< ? > > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderEntityType() ) ), key ) );
+	public Serializable< Type > defineEntityTypeList( String key, DataList.Getter< Type, EntityType< ? > > getter,
+		DataList.Setter< Type, EntityType< ? > > setter
+	) {
+		this.serializables.add( new DataList<>( getter, setter, new ReaderEntityType(), key ) );
+
+		return this;
 	}
 
-	public void defineEntityType( String key, DataMap.Getter< EntityType< ? > > getter, DataMap.Setter< EntityType< ? > > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderEntityType() ) ), key ) );
+	public Serializable< Type > defineEntityTypeMap( String key, DataMap.Getter< Type, EntityType< ? > > getter,
+		DataMap.Setter< Type, EntityType< ? > > setter
+	) {
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderEntityType(), key ) );
+
+		return this;
 	}
 
-	public < Type extends Enum< ? > > void defineEnum( String key, DataObject.Getter< Type > getter, DataObject.Setter< Type > setter,
-		Supplier< Type[] > values
+	public < EnumType extends Enum< ? > > Serializable< Type > defineEnum( String key, DataObject.Getter< Type, EnumType > getter,
+		DataObject.Setter< Type, EnumType > setter, Supplier< EnumType[] > values
 	) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderEnum<>( values ), key ) );
+
+		return this;
 	}
 
-	public < Type extends Enum< ? > > void defineEnum( String key, DataList.Getter< Type > getter, DataList.Setter< Type > setter,
-		Supplier< Type[] > values
+	public < EnumType extends Enum< ? > > Serializable< Type > defineEnumList( String key, DataList.Getter< Type, EnumType > getter,
+		DataList.Setter< Type, EnumType > setter, Supplier< EnumType[] > values
 	) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderEnum<>( values ) ) ), key ) );
+		this.serializables.add( new DataList<>( getter, setter, new ReaderEnum<>( values ), key ) );
+
+		return this;
 	}
 
-	public < Type extends Enum< ? > > void defineEnum( String key, DataMap.Getter< Type > getter, DataMap.Setter< Type > setter,
-		Supplier< Type[] > values
+	public < EnumType extends Enum< ? > > Serializable< Type > defineEnumMap( String key, DataMap.Getter< Type, EnumType > getter,
+		DataMap.Setter< Type, EnumType > setter, Supplier< EnumType[] > values
 	) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderEnum<>( values ) ) ), key ) );
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderEnum<>( values ), key ) );
+
+		return this;
 	}
 
-	public void defineFloat( String key, DataObject.Getter< Float > getter, DataObject.Setter< Float > setter ) {
+	public Serializable< Type > defineFloat( String key, DataObject.Getter< Type, Float > getter, DataObject.Setter< Type, Float > setter ) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderFloat(), key ) );
+
+		return this;
 	}
 
-	public void defineFloat( String key, DataList.Getter< Float > getter, DataList.Setter< Float > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderFloat() ) ), key ) );
+	public Serializable< Type > defineFloatList( String key, DataList.Getter< Type, Float > getter, DataList.Setter< Type, Float > setter ) {
+		this.serializables.add( new DataList<>( getter, setter, new ReaderFloat(), key ) );
+
+		return this;
 	}
 
-	public void defineFloat( String key, DataMap.Getter< Float > getter, DataMap.Setter< Float > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderFloat() ) ), key ) );
+	public Serializable< Type > defineFloatMap( String key, DataMap.Getter< Type, Float > getter, DataMap.Setter< Type, Float > setter ) {
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderFloat(), key ) );
+
+		return this;
 	}
 
-	public void defineFloatRange( String key, DataObject.Getter< Range< Float > > getter, DataObject.Setter< Range< Float > > setter ) {
+	public Serializable< Type > defineFloatRange( String key, DataObject.Getter< Type, Range< Float > > getter,
+		DataObject.Setter< Type, Range< Float > > setter
+	) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderRange<>( new ReaderFloat() ), key ) );
+
+		return this;
 	}
 
-	public void defineInteger( String key, DataObject.Getter< Integer > getter, DataObject.Setter< Integer > setter ) {
+	public Serializable< Type > defineInteger( String key, DataObject.Getter< Type, Integer > getter, DataObject.Setter< Type, Integer > setter ) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderInteger(), key ) );
+
+		return this;
 	}
 
-	public void defineInteger( String key, DataList.Getter< Integer > getter, DataList.Setter< Integer > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderInteger() ) ), key ) );
+	public Serializable< Type > defineIntegerList( String key, DataList.Getter< Type, Integer > getter, DataList.Setter< Type, Integer > setter ) {
+		this.serializables.add( new DataList<>( getter, setter, new ReaderInteger(), key ) );
+
+		return this;
 	}
 
-	public void defineInteger( String key, DataMap.Getter< Integer > getter, DataMap.Setter< Integer > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderInteger() ) ), key ) );
+	public Serializable< Type > defineIntegerMap( String key, DataMap.Getter< Type, Integer > getter, DataMap.Setter< Type, Integer > setter ) {
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderInteger(), key ) );
+
+		return this;
 	}
 
-	public void defineIntegerRange( String key, DataObject.Getter< Range< Integer > > getter, DataObject.Setter< Range< Integer > > setter ) {
+	public Serializable< Type > defineIntegerRange( String key, DataObject.Getter< Type, Range< Integer > > getter,
+		DataObject.Setter< Type, Range< Integer > > setter
+	) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderRange<>( new ReaderInteger() ), key ) );
+
+		return this;
 	}
 
-	public void defineLocation( String key, DataObject.Getter< ResourceLocation > getter, DataObject.Setter< ResourceLocation > setter ) {
+	public Serializable< Type > defineLocation( String key, DataObject.Getter< Type, ResourceLocation > getter,
+		DataObject.Setter< Type, ResourceLocation > setter
+	) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderResourceLocation(), key ) );
+
+		return this;
 	}
 
-	public void defineLocation( String key, DataList.Getter< ResourceLocation > getter, DataList.Setter< ResourceLocation > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderResourceLocation() ) ), key ) );
+	public Serializable< Type > defineLocationList( String key, DataList.Getter< Type, ResourceLocation > getter,
+		DataList.Setter< Type, ResourceLocation > setter
+	) {
+		this.serializables.add( new DataList<>( getter, setter, new ReaderResourceLocation(), key ) );
+
+		return this;
 	}
 
-	public void defineLocation( String key, DataMap.Getter< ResourceLocation > getter, DataMap.Setter< ResourceLocation > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderResourceLocation() ) ), key ) );
+	public Serializable< Type > defineLocationMap( String key, DataMap.Getter< Type, ResourceLocation > getter,
+		DataMap.Setter< Type, ResourceLocation > setter
+	) {
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderResourceLocation(), key ) );
+
+		return this;
 	}
 
-	public void defineString( String key, DataObject.Getter< String > getter, DataObject.Setter< String > setter ) {
+	public Serializable< Type > defineString( String key, DataObject.Getter< Type, String > getter, DataObject.Setter< Type, String > setter ) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderString(), key ) );
+
+		return this;
 	}
 
-	public void defineString( String key, DataList.Getter< String > getter, DataList.Setter< String > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderString() ) ), key ) );
+	public Serializable< Type > defineStringList( String key, DataList.Getter< Type, String > getter, DataList.Setter< Type, String > setter ) {
+		this.serializables.add( new DataList<>( getter, setter, new ReaderString(), key ) );
+
+		return this;
 	}
 
-	public void defineString( String key, DataMap.Getter< String > getter, DataMap.Setter< String > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderString() ) ), key ) );
+	public Serializable< Type > defineStringMap( String key, DataMap.Getter< Type, String > getter, DataMap.Setter< Type, String > setter ) {
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderString(), key ) );
+
+		return this;
 	}
 
-	public void defineUUID( String key, DataObject.Getter< UUID > getter, DataObject.Setter< UUID > setter ) {
+	public Serializable< Type > defineUUID( String key, DataObject.Getter< Type, UUID > getter, DataObject.Setter< Type, UUID > setter ) {
 		this.serializables.add( new DataObject<>( getter, setter, new ReaderUUID(), key ) );
+
+		return this;
 	}
 
-	public void defineUUID( String key, DataList.Getter< UUID > getter, DataList.Setter< UUID > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderList<>( new DataList<>( getter, setter, new ReaderUUID() ) ), key ) );
+	public Serializable< Type > defineUUIDList( String key, DataList.Getter< Type, UUID > getter, DataList.Setter< Type, UUID > setter ) {
+		this.serializables.add( new DataList<>( getter, setter, new ReaderUUID(), key ) );
+
+		return this;
 	}
 
-	public void defineUUID( String key, DataMap.Getter< UUID > getter, DataMap.Setter< UUID > setter ) {
-		this.serializables.add( new DataObject<>( getter, setter, new ReaderMap<>( new DataMap<>( getter, setter, new ReaderUUID() ) ), key ) );
+	public Serializable< Type > defineUUIDMap( String key, DataMap.Getter< Type, UUID > getter, DataMap.Setter< Type, UUID > setter ) {
+		this.serializables.add( new DataMap<>( getter, setter, new ReaderUUID(), key ) );
+
+		return this;
 	}
 }

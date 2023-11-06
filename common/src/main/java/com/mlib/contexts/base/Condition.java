@@ -2,19 +2,15 @@ package com.mlib.contexts.base;
 
 import com.mlib.contexts.data.ILevelData;
 import com.mlib.contexts.data.IPositionData;
-import com.mlib.item.EnchantmentHelper;
 import com.mlib.level.LevelHelper;
 import com.mlib.math.AnyPos;
 import com.mlib.math.Random;
 import com.mlib.platform.Side;
 import com.mlib.time.TimeHelper;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.List;
 import java.util.function.Function;
@@ -72,22 +68,6 @@ public class Condition< DataType > {
 		return Condition.cooldown( ()->seconds );
 	}
 
-	public static < DataType > Condition< DataType > hasEnchantment( Supplier< Enchantment > enchantment, Function< DataType, LivingEntity > entity ) {
-		return new Condition<>( data->entity.apply( data ) != null && EnchantmentHelper.has( enchantment, entity.apply( data ) ) );
-	}
-
-	public static < DataType > Condition< DataType > hasEnchantment( Enchantment enchantment, Function< DataType, LivingEntity > entity ) {
-		return Condition.hasEnchantment( ()->enchantment, entity );
-	}
-
-	public static < DataType > Condition< DataType > hasEffect( Supplier< MobEffect > effect, Function< DataType, LivingEntity > entity ) {
-		return new Condition<>( data->entity.apply( data ) != null && entity.apply( data ).hasEffect( effect.get() ) );
-	}
-
-	public static < DataType > Condition< DataType > hasEffect( MobEffect effect, Function< DataType, LivingEntity > entity ) {
-		return Condition.hasEffect( ()->effect, entity );
-	}
-
 	public static < DataType > Condition< DataType > isShiftKeyDown( Function< DataType, Player > player ) {
 		return new Condition<>( data->player.apply( data ) != null && player.apply( data ).isShiftKeyDown() );
 	}
@@ -96,7 +76,7 @@ public class Condition< DataType > {
 		return new Condition<>( data->entity.apply( data ) != null && entity.apply( data ).onGround() );
 	}
 
-	public static < DataType > Condition< DataType > isCooldownOver( Function< DataType, Player > player, Supplier< Item > item ) {
+	public static < DataType > Condition< DataType > isCooldownOver( Function< DataType, Player > player, Supplier< ? extends Item > item ) {
 		return new Condition<>( data->player.apply( data ) != null && !player.apply( data ).getCooldowns().isOnCooldown( item.get() ) );
 	}
 

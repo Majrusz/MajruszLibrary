@@ -13,8 +13,8 @@ class ReaderBoolean implements IReader< Boolean > {
 	}
 
 	@Override
-	public Boolean readJson( JsonElement element ) {
-		return element.getAsBoolean();
+	public Boolean readJson( JsonElement json ) {
+		return json.getAsBoolean();
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package com.mlib.network;
 
-import com.mlib.data.ISerializable;
-import com.mlib.data.SerializableHelper;
+import com.mlib.data.Serializables;
 import com.mlib.modhelper.ModHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -27,29 +26,29 @@ public class NetworkNeoForge implements INetworkPlatform {
 	}
 
 	@Override
-	public < Type extends ISerializable > void sendToServer( NetworkObject< Type > object, Type message ) {
+	public < Type > void sendToServer( NetworkObject< Type > object, Type message ) {
 		this.channel.send( PacketDistributor.SERVER.with( ()->null ), message );
 	}
 
 	@Override
-	public < Type extends ISerializable > void sendToClients( NetworkObject< Type > object, Type message, List< ServerPlayer > players ) {
+	public < Type > void sendToClients( NetworkObject< Type > object, Type message, List< ServerPlayer > players ) {
 		players.forEach( player->this.channel.send( PacketDistributor.PLAYER.with( ()->player ), message ) );
 	}
 
-	private < Type extends ISerializable > void register( NetworkObject< Type > object ) {
+	private < Type > void register( NetworkObject< Type > object ) {
 		this.channel.registerMessage(
 			this.idx++,
 			object.clazz,
-			ISerializable::write,
-			( buffer )->SerializableHelper.read( object.instance, buffer ),
-			( serializable, contextSupplier )->{
+			Serializables::write,
+			buffer->Serializables.read( object.instance.get(), buffer ),
+			( message, contextSupplier )->{
 				NetworkEvent.Context context = contextSupplier.get();
 				context.enqueueWork( ()->{
 					ServerPlayer sender = context.getSender();
 					if( sender != null ) {
-						serializable.onServer( sender );
+						object.broadcastOnServer( message, sender );
 					} else {
-						serializable.onClient();
+						object.broadcastOnClient( message );
 					}
 				} );
 				context.setPacketHandled( true );

@@ -15,10 +15,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin( BrushableBlockEntity.class )
 public abstract class MixinBrushableBlockEntity {
-	@Shadow private ItemStack item;
-	@Shadow private Direction hitDirection;
-	@Shadow private ResourceLocation lootTable;
-	private ResourceLocation mlibLocation;
+	private @Shadow ItemStack item;
+	private @Shadow Direction hitDirection;
+	private @Shadow ResourceLocation lootTable;
+	private ResourceLocation mlib$location;
 
 	@Inject(
 		at = @At(
@@ -28,11 +28,11 @@ public abstract class MixinBrushableBlockEntity {
 		method = "dropContent (Lnet/minecraft/world/entity/player/Player;)V"
 	)
 	private void dropContent( Player player, CallbackInfo callback ) {
-		if( this.mlibLocation == null ) {
+		if( this.mlib$location == null ) {
 			return;
 		}
 
-		Contexts.dispatch( new OnItemBrushed( player, this.mlibLocation, this.item, this.hitDirection, ( BrushableBlockEntity )( Object )this ) );
+		Contexts.dispatch( new OnItemBrushed( player, this.mlib$location, this.item, this.hitDirection, ( BrushableBlockEntity )( Object )this ) );
 	}
 
 	@Inject(
@@ -43,6 +43,6 @@ public abstract class MixinBrushableBlockEntity {
 		method = "unpackLootTable (Lnet/minecraft/world/entity/player/Player;)V "
 	)
 	private void unpackLootTable( Player player, CallbackInfo callback ) {
-		this.mlibLocation = this.lootTable;
+		this.mlib$location = this.lootTable;
 	}
 }

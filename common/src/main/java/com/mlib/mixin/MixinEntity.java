@@ -28,11 +28,12 @@ import java.util.function.BiConsumer;
 
 @Mixin( Entity.class )
 public abstract class MixinEntity implements IMixinEntity {
-	@Shadow private Level level;
-	private VibrationSystem.User mlibVibrationUser = null;
-	private VibrationSystem.Data mlibVibrationData = null;
-	private DynamicGameEventListener< VibrationSystem.Listener > mlibVibrationListener = null;
-	private int mlibGlowTicks = 0;
+	private @Shadow Level level;
+	private VibrationSystem.User mlib$vibrationUser = null;
+	private VibrationSystem.Data mlib$vibrationData = null;
+	private DynamicGameEventListener< VibrationSystem.Listener > mlib$vibrationListener = null;
+	private int mlib$glowTicks = 0;
+	private int mlib$invisibleTicks = 0;
 
 	@Inject(
 		at = @At( "TAIL" ),
@@ -40,17 +41,17 @@ public abstract class MixinEntity implements IMixinEntity {
 	)
 	private void constructor( EntityType< ? > type, Level level, CallbackInfo callback ) {
 		if( EntityNoiseListener.isSupported( ( ( Entity )( Object )this ).getClass() ) ) {
-			this.mlibVibrationUser = new Config( ( Entity )( Object )this );
-			this.mlibVibrationData = new VibrationSystem.Data();
-			this.mlibVibrationListener = new DynamicGameEventListener<>( new VibrationSystem.Listener( new VibrationSystem() {
+			this.mlib$vibrationUser = new Config( ( Entity )( Object )this );
+			this.mlib$vibrationData = new VibrationSystem.Data();
+			this.mlib$vibrationListener = new DynamicGameEventListener<>( new VibrationSystem.Listener( new VibrationSystem() {
 				@Override
 				public Data getVibrationData() {
-					return MixinEntity.this.mlibVibrationData;
+					return MixinEntity.this.mlib$vibrationData;
 				}
 
 				@Override
 				public User getVibrationUser() {
-					return MixinEntity.this.mlibVibrationUser;
+					return MixinEntity.this.mlib$vibrationUser;
 				}
 			} ) );
 		}
@@ -61,9 +62,10 @@ public abstract class MixinEntity implements IMixinEntity {
 		method = "tick ()V"
 	)
 	private void tick( CallbackInfo callback ) {
-		this.mlibGlowTicks = Math.max( this.mlibGlowTicks - 1, 0 );
-		if( this.mlibVibrationData != null ) {
-			VibrationSystem.Ticker.tick( this.level, this.mlibVibrationData, this.mlibVibrationUser );
+		this.mlib$glowTicks = Math.max( this.mlib$glowTicks - 1, 0 );
+		this.mlib$invisibleTicks = Math.max( this.mlib$invisibleTicks - 1, 0 );
+		if( this.mlib$vibrationData != null ) {
+			VibrationSystem.Ticker.tick( this.level, this.mlib$vibrationData, this.mlib$vibrationUser );
 		}
 	}
 
@@ -72,8 +74,8 @@ public abstract class MixinEntity implements IMixinEntity {
 		method = "updateDynamicGameEventListener (Ljava/util/function/BiConsumer;)V"
 	)
 	private void updateDynamicGameEventListener( BiConsumer< DynamicGameEventListener< ? >, ServerLevel > consumer, CallbackInfo callback ) {
-		if( this.mlibVibrationListener != null && this.level instanceof ServerLevel level ) {
-			consumer.accept( this.mlibVibrationListener, level );
+		if( this.mlib$vibrationListener != null && this.level instanceof ServerLevel level ) {
+			consumer.accept( this.mlib$vibrationListener, level );
 		}
 	}
 
@@ -83,12 +85,31 @@ public abstract class MixinEntity implements IMixinEntity {
 		method = "isCurrentlyGlowing ()Z"
 	)
 	private void isCurrentlyGlowing( CallbackInfoReturnable< Boolean > callback ) {
-		callback.setReturnValue( callback.getReturnValue() || this.mlibGlowTicks > 0 );
+		callback.setReturnValue( callback.getReturnValue() || this.mlib$glowTicks > 0 );
+	}
+
+	@Inject(
+		at = @At( "RETURN" ),
+		cancellable = true,
+		method = "isInvisible ()Z"
+	)
+	private void isInvisible( CallbackInfoReturnable< Boolean > callback ) {
+		callback.setReturnValue( callback.getReturnValue() || this.mlib$invisibleTicks > 0 );
 	}
 
 	@Override
-	public void addGlowTicks( int ticks ) {
-		this.mlibGlowTicks += ticks;
+	public void mlib$addGlowTicks( int ticks ) {
+		this.mlib$glowTicks += ticks;
+	}
+
+	@Override
+	public void mlib$addInvisibleTicks( int ticks ) {
+		this.mlib$invisibleTicks += ticks;
+	}
+
+	@Override
+	public int mlib$getInvisibleTicks() {
+		return this.mlib$invisibleTicks;
 	}
 
 	public static class Config implements VibrationSystem.User {

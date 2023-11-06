@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin( ExperienceOrb.class )
 public abstract class MixinExperienceOrb {
-	@Shadow private int value;
+	private @Shadow int value;
 
 	@Inject(
 		at = @At(

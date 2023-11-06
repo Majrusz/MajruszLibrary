@@ -6,57 +6,59 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
-record DataObject< Type >( Supplier< Type > getter, Consumer< Type > setter, IReader< Type > reader, String key ) implements ISerializable {
+record DataObject< ObjectType, ValueType >(
+	Function< ObjectType, ValueType > getter, BiConsumer< ObjectType, ValueType > setter, IReader< ValueType > reader, String key
+) implements ISerializable< ObjectType > {
 	@Override
-	public void write( JsonElement element ) {
-		if( this.getter.get() == null ) {
+	public void write( ObjectType object, JsonElement json ) {
+		if( this.getter.apply( object ) == null ) {
 			return;
 		}
 
-		JsonObject object = element.getAsJsonObject();
-		object.add( this.key, this.reader.writeJson( this.getter.get() ) );
+		JsonObject jsonObject = json.getAsJsonObject();
+		jsonObject.add( this.key, this.reader.writeJson( this.getter.apply( object ) ) );
 	}
 
 	@Override
-	public void read( JsonElement element ) {
-		JsonObject object = element.getAsJsonObject();
-		if( object.has( this.key ) ) {
-			this.setter.accept( this.reader.readJson( object.get( this.key ) ) );
+	public void read( ObjectType object, JsonElement json ) {
+		JsonObject jsonObject = json.getAsJsonObject();
+		if( jsonObject.has( this.key ) ) {
+			this.setter.accept( object, this.reader.readJson( jsonObject.get( this.key ) ) );
 		}
 	}
 
 	@Override
-	public void write( FriendlyByteBuf buffer ) {
-		this.reader.writeBuffer( buffer, this.getter.get() );
+	public void write( ObjectType object, FriendlyByteBuf buffer ) {
+		this.reader.writeBuffer( buffer, this.getter.apply( object ) );
 	}
 
 	@Override
-	public void read( FriendlyByteBuf buffer ) {
-		this.setter.accept( this.reader.readBuffer( buffer ) );
+	public void read( ObjectType object, FriendlyByteBuf buffer ) {
+		this.setter.accept( object, this.reader.readBuffer( buffer ) );
 	}
 
 	@Override
-	public void write( Tag tag ) {
-		if( this.getter.get() == null ) {
+	public void write( ObjectType object, Tag tag ) {
+		if( this.getter.apply( object ) == null ) {
 			return;
 		}
 
 		CompoundTag compoundTag = ( CompoundTag )tag;
-		compoundTag.put( this.key, this.reader.writeTag( this.getter.get() ) );
+		compoundTag.put( this.key, this.reader.writeTag( this.getter.apply( object ) ) );
 	}
 
 	@Override
-	public void read( Tag tag ) {
+	public void read( ObjectType object, Tag tag ) {
 		CompoundTag compoundTag = ( CompoundTag )tag;
 		if( compoundTag.contains( this.key ) ) {
-			this.setter.accept( this.reader.readTag( compoundTag.get( this.key ) ) );
+			this.setter.accept( object, this.reader.readTag( compoundTag.get( this.key ) ) );
 		}
 	}
 
-	public interface Getter< Type > extends Supplier< Type > {}
+	public interface Getter< ObjectType, ValueType > extends Function< ObjectType, ValueType > {}
 
-	public interface Setter< Type > extends Consumer< Type > {}
+	public interface Setter< ObjectType, ValueType > extends BiConsumer< ObjectType, ValueType > {}
 }

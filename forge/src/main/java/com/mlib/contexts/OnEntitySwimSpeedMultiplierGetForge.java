@@ -12,7 +12,7 @@ public class OnEntitySwimSpeedMultiplierGetForge {
 
 	public OnEntitySwimSpeedMultiplierGetForge() {
 		OnEntityTicked.listen( data->{
-			this.attribute.setValue( data.entity instanceof IMixinLivingEntity entity ? entity.getSwimSpeedMultiplier() : 0.0f ).apply( data.entity );
+			this.attribute.setValue( data.entity instanceof IMixinLivingEntity entity ? entity.mlib$getSwimSpeedMultiplier() : 0.0f ).apply( data.entity );
 		} );
 	}
 }

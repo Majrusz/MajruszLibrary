@@ -1,5 +1,9 @@
 package com.mlib.mixininterfaces;
 
 public interface IMixinEntity {
-	void addGlowTicks( int ticks );
+	void mlib$addGlowTicks( int ticks );
+
+	void mlib$addInvisibleTicks( int ticks );
+
+	int mlib$getInvisibleTicks();
 }

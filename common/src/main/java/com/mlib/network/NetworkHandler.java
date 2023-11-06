@@ -1,6 +1,5 @@
 package com.mlib.network;
 
-import com.mlib.data.ISerializable;
 import com.mlib.modhelper.ModHelper;
 import com.mlib.platform.Services;
 
@@ -17,7 +16,7 @@ public class NetworkHandler {
 		this.helper = helper;
 	}
 
-	public < Type extends ISerializable > NetworkObject< Type > create( String id, Class< Type > clazz, Supplier< Type > instance ) {
+	public < Type > NetworkObject< Type > create( String id, Class< Type > clazz, Supplier< Type > instance ) {
 		NetworkObject< Type > object = new NetworkObject<>( this, this.helper.getLocation( id ), clazz, instance );
 		this.objects.add( object );
 

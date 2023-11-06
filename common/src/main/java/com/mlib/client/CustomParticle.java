@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -120,26 +121,34 @@ public abstract class CustomParticle extends TextureSheetParticle {
 	}
 
 	@OnlyIn( Dist.CLIENT )
-	public static abstract class SimpleFactory implements ParticleProvider< SimpleParticleType > {
+	public static class Factory< ParticleType extends Particle, OptionsType extends ParticleOptions > implements ParticleProvider< OptionsType > {
 		private final SpriteSet spriteSet;
-		private final IFactory instanceFactory;
+		private final IFactory< ParticleType > factory;
+		private final IModification< ParticleType, OptionsType > function;
 
-		public SimpleFactory( SpriteSet sprite, IFactory instanceFactory ) {
+		public Factory( SpriteSet sprite, IFactory< ParticleType > factory, IModification< ParticleType, OptionsType > function ) {
 			this.spriteSet = sprite;
-			this.instanceFactory = instanceFactory;
+			this.factory = factory;
+			this.function = function;
+		}
+
+		public Factory( SpriteSet sprite, IFactory< ParticleType > factory ) {
+			this( sprite, factory, ( particle, options )->{} );
 		}
 
 		@Override
-		public Particle createParticle( SimpleParticleType type, ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed,
-			double zSpeed
-		) {
-			return this.instanceFactory.create( world, x, y, z, xSpeed, ySpeed, zSpeed, this.spriteSet );
-		}
+		public Particle createParticle( OptionsType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed ) {
+			ParticleType particle = this.factory.create( level, x, y, z, xSpeed, ySpeed, zSpeed, this.spriteSet );
+			this.function.apply( particle, type );
 
-		@FunctionalInterface
-		@OnlyIn( Dist.CLIENT )
-		public interface IFactory {
-			CustomParticle create( ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet );
+			return particle;
+		}
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	public static class SimpleFactory extends Factory< Particle, SimpleParticleType > {
+		public SimpleFactory( SpriteSet sprite, IFactory< Particle > factory ) {
+			super( sprite, factory );
 		}
 	}
 
@@ -147,5 +156,17 @@ public abstract class CustomParticle extends TextureSheetParticle {
 	@OnlyIn( Dist.CLIENT )
 	public interface IFormula< Type > {
 		Type apply( Type type );
+	}
+
+	@FunctionalInterface
+	@OnlyIn( Dist.CLIENT )
+	public interface IFactory< Type extends Particle > {
+		Type create( ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet spriteSet );
+	}
+
+	@FunctionalInterface
+	@OnlyIn( Dist.CLIENT )
+	public interface IModification< ParticleType extends Particle, OptionsType extends ParticleOptions > {
+		void apply( ParticleType particle, OptionsType options );
 	}
 }

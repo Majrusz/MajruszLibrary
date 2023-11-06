@@ -1,9 +1,9 @@
 package com.mlib.mixininterfaces;
 
 public interface IMixinExplosion {
-	float getRadius();
+	float mlib$getRadius();
 
-	boolean getSpawnsFire();
+	boolean mlib$getSpawnsFire();
 
-	boolean isExplosionCancelled();
+	boolean mlib$isExplosionCancelled();
 }

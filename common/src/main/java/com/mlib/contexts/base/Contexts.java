@@ -1,5 +1,6 @@
 package com.mlib.contexts.base;
 
+import com.mlib.contexts.data.ICancellableData;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.Mth;
@@ -7,6 +8,7 @@ import net.minecraft.util.Mth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class Contexts< DataType > {
 	final static Object2ObjectMap< Class< ? >, Contexts< ? > > CONTEXTS = new Object2ObjectOpenHashMap<>();
@@ -16,6 +18,15 @@ public class Contexts< DataType > {
 		Contexts< ? > contexts = CONTEXTS.get( data.getClass() );
 		if( contexts != null ) {
 			( ( Contexts< DataType > )contexts ).accept( data );
+		}
+
+		return data;
+	}
+
+	public static < DataType extends ICancellableData > DataType dispatch( DataType data ) {
+		Contexts< ? > contexts = CONTEXTS.get( data.getClass() );
+		if( contexts != null ) {
+			( ( Contexts< DataType > )contexts ).accept( data, ICancellableData::isExecutionStopped );
 		}
 
 		return data;
@@ -48,6 +59,15 @@ public class Contexts< DataType > {
 	private void accept( DataType data ) {
 		for( Context< DataType > context : this.contexts ) {
 			context.accept( data );
+		}
+	}
+
+	private void accept( DataType data, Predicate< DataType > isExecutionStopped ) {
+		for( Context< DataType > context : this.contexts ) {
+			context.accept( data );
+			if( isExecutionStopped.test( data ) ) {
+				break;
+			}
 		}
 	}
 }

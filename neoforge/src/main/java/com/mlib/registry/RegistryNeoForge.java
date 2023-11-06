@@ -24,7 +24,7 @@ public class RegistryNeoForge implements IRegistryPlatform {
 	@Override
 	public < Type > void register( RegistryObject< Type > object ) {
 		net.minecraftforge.registries.RegistryObject< Type > forgeObject = ( ( DeferredRegister< Type > )this.lastDeferredRegister ).register( object.id, object.newInstance );
-		object.set( forgeObject );
+		object.set( forgeObject, forgeObject::isPresent );
 	}
 
 	@Override

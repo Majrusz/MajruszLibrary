@@ -2,6 +2,8 @@ package com.mlib.math;
 
 import net.minecraft.util.Mth;
 
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 public class Range< Type extends Number & Comparable< Type > > implements Predicate< Type > {
@@ -37,6 +39,20 @@ public class Range< Type extends Number & Comparable< Type > > implements Predic
 
 	public Range< Type > clamp( Range< Type > value ) {
 		return Range.of( this.clamp( value.from ), this.clamp( value.to ) );
+	}
+
+	public List< Type > clamp( List< Type > values ) {
+		for( int idx = 0; idx < values.size(); ++idx ) {
+			values.set( idx, this.clamp( values.get( idx ) ) );
+		}
+
+		return values;
+	}
+
+	public < KeyType > Map< KeyType, Type > clamp( Map< KeyType, Type > values ) {
+		values.keySet().forEach( key->values.replace( key, this.clamp( values.get( key ) ) ) );
+
+		return values;
 	}
 
 	public float lerp( float ratio ) {

@@ -17,7 +17,7 @@ import java.util.Iterator;
 
 @Mixin( PhantomSpawner.class )
 public abstract class MixinPhantomSpawner {
-	private ServerPlayer mlibLastPlayer;
+	private ServerPlayer mlib$lastPlayer;
 
 	@ModifyVariable(
 		at = @At( "STORE" ),
@@ -25,7 +25,7 @@ public abstract class MixinPhantomSpawner {
 		name = { "l", "$$15" } // for some magic reason ordinal = 3 does not work on fabric
 	)
 	private int getPhantomsCount( int count ) {
-		return Contexts.dispatch( new OnInsomniaPhantomsCountGet( this.mlibLastPlayer, count ) ).getCount();
+		return Contexts.dispatch( new OnInsomniaPhantomsCountGet( this.mlib$lastPlayer, count ) ).getCount();
 	}
 
 	@Inject(
@@ -39,6 +39,6 @@ public abstract class MixinPhantomSpawner {
 	private void tick( ServerLevel level, boolean p_64577_, boolean p_64578_, CallbackInfoReturnable< Integer > callback, RandomSource $$0, int $$1,
 		Iterator< ServerPlayer > iterator, ServerPlayer player
 	) {
-		this.mlibLastPlayer = player;
+		this.mlib$lastPlayer = player;
 	}
 }

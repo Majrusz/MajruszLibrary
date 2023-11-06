@@ -24,8 +24,8 @@ class ReaderRange< Type extends Number & Comparable< Type > > implements IReader
 	}
 
 	@Override
-	public Range< Type > readJson( JsonElement element ) {
-		JsonObject jsonObject = element.getAsJsonObject();
+	public Range< Type > readJson( JsonElement json ) {
+		JsonObject jsonObject = json.getAsJsonObject();
 
 		return Range.validated(
 			this.reader.readJson( jsonObject.get( "min" ) ),

@@ -8,7 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.function.Supplier;
 
-class ReaderCustom< Type extends ISerializable > implements IReader< Type > {
+class ReaderCustom< Type > implements IReader< Type > {
 	final Supplier< Type > supplier;
 
 	public ReaderCustom( Supplier< Type > supplier ) {
@@ -17,31 +17,31 @@ class ReaderCustom< Type extends ISerializable > implements IReader< Type > {
 
 	@Override
 	public JsonElement writeJson( Type value ) {
-		return SerializableHelper.write( ()->value, new JsonObject() );
+		return Serializables.write( value, new JsonObject() );
 	}
 
 	@Override
-	public Type readJson( JsonElement element ) {
-		return SerializableHelper.read( this.supplier, element );
+	public Type readJson( JsonElement json ) {
+		return Serializables.read( this.supplier.get(), json );
 	}
 
 	@Override
 	public void writeBuffer( FriendlyByteBuf buffer, Type value ) {
-		value.write( buffer );
+		Serializables.write( value, buffer );
 	}
 
 	@Override
 	public Type readBuffer( FriendlyByteBuf buffer ) {
-		return SerializableHelper.read( this.supplier, buffer );
+		return Serializables.read( this.supplier.get(), buffer );
 	}
 
 	@Override
 	public Tag writeTag( Type value ) {
-		return SerializableHelper.write( ()->value, new CompoundTag() );
+		return Serializables.write( value, new CompoundTag() );
 	}
 
 	@Override
 	public Type readTag( Tag tag ) {
-		return SerializableHelper.read( this.supplier, tag );
+		return Serializables.read( this.supplier.get(), tag );
 	}
 }

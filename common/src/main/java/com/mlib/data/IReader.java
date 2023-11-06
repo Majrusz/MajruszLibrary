@@ -7,7 +7,7 @@ import net.minecraft.network.FriendlyByteBuf;
 interface IReader< Type > {
 	JsonElement writeJson( Type value );
 
-	Type readJson( JsonElement element );
+	Type readJson( JsonElement json );
 
 	void writeBuffer( FriendlyByteBuf buffer, Type value );
 

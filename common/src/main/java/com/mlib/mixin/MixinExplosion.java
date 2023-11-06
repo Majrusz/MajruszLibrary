@@ -1,6 +1,6 @@
 package com.mlib.mixin;
 
-import com.mlib.contexts.OnExplosion;
+import com.mlib.contexts.OnExploded;
 import com.mlib.contexts.base.Contexts;
 import com.mlib.mixininterfaces.IMixinExplosion;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -9,6 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,23 +22,27 @@ import java.util.List;
 
 @Mixin( Explosion.class )
 public abstract class MixinExplosion implements IMixinExplosion {
-	@Mutable @Shadow private boolean fire;
-	@Mutable @Shadow private float radius;
-	@Shadow private ObjectArrayList< BlockPos > toBlow;
-	private OnExplosion mlibContext = null;
+	private @Shadow @Mutable boolean fire;
+	private @Shadow @Mutable float radius;
+	private @Shadow Level level;
+	private @Shadow ObjectArrayList< BlockPos > toBlow;
+	private @Shadow double x;
+	private @Shadow double y;
+	private @Shadow double z;
+	private OnExploded mlibContext = null;
 
 	@Override
-	public float getRadius() {
+	public float mlib$getRadius() {
 		return this.radius;
 	}
 
 	@Override
-	public boolean getSpawnsFire() {
+	public boolean mlib$getSpawnsFire() {
 		return this.fire;
 	}
 
 	@Override
-	public boolean isExplosionCancelled() {
+	public boolean mlib$isExplosionCancelled() {
 		return this.mlibContext != null
 			&& this.mlibContext.isExplosionCancelled();
 	}
@@ -48,7 +53,7 @@ public abstract class MixinExplosion implements IMixinExplosion {
 		method = "explode ()V"
 	)
 	private void explode( CallbackInfo callback ) {
-		this.mlibContext = Contexts.dispatch( new OnExplosion( ( Explosion )( Object )this, this.radius, this.fire ) );
+		this.mlibContext = Contexts.dispatch( new OnExploded( ( Explosion )( Object )this, this.level, new Vec3( this.x, this.y, this.z ), this.radius, this.fire ) );
 		if( this.mlibContext.isExplosionCancelled() ) {
 			callback.cancel();
 		} else {
@@ -63,7 +68,7 @@ public abstract class MixinExplosion implements IMixinExplosion {
 		method = "finalizeExplosion (Z)V"
 	)
 	private void finalizeExplosion( boolean $$1, CallbackInfo callback ) {
-		if( this.isExplosionCancelled() ) {
+		if( this.mlib$isExplosionCancelled() ) {
 			callback.cancel();
 		}
 	}

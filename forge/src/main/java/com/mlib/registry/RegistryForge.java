@@ -25,7 +25,7 @@ public class RegistryForge implements IRegistryPlatform {
 	public < Type > void register( RegistryObject< Type > object ) {
 		DataForge data = object.group.helper.getData( DataForge.class );
 		net.minecraftforge.registries.RegistryObject< Type > forgeObject = ( ( DeferredRegister< Type > )data.lastDeferredRegister ).register( object.id, object.newInstance );
-		object.set( forgeObject );
+		object.set( forgeObject, forgeObject::isPresent );
 	}
 
 	@Override

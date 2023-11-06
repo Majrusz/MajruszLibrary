@@ -2,8 +2,9 @@ package com.mlib.emitter;
 
 import com.mlib.math.AnyPos;
 import com.mlib.math.Random;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
@@ -15,7 +16,7 @@ import java.util.function.Supplier;
 public class ParticleEmitter {
 	static final Properties DEFAULT_PROPERTIES = new Properties( ParticleEmitter.offset( 0.25f ), ParticleEmitter.speed( 0.025f, 0.1f ) );
 	static final Map< Object, Properties > PROPERTIES = new HashMap<>();
-	private final SimpleParticleType type;
+	private final Supplier< ? extends ParticleOptions > type;
 	private Supplier< Vec3 > position = ()->Vec3.ZERO;
 	private Supplier< Vec3 > offset;
 	private Supplier< Float > speed;
@@ -31,15 +32,15 @@ public class ParticleEmitter {
 		ParticleEmitter.setDefault( ParticleTypes.WITCH, new Properties( ParticleEmitter.offset( 0.5f ), ParticleEmitter.speed( 0.0025f, 0.01f ) ) );
 	}
 
-	public static void setDefault( SimpleParticleType type, Properties properties ) {
+	public static void setDefault( ParticleType< ? > type, Properties properties ) {
 		PROPERTIES.put( type, properties );
 	}
 
-	public static ParticleEmitter of( Supplier< ? extends SimpleParticleType > type ) {
-		return new ParticleEmitter( type.get(), PROPERTIES.getOrDefault( type.get(), DEFAULT_PROPERTIES ) );
+	public static ParticleEmitter of( Supplier< ? extends ParticleOptions > type ) {
+		return new ParticleEmitter( type, PROPERTIES.getOrDefault( type.get().getType(), DEFAULT_PROPERTIES ) );
 	}
 
-	public static ParticleEmitter of( SimpleParticleType type ) {
+	public static ParticleEmitter of( ParticleOptions type ) {
 		return ParticleEmitter.of( ()->type );
 	}
 
@@ -109,20 +110,20 @@ public class ParticleEmitter {
 		float width = entity.getBbWidth();
 		float height = entity.getBbHeight();
 		this.position = ()->AnyPos.from( entity.position() ).add( 0.0, 0.5 * height, 0.0 ).vec3();
-		this.offset = ()->AnyPos.from( width, height, width ).mul( 0.5 ).vec3();
+		this.offset = ()->AnyPos.from( width, height, width ).mul( 0.5, 0.25, 0.5 ).vec3();
 		this.countMultiplier = Math.round( ( 1.0f + width + height ) );
 
 		return this;
 	}
 
-	private ParticleEmitter( SimpleParticleType type, Properties properties ) {
+	private ParticleEmitter( Supplier< ? extends ParticleOptions > type, Properties properties ) {
 		this.type = type;
 		this.offset = properties.offset;
 		this.speed = properties.speed;
 	}
 
 	private void emit( ServerLevel level, Vec3 position, Vec3 offset, int count ) {
-		level.sendParticles( this.type, position.x, position.y, position.z, count, offset.x, offset.y, offset.z, this.speed.get() );
+		level.sendParticles( this.type.get(), position.x, position.y, position.z, count, offset.x, offset.y, offset.z, this.speed.get() );
 	}
 
 	public record Properties( Supplier< Vec3 > offset, Supplier< Float > speed ) {}

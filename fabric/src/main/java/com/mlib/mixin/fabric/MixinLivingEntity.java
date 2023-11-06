@@ -19,7 +19,7 @@ public abstract class MixinLivingEntity {
 		ordinal = 1
 	)
 	private float modifySwimSpeed( float speed ) {
-		return speed * ( this instanceof IMixinLivingEntity entity ? entity.getSwimSpeedMultiplier() : 1.0f );
+		return speed * ( this instanceof IMixinLivingEntity entity ? entity.mlib$getSwimSpeedMultiplier() : 1.0f );
 	}
 
 	@ModifyArg(
@@ -31,7 +31,7 @@ public abstract class MixinLivingEntity {
 		index = 1
 	)
 	private double jumpInLiquid( double y ) {
-		return y * ( this instanceof IMixinLivingEntity entity ? entity.getSwimSpeedMultiplier() : 1.0f );
+		return y * ( this instanceof IMixinLivingEntity entity ? entity.mlib$getSwimSpeedMultiplier() : 1.0f );
 	}
 
 	@ModifyArg(
@@ -43,6 +43,6 @@ public abstract class MixinLivingEntity {
 		index = 1
 	)
 	private double goDownInWater( double y ) {
-		return y * ( this instanceof IMixinLivingEntity entity ? entity.getSwimSpeedMultiplier() : 1.0f );
+		return y * ( this instanceof IMixinLivingEntity entity ? entity.mlib$getSwimSpeedMultiplier() : 1.0f );
 	}
 }

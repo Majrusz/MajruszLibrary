@@ -4,8 +4,10 @@ import com.mlib.entity.EntityHelper;
 import com.mlib.math.Random;
 import com.mlib.math.Range;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -19,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class ItemHelper {
 	private static final float MINECRAFT_WEAPON_ENCHANT_CHANCE = 0.25f;
@@ -47,6 +50,14 @@ public class ItemHelper {
 		}
 	}
 
+	public static void damage( LivingEntity entity, EquipmentSlot slot, int damage ) {
+		entity.getItemBySlot( slot ).hurtAndBreak( damage, entity, subentity->subentity.broadcastBreakEvent( slot ) );
+	}
+
+	public static void damage( LivingEntity entity, InteractionHand hand, int damage ) {
+		entity.getItemInHand( hand ).hurtAndBreak( damage, entity, subentity->subentity.broadcastBreakEvent( hand ) );
+	}
+
 	/** Required because Mob::equipItemIfPossible makes item a guaranteed drop and enables persistence for mob. */
 	public static @Nullable EquipmentSlot equip( Mob mob, ItemStack itemStack ) {
 		if( !mob.canHoldItem( itemStack ) ) {
@@ -71,6 +82,14 @@ public class ItemHelper {
 		for( Item item : items ) {
 			player.getCooldowns().addCooldown( item, duration );
 		}
+	}
+
+	public static ItemStack getHandItem( LivingEntity entity, Predicate< ItemStack > predicate ) {
+		return predicate.test( entity.getMainHandItem() ) ? entity.getMainHandItem() : entity.getOffhandItem();
+	}
+
+	public static ItemStack getCurrentlyUsedItem( LivingEntity entity ) {
+		return entity.isUsingItem() ? entity.getItemInHand( entity.getUsedItemHand() ) : ItemStack.EMPTY;
 	}
 
 	public static boolean isOnCooldown( Player player, Item... items ) {

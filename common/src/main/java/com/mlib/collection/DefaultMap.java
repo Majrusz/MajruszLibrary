@@ -10,23 +10,28 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-public class DefaultMap< KeyType, ValueType > implements Map< KeyType, ValueType > {
-	private final ValueType defaultValue;
-	private final Object2ObjectMap< KeyType, ValueType > map;
+public class DefaultMap< Type > implements Map< String, Type > {
+	private static final String DEFAULT_ID = "__default";
+	private final Type defaultValue;
+	private final Object2ObjectMap< String, Type > map;
 
-	public static < KeyType, ValueType > DefaultMap< KeyType, ValueType > of( Map< KeyType, ValueType > map ) {
+	public static < Type > DefaultMap< Type > of( Map< String, Type > map ) {
 		return new DefaultMap<>( new Object2ObjectOpenHashMap<>( map ) );
 	}
 
 	@SafeVarargs
-	public static < KeyType, ValueType > DefaultMap< KeyType, ValueType > of( Entry< KeyType, ValueType >... entries ) {
-		Object2ObjectOpenHashMap< KeyType, ValueType > map = new Object2ObjectOpenHashMap<>();
+	public static < Type > DefaultMap< Type > of( Entry< String, Type >... entries ) {
+		Object2ObjectOpenHashMap< String, Type > map = new Object2ObjectOpenHashMap<>();
 		Arrays.stream( entries ).forEach( entry->map.put( entry.key, entry.value ) );
 
 		return new DefaultMap<>( map );
 	}
 
-	public static < KeyType, ValueType > Entry< KeyType, ValueType > entry( KeyType key, ValueType value ) {
+	public static < Type > Entry< String, Type > defaultEntry( Type value ) {
+		return new Entry<>( DEFAULT_ID, value );
+	}
+
+	public static < Type > Entry< String, Type > entry( String key, Type value ) {
 		return new Entry<>( key, value );
 	}
 
@@ -51,25 +56,25 @@ public class DefaultMap< KeyType, ValueType > implements Map< KeyType, ValueType
 	}
 
 	@Override
-	public ValueType get( Object key ) {
-		ValueType value = this.map.get( key );
+	public Type get( Object key ) {
+		Type value = this.map.get( key );
 
 		return value != null ? value : this.defaultValue;
 	}
 
 	@Nullable
 	@Override
-	public ValueType put( KeyType key, ValueType value ) {
+	public Type put( String key, Type value ) {
 		return this.map.put( key, value );
 	}
 
 	@Override
-	public ValueType remove( Object key ) {
+	public Type remove( Object key ) {
 		return this.map.remove( key );
 	}
 
 	@Override
-	public void putAll( @NotNull Map< ? extends KeyType, ? extends ValueType > map ) {
+	public void putAll( @NotNull Map< ? extends String, ? extends Type > map ) {
 		this.map.forEach( this::put );
 	}
 
@@ -80,24 +85,24 @@ public class DefaultMap< KeyType, ValueType > implements Map< KeyType, ValueType
 
 	@NotNull
 	@Override
-	public Set< KeyType > keySet() {
+	public Set< String > keySet() {
 		return this.map.keySet();
 	}
 
 	@NotNull
 	@Override
-	public Collection< ValueType > values() {
+	public Collection< Type > values() {
 		return this.map.values();
 	}
 
 	@NotNull
 	@Override
-	public Set< java.util.Map.Entry< KeyType, ValueType > > entrySet() {
+	public Set< java.util.Map.Entry< String, Type > > entrySet() {
 		return this.map.entrySet();
 	}
 
-	private DefaultMap( Object2ObjectOpenHashMap< KeyType, ValueType > map ) {
-		this.defaultValue = map.get( "default" );
+	private DefaultMap( Object2ObjectOpenHashMap< String, Type > map ) {
+		this.defaultValue = map.get( DEFAULT_ID );
 		this.map = map;
 
 		if( this.defaultValue == null ) {
