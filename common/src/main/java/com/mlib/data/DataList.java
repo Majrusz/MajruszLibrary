@@ -61,7 +61,7 @@ record DataList< ObjectType, ValueType >(
 	public void read( ObjectType object, Tag tag ) {
 		CompoundTag compoundTag = ( CompoundTag )tag;
 		if( compoundTag.contains( this.key ) ) {
-			ListTag listTag = compoundTag.getList( this.key, 0 );
+			ListTag listTag = compoundTag.getList( this.key, 10 );
 			List< ValueType > values = new ArrayList<>();
 			for( Tag subtag : listTag ) {
 				values.add( this.reader.readTag( subtag ) );
