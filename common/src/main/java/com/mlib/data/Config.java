@@ -88,8 +88,11 @@ public abstract class Config {
 
 			OnResourcesReloaded.listen( data->{
 				if( Side.isLogicalServer() ) {
+					long start = System.currentTimeMillis();
 					config.load();
 					config.save();
+					long end = System.currentTimeMillis();
+					MajruszLibrary.HELPER.log( "Reloading %s.json took %dms".formatted( name, end - start ) );
 				}
 				if( Side.isDedicatedServer() && network != null ) {
 					network.sendToClients( config );
