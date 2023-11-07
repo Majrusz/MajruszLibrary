@@ -1,0 +1,1 @@
+- fixed bug with map values not serializing properly in configuration files
