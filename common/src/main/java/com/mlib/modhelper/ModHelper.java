@@ -2,6 +2,7 @@ package com.mlib.modhelper;
 
 import com.mlib.annotation.AutoInstance;
 import com.mlib.data.Config;
+import com.mlib.data.WorldData;
 import com.mlib.network.NetworkHandler;
 import com.mlib.network.NetworkObject;
 import com.mlib.platform.Services;
@@ -58,6 +59,14 @@ public class ModHelper {
 
 	public < Type extends Config > Config.Builder< Type > config( Function< String, Type > instance ) {
 		return new Config.Builder<>( this, instance );
+	}
+
+	public < Type extends WorldData > Type saved( Supplier< Type > instance, String id ) {
+		return ( Type )instance.get().named( id );
+	}
+
+	public < Type extends WorldData > Type saved( Supplier< Type > instance ) {
+		return this.saved( instance, this.getModId() );
 	}
 
 	public void triggerAchievement( ServerPlayer player, String id ) {
