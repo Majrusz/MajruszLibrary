@@ -5,10 +5,9 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.commands.arguments.coordinates.Coordinates;
@@ -33,6 +32,7 @@ public class Command {
 	}
 
 	public static IParameter.Named< Integer > integer( Range< Integer > range ) {
+		IParameter.Named< Integer > parameter = new IParameter.Named<>();
 		IntegerArgumentType argument;
 		if( range == null ) {
 			argument = IntegerArgumentType.integer();
@@ -42,17 +42,9 @@ public class Command {
 			argument = IntegerArgumentType.integer( range.from, range.to );
 		}
 
-		return new IParameter.Named< Integer >() {
-			@Override
-			public CommandBuilder apply( CommandBuilder builder ) {
-				return builder.addArgument( ()->Commands.argument( this.name, argument ) );
-			}
-
-			@Override
-			public Integer get( CommandContext< CommandSourceStack > context ) {
-				return context.getArgument( this.name, Integer.class );
-			}
-		}.named( DefaultKeys.VALUE );
+		return parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, argument ) ) )
+			.getter( context->context.getArgument( parameter.name, Integer.class ) )
+			.named( DefaultKeys.VALUE );
 	}
 
 	public static IParameter.Named< Float > number() {
@@ -60,6 +52,7 @@ public class Command {
 	}
 
 	public static IParameter.Named< Float > number( Range< Float > range ) {
+		IParameter.Named< Float > parameter = new IParameter.Named<>();
 		FloatArgumentType argument;
 		if( range == null ) {
 			argument = FloatArgumentType.floatArg();
@@ -69,139 +62,96 @@ public class Command {
 			argument = FloatArgumentType.floatArg( range.from, range.to );
 		}
 
-		return new IParameter.Named< Float >() {
-			@Override
-			public CommandBuilder apply( CommandBuilder builder ) {
-				return builder.addArgument( ()->Commands.argument( this.name, argument ) );
-			}
-
-			@Override
-			public Float get( CommandContext< CommandSourceStack > context ) {
-				return context.getArgument( this.name, Float.class );
-			}
-		}.named( DefaultKeys.VALUE );
+		return parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, argument ) ) )
+			.getter( context->context.getArgument( parameter.name, Float.class ) )
+			.named( DefaultKeys.VALUE );
 	}
 
 	public static IParameter.Named< Boolean > bool() {
-		return new IParameter.Named< Boolean >() {
-			@Override
-			public CommandBuilder apply( CommandBuilder builder ) {
-				return builder.addArgument( ()->Commands.argument( this.name, BoolArgumentType.bool() ) );
-			}
+		IParameter.Named< Boolean > parameter = new IParameter.Named<>();
 
-			@Override
-			public Boolean get( CommandContext< CommandSourceStack > context ) {
-				return context.getArgument( this.name, boolean.class );
-			}
-		}.named( DefaultKeys.VALUE );
+		return parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, BoolArgumentType.bool() ) ) )
+			.getter( context->context.getArgument( parameter.name, boolean.class ) )
+			.named( DefaultKeys.VALUE );
 	}
 
-	public static IParameter.Named< String > string() {
-		return new IParameter.Named< String >() {
-			@Override
-			public CommandBuilder apply( CommandBuilder builder ) {
-				return builder.addArgument( ()->Commands.argument( this.name, StringArgumentType.string() ) );
-			}
+	public static IParameter.Hinted< String > string() {
+		IParameter.Hinted< String > parameter = new IParameter.Hinted<>();
+		parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, StringArgumentType.string() )
+				.suggests( ( context, subbuilder )->SharedSuggestionProvider.suggest( parameter.suggestions.get(), subbuilder ) ) )
+			)
+			.getter( context->context.getArgument( parameter.name, String.class ) )
+			.named( DefaultKeys.VALUE );
 
-			@Override
-			public String get( CommandContext< CommandSourceStack > context ) {
-				return context.getArgument( this.name, String.class );
-			}
-		}.named( DefaultKeys.VALUE );
+		return parameter;
 	}
 
 	public static IParameter.Hinted< ResourceLocation > resource() {
-		return new IParameter.Hinted< ResourceLocation >() {
-			@Override
-			public CommandBuilder apply( CommandBuilder builder ) {
-				return builder.addArgument( ()->Commands.argument( this.name, ResourceLocationArgument.id() ).suggests( this.suggestions ) );
-			}
+		IParameter.Hinted< ResourceLocation > parameter = new IParameter.Hinted<>();
+		parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, ResourceLocationArgument.id() )
+				.suggests( ( context, subbuilder )->SharedSuggestionProvider.suggestResource( parameter.suggestions.get(), subbuilder ) ) )
+			)
+			.getter( context->context.getArgument( parameter.name, ResourceLocation.class ) )
+			.named( DefaultKeys.VALUE );
 
-			@Override
-			public ResourceLocation get( CommandContext< CommandSourceStack > context ) {
-				return context.getArgument( this.name, ResourceLocation.class );
-			}
-		}.named( DefaultKeys.VALUE );
+		return parameter;
 	}
 
 	public static < EnumType extends Enum< EnumType > > IParameter.Named< EnumType > enumeration( Class< EnumType > clazz ) {
-		return new IParameter.Named< EnumType >() {
-			@Override
-			public CommandBuilder apply( CommandBuilder builder ) {
-				return builder.addArgument( ()->Commands.argument( this.name, EnumArgument.enumArgument( clazz ) ) );
-			}
+		IParameter.Named< EnumType > parameter = new IParameter.Named<>();
 
-			@Override
-			public EnumType get( CommandContext< CommandSourceStack > context ) {
-				return context.getArgument( this.name, clazz );
-			}
-		}.named( clazz.getSimpleName().toLowerCase() );
+		return parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, EnumArgument.enumArgument( clazz ) ) ) )
+			.getter( context->context.getArgument( parameter.name, clazz ) )
+			.named( clazz.getSimpleName().toLowerCase() );
 	}
 
 	public static IParameter.Named< Vec3 > position() {
-		return new IParameter.Named< Vec3 >() {
-			@Override
-			public CommandBuilder apply( CommandBuilder builder ) {
-				return builder.addArgument( ()->Commands.argument( this.name, Vec3Argument.vec3() ) );
-			}
+		IParameter.Named< Vec3 > parameter = new IParameter.Named<>();
 
-			@Override
-			public Vec3 get( CommandContext< CommandSourceStack > context ) {
-				return context.getArgument( this.name, Coordinates.class ).getPosition( context.getSource() );
-			}
-		}.named( DefaultKeys.POSITION );
+		return parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, Vec3Argument.vec3() ) ) )
+			.getter( context->context.getArgument( parameter.name, Coordinates.class ).getPosition( context.getSource() ) )
+			.named( DefaultKeys.POSITION );
 	}
 
 	public static IParameter.Named< Entity > entity() {
-		return new IParameter.Named< Entity >() {
-			@Override
-			public CommandBuilder apply( CommandBuilder builder ) {
-				return builder.addArgument( ()->Commands.argument( this.name, EntityArgument.entity() ) );
-			}
+		IParameter.Named< Entity > parameter = new IParameter.Named<>();
 
-			@Override
-			public Entity get( CommandContext< CommandSourceStack > context ) {
+		return parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, EntityArgument.entity() ) ) )
+			.getter( context->{
 				try {
-					return context.getArgument( this.name, EntitySelector.class ).findSingleEntity( context.getSource() );
+					return context.getArgument( parameter.name, EntitySelector.class ).findSingleEntity( context.getSource() );
 				} catch( Throwable exception ) {
 					return null;
 				}
-			}
-		}.named( DefaultKeys.ENTITY );
+			} )
+			.named( DefaultKeys.ENTITY );
 	}
 
 	public static IParameter.Named< List< ? extends Entity > > entities() {
-		return new IParameter.Named< List< ? extends Entity > >() {
-			@Override
-			public CommandBuilder apply( CommandBuilder builder ) {
-				return builder.addArgument( ()->Commands.argument( this.name, EntityArgument.entities() ) );
-			}
+		IParameter.Named< List< ? extends Entity > > parameter = new IParameter.Named<>();
 
-			@Override
-			public List< ? extends Entity > get( CommandContext< CommandSourceStack > context ) {
+		return parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, EntityArgument.entities() ) ) )
+			.getter( context->{
 				try {
-					return context.getArgument( this.name, EntitySelector.class ).findEntities( context.getSource() );
+					return context.getArgument( parameter.name, EntitySelector.class ).findEntities( context.getSource() );
 				} catch( Throwable exception ) {
 					return null;
 				}
-			}
-		}.named( DefaultKeys.ENTITIES );
+			} )
+			.named( DefaultKeys.ENTITIES );
 	}
 
 	public static IParameter< List< Vec3 > > anyPosition() {
-		return new IParameter<>() {
-			@Override
-			public CommandBuilder apply( CommandBuilder builder ) {
-				List< IModification > modifications = new ArrayList<>();
-				modifications.add( ( CommandBuilder subbuilder )->subbuilder.addArgument( Commands.argument( DefaultKeys.POSITION, Vec3Argument.vec3() ) ) );
-				modifications.add( ( CommandBuilder subbuilder )->subbuilder.addArgument( Commands.argument( DefaultKeys.ENTITY, EntityArgument.entity() ) ) );
-				modifications.add( ( CommandBuilder subbuilder )->subbuilder.addArgument( Commands.argument( DefaultKeys.ENTITIES, EntityArgument.entities() ) ) );
+		IParameter.Named< List< Vec3 > > parameter = new IParameter.Named<>();
 
-				return builder.add( modifications );
-			}
-
-			@Override
-			public List< Vec3 > get( CommandContext< CommandSourceStack > context ) {
+		return parameter.applier( builder->{
+				builder.add( List.of(
+					subbuilder->subbuilder.addArgument( Commands.argument( DefaultKeys.POSITION, Vec3Argument.vec3() ) ),
+					subbuilder->subbuilder.addArgument( Commands.argument( DefaultKeys.ENTITY, EntityArgument.entity() ) ),
+					subbuilder->subbuilder.addArgument( Commands.argument( DefaultKeys.ENTITIES, EntityArgument.entities() ) )
+				) );
+			} )
+			.getter( context->{
 				List< Vec3 > positions = new ArrayList<>();
 				try {
 					positions.add( context.getArgument( DefaultKeys.POSITION, Coordinates.class ).getPosition( context.getSource() ) );
@@ -216,8 +166,7 @@ public class Command {
 				} catch( Throwable ignored ) {}
 
 				return positions;
-			}
-		};
+			} );
 	}
 
 	@FunctionalInterface

@@ -1,14 +1,11 @@
 package com.mlib.command;
 
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.storage.loot.LootDataManager;
-import net.minecraft.world.level.storage.loot.LootDataType;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface IParameter< Type > {
@@ -16,28 +13,54 @@ public interface IParameter< Type > {
 
 	Type get( CommandContext< CommandSourceStack > context );
 
-	abstract class Named< Type > implements IParameter< Type > {
+	class Named< Type > implements IParameter< Type > {
+		Consumer< CommandBuilder > applier;
+		Function< CommandContext< CommandSourceStack >, Type > getter;
 		String name;
+
+		@Override
+		public CommandBuilder apply( CommandBuilder builder ) {
+			this.applier.accept( builder );
+
+			return builder;
+		}
+
+		@Override
+		public Type get( CommandContext< CommandSourceStack > context ) {
+			return this.getter.apply( context );
+		}
 
 		public Named< Type > named( String name ) {
 			this.name = name;
 
 			return this;
 		}
-	}
 
-	abstract class Hinted< Type > implements IParameter< Type > {
-		String name;
-		SuggestionProvider< CommandSourceStack > suggestions = null;
-
-		public Hinted< Type > named( String name ) {
-			this.name = name;
+		Named< Type > applier( Consumer< CommandBuilder > applier ) {
+			this.applier = applier;
 
 			return this;
 		}
 
-		public Hinted< Type > suggests( Supplier< List< ResourceLocation > > suggestions ) {
-			this.suggestions = ( context, builder )->SharedSuggestionProvider.suggestResource( suggestions.get(), builder );
+		Named< Type > getter( Function< CommandContext< CommandSourceStack >, Type > getter ) {
+			this.getter = getter;
+
+			return this;
+		}
+	}
+
+	class Hinted< Type > extends Named< Type > {
+		Supplier< List< Type > > suggestions = null;
+
+		@Override
+		public Hinted< Type > named( String name ) {
+			super.named( name );
+
+			return this;
+		}
+
+		public Hinted< Type > suggests( Supplier< List< Type > > suggestions ) {
+			this.suggestions = suggestions;
 
 			return this;
 		}

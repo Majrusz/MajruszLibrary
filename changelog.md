@@ -1,0 +1,1 @@
+- optimized custom commands size by ~9KB
