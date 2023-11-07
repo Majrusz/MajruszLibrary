@@ -8,14 +8,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
@@ -29,7 +28,7 @@ public abstract class MixinExplosion implements IMixinExplosion {
 	private @Shadow double x;
 	private @Shadow double y;
 	private @Shadow double z;
-	private OnExploded mlibContext = null;
+	private OnExploded mlib$context = null;
 
 	@Override
 	public float mlib$getRadius() {
@@ -43,8 +42,8 @@ public abstract class MixinExplosion implements IMixinExplosion {
 
 	@Override
 	public boolean mlib$isExplosionCancelled() {
-		return this.mlibContext != null
-			&& this.mlibContext.isExplosionCancelled();
+		return this.mlib$context != null
+			&& this.mlib$context.isExplosionCancelled();
 	}
 
 	@Inject(
@@ -53,12 +52,12 @@ public abstract class MixinExplosion implements IMixinExplosion {
 		method = "explode ()V"
 	)
 	private void explode( CallbackInfo callback ) {
-		this.mlibContext = Contexts.dispatch( new OnExploded( ( Explosion )( Object )this, this.level, new Vec3( this.x, this.y, this.z ), this.radius, this.fire ) );
-		if( this.mlibContext.isExplosionCancelled() ) {
+		this.mlib$context = Contexts.dispatch( new OnExploded( ( Explosion )( Object )this, this.level, new Vec3( this.x, this.y, this.z ), this.radius, this.fire ) );
+		if( this.mlib$context.isExplosionCancelled() ) {
 			callback.cancel();
 		} else {
-			this.radius = this.mlibContext.radius;
-			this.fire = this.mlibContext.spawnsFire;
+			this.radius = this.mlib$context.radius;
+			this.fire = this.mlib$context.spawnsFire;
 		}
 	}
 
@@ -73,16 +72,12 @@ public abstract class MixinExplosion implements IMixinExplosion {
 		}
 	}
 
-	@Redirect(
-		at = @At(
-			target = "Lnet/minecraft/world/level/Level;getEntities (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/AABB;)Ljava/util/List;",
-			value = "INVOKE"
-		),
+	@ModifyVariable(
+		at = @At( "STORE" ),
 		method = "explode ()V"
 	)
-	private List< Entity > getEntities( Level level, Entity entity, AABB aabb ) {
-		List< Entity > entities = level.getEntities( entity, aabb );
-		this.mlibContext.filter( this.toBlow, entities );
+	private List< Entity > getEntities( List< Entity > entities ) {
+		this.mlib$context.filter( this.toBlow, entities );
 
 		return entities;
 	}
