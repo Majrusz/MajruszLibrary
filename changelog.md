@@ -1,1 +1,0 @@
-- fixed compatibility crash with Enhanced Visuals mod (reported by @jojofenin99)
