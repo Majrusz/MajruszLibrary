@@ -1,2 +1,0 @@
-- fixed bug with shift crafting in players inventory not working properly (reported by @NekoLeila)
-- fixed server crash related to glowing and invisible entities (reported by @roobscoob)
