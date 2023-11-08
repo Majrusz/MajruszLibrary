@@ -1,2 +1,1 @@
-- fixed bug with map values not serializing properly in configuration files
-- fixed bug with shields not taking damage (reported by @MLMII)
+- fixed game crash when loading mods (reported by @Zedrimar)
