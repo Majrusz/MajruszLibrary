@@ -1,11 +1,20 @@
 package com.mlib.text;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 public class RegexString {
 	public static final String REGEX_PREFIX = "{regex}";
 	String value;
 	Predicate< String > predicate = value->value.equals( this.value );
+
+	public static List< String > toString( List< RegexString > strings ) {
+		return strings.stream().map( string->string.value ).toList();
+	}
+
+	public static List< RegexString > toRegex( List< String > strings ) {
+		return strings.stream().map( RegexString::new ).toList();
+	}
 
 	public RegexString() {}
 
