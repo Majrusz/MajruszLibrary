@@ -75,7 +75,7 @@ record DataMap< ObjectType, ValueType >(
 	public void read( ObjectType object, Tag tag ) {
 		CompoundTag compoundTag = ( CompoundTag )tag;
 		if( compoundTag.contains( this.key ) ) {
-			CompoundTag subcompoundTag = new CompoundTag();
+			CompoundTag subcompoundTag = compoundTag.getCompound( this.key );
 			Map< String, ValueType > values = new HashMap<>();
 			for( String key : subcompoundTag.getAllKeys() ) {
 				values.put( key, this.reader.readTag( subcompoundTag.get( key ) ) );

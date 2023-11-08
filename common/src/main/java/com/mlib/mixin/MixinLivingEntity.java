@@ -42,7 +42,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		method = "hurt (Lnet/minecraft/world/damagesource/DamageSource;F)Z"
 	)
 	private void hurt( DamageSource source, float damage, CallbackInfoReturnable< Boolean > callback ) {
-		this.mlib$lastDamage = 0.0f;
+		this.mlib$lastDamage = damage;
 		LivingEntity entity = ( LivingEntity )( Object )this;
 		if( mlib$willBeCancelled( source, entity ) ) {
 			return;
