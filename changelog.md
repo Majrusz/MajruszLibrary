@@ -1,0 +1,1 @@
+- fixed bug with swim speed being always doubled (reported by @england1122589, @NeuTraLZero)
