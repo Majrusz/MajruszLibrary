@@ -1,1 +1,0 @@
-- fixed game crash when loading mods (reported by @Zedrimar)
