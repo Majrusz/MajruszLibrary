@@ -12,7 +12,9 @@ public class OnEntitySwimSpeedMultiplierGetNeoForge {
 
 	public OnEntitySwimSpeedMultiplierGetNeoForge() {
 		OnEntityTicked.listen( data->{
-			this.attribute.setValue( data.entity instanceof IMixinLivingEntity entity ? entity.mlib$getSwimSpeedMultiplier() : 0.0f ).apply( data.entity );
+			float multiplier = data.entity instanceof IMixinLivingEntity entity ? entity.mlib$getSwimSpeedMultiplier() : 1.0f;
+
+			this.attribute.setValue( multiplier - 1.0f ).apply( data.entity );
 		} );
 	}
 }

@@ -1,1 +1,1 @@
-- fixed game crash when loading mods (reported by @Zedrimar)
+- fixed bug with swim speed being always doubled (reported by @england1122589, @NeuTraLZero)
