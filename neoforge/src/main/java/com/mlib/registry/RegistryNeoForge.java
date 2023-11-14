@@ -1,10 +1,22 @@
 package com.mlib.registry;
 
+import com.mlib.mixin.IMixinCriteriaTriggers;
+import com.mlib.platform.Side;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
@@ -25,6 +37,34 @@ public class RegistryNeoForge implements IRegistryPlatform {
 	public < Type > void register( RegistryObject< Type > object ) {
 		net.minecraftforge.registries.RegistryObject< Type > forgeObject = ( ( DeferredRegister< Type > )this.lastDeferredRegister ).register( object.id, object.newInstance );
 		object.set( forgeObject, forgeObject::isPresent );
+	}
+
+	@Override
+	public void register( RegistryCallbacks callbacks ) {
+		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		eventBus.addListener( ( FMLCommonSetupEvent event )->{
+			callbacks.execute( Custom.Advancements.class, IMixinCriteriaTriggers::register );
+		} );
+		eventBus.addListener( ( EntityAttributeCreationEvent event )->{
+			callbacks.execute( Custom.Attributes.class, event::put );
+		} );
+		eventBus.addListener( ( final SpawnPlacementRegisterEvent event )->{
+			callbacks.execute( Custom.SpawnPlacements.class, new Custom.SpawnPlacements() {
+				@Override
+				public < Type extends Mob > void register( EntityType< Type > entityType, SpawnPlacements.Type type, Heightmap.Types heightmap,
+					SpawnPlacements.SpawnPredicate< Type > predicate
+				) {
+					event.register( entityType, type, heightmap, predicate, SpawnPlacementRegisterEvent.Operation.AND );
+				}
+			} );
+		} );
+
+		Side.runOnClient( ()->()->{
+			eventBus.addListener( ( final FMLClientSetupEvent event )->{
+				callbacks.execute( Custom.ModelLayers.class, ForgeHooksClient::registerLayerDefinition );
+				callbacks.execute( Custom.Renderers.class, EntityRenderers::register );
+			} );
+		} );
 	}
 
 	@Override
