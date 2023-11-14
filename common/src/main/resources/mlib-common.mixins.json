@@ -17,6 +17,7 @@
     "IMixinBreedGoal",
     "IMixinCriteriaTriggers",
     "IMixinEnchantment",
+    "IMixinMob",
     "IMixinServerLevel",
     "IMixinSharedSuggestionProvider",
     "MixinAbstractHorse",
