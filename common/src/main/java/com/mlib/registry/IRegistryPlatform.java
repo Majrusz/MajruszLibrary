@@ -5,7 +5,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.level.Level;
 
 import java.nio.file.Path;
 
@@ -13,6 +12,8 @@ public interface IRegistryPlatform {
 	< Type > void register( RegistryGroup< Type > group );
 
 	< Type > void register( RegistryObject< Type > object );
+
+	void register( RegistryCallbacks callbacks );
 
 	IAccessor< Item > getItems();
 

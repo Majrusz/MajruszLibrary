@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -55,6 +56,10 @@ public class ModHelper {
 				throw new IllegalArgumentException();
 			}
 		} );
+	}
+
+	public < Type > void create( Class< Type > clazz, Consumer< Type > consumer ) {
+		this.registryHandler.create( clazz, consumer );
 	}
 
 	public < Type extends Config > Config.Builder< Type > config( Function< String, Type > instance ) {
@@ -113,8 +118,8 @@ public class ModHelper {
 		this.modId = modId;
 		this.logger = LoggerFactory.getLogger( modId );
 		this.classFinder = new ClassFinder( this );
-		this.advancementCaller = new AdvancementCaller( this );
 		this.registryHandler = new RegistryHandler( this );
+		this.advancementCaller = new AdvancementCaller( this );
 		this.networkHandler = new NetworkHandler( this );
 		this.versionChecker = new VersionChecker( this );
 

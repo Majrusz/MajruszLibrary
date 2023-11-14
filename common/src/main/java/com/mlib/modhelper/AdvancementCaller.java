@@ -1,7 +1,7 @@
 package com.mlib.modhelper;
 
 import com.google.gson.JsonObject;
-import com.mlib.mixin.IMixinCriteriaTriggers;
+import com.mlib.registry.Custom;
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -12,7 +12,7 @@ class AdvancementCaller extends SimpleCriterionTrigger< AdvancementCaller.Instan
 	public AdvancementCaller( ModHelper helper ) {
 		this.id = helper.getLocation( "basic_trigger" );
 
-		IMixinCriteriaTriggers.register( this );
+		helper.create( Custom.Advancements.class, advancements->advancements.register( this ) );
 	}
 
 	@Override

@@ -5,10 +5,13 @@ import net.minecraft.core.Registry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 public class RegistryHandler {
 	final ModHelper helper;
 	final List< RegistryGroup< ? > > groups = new ArrayList<>();
+	final RegistryCallbacks callbacks = new RegistryCallbacks();
 
 	public RegistryHandler( ModHelper helper ) {
 		this.helper = helper;
@@ -21,7 +24,13 @@ public class RegistryHandler {
 		return group;
 	}
 
+	public < Type > void create( Class< Type > clazz, Consumer< Type > consumer ) {
+		this.callbacks.add( clazz, consumer );
+	}
+
 	public void register() {
 		this.groups.forEach( RegistryGroup::register );
+
+		Registries.PLATFORM.register( this.callbacks );
 	}
 }
