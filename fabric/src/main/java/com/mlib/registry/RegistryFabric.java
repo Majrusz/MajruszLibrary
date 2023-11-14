@@ -3,22 +3,34 @@ package com.mlib.registry;
 import com.mlib.annotation.Dist;
 import com.mlib.annotation.OnlyIn;
 import com.mlib.contexts.OnParticlesRegisteredFabric;
+import com.mlib.mixin.IMixinCriteriaTriggers;
+import com.mlib.mixin.IMixinSpawnPlacements;
 import com.mlib.platform.Side;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.nio.file.Path;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class RegistryFabric implements IRegistryPlatform {
 	@Override
@@ -34,8 +46,14 @@ public class RegistryFabric implements IRegistryPlatform {
 
 	@Override
 	public void register( RegistryCallbacks callbacks ) {
+		callbacks.execute( Custom.Advancements.class, this::registerAdvancement );
+		callbacks.execute( Custom.Attributes.class, this::registerAttributes );
+		callbacks.execute( Custom.SpawnPlacements.class, this::registerSpawnPlacement );
+
 		Side.runOnClient( ()->()->{
 			callbacks.execute( Custom.Particles.class, this::registerParticles );
+			callbacks.execute( Custom.SpawnPlacements.class, this::registerSpawnPlacement );
+			callbacks.execute( Custom.ModelLayers.class, this::registerModelLayer );
 		} );
 	}
 
@@ -124,8 +142,32 @@ public class RegistryFabric implements IRegistryPlatform {
 		return FabricLoader.getInstance().getConfigDir();
 	}
 
+	private < Type extends CriterionTrigger< ? > > void registerAdvancement( Type trigger ) {
+		IMixinCriteriaTriggers.register( trigger );
+	}
+
+	private < Type extends LivingEntity > void registerAttributes( EntityType< Type > type, AttributeSupplier attributes ) {
+		FabricDefaultAttributeRegistry.register( type, attributes );
+	}
+
+	private < Type extends Mob > void registerSpawnPlacement( EntityType< Type > entityType, SpawnPlacements.Type type, Heightmap.Types heightmap,
+		SpawnPlacements.SpawnPredicate< Type > predicate
+	) {
+		IMixinSpawnPlacements.register( entityType, type, heightmap, predicate );
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	private void registerModelLayer( ModelLayerLocation id, Supplier< LayerDefinition > definition ) {
+		EntityModelLayerRegistry.registerModelLayer( id, definition::get );
+	}
+
 	@OnlyIn( Dist.CLIENT )
 	private < Type extends ParticleOptions > void registerParticles( ParticleType< Type > type, Function< SpriteSet, ParticleProvider< Type > > factory ) {
 		OnParticlesRegisteredFabric.listen( data->data.engine.register( type, factory::apply ) );
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	private < Type extends Entity > void registerRenderer( EntityType< Type > type, EntityRendererProvider< Type > factory ) {
+		EntityRendererRegistry.register( type, factory );
 	}
 }

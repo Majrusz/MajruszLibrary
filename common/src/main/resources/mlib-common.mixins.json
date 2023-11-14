@@ -19,6 +19,7 @@
     "IMixinMob",
     "IMixinServerLevel",
     "IMixinSharedSuggestionProvider",
+    "IMixinSpawnPlacements",
     "MixinAbstractHorse",
     "MixinAnimal",
     "MixinArrow",
