@@ -9,6 +9,7 @@ import com.mlib.emitter.SoundEmitter;
 import com.mlib.level.LevelHelper;
 import com.mlib.math.AnyPos;
 import com.mlib.math.AnyRot;
+import com.mlib.mixin.IMixinMob;
 import com.mlib.mixin.IMixinServerLevel;
 import com.mlib.mixininterfaces.IMixinEntity;
 import com.mlib.platform.Side;
@@ -22,6 +23,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Witch;
@@ -107,6 +109,14 @@ public class EntityHelper {
 
 	public static float getWalkDistanceDelta( LivingEntity entity ) {
 		return entity.walkDist - entity.walkDistO; // these values are usually different on client and server sides!
+	}
+
+	public static GoalSelector getGoalSelector( Mob mob ) {
+		return ( ( IMixinMob )mob ).getGoalSelector();
+	}
+
+	public static GoalSelector getTargetSelector( Mob mob ) {
+		return ( ( IMixinMob )mob ).getTargetSelector();
 	}
 
 	public static void disableCurrentItem( Player player, double seconds ) {
