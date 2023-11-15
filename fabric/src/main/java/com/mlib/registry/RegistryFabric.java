@@ -45,8 +45,8 @@ public class RegistryFabric implements IRegistryPlatform {
 		callbacks.execute( Custom.SpawnPlacements.class, this::registerSpawnPlacement );
 
 		Side.runOnClient( ()->()->{
-			callbacks.execute( Custom.SpawnPlacements.class, this::registerSpawnPlacement );
 			callbacks.execute( Custom.ModelLayers.class, this::registerModelLayer );
+			callbacks.execute( Custom.Renderers.class, this::registerRenderer );
 		} );
 	}
 
