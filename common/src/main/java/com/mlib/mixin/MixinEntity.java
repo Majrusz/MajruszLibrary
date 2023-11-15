@@ -69,7 +69,7 @@ public abstract class MixinEntity implements IMixinEntity {
 			VibrationSystem.Ticker.tick( this.level, this.mlib$vibrationData, this.mlib$vibrationUser );
 		}
 		if( this instanceof IAnimableEntity animable ) {
-			animable.tickAnimations();
+			animable.getAnimations().tick();
 		}
 	}
 

@@ -98,7 +98,7 @@ public class Random {
 		return pos.len().doubleValue() < 1e-5 ? Random.nextUnitVector() : pos.norm();
 	}
 
-	public static < Type > Type next( Type[] elements ) {
+	public static < Type > Type next( Type... elements ) {
 		return elements.length > 0 ? elements[ Random.nextInt( elements.length ) ] : null;
 	}
 

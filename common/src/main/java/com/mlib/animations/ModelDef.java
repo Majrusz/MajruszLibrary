@@ -32,15 +32,15 @@ public class ModelDef {
 		Serializables.get( BoneDef.class )
 			.defineString( "name", s->s.name, ( s, v )->s.name = v )
 			.defineString( "parent", s->s.parent, ( s, v )->s.parent = v )
-			.defineFloatList( "pivot", s->AnimationHelper.to3d( s.globalPivot ), ( s, v )->s.globalPivot = AnimationHelper.to3d( v ) )
-			.defineFloatList( "rotation", s->AnimationHelper.toRadians3d( s.rotation ), ( s, v )->s.rotation = AnimationHelper.toRadians3d( v ) )
+			.defineFloatList( "pivot", s->Animation.to3d( s.globalPivot ), ( s, v )->s.globalPivot = Animation.to3d( v ) )
+			.defineFloatList( "rotation", s->Animation.toRadians3d( s.rotation ), ( s, v )->s.rotation = Animation.toRadians3d( v ) )
 			.defineCustomList( "cubes", s->s.cubes, ( s, v )->s.cubes = v, CubeDef::new );
 
 		Serializables.get( CubeDef.class )
-			.defineFloatList( "origin", s->AnimationHelper.to3d( s.origin ), ( s, v )->s.origin = AnimationHelper.to3d( v ) )
-			.defineFloatList( "size", s->AnimationHelper.to3d( s.size ), ( s, v )->s.size = AnimationHelper.to3d( v ) )
+			.defineFloatList( "origin", s->Animation.to3d( s.origin ), ( s, v )->s.origin = Animation.to3d( v ) )
+			.defineFloatList( "size", s->Animation.to3d( s.size ), ( s, v )->s.size = Animation.to3d( v ) )
 			.defineFloat( "inflate", s->s.inflate, ( s, v )->s.inflate = v )
-			.defineIntegerList( "uv", s->AnimationHelper.to2d( s.uv ), ( s, v )->s.uv = AnimationHelper.to2d( v ) );
+			.defineIntegerList( "uv", s->Animation.to2d( s.uv ), ( s, v )->s.uv = Animation.to2d( v ) );
 	}
 
 	@OnlyIn( Dist.CLIENT )

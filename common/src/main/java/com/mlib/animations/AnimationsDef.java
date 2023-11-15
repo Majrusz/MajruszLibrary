@@ -26,7 +26,7 @@ public class AnimationsDef {
 			.defineCustomMap( "rotation", BoneDef::getRotations, BoneDef::setRotations, RotationDef::new );
 
 		Serializables.get( RotationDef.class )
-			.defineFloatList( "vector", s->AnimationHelper.toRadians3d( s.rotation ), ( s, v )->s.rotation = AnimationHelper.toRadians3d( v ) )
+			.defineFloatList( "vector", s->Animation.toRadians3d( s.rotation ), ( s, v )->s.rotation = Animation.toRadians3d( v ) )
 			.defineEnum( "easing", s->s.easing, ( s, v )->s.easing = v, Easing::values );
 	}
 
