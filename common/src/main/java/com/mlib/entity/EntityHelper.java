@@ -1,6 +1,7 @@
 package com.mlib.entity;
 
 import com.mlib.MajruszLibrary;
+import com.mlib.animations.IAnimableEntity;
 import com.mlib.annotation.Dist;
 import com.mlib.annotation.OnlyIn;
 import com.mlib.data.Serializables;
@@ -210,7 +211,41 @@ public class EntityHelper {
 		}
 	}
 
+	public static class EntityAnimation {
+		int entityId;
+		String name;
+
+		static {
+			Serializables.get( EntityAnimation.class )
+				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
+				.defineString( "name", s->s.name, ( s, v )->s.name = v );
+
+			Side.runOnClient( ()->()->MajruszLibrary.ENTITY_ANIMATION.addClientCallback( EntityAnimation::onClient ) );
+		}
+
+		public EntityAnimation( int entityId, String name ) {
+			this.entityId = entityId;
+			this.name = name;
+		}
+
+		public EntityAnimation( Entity entity, String name ) {
+			this( entity.getId(), name );
+		}
+
+		public EntityAnimation() {
+			this( 0, "" );
+		}
+
+		@OnlyIn( Dist.CLIENT )
+		private static void onClient( EntityAnimation data ) {
+			( ( IAnimableEntity )( Side.getLocalLevel().getEntity( data.entityId ) ) ).playAnimation( data.name );
+		}
+	}
+
 	public static class EntityGlow {
+		int entityId;
+		int ticks;
+
 		static {
 			Serializables.get( EntityGlow.class )
 				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
@@ -218,9 +253,6 @@ public class EntityHelper {
 
 			Side.runOnClient( ()->()->MajruszLibrary.ENTITY_GLOW.addClientCallback( EntityGlow::onClient ) );
 		}
-
-		int entityId;
-		int ticks;
 
 		public EntityGlow( int entityId, int ticks ) {
 			this.entityId = entityId;
@@ -244,6 +276,9 @@ public class EntityHelper {
 	}
 
 	public static class EntityInvisible {
+		int entityId;
+		int ticks;
+
 		static {
 			Serializables.get( EntityInvisible.class )
 				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
@@ -251,9 +286,6 @@ public class EntityHelper {
 
 			Side.runOnClient( ()->()->MajruszLibrary.ENTITY_INVISIBLE.addClientCallback( EntityInvisible::onClient ) );
 		}
-
-		int entityId;
-		int ticks;
 
 		public EntityInvisible( int entityId, int ticks ) {
 			this.entityId = entityId;

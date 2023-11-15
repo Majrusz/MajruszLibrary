@@ -11,6 +11,7 @@ import com.mlib.registry.RegistryHandler;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.packs.PackType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +31,7 @@ public class ModHelper {
 	final AdvancementCaller advancementCaller;
 	final NetworkHandler networkHandler;
 	final VersionChecker versionChecker;
+	final ResourceLoader resourceLoader;
 	final IDataPlatform data = Services.loadOptional( IDataPlatform.class ).orElse( null );
 
 	public static ModHelper create( String modId ) {
@@ -86,6 +88,10 @@ public class ModHelper {
 		this.logger.error( format.formatted( args ) );
 	}
 
+	public < Type > LazyResource< Type > load( String id, Class< Type > clazz, PackType packType ) {
+		return LazyResource.of( ()->this.resourceLoader.load( this.getLocation( "custom/%s.json".formatted( id ) ), clazz, packType ) );
+	}
+
 	public < Type extends IDataPlatform > Type getData( Class< Type > clazz ) {
 		return clazz.cast( this.data );
 	}
@@ -122,6 +128,7 @@ public class ModHelper {
 		this.advancementCaller = new AdvancementCaller( this );
 		this.networkHandler = new NetworkHandler( this );
 		this.versionChecker = new VersionChecker( this );
+		this.resourceLoader = new ResourceLoader( this );
 
 		this.onRegister( this.classFinder::findClasses );
 		this.onRegister( ()->this.instances.add( this.classFinder.getInstances( clazz->clazz.isAnnotationPresent( AutoInstance.class ) ) ) );

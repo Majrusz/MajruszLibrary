@@ -24,6 +24,7 @@ public class MajruszLibrary {
 	public static final RegistryObject< ArgumentTypeInfo< ?, ? > > ENUM_ARGUMENT_TYPE = ARGUMENT_TYPES.create( "enum", EnumArgument::register );
 
 	// Network
+	public static final NetworkObject< EntityHelper.EntityAnimation > ENTITY_ANIMATION = HELPER.create( "entity_animation", EntityHelper.EntityAnimation.class );
 	public static final NetworkObject< EntityHelper.EntityGlow > ENTITY_GLOW = HELPER.create( "entity_glow", EntityHelper.EntityGlow.class );
 	public static final NetworkObject< EntityHelper.EntityInvisible > ENTITY_INVISIBLE = HELPER.create( "entity_invisible", EntityHelper.EntityInvisible.class );
 
