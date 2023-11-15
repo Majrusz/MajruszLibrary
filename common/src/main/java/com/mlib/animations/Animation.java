@@ -8,12 +8,15 @@ import net.minecraft.util.Mth;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Animation {
-	public final AnimationsDef.AnimationDef def;
-	public int ticksLeft;
+	private final AnimationsDef.AnimationDef def;
+	private final Map< Integer, List< Runnable > > callbacks = new HashMap<>();
+	private int ticksLeft;
 
 	public static Vector3f to3d( List< Float > values ) {
 		return new Vector3f( values.get( 0 ), values.get( 1 ), values.get( 2 ) );
@@ -65,8 +68,17 @@ public class Animation {
 		} );
 	}
 
+	public void addCallback( int tick, Runnable callback ) {
+		this.callbacks.computeIfAbsent( tick, ArrayList::new ).add( callback );
+	}
+
 	public void tick() {
 		this.ticksLeft--;
+
+		int tickIdx = this.def.ticks - this.ticksLeft;
+		if( this.callbacks.containsKey( tickIdx ) ) {
+			this.callbacks.get( tickIdx ).forEach( Runnable::run );
+		}
 
 		if( this.isFinished() && this.def.isLooped ) {
 			this.ticksLeft = this.def.ticks;
