@@ -4,26 +4,18 @@ import com.mlib.MajruszLibrary;
 import com.mlib.entity.EntityHelper;
 import com.mlib.platform.Side;
 
-import java.util.List;
-
 public interface IAnimableEntity {
 	AnimationsDef getAnimationsDef();
 
-	List< Animation > getAnimations();
+	Animations getAnimations();
 
 	int getId();
 
-	default void tickAnimations() {
-		List< Animation > animations = this.getAnimations();
-		animations.forEach( Animation::tick );
-		animations.removeIf( Animation::isFinished );
-	}
-
-	default void playAnimation( String name ) {
+	default Animation playAnimation( String name, int trackIdx ) {
 		if( Side.isLogicalServer() ) {
-			MajruszLibrary.ENTITY_ANIMATION.sendToClients( new EntityHelper.EntityAnimation( this.getId(), name ) );
+			MajruszLibrary.ENTITY_ANIMATION.sendToClients( new EntityHelper.EntityAnimation( this.getId(), name, trackIdx ) );
 		}
 
-		this.getAnimations().add( new Animation( this.getAnimationsDef().animations.get( name ) ) );
+		return this.getAnimations().add( new Animation( this.getAnimationsDef().animations.get( name ) ), trackIdx );
 	}
 }

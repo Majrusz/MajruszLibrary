@@ -214,31 +214,34 @@ public class EntityHelper {
 	public static class EntityAnimation {
 		int entityId;
 		String name;
+		int trackIdx;
 
 		static {
 			Serializables.get( EntityAnimation.class )
 				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
-				.defineString( "name", s->s.name, ( s, v )->s.name = v );
+				.defineString( "name", s->s.name, ( s, v )->s.name = v )
+				.defineInteger( "trackIdx", s->s.trackIdx, ( s, v )->s.trackIdx = v );
 
 			Side.runOnClient( ()->()->MajruszLibrary.ENTITY_ANIMATION.addClientCallback( EntityAnimation::onClient ) );
 		}
 
-		public EntityAnimation( int entityId, String name ) {
+		public EntityAnimation( int entityId, String name, int trackIdx ) {
 			this.entityId = entityId;
 			this.name = name;
+			this.trackIdx = trackIdx;
 		}
 
-		public EntityAnimation( Entity entity, String name ) {
-			this( entity.getId(), name );
+		public EntityAnimation( Entity entity, String name, int trackIdx ) {
+			this( entity.getId(), name, trackIdx );
 		}
 
 		public EntityAnimation() {
-			this( 0, "" );
+			this( 0, "", 0 );
 		}
 
 		@OnlyIn( Dist.CLIENT )
 		private static void onClient( EntityAnimation data ) {
-			( ( IAnimableEntity )( Side.getLocalLevel().getEntity( data.entityId ) ) ).playAnimation( data.name );
+			( ( IAnimableEntity )( Side.getLocalLevel().getEntity( data.entityId ) ) ).playAnimation( data.name, data.trackIdx );
 		}
 	}
 

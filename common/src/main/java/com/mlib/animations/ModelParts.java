@@ -9,13 +9,13 @@ import java.util.Map;
 
 @OnlyIn( Dist.CLIENT )
 public class ModelParts {
-	private final ModelDef model;
 	private final ModelPart root;
+	private final ModelDef model;
 	private final Map< String, ModelPart > parts = new HashMap<>();
 
-	public ModelParts( ModelDef model, ModelPart root ) {
-		this.model = model;
+	public ModelParts( ModelPart root, ModelDef model ) {
 		this.root = root;
+		this.model = model;
 		for( ModelDef.BoneDef bone : model.geometries.get( 0 ).bones ) {
 			this.parts.put( bone.name, ( bone.parent != null ? this.parts.get( bone.parent ) : this.root ).getChild( bone.name ) );
 		}
