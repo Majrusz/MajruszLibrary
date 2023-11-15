@@ -1,5 +1,6 @@
 package com.mlib.mixin;
 
+import com.mlib.animations.IAnimableEntity;
 import com.mlib.contexts.OnEntityNoiseCheck;
 import com.mlib.contexts.OnEntityNoiseReceived;
 import com.mlib.contexts.base.Contexts;
@@ -66,6 +67,9 @@ public abstract class MixinEntity implements IMixinEntity {
 		this.mlib$invisibleTicks = Math.max( this.mlib$invisibleTicks - 1, 0 );
 		if( this.mlib$vibrationData != null ) {
 			VibrationSystem.Ticker.tick( this.level, this.mlib$vibrationData, this.mlib$vibrationUser );
+		}
+		if( this instanceof IAnimableEntity animable ) {
+			animable.tickAnimations();
 		}
 	}
 
