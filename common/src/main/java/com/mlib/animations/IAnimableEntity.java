@@ -2,7 +2,8 @@ package com.mlib.animations;
 
 import com.mlib.MajruszLibrary;
 import com.mlib.entity.EntityHelper;
-import com.mlib.platform.Side;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 
 public interface IAnimableEntity {
 	AnimationsDef getAnimationsDef();
@@ -11,8 +12,10 @@ public interface IAnimableEntity {
 
 	int getId();
 
+	Level level();
+
 	default Animation playAnimation( String name, int trackIdx ) {
-		if( Side.isLogicalServer() ) {
+		if( this.level() instanceof ServerLevel ) {
 			MajruszLibrary.ENTITY_ANIMATION.sendToClients( new EntityHelper.EntityAnimation( this.getId(), name, trackIdx ) );
 		}
 
