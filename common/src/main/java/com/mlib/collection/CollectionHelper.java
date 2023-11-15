@@ -14,10 +14,19 @@ public class CollectionHelper {
 		return copy;
 	}
 
-	public static < K, V1, V2 > Map< K, V2 > map( Map< K, V1 > input, Function< V1, V2 > mapper, Supplier< Map< K, V2 > > instance ) {
-		Map< K, V2 > output = instance.get();
+	public static < K, V1, V2, M extends Map< K, V2 > > M map( Map< K, V1 > input, Function< V1, V2 > mapper, Supplier< M > instance ) {
+		M output = instance.get();
 		for( K key : input.keySet() ) {
 			output.put( key, mapper.apply( input.get( key ) ) );
+		}
+
+		return output;
+	}
+
+	public static < K1, K2, V, M extends Map< K2, V > > M mapKey( Map< K1, V > input, Function< K1, K2 > mapper, Supplier< M > instance ) {
+		M output = instance.get();
+		for( K1 key : input.keySet() ) {
+			output.put( mapper.apply( key ), input.get( key ) );
 		}
 
 		return output;
