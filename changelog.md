@@ -1,0 +1,1 @@
+- fixed bug with shift crafting in players inventory not working properly (reported by @NekoLeila)

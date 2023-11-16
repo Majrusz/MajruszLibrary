@@ -35,6 +35,7 @@
     "MixinExplosion",
     "MixinFishingHook",
     "MixinFoxBreedGoal",
+    "MixinInventoryMenu",
     "MixinItem",
     "MixinItemStack",
     "MixinLivingEntity",
