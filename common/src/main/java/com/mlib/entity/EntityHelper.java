@@ -227,7 +227,9 @@ public class EntityHelper {
 
 		@OnlyIn( Dist.CLIENT )
 		private static void onClient( EntityGlow data ) {
-			( ( IMixinEntity )( Side.getLocalLevel().getEntity( data.entityId ) ) ).mlib$addGlowTicks( data.ticks );
+			if( Side.getLocalLevel().getEntity( data.entityId ) instanceof IMixinEntity entity ) {
+				entity.mlib$addGlowTicks( data.ticks );
+			}
 		}
 	}
 
@@ -258,8 +260,9 @@ public class EntityHelper {
 
 		@OnlyIn( Dist.CLIENT )
 		private static void onClient( EntityInvisible data ) {
-			IMixinEntity entity = ( ( IMixinEntity )( Side.getLocalLevel().getEntity( data.entityId ) ) );
-			entity.mlib$addInvisibleTicks( data.ticks );
+			if( Side.getLocalLevel().getEntity( data.entityId ) instanceof IMixinEntity entity ) {
+				entity.mlib$addInvisibleTicks( data.ticks );
+			}
 		}
 	}
 }
