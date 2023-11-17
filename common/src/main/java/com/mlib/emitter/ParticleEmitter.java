@@ -7,6 +7,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
@@ -52,11 +53,11 @@ public class ParticleEmitter {
 		return ()->Random.nextFloat( min, max );
 	}
 
-	public void emit( ServerLevel level ) {
+	public void emit( Level level ) {
 		this.emit( level, this.position.get(), this.offset.get(), Math.round( this.count * this.countMultiplier ) );
 	}
 
-	public void emitLine( ServerLevel level, Vec3 end ) {
+	public void emitLine( Level level, Vec3 end ) {
 		Vec3 start = this.position.get();
 		int count = Math.round( this.count * this.countMultiplier );
 		AnyPos direction = AnyPos.from( end ).sub( start );
@@ -122,8 +123,16 @@ public class ParticleEmitter {
 		this.speed = properties.speed;
 	}
 
-	private void emit( ServerLevel level, Vec3 position, Vec3 offset, int count ) {
-		level.sendParticles( this.type.get(), position.x, position.y, position.z, count, offset.x, offset.y, offset.z, this.speed.get() );
+	private void emit( Level level, Vec3 position, Vec3 offset, int count ) {
+		if( level instanceof ServerLevel serverLevel ) {
+			serverLevel.sendParticles( this.type.get(), position.x, position.y, position.z, count, offset.x, offset.y, offset.z, this.speed.get() );
+		} else {
+			ParticleOptions type = this.type.get();
+			float speed = this.speed.get();
+			for( int idx = 0; idx < count; ++idx ) {
+				level.addParticle( type, position.x, position.y, position.z, offset.x * speed, offset.y * speed, offset.z * speed );
+			}
+		}
 	}
 
 	public record Properties( Supplier< Vec3 > offset, Supplier< Float > speed ) {}

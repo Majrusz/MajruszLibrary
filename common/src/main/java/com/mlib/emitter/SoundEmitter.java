@@ -1,10 +1,10 @@
 package com.mlib.emitter;
 
 import com.mlib.math.Random;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
@@ -50,7 +50,7 @@ public class SoundEmitter {
 		return SoundEmitter.randomized( value * 0.8f, value * 1.2f );
 	}
 
-	public void emit( ServerLevel level ) {
+	public void emit( Level level ) {
 		Vec3 position = this.position.get();
 		level.playSound( null, position.x, position.y, position.z, this.event, this.source, this.volume.get(), this.pitch.get() );
 	}
