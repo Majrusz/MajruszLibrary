@@ -1,0 +1,1 @@
+- fixed bug with experience bonus sometimes growing exponentially (reported by @roobscoob)
