@@ -241,7 +241,9 @@ public class EntityHelper {
 
 		@OnlyIn( Dist.CLIENT )
 		private static void onClient( EntityAnimation data ) {
-			( ( IAnimableEntity )( Side.getLocalLevel().getEntity( data.entityId ) ) ).playAnimation( data.name, data.trackIdx );
+			if( Side.getLocalLevel().getEntity( data.entityId ) instanceof IAnimableEntity entity ) {
+				entity.playAnimation( data.name, data.trackIdx );
+			}
 		}
 	}
 
