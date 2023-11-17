@@ -161,6 +161,10 @@ public class EntityHelper {
 		return AnyRot.y( Math.toRadians( -entity.getYRot() ) - Math.PI / 2.0 )
 			.rotZ( Math.toRadians( -entity.getXRot() ) );
 	}
+	
+	public static AnyPos getDirection2d( Entity entity ) {
+		return AnyPos.from( 1.0, 0.0, 0.0 ).rot( AnyRot.y( Math.toRadians( -entity.getYRot() ) - Math.PI / 2.0 ) );
+	}
 
 	public static class Spawner< Type extends Entity > {
 		private final EntityType< Type > type;
