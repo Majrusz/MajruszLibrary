@@ -11,10 +11,18 @@ public class Animations {
 		return new Animations( trackCount );
 	}
 
+	public static Animations create() {
+		return new Animations( 1 );
+	}
+
 	public Animation add( Animation animation, int trackIdx ) {
 		this.animations.get( trackIdx ).add( animation );
 
 		return animation;
+	}
+
+	public Animation add( Animation animation ) {
+		return this.add( animation, 0 );
 	}
 
 	public void tick() {
@@ -40,6 +48,10 @@ public class Animations {
 
 	public boolean isEmpty( int trackId ) {
 		return this.animations.get( trackId ).isEmpty();
+	}
+
+	public boolean isEmpty() {
+		return this.isEmpty( 0 );
 	}
 
 	private Animations( int trackCount ) {

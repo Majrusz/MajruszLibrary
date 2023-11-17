@@ -21,4 +21,8 @@ public interface IAnimableEntity {
 
 		return this.getAnimations().add( new Animation( this.getAnimationsDef().animations.get( name ) ), trackIdx );
 	}
+
+	default Animation playAnimation( String name ) {
+		return this.playAnimation( name, 0 );
+	}
 }
