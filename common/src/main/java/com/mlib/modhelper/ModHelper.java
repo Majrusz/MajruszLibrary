@@ -1,6 +1,8 @@
 package com.mlib.modhelper;
 
 import com.mlib.annotation.AutoInstance;
+import com.mlib.annotation.Dist;
+import com.mlib.annotation.OnlyIn;
 import com.mlib.data.Config;
 import com.mlib.data.WorldData;
 import com.mlib.network.NetworkHandler;
@@ -8,6 +10,7 @@ import com.mlib.network.NetworkObject;
 import com.mlib.platform.Services;
 import com.mlib.registry.RegistryGroup;
 import com.mlib.registry.RegistryHandler;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -106,6 +109,16 @@ public class ModHelper {
 
 	public String getModId() {
 		return this.modId;
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	public ModelLayerLocation getLayerLocation( String id, String type ) {
+		return new ModelLayerLocation( this.getLocation( id ), type );
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	public ModelLayerLocation getLayerLocation( String id ) {
+		return this.getLayerLocation( id, "main" );
 	}
 
 	public ResourceLocation getLocation( String id ) {
