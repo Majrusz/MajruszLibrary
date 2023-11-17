@@ -68,8 +68,10 @@ public class Animation {
 		} );
 	}
 
-	public void addCallback( int tick, Runnable callback ) {
+	public Animation addCallback( int tick, Runnable callback ) {
 		this.callbacks.computeIfAbsent( tick, ArrayList::new ).add( callback );
+
+		return this;
 	}
 
 	public void tick() {
