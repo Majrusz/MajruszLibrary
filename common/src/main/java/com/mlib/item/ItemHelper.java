@@ -3,12 +3,12 @@ package com.mlib.item;
 import com.mlib.entity.EntityHelper;
 import com.mlib.math.Random;
 import com.mlib.math.Range;
+import com.mlib.platform.Services;
+import net.minecraft.core.Direction;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -16,14 +16,18 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class ItemHelper {
+	private static final IItemPlatform PLATFORM = Services.load( IItemPlatform.class );
 	private static final float MINECRAFT_WEAPON_ENCHANT_CHANCE = 0.25f;
 	private static final float MINECRAFT_ARMOR_PIECE_ENCHANT_CHANCE = 0.5f;
 
@@ -82,6 +86,12 @@ public class ItemHelper {
 		for( Item item : items ) {
 			player.getCooldowns().addCooldown( item, duration );
 		}
+	}
+
+	public static < Type extends EntityType< ? extends Mob > > Supplier< SpawnEggItem > createEgg( Supplier< Type > type, int backgroundColor,
+		int highlightColor
+	) {
+		return PLATFORM.createEgg( type, backgroundColor, highlightColor );
 	}
 
 	public static ItemStack getHandItem( LivingEntity entity, Predicate< ItemStack > predicate ) {
