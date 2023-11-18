@@ -60,7 +60,7 @@ public class ModelDef {
 			if( bone.parent != null ) {
 				bone.pivot = AnyPos.from( bone.globalPivot ).sub( offsets.get( bone.parent ) ).mul( 1.0f, -1.0f, 1.0f ).vec3f();
 			} else {
-				bone.pivot = bone.globalPivot;
+				bone.pivot = AnyPos.from( bone.globalPivot ).mul( 1.0f, -1.0f, 1.0f ).add( 0.0, 24.0, 0.0 ).vec3f();
 			}
 
 			PartPose pose;
