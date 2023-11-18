@@ -8,10 +8,7 @@ import net.minecraft.util.Mth;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Animation {
 	private final AnimationsDef.AnimationDef def;
@@ -51,20 +48,20 @@ public class Animation {
 		this.def.bones.forEach( ( name, bone )->{
 			ModelPart modelPart = modelParts.get( name );
 
-			Map.Entry< Float, AnimationsDef.RotationDef > current = bone.rotations.floorEntry( duration );
-			Map.Entry< Float, AnimationsDef.RotationDef > next = bone.rotations.ceilingEntry( duration );
-			if( current.getValue() != next.getValue() ) {
-				float ratio = ( float )( duration + ( ageInTicks % 1.0f ) * TimeHelper.toSeconds( 1 ) - current.getKey() ) / ( next.getKey() - current.getKey() );
-				ratio = next.getValue().easing.apply( ratio );
+			Vector3f rotation = this.lerp( bone.rotations, duration, ageInTicks );
+			modelPart.xRot += rotation.x;
+			modelPart.yRot += rotation.y;
+			modelPart.zRot += rotation.z;
 
-				modelPart.xRot += Mth.lerp( ratio, current.getValue().rotation.x, next.getValue().rotation.x );
-				modelPart.yRot += Mth.lerp( ratio, current.getValue().rotation.y, next.getValue().rotation.y );
-				modelPart.zRot += Mth.lerp( ratio, current.getValue().rotation.z, next.getValue().rotation.z );
-			} else {
-				modelPart.xRot += current.getValue().rotation.x;
-				modelPart.yRot += current.getValue().rotation.y;
-				modelPart.zRot += current.getValue().rotation.z;
-			}
+			Vector3f position = this.lerp( bone.positions, duration, ageInTicks );
+			modelPart.x += position.x;
+			modelPart.y += position.y;
+			modelPart.z += position.z;
+
+			Vector3f scale = this.lerp( bone.scales, duration, ageInTicks );
+			modelPart.xScale *= scale.x;
+			modelPart.yScale *= scale.y;
+			modelPart.zScale *= scale.z;
 		} );
 	}
 
@@ -89,6 +86,32 @@ public class Animation {
 
 	public boolean isFinished() {
 		return this.ticksLeft <= 0;
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	private Vector3f lerp( TreeMap< Float, AnimationsDef.VectorDef > vectors, float duration, float ageInTicks ) {
+		if( vectors.isEmpty() ) {
+			return new Vector3f( 0.0f, 0.0f, 0.0f );
+		}
+
+		Map.Entry< Float, AnimationsDef.VectorDef > current = vectors.floorEntry( duration );
+		Map.Entry< Float, AnimationsDef.VectorDef > next = vectors.ceilingEntry( duration );
+		if( current.getValue() != next.getValue() ) {
+			float ratio = ( float )( duration + ( ageInTicks % 1.0f ) * TimeHelper.toSeconds( 1 ) - current.getKey() ) / ( next.getKey() - current.getKey() );
+			ratio = next.getValue().easing.apply( ratio );
+
+			return new Vector3f(
+				Mth.lerp( ratio, current.getValue().vector.x, next.getValue().vector.x ),
+				Mth.lerp( ratio, current.getValue().vector.y, next.getValue().vector.y ),
+				Mth.lerp( ratio, current.getValue().vector.z, next.getValue().vector.z )
+			);
+		} else {
+			return new Vector3f(
+				current.getValue().vector.x,
+				current.getValue().vector.y,
+				current.getValue().vector.z
+			);
+		}
 	}
 
 	Animation( AnimationsDef.AnimationDef def ) {
