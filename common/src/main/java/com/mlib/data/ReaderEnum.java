@@ -13,7 +13,7 @@ class ReaderEnum< Type extends Enum< ? > > extends ReaderStringCustom< Type > {
 	public Type convert( String id ) {
 		Type[] values = this.values.get();
 		for( Type value : values ) {
-			if( id.equalsIgnoreCase( value.toString() ) ) {
+			if( id.equalsIgnoreCase( value.name() ) ) {
 				return value;
 			}
 		}
@@ -23,6 +23,6 @@ class ReaderEnum< Type extends Enum< ? > > extends ReaderStringCustom< Type > {
 
 	@Override
 	public String convert( Type value ) {
-		return value.toString();
+		return value.name();
 	}
 }
