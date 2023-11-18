@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -160,6 +161,26 @@ public class RegistryForge implements IRegistryPlatform {
 			@Override
 			public Iterable< EntityType< ? > > get() {
 				return ForgeRegistries.ENTITY_TYPES;
+			}
+		};
+	}
+
+	@Override
+	public IAccessor< SoundEvent > getSoundEvents() {
+		return new IAccessor<>() {
+			@Override
+			public ResourceLocation get( SoundEvent value ) {
+				return ForgeRegistries.SOUND_EVENTS.getKey( value );
+			}
+
+			@Override
+			public SoundEvent get( ResourceLocation id ) {
+				return ForgeRegistries.SOUND_EVENTS.getValue( id );
+			}
+
+			@Override
+			public Iterable< SoundEvent > get() {
+				return ForgeRegistries.SOUND_EVENTS;
 			}
 		};
 	}

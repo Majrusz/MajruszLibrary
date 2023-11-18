@@ -21,6 +21,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -133,6 +134,26 @@ public class RegistryFabric implements IRegistryPlatform {
 			@Override
 			public Iterable< EntityType< ? > > get() {
 				return BuiltInRegistries.ENTITY_TYPE;
+			}
+		};
+	}
+
+	@Override
+	public IAccessor< SoundEvent > getSoundEvents() {
+		return new IAccessor<>() {
+			@Override
+			public ResourceLocation get( SoundEvent value ) {
+				return BuiltInRegistries.SOUND_EVENT.getKey( value );
+			}
+
+			@Override
+			public SoundEvent get( ResourceLocation id ) {
+				return BuiltInRegistries.SOUND_EVENT.get( id );
+			}
+
+			@Override
+			public Iterable< SoundEvent > get() {
+				return BuiltInRegistries.SOUND_EVENT;
 			}
 		};
 	}

@@ -2,6 +2,7 @@ package com.mlib.registry;
 
 import com.mlib.platform.Services;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -15,6 +16,7 @@ public class Registries {
 	final static IRegistryPlatform.IAccessor< MobEffect > EFFECTS = PLATFORM.getEffects();
 	final static IRegistryPlatform.IAccessor< Enchantment > ENCHANTMENTS = PLATFORM.getEnchantments();
 	final static IRegistryPlatform.IAccessor< EntityType< ? > > ENTITY_TYPES = PLATFORM.getEntityTypes();
+	final static IRegistryPlatform.IAccessor< SoundEvent > SOUND_EVENTS = PLATFORM.getSoundEvents();
 
 	public static ResourceLocation get( Item item ) {
 		return ITEMS.get( item );
@@ -30,6 +32,10 @@ public class Registries {
 
 	public static ResourceLocation get( EntityType< ? > entityType ) {
 		return ENTITY_TYPES.get( entityType );
+	}
+
+	public static ResourceLocation get( SoundEvent sound ) {
+		return SOUND_EVENTS.get( sound );
 	}
 
 	public static Item getItem( ResourceLocation id ) {
@@ -48,8 +54,16 @@ public class Registries {
 		return ENTITY_TYPES.get( id );
 	}
 
+	public static SoundEvent getSoundEvent( ResourceLocation id ) {
+		return SOUND_EVENTS.get( id );
+	}
+
 	public static Iterable< Item > getItems() {
 		return ITEMS.get();
+	}
+
+	public static Iterable< MobEffect > getEffects() {
+		return EFFECTS.get();
 	}
 
 	public static Iterable< Enchantment > getEnchantments() {
@@ -58,6 +72,10 @@ public class Registries {
 
 	public static Iterable< EntityType< ? > > getEntityTypes() {
 		return ENTITY_TYPES.get();
+	}
+
+	public static Iterable< SoundEvent > getSoundEvents() {
+		return SOUND_EVENTS.get();
 	}
 
 	public static Path getConfigPath() {
