@@ -12,6 +12,7 @@ import com.mlib.math.AnyPos;
 import com.mlib.math.AnyRot;
 import com.mlib.mixin.IMixinMob;
 import com.mlib.mixin.IMixinServerLevel;
+import com.mlib.mixininterfaces.IMixinClientLevel;
 import com.mlib.mixininterfaces.IMixinEntity;
 import com.mlib.platform.Side;
 import com.mlib.time.TimeHelper;
@@ -157,6 +158,17 @@ public class EntityHelper {
 		return destroyedAnyBlock;
 	}
 
+	@OnlyIn( Dist.CLIENT )
+	public static < Type > void applyToClientEntity( int entityId, Class< Type > clazz, Consumer< Type > consumer ) {
+		Entity entity = Side.getLocalLevel().getEntity( entityId );
+		if( clazz.isInstance( entity ) ) {
+			consumer.accept( clazz.cast( entity ) );
+		} else {
+			// required because the entity can be recreated from client package later during the same tick
+			( ( IMixinClientLevel )Side.getLocalLevel() ).mlib$delayExecution( entityId, clazz, consumer );
+		}
+	}
+
 	public static AnyRot getLookRotation( Entity entity ) {
 		return AnyRot.y( Math.toRadians( -entity.getYRot() ) - Math.PI / 2.0 )
 			.rotZ( Math.toRadians( -entity.getXRot() ) );
@@ -245,9 +257,7 @@ public class EntityHelper {
 
 		@OnlyIn( Dist.CLIENT )
 		private static void onClient( EntityAnimation data ) {
-			if( Side.getLocalLevel().getEntity( data.entityId ) instanceof IAnimableEntity entity ) {
-				entity.playAnimation( data.name, data.trackIdx );
-			}
+			EntityHelper.applyToClientEntity( data.entityId, IAnimableEntity.class, entity->entity.playAnimation( data.name, data.trackIdx ) );
 		}
 	}
 
@@ -278,9 +288,7 @@ public class EntityHelper {
 
 		@OnlyIn( Dist.CLIENT )
 		private static void onClient( EntityGlow data ) {
-			if( Side.getLocalLevel().getEntity( data.entityId ) instanceof IMixinEntity entity ) {
-				entity.mlib$addGlowTicks( data.ticks );
-			}
+			EntityHelper.applyToClientEntity( data.entityId, IMixinEntity.class, entity->entity.mlib$addGlowTicks( data.ticks ) );
 		}
 	}
 
@@ -311,9 +319,7 @@ public class EntityHelper {
 
 		@OnlyIn( Dist.CLIENT )
 		private static void onClient( EntityInvisible data ) {
-			if( Side.getLocalLevel().getEntity( data.entityId ) instanceof IMixinEntity entity ) {
-				entity.mlib$addInvisibleTicks( data.ticks );
-			}
+			EntityHelper.applyToClientEntity( data.entityId, IMixinEntity.class, entity->entity.mlib$addInvisibleTicks( data.ticks ) );
 		}
 	}
 }
