@@ -1,6 +1,7 @@
 package com.mlib.registry;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -22,6 +23,8 @@ public interface IRegistryPlatform {
 	IAccessor< Enchantment > getEnchantments();
 
 	IAccessor< EntityType< ? > > getEntityTypes();
+
+	IAccessor< SoundEvent > getSoundEvents();
 
 	Path getConfigPath();
 
