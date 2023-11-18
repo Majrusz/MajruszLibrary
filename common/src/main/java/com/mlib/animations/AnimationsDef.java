@@ -55,8 +55,8 @@ public class AnimationsDef {
 
 	public enum Easing {
 		LINEAR( "linear", x->x ),
-		QUADRATIC_OUT( "easeOutQuad", x->( float )Math.sqrt( x ) ),
-		QUADRATIC_IN( "easeInQuad", x->x * x );
+		EASEOUTQUAD( "easeOutQuad", x->( float )Math.sqrt( x ) ),
+		EASEINQUAD( "easeInQuad", x->x * x );
 
 		final String id;
 		final Function< Float, Float > mapper;
