@@ -11,6 +11,7 @@ import org.joml.Vector3f;
 import java.util.*;
 
 public class Animation {
+	public static Animation INVALID = new Animation( null );
 	private final AnimationsDef.AnimationDef def;
 	private final Map< Integer, List< Runnable > > callbacks = new HashMap<>();
 	private int ticksLeft;
@@ -55,7 +56,7 @@ public class Animation {
 
 			Vector3f position = this.lerp( bone.positions, duration, ageInTicks );
 			modelPart.x += position.x;
-			modelPart.y += position.y;
+			modelPart.y -= position.y;
 			modelPart.z += position.z;
 
 			Vector3f scale = this.lerp( bone.scales, duration, ageInTicks );
@@ -89,13 +90,19 @@ public class Animation {
 	}
 
 	@OnlyIn( Dist.CLIENT )
-	private Vector3f lerp( TreeMap< Float, AnimationsDef.VectorDef > vectors, float duration, float ageInTicks ) {
+	private Vector3f lerp( TreeMap< Float, ? extends AnimationsDef.VectorDef > vectors, float duration, float ageInTicks ) {
 		if( vectors.isEmpty() ) {
 			return new Vector3f( 0.0f, 0.0f, 0.0f );
 		}
 
-		Map.Entry< Float, AnimationsDef.VectorDef > current = vectors.floorEntry( duration );
-		Map.Entry< Float, AnimationsDef.VectorDef > next = vectors.ceilingEntry( duration );
+		Map.Entry< Float, ? extends AnimationsDef.VectorDef > current = vectors.floorEntry( duration );
+		Map.Entry< Float, ? extends AnimationsDef.VectorDef > next = vectors.ceilingEntry( duration );
+		if( current == null ) {
+			current = next;
+		} else if( next == null ) {
+			next = current;
+		}
+
 		if( current.getValue() != next.getValue() ) {
 			float ratio = ( float )( duration + ( ageInTicks % 1.0f ) * TimeHelper.toSeconds( 1 ) - current.getKey() ) / ( next.getKey() - current.getKey() );
 			ratio = next.getValue().easing.apply( ratio );
@@ -116,6 +123,6 @@ public class Animation {
 
 	Animation( AnimationsDef.AnimationDef def ) {
 		this.def = def;
-		this.ticksLeft = def.ticks;
+		this.ticksLeft = def != null ? def.ticks : 1;
 	}
 }

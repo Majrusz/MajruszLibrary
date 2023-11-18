@@ -30,6 +30,7 @@ public class ModelParts {
 			} else {
 				modelPart.setRotation( 0.0f, 0.0f, 0.0f );
 			}
+			modelPart.xScale = modelPart.yScale = modelPart.zScale = 1.0f;
 		} );
 	}
 

@@ -15,6 +15,10 @@ public interface IAnimableEntity {
 	Level level();
 
 	default Animation playAnimation( String name, int trackIdx ) {
+		if( this.getAnimationsDef() == null ) {
+			return Animation.INVALID;
+		}
+
 		if( this.level() instanceof ServerLevel ) {
 			MajruszLibrary.ENTITY_ANIMATION.sendToClients( new EntityHelper.EntityAnimation( this.getId(), name, trackIdx ) );
 		}

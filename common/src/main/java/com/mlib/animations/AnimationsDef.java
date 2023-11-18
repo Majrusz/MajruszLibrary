@@ -23,12 +23,16 @@ public class AnimationsDef {
 			.defineCustomMap( "bones", s->s.bones, ( s, v )->s.bones = v, BoneDef::new );
 
 		Serializables.get( BoneDef.class )
-			.defineCustomMap( "rotation", BoneDef::getRotations, BoneDef::setRotations, VectorDef::new )
+			.defineCustomMap( "rotation", BoneDef::getRotations, BoneDef::setRotations, RotationDef::new )
 			.defineCustomMap( "position", BoneDef::getPositions, BoneDef::setPositions, VectorDef::new )
 			.defineCustomMap( "scale", BoneDef::getScales, BoneDef::setScales, VectorDef::new );
 
-		Serializables.get( VectorDef.class )
+		Serializables.get( RotationDef.class )
 			.defineFloatList( "vector", s->Animation.toRadians3d( s.vector ), ( s, v )->s.vector = Animation.toRadians3d( v ) )
+			.defineEnum( "easing", s->s.easing, ( s, v )->s.easing = v, Easing::values );
+
+		Serializables.get( VectorDef.class )
+			.defineFloatList( "vector", s->Animation.to3d( s.vector ), ( s, v )->s.vector = Animation.to3d( v ) )
 			.defineEnum( "easing", s->s.easing, ( s, v )->s.easing = v, Easing::values );
 	}
 
@@ -39,11 +43,11 @@ public class AnimationsDef {
 	}
 
 	public static class BoneDef {
-		public TreeMap< Float, VectorDef > rotations = new TreeMap<>();
+		public TreeMap< Float, RotationDef > rotations = new TreeMap<>();
 		public TreeMap< Float, VectorDef > positions = new TreeMap<>();
 		public TreeMap< Float, VectorDef > scales = new TreeMap<>();
 
-		void setRotations( Map< String, VectorDef > rotations ) {
+		void setRotations( Map< String, RotationDef > rotations ) {
 			this.rotations = CollectionHelper.mapKey( rotations, Float::parseFloat, TreeMap::new );
 		}
 
@@ -55,7 +59,7 @@ public class AnimationsDef {
 			this.scales = CollectionHelper.mapKey( rotations, Float::parseFloat, TreeMap::new );
 		}
 
-		Map< String, VectorDef > getRotations() {
+		Map< String, RotationDef > getRotations() {
 			return CollectionHelper.mapKey( this.rotations, Object::toString, HashMap::new );
 		}
 
@@ -67,6 +71,8 @@ public class AnimationsDef {
 			return CollectionHelper.mapKey( this.scales, Object::toString, HashMap::new );
 		}
 	}
+
+	public static class RotationDef extends VectorDef {}
 
 	public static class VectorDef {
 		public Vector3f vector = new Vector3f( 0.0f, 0.0f, 0.0f );
