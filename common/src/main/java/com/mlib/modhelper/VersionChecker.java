@@ -1,9 +1,9 @@
 package com.mlib.modhelper;
 
 import com.google.gson.*;
-import com.mlib.annotation.AutoInstance;
+import com.mlib.MajruszLibrary;
 import com.mlib.contexts.OnPlayerLoggedIn;
-import com.mlib.data.Config;
+import com.mlib.data.Reader;
 import com.mlib.data.Serializables;
 import com.mlib.platform.Integration;
 import com.mlib.platform.Side;
@@ -14,7 +14,6 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.storage.loot.Deserializers;
 
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URL;
 import java.util.*;
 import java.util.function.Supplier;
@@ -22,15 +21,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class VersionChecker {
-	private static final Pattern VERSION = Pattern.compile( "(\\d+)\\.(\\d+)\\.(\\d+)" );
+	static final Pattern VERSION = Pattern.compile( "(\\d+)\\.(\\d+)\\.(\\d+)" );
+	static final List< Component > COMPONENTS = Collections.synchronizedList( new ArrayList<>() );
+	static boolean IS_ENABLED = true;
 	final ModHelper helper;
 	final Gson gson;
-	final Data data = new Data();
+	String currentVersion;
+	String latestVersion;
+	String homepage;
+	Map< String, String > versions = new HashMap<>();
+
+	static {
+		Serializables.getStatic( MajruszLibrary.Config.class )
+			.define( "send_new_available_updates_message", Reader.bool(), ()->IS_ENABLED, v->IS_ENABLED = v );
+
+		Serializables.get( VersionChecker.class )
+			.define( "homepage", Reader.string(), s->s.homepage, ( s, v )->s.homepage = v )
+			.define( "promos", Reader.map( Reader.string() ), s->s.versions, ( s, v )->s.versions = v );
+
+		OnPlayerLoggedIn.listen( VersionChecker::sendUpdateMessages )
+			.addCondition( data->IS_ENABLED )
+			.addCondition( data->COMPONENTS.size() > 0 )
+			.addCondition( data->Side.isLogicalServer() && !Side.isDedicatedServer() || data.player.hasPermissions( 4 ) );
+	}
 
 	public VersionChecker( ModHelper helper ) {
 		this.helper = helper;
 		this.gson = Deserializers.createFunctionSerializer()
-			.registerTypeAdapter( Data.class, new TypeAdapter<>( ()->this.data ) )
+			.registerTypeAdapter( VersionChecker.class, new TypeAdapter<>( ()->this ) )
 			.setPrettyPrinting()
 			.create();
 	}
@@ -49,39 +67,39 @@ class VersionChecker {
 		}
 
 		try {
-			Reader reader = new InputStreamReader( update.get().openStream() );
-			this.gson.fromJson( reader, Data.class );
+			java.io.Reader reader = new InputStreamReader( update.get().openStream() );
+			this.gson.fromJson( reader, VersionChecker.class );
 		} catch( Exception exception ) {
 			this.helper.logError( "Failed to retrieve the latest mod versions from %s".formatted( update.get() ) );
 			return;
 		}
 
 		String id = "%s-recommended".formatted( Integration.getMinecraftVersion() );
-		if( !this.data.versions.containsKey( id ) ) {
+		if( !this.versions.containsKey( id ) ) {
 			return;
 		}
 
-		this.data.currentVersion = matcher.group();
-		this.data.latestVersion = this.data.versions.get( id );
+		this.currentVersion = matcher.group();
+		this.latestVersion = this.versions.get( id );
 		if( !this.isUpdateAvailable() ) {
 			return;
 		}
 
-		MutableComponent name = TextHelper.literal( " [%s %s]", Integration.getName( this.helper.getModId() ), this.data.latestVersion )
+		MutableComponent name = TextHelper.literal( " [%s %s]", Integration.getName( this.helper.getModId() ), this.latestVersion )
 			.withStyle( ChatFormatting.YELLOW )
-			.withStyle( TextHelper.createURL( this.data.homepage ) );
+			.withStyle( TextHelper.createURL( this.homepage ) );
 
-		MutableComponent versions = TextHelper.translatable( "mlib.update_versions", name, this.data.currentVersion )
+		MutableComponent versions = TextHelper.translatable( "mlib.update_versions", name, this.currentVersion )
 			.withStyle( ChatFormatting.GRAY );
 
-		Sender.COMPONENTS.add( versions );
+		COMPONENTS.add( versions );
 	}
 
 	private boolean isUpdateAvailable() {
-		Matcher current = VERSION.matcher( this.data.currentVersion );
-		Matcher latest = VERSION.matcher( this.data.latestVersion );
+		Matcher current = VERSION.matcher( this.currentVersion );
+		Matcher latest = VERSION.matcher( this.latestVersion );
 		if( !current.find() || !latest.find() ) {
-			this.helper.logError( "Not supported version format (current: %s, latest: %s)".formatted( this.data.currentVersion, this.data.latestVersion ) );
+			this.helper.logError( "Not supported version format (current: %s, latest: %s)".formatted( this.currentVersion, this.latestVersion ) );
 			return false;
 		}
 
@@ -97,38 +115,9 @@ class VersionChecker {
 			|| latestMajor == currentMajor && latestMinor == currentMinor && latestPatch > currentPatch;
 	}
 
-	@AutoInstance
-	public static class Sender {
-		static final List< Component > COMPONENTS = Collections.synchronizedList( new ArrayList<>() );
-		private boolean isEnabled = true;
-
-		public Sender() {
-			OnPlayerLoggedIn.listen( this::sendUpdateMessages )
-				.addCondition( data->this.isEnabled )
-				.addCondition( data->COMPONENTS.size() > 0 )
-				.addCondition( data->Side.isLogicalServer() && !Side.isDedicatedServer() || data.player.hasPermissions( 4 ) );
-
-			Serializables.get( Config.class )
-				.defineBoolean( "send_new_available_updates_message", s->this.isEnabled, ( s, x )->this.isEnabled = x );
-		}
-
-		private void sendUpdateMessages( OnPlayerLoggedIn data ) {
-			data.player.sendSystemMessage( TextHelper.translatable( "mlib.update_available" ) );
-			COMPONENTS.forEach( data.player::sendSystemMessage );
-		}
-	}
-
-	private static class Data {
-		static {
-			Serializables.get( Data.class )
-				.defineString( "homepage", s->s.homepage, ( s, v )->s.homepage = v )
-				.defineStringMap( "promos", s->s.versions, ( s, v )->s.versions = v );
-		}
-
-		String currentVersion;
-		String latestVersion;
-		String homepage;
-		Map< String, String > versions = new HashMap<>();
+	private static void sendUpdateMessages( OnPlayerLoggedIn data ) {
+		data.player.sendSystemMessage( TextHelper.translatable( "mlib.update_available" ) );
+		COMPONENTS.forEach( data.player::sendSystemMessage );
 	}
 
 	private record TypeAdapter< Type >( Supplier< Type > instance ) implements JsonDeserializer< Type > {

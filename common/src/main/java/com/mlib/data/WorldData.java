@@ -17,9 +17,7 @@ public class WorldData extends SavedData {
 	}
 
 	public WorldData load( CompoundTag tag ) {
-		Serializables.read( this, tag );
-
-		return this;
+		return Serializables.read( this, tag );
 	}
 
 	public WorldData named( String name ) {

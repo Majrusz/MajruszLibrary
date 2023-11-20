@@ -13,23 +13,23 @@ class ReaderString implements IReader< String > {
 	}
 
 	@Override
-	public String readJson( JsonElement json ) {
-		return json.getAsString();
-	}
-
-	@Override
 	public void writeBuffer( FriendlyByteBuf buffer, String value ) {
 		buffer.writeUtf( value );
 	}
 
 	@Override
-	public String readBuffer( FriendlyByteBuf buffer ) {
-		return buffer.readUtf();
+	public Tag writeTag( String value ) {
+		return StringTag.valueOf( value );
 	}
 
 	@Override
-	public Tag writeTag( String value ) {
-		return StringTag.valueOf( value );
+	public String readJson( JsonElement json ) {
+		return json.getAsString();
+	}
+
+	@Override
+	public String readBuffer( FriendlyByteBuf buffer ) {
+		return buffer.readUtf();
 	}
 
 	@Override

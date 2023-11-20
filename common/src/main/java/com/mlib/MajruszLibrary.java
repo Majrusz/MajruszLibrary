@@ -1,7 +1,7 @@
 package com.mlib;
 
 import com.mlib.command.EnumArgument;
-import com.mlib.data.Config;
+import com.mlib.data.Serializables;
 import com.mlib.entity.EntityHelper;
 import com.mlib.modhelper.ModHelper;
 import com.mlib.network.NetworkObject;
@@ -15,7 +15,9 @@ public class MajruszLibrary {
 	public static final ModHelper HELPER = ModHelper.create( MOD_ID );
 
 	// Configs
-	public static final Config CONFIG = HELPER.config( name->new Config( name ) {} ).named( "majruszlibrary" ).autoSync().create();
+	static {
+		HELPER.config( Config.class ).named( "majruszlibrary" ).autoSync().create();
+	}
 
 	// Registry Groups
 	public static final RegistryGroup< ArgumentTypeInfo< ?, ? > > ARGUMENT_TYPES = HELPER.create( BuiltInRegistries.COMMAND_ARGUMENT_TYPE );
@@ -29,4 +31,10 @@ public class MajruszLibrary {
 	public static final NetworkObject< EntityHelper.EntityInvisible > ENTITY_INVISIBLE = HELPER.create( "entity_invisible", EntityHelper.EntityInvisible.class );
 
 	private MajruszLibrary() {}
+
+	public static class Config {
+		static {
+			Serializables.getStatic( Config.class );
+		}
+	}
 }

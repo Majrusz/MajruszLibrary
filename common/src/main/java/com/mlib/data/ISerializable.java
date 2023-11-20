@@ -5,15 +5,15 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 
 public interface ISerializable< Type > {
-	void write( Type object, JsonElement json );
+	< JsonType extends JsonElement > JsonType writeJson( Type value, JsonType json );
 
-	void read( Type object, JsonElement json );
+	FriendlyByteBuf writeBuffer( Type value, FriendlyByteBuf buffer );
 
-	void write( Type object, FriendlyByteBuf buffer );
+	< TagType extends Tag > TagType writeTag( Type value, TagType tag );
 
-	void read( Type object, FriendlyByteBuf buffer );
+	Type readJson( Type value, JsonElement json );
 
-	void write( Type object, Tag tag );
+	Type readBuffer( Type value, FriendlyByteBuf buffer );
 
-	void read( Type object, Tag tag );
+	Type readTag( Type value, Tag tag );
 }

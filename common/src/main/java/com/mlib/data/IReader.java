@@ -4,16 +4,16 @@ import com.google.gson.JsonElement;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 
-interface IReader< Type > {
+public interface IReader< Type > {
 	JsonElement writeJson( Type value );
-
-	Type readJson( JsonElement json );
 
 	void writeBuffer( FriendlyByteBuf buffer, Type value );
 
-	Type readBuffer( FriendlyByteBuf buffer );
-
 	Tag writeTag( Type value );
+
+	Type readJson( JsonElement json );
+
+	Type readBuffer( FriendlyByteBuf buffer );
 
 	Type readTag( Tag tag );
 }

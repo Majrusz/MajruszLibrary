@@ -14,23 +14,23 @@ class ReaderInteger implements IReader< Integer > {
 	}
 
 	@Override
-	public Integer readJson( JsonElement json ) {
-		return json.getAsInt();
-	}
-
-	@Override
 	public void writeBuffer( FriendlyByteBuf buffer, Integer value ) {
 		buffer.writeInt( value );
 	}
 
 	@Override
-	public Integer readBuffer( FriendlyByteBuf buffer ) {
-		return buffer.readInt();
+	public Tag writeTag( Integer value ) {
+		return IntTag.valueOf( value );
 	}
 
 	@Override
-	public Tag writeTag( Integer value ) {
-		return IntTag.valueOf( value );
+	public Integer readJson( JsonElement json ) {
+		return json.getAsInt();
+	}
+
+	@Override
+	public Integer readBuffer( FriendlyByteBuf buffer ) {
+		return buffer.readInt();
 	}
 
 	@Override

@@ -1,8 +1,9 @@
 package com.mlib.item;
 
+import com.mlib.data.Reader;
 import com.mlib.data.Serializables;
 import com.mlib.registry.Registries;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,7 +12,6 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 
 public class EnchantmentHelper {
@@ -100,13 +100,16 @@ public class EnchantmentHelper {
 	}
 
 	public static EnchantmentsDef read( ItemStack itemStack ) {
-		return Serializables.read( new EnchantmentsDef(), Optional.ofNullable( itemStack.getTag() ).orElse( new CompoundTag() ) );
+		EnchantmentsDef enchantmentsDef = new EnchantmentsDef();
+		Tag tag = itemStack.getTag();
+
+		return tag != null ? Serializables.read( enchantmentsDef, tag ) : enchantmentsDef;
 	}
 
 	public static class EnchantmentsDef {
 		static {
 			Serializables.get( EnchantmentsDef.class )
-				.defineCustomList( "Enchantments", s->s.enchantments, ( s, v )->s.enchantments = v, EnchantmentDef::new );
+				.define( "Enchantments", Reader.list( Reader.custom( EnchantmentDef::new ) ), s->s.enchantments, ( s, v )->s.enchantments = v );
 		}
 
 		public List< EnchantmentDef > enchantments = new ArrayList<>();
@@ -115,8 +118,8 @@ public class EnchantmentHelper {
 	public static class EnchantmentDef {
 		static {
 			Serializables.get( EnchantmentDef.class )
-				.defineLocation( "id", s->s.id, ( s, v )->s.id = v )
-				.defineInteger( "lvl", s->s.level, ( s, v )->s.level = v );
+				.define( "id", Reader.location(), s->s.id, ( s, v )->s.id = v )
+				.define( "lvl", Reader.integer(), s->s.level, ( s, v )->s.level = v );
 		}
 
 		public ResourceLocation id;

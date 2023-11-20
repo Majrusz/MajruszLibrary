@@ -13,23 +13,23 @@ abstract class ReaderStringCustom< Type > implements IReader< Type > {
 	}
 
 	@Override
-	public Type readJson( JsonElement json ) {
-		return this.convert( json.getAsString() );
-	}
-
-	@Override
 	public void writeBuffer( FriendlyByteBuf buffer, Type value ) {
 		buffer.writeUtf( this.convert( value ) );
 	}
 
 	@Override
-	public Type readBuffer( FriendlyByteBuf buffer ) {
-		return this.convert( buffer.readUtf() );
+	public Tag writeTag( Type value ) {
+		return StringTag.valueOf( this.convert( value ) );
 	}
 
 	@Override
-	public Tag writeTag( Type value ) {
-		return StringTag.valueOf( this.convert( value ) );
+	public Type readJson( JsonElement json ) {
+		return this.convert( json.getAsString() );
+	}
+
+	@Override
+	public Type readBuffer( FriendlyByteBuf buffer ) {
+		return this.convert( buffer.readUtf() );
 	}
 
 	@Override

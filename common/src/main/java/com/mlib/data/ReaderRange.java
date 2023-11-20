@@ -24,6 +24,21 @@ class ReaderRange< Type extends Number & Comparable< Type > > implements IReader
 	}
 
 	@Override
+	public void writeBuffer( FriendlyByteBuf buffer, Range< Type > value ) {
+		this.reader.writeBuffer( buffer, value.from );
+		this.reader.writeBuffer( buffer, value.to );
+	}
+
+	@Override
+	public Tag writeTag( Range< Type > value ) {
+		CompoundTag compoundTag = new CompoundTag();
+		compoundTag.put( "min", this.reader.writeTag( value.from ) );
+		compoundTag.put( "max", this.reader.writeTag( value.to ) );
+
+		return compoundTag;
+	}
+
+	@Override
 	public Range< Type > readJson( JsonElement json ) {
 		JsonObject jsonObject = json.getAsJsonObject();
 
@@ -34,26 +49,11 @@ class ReaderRange< Type extends Number & Comparable< Type > > implements IReader
 	}
 
 	@Override
-	public void writeBuffer( FriendlyByteBuf buffer, Range< Type > value ) {
-		this.reader.writeBuffer( buffer, value.from );
-		this.reader.writeBuffer( buffer, value.to );
-	}
-
-	@Override
 	public Range< Type > readBuffer( FriendlyByteBuf buffer ) {
 		return Range.validated(
 			this.reader.readBuffer( buffer ),
 			this.reader.readBuffer( buffer )
 		);
-	}
-
-	@Override
-	public Tag writeTag( Range< Type > value ) {
-		CompoundTag compoundTag = new CompoundTag();
-		compoundTag.put( "min", this.reader.writeTag( value.from ) );
-		compoundTag.put( "max", this.reader.writeTag( value.to ) );
-
-		return compoundTag;
 	}
 
 	@Override
