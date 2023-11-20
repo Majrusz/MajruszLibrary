@@ -38,8 +38,8 @@ project(':common') {
         filter {
             String line ->  line.replaceAll('@OnlyIn', '@Environment')
                     .replaceAll('Dist.CLIENT', 'EnvType.CLIENT')
-                    .replaceAll('com.mlib.annotation.Dist', 'net.fabricmc.api.EnvType')
-                    .replaceAll('com.mlib.annotation.OnlyIn', 'net.fabricmc.api.Environment')
+                    .replaceAll('com.majruszlibrary.annotation.Dist', 'net.fabricmc.api.EnvType')
+                    .replaceAll('com.majruszlibrary.annotation.OnlyIn', 'net.fabricmc.api.Environment')
         }
     }
 

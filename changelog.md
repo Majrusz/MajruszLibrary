@@ -1,1 +1,2 @@
-- optimized custom commands size by ~9KB
+- changed mod id from `mlib` to `majruszlibrary` (suggested by @ChiefArug)
+- optimized and reworked multiple features
