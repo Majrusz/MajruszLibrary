@@ -14,23 +14,23 @@ class ReaderFloat implements IReader< Float > {
 	}
 
 	@Override
-	public Float readJson( JsonElement json ) {
-		return json.getAsFloat();
-	}
-
-	@Override
 	public void writeBuffer( FriendlyByteBuf buffer, Float value ) {
 		buffer.writeFloat( value );
 	}
 
 	@Override
-	public Float readBuffer( FriendlyByteBuf buffer ) {
-		return buffer.readFloat();
+	public Tag writeTag( Float value ) {
+		return FloatTag.valueOf( value );
 	}
 
 	@Override
-	public Tag writeTag( Float value ) {
-		return FloatTag.valueOf( value );
+	public Float readJson( JsonElement json ) {
+		return json.getAsFloat();
+	}
+
+	@Override
+	public Float readBuffer( FriendlyByteBuf buffer ) {
+		return buffer.readFloat();
 	}
 
 	@Override

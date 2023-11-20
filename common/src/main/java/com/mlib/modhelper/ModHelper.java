@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class ModHelper {
@@ -49,12 +48,8 @@ public class ModHelper {
 		return this.registryHandler.create( registry );
 	}
 
-	public < Type > NetworkObject< Type > create( String id, Class< Type > clazz, Supplier< Type > instance ) {
-		return this.networkHandler.create( id, clazz, instance );
-	}
-
 	public < Type > NetworkObject< Type > create( String id, Class< Type > clazz ) {
-		return this.create( id, clazz, ()->{
+		return this.networkHandler.create( id, clazz, ()->{
 			try {
 				return clazz.getConstructor().newInstance();
 			} catch( Exception exception ) {
@@ -67,8 +62,8 @@ public class ModHelper {
 		this.registryHandler.create( clazz, consumer );
 	}
 
-	public < Type extends Config > Config.Builder< Type > config( Function< String, Type > instance ) {
-		return new Config.Builder<>( this, instance );
+	public Config.Builder< ? > config( Class< ? > clazz ) {
+		return new Config.Builder<>( this, clazz );
 	}
 
 	public < Type extends WorldData > Type saved( Supplier< Type > instance, String id ) {

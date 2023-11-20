@@ -13,23 +13,23 @@ class ReaderBoolean implements IReader< Boolean > {
 	}
 
 	@Override
-	public Boolean readJson( JsonElement json ) {
-		return json.getAsBoolean();
-	}
-
-	@Override
 	public void writeBuffer( FriendlyByteBuf buffer, Boolean value ) {
 		buffer.writeBoolean( value );
 	}
 
 	@Override
-	public Boolean readBuffer( FriendlyByteBuf buffer ) {
-		return buffer.readBoolean();
+	public Tag writeTag( Boolean value ) {
+		return ByteTag.valueOf( value );
 	}
 
 	@Override
-	public Tag writeTag( Boolean value ) {
-		return ByteTag.valueOf( value );
+	public Boolean readJson( JsonElement json ) {
+		return json.getAsBoolean();
+	}
+
+	@Override
+	public Boolean readBuffer( FriendlyByteBuf buffer ) {
+		return buffer.readBoolean();
 	}
 
 	@Override

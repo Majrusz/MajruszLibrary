@@ -1,6 +1,7 @@
 package com.mlib.animations;
 
 import com.mlib.collection.CollectionHelper;
+import com.mlib.data.Reader;
 import com.mlib.data.Serializables;
 import com.mlib.time.TimeHelper;
 import org.joml.Vector3f;
@@ -15,25 +16,25 @@ public class AnimationsDef {
 
 	static {
 		Serializables.get( AnimationsDef.class )
-			.defineCustomMap( "animations", s->s.animations, ( s, v )->s.animations = v, AnimationDef::new );
+			.define( "animations", Reader.map( Reader.custom( AnimationDef::new ) ), s->s.animations, ( s, v )->s.animations = v );
 
 		Serializables.get( AnimationDef.class )
-			.defineBoolean( "loop", s->s.isLooped, ( s, v )->s.isLooped = v )
-			.defineFloat( "animation_length", s->( float )TimeHelper.toSeconds( s.ticks ), ( s, v )->s.ticks = TimeHelper.toTicks( v ) )
-			.defineCustomMap( "bones", s->s.bones, ( s, v )->s.bones = v, BoneDef::new );
+			.define( "loop", Reader.bool(), s->s.isLooped, ( s, v )->s.isLooped = v )
+			.define( "animation_length", Reader.number(), s->( float )TimeHelper.toSeconds( s.ticks ), ( s, v )->s.ticks = TimeHelper.toTicks( v ) )
+			.define( "bones", Reader.map( Reader.custom( BoneDef::new ) ), s->s.bones, ( s, v )->s.bones = v );
 
 		Serializables.get( BoneDef.class )
-			.defineCustomMap( "rotation", BoneDef::getRotations, BoneDef::setRotations, RotationDef::new )
-			.defineCustomMap( "position", BoneDef::getPositions, BoneDef::setPositions, VectorDef::new )
-			.defineCustomMap( "scale", BoneDef::getScales, BoneDef::setScales, VectorDef::new );
+			.define( "rotation", Reader.map( Reader.custom( RotationDef::new ) ), BoneDef::getRotations, BoneDef::setRotations )
+			.define( "position", Reader.map( Reader.custom( VectorDef::new ) ), BoneDef::getPositions, BoneDef::setPositions )
+			.define( "scale", Reader.map( Reader.custom( VectorDef::new ) ), BoneDef::getScales, BoneDef::setScales );
 
 		Serializables.get( RotationDef.class )
-			.defineFloatList( "vector", s->Animation.toRadians3d( s.vector ), ( s, v )->s.vector = Animation.toRadians3d( v ) )
-			.defineEnum( "easing", s->s.easing, ( s, v )->s.easing = v, Easing::values );
+			.define( "vector", Reader.list( Reader.number() ), s->Animation.toRadians3d( s.vector ), ( s, v )->s.vector = Animation.toRadians3d( v ) )
+			.define( "easing", Reader.enumeration( Easing::values ), s->s.easing, ( s, v )->s.easing = v );
 
 		Serializables.get( VectorDef.class )
-			.defineFloatList( "vector", s->Animation.to3d( s.vector ), ( s, v )->s.vector = Animation.to3d( v ) )
-			.defineEnum( "easing", s->s.easing, ( s, v )->s.easing = v, Easing::values );
+			.define( "vector", Reader.list( Reader.number() ), s->Animation.to3d( s.vector ), ( s, v )->s.vector = Animation.to3d( v ) )
+			.define( "easing", Reader.enumeration( Easing::values ), s->s.easing, ( s, v )->s.easing = v );
 	}
 
 	public static class AnimationDef {

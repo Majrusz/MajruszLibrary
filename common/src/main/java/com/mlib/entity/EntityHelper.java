@@ -4,6 +4,7 @@ import com.mlib.MajruszLibrary;
 import com.mlib.animations.IAnimableEntity;
 import com.mlib.annotation.Dist;
 import com.mlib.annotation.OnlyIn;
+import com.mlib.data.Reader;
 import com.mlib.data.Serializables;
 import com.mlib.emitter.ParticleEmitter;
 import com.mlib.emitter.SoundEmitter;
@@ -234,9 +235,9 @@ public class EntityHelper {
 
 		static {
 			Serializables.get( EntityAnimation.class )
-				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
-				.defineString( "name", s->s.name, ( s, v )->s.name = v )
-				.defineInteger( "trackIdx", s->s.trackIdx, ( s, v )->s.trackIdx = v );
+				.define( "id", Reader.integer(), s->s.entityId, ( s, v )->s.entityId = v )
+				.define( "name", Reader.string(), s->s.name, ( s, v )->s.name = v )
+				.define( "trackIdx", Reader.integer(), s->s.trackIdx, ( s, v )->s.trackIdx = v );
 
 			Side.runOnClient( ()->()->MajruszLibrary.ENTITY_ANIMATION.addClientCallback( EntityAnimation::onClient ) );
 		}
@@ -267,8 +268,8 @@ public class EntityHelper {
 
 		static {
 			Serializables.get( EntityGlow.class )
-				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
-				.defineInteger( "ticks", s->s.ticks, ( s, v )->s.ticks = v );
+				.define( "id", Reader.integer(), s->s.entityId, ( s, v )->s.entityId = v )
+				.define( "ticks", Reader.integer(), s->s.ticks, ( s, v )->s.ticks = v );
 
 			Side.runOnClient( ()->()->MajruszLibrary.ENTITY_GLOW.addClientCallback( EntityGlow::onClient ) );
 		}
@@ -298,8 +299,8 @@ public class EntityHelper {
 
 		static {
 			Serializables.get( EntityInvisible.class )
-				.defineInteger( "id", s->s.entityId, ( s, v )->s.entityId = v )
-				.defineInteger( "ticks", s->s.ticks, ( s, v )->s.ticks = v );
+				.define( "id", Reader.integer(), s->s.entityId, ( s, v )->s.entityId = v )
+				.define( "ticks", Reader.integer(), s->s.ticks, ( s, v )->s.ticks = v );
 
 			Side.runOnClient( ()->()->MajruszLibrary.ENTITY_INVISIBLE.addClientCallback( EntityInvisible::onClient ) );
 		}

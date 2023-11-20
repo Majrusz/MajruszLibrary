@@ -1,6 +1,5 @@
 package com.mlib.particles;
 
-import com.mlib.data.Serializable;
 import com.mlib.data.Serializables;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -15,13 +14,10 @@ import net.minecraft.network.FriendlyByteBuf;
 import java.util.function.Supplier;
 
 public class CustomParticleType< Type extends ParticleOptions > extends ParticleType< Type > {
-	private final Serializable< Type > serializable;
 	private final Codec< Type > codec;
 
-	public CustomParticleType( Class< Type > clazz, Supplier< Type > instance ) {
+	public CustomParticleType( Supplier< Type > instance ) {
 		super( true, new ParticleOptions.Deserializer<>() {
-			final Serializable< Type > serializable = Serializables.get( clazz );
-
 			@Override
 			public Type fromCommand( ParticleType< Type > type, StringReader string ) throws CommandSyntaxException {
 				return instance.get();
@@ -29,14 +25,10 @@ public class CustomParticleType< Type extends ParticleOptions > extends Particle
 
 			@Override
 			public Type fromNetwork( ParticleType< Type > type, FriendlyByteBuf buffer ) {
-				Type object = instance.get();
-				this.serializable.read( object, buffer );
-
-				return object;
+				return Serializables.read( instance.get(), buffer );
 			}
 		} );
 
-		this.serializable = Serializables.get( clazz );
 		this.codec = new Codec<>() {
 			@Override
 			public < T > DataResult< Pair< Type, T > > decode( DynamicOps< T > ops, T input ) {

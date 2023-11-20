@@ -2,6 +2,7 @@ package com.mlib.animations;
 
 import com.mlib.annotation.Dist;
 import com.mlib.annotation.OnlyIn;
+import com.mlib.data.Reader;
 import com.mlib.data.Serializables;
 import com.mlib.math.AnyPos;
 import net.minecraft.client.model.geom.PartPose;
@@ -19,28 +20,28 @@ public class ModelDef {
 
 	static {
 		Serializables.get( ModelDef.class )
-			.defineCustomList( "minecraft:geometry", s->s.geometries, ( s, v )->s.geometries = v, GeometryDef::new );
+			.define( "minecraft:geometry", Reader.list( Reader.custom( GeometryDef::new ) ), s->s.geometries, ( s, v )->s.geometries = v );
 
 		Serializables.get( GeometryDef.class )
-			.defineCustom( "description", s->s.description, ( s, v )->s.description = v, DescriptionDef::new )
-			.defineCustomList( "bones", s->s.bones, ( s, v )->s.bones = v, BoneDef::new );
+			.define( "description", Reader.custom( DescriptionDef::new ), s->s.description, ( s, v )->s.description = v )
+			.define( "bones", Reader.list( Reader.custom( BoneDef::new ) ), s->s.bones, ( s, v )->s.bones = v );
 
 		Serializables.get( DescriptionDef.class )
-			.defineInteger( "texture_width", s->s.width, ( s, v )->s.width = v )
-			.defineInteger( "texture_height", s->s.height, ( s, v )->s.height = v );
+			.define( "texture_width", Reader.integer(), s->s.width, ( s, v )->s.width = v )
+			.define( "texture_height", Reader.integer(), s->s.height, ( s, v )->s.height = v );
 
 		Serializables.get( BoneDef.class )
-			.defineString( "name", s->s.name, ( s, v )->s.name = v )
-			.defineString( "parent", s->s.parent, ( s, v )->s.parent = v )
-			.defineFloatList( "pivot", s->Animation.to3d( s.globalPivot ), ( s, v )->s.globalPivot = Animation.to3d( v ) )
-			.defineFloatList( "rotation", s->Animation.toRadians3d( s.rotation ), ( s, v )->s.rotation = Animation.toRadians3d( v ) )
-			.defineCustomList( "cubes", s->s.cubes, ( s, v )->s.cubes = v, CubeDef::new );
+			.define( "name", Reader.string(), s->s.name, ( s, v )->s.name = v )
+			.define( "parent", Reader.string(), s->s.parent, ( s, v )->s.parent = v )
+			.define( "pivot", Reader.list( Reader.number() ), s->Animation.to3d( s.globalPivot ), ( s, v )->s.globalPivot = Animation.to3d( v ) )
+			.define( "rotation", Reader.list( Reader.number() ), s->Animation.toRadians3d( s.rotation ), ( s, v )->s.rotation = Animation.toRadians3d( v ) )
+			.define( "cubes", Reader.list( Reader.custom( CubeDef::new ) ), s->s.cubes, ( s, v )->s.cubes = v );
 
 		Serializables.get( CubeDef.class )
-			.defineFloatList( "origin", s->Animation.to3d( s.origin ), ( s, v )->s.origin = Animation.to3d( v ) )
-			.defineFloatList( "size", s->Animation.to3d( s.size ), ( s, v )->s.size = Animation.to3d( v ) )
-			.defineFloat( "inflate", s->s.inflate, ( s, v )->s.inflate = v )
-			.defineIntegerList( "uv", s->Animation.to2d( s.uv ), ( s, v )->s.uv = Animation.to2d( v ) );
+			.define( "origin", Reader.list( Reader.number() ), s->Animation.to3d( s.origin ), ( s, v )->s.origin = Animation.to3d( v ) )
+			.define( "size", Reader.list( Reader.number() ), s->Animation.to3d( s.size ), ( s, v )->s.size = Animation.to3d( v ) )
+			.define( "inflate", Reader.number(), s->s.inflate, ( s, v )->s.inflate = v )
+			.define( "uv", Reader.list( Reader.integer() ), s->Animation.to2d( s.uv ), ( s, v )->s.uv = Animation.to2d( v ) );
 	}
 
 	@OnlyIn( Dist.CLIENT )

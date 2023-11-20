@@ -21,23 +21,23 @@ class ReaderCustom< Type > implements IReader< Type > {
 	}
 
 	@Override
-	public Type readJson( JsonElement json ) {
-		return Serializables.read( this.supplier.get(), json );
-	}
-
-	@Override
 	public void writeBuffer( FriendlyByteBuf buffer, Type value ) {
 		Serializables.write( value, buffer );
 	}
 
 	@Override
-	public Type readBuffer( FriendlyByteBuf buffer ) {
-		return Serializables.read( this.supplier.get(), buffer );
+	public Tag writeTag( Type value ) {
+		return Serializables.write( value, new CompoundTag() );
 	}
 
 	@Override
-	public Tag writeTag( Type value ) {
-		return Serializables.write( value, new CompoundTag() );
+	public Type readJson( JsonElement json ) {
+		return Serializables.read( this.supplier.get(), json );
+	}
+
+	@Override
+	public Type readBuffer( FriendlyByteBuf buffer ) {
+		return Serializables.read( this.supplier.get(), buffer );
 	}
 
 	@Override
