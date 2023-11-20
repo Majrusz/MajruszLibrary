@@ -4,6 +4,7 @@ import com.majruszlibrary.contexts.base.Context;
 import com.majruszlibrary.contexts.base.Contexts;
 import com.majruszlibrary.contexts.data.ICancellableData;
 import com.majruszlibrary.contexts.data.ILevelData;
+import com.majruszlibrary.contexts.data.IPositionData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class OnExploded implements ICancellableData, ILevelData {
+public class OnExploded implements ICancellableData, ILevelData, IPositionData {
 	public final Explosion explosion;
 	public final Level level;
 	public final Vec3 position;
@@ -50,6 +51,11 @@ public class OnExploded implements ICancellableData, ILevelData {
 	@Override
 	public Level getLevel() {
 		return this.level;
+	}
+
+	@Override
+	public Vec3 getPosition() {
+		return this.position;
 	}
 
 	public void filter( List< BlockPos > positions, List< Entity > entities ) {
