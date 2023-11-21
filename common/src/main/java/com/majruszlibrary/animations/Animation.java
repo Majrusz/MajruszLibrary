@@ -49,17 +49,17 @@ public class Animation {
 		this.def.bones.forEach( ( name, bone )->{
 			ModelPart modelPart = modelParts.get( name );
 
-			Vector3f rotation = this.lerp( bone.rotations, duration, ageInTicks );
+			Vector3f rotation = this.lerp( bone.rotations, duration, ageInTicks ).orElseGet( ()->new Vector3f( 0.0f, 0.0f, 0.0f ) );
 			modelPart.xRot += rotation.x;
 			modelPart.yRot += rotation.y;
 			modelPart.zRot += rotation.z;
 
-			Vector3f position = this.lerp( bone.positions, duration, ageInTicks );
+			Vector3f position = this.lerp( bone.positions, duration, ageInTicks ).orElseGet( ()->new Vector3f( 0.0f, 0.0f, 0.0f ) );
 			modelPart.x += position.x;
 			modelPart.y -= position.y;
 			modelPart.z += position.z;
 
-			Vector3f scale = this.lerp( bone.scales, duration, ageInTicks );
+			Vector3f scale = this.lerp( bone.scales, duration, ageInTicks ).orElseGet( ()->new Vector3f( 1.0f, 1.0f, 1.0f ) );
 			modelPart.xScale *= scale.x;
 			modelPart.yScale *= scale.y;
 			modelPart.zScale *= scale.z;
@@ -90,9 +90,9 @@ public class Animation {
 	}
 
 	@OnlyIn( Dist.CLIENT )
-	private Vector3f lerp( TreeMap< Float, ? extends AnimationsDef.VectorDef > vectors, float duration, float ageInTicks ) {
+	private Optional< Vector3f > lerp( TreeMap< Float, ? extends AnimationsDef.VectorDef > vectors, float duration, float ageInTicks ) {
 		if( vectors.isEmpty() ) {
-			return new Vector3f( 0.0f, 0.0f, 0.0f );
+			return Optional.empty();
 		}
 
 		Map.Entry< Float, ? extends AnimationsDef.VectorDef > current = vectors.floorEntry( duration );
@@ -107,17 +107,17 @@ public class Animation {
 			float ratio = ( float )( duration + ( ageInTicks % 1.0f ) * TimeHelper.toSeconds( 1 ) - current.getKey() ) / ( next.getKey() - current.getKey() );
 			ratio = next.getValue().easing.apply( ratio );
 
-			return new Vector3f(
+			return Optional.of( new Vector3f(
 				Mth.lerp( ratio, current.getValue().vector.x, next.getValue().vector.x ),
 				Mth.lerp( ratio, current.getValue().vector.y, next.getValue().vector.y ),
 				Mth.lerp( ratio, current.getValue().vector.z, next.getValue().vector.z )
-			);
+			) );
 		} else {
-			return new Vector3f(
+			return Optional.of( new Vector3f(
 				current.getValue().vector.x,
 				current.getValue().vector.y,
 				current.getValue().vector.z
-			);
+			) );
 		}
 	}
 
