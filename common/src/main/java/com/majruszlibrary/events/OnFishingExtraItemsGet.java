@@ -1,12 +1,12 @@
 package com.majruszlibrary.events;
 
 import com.majruszlibrary.annotation.AutoInstance;
+import com.majruszlibrary.entity.EntityHelper;
 import com.majruszlibrary.events.base.Condition;
 import com.majruszlibrary.events.base.Event;
 import com.majruszlibrary.events.base.Events;
 import com.majruszlibrary.events.base.Priority;
 import com.majruszlibrary.events.type.IEntityEvent;
-import com.majruszlibrary.entity.EntityHelper;
 import com.majruszlibrary.math.AnyPos;
 import com.majruszlibrary.math.Random;
 import net.minecraft.world.entity.Entity;

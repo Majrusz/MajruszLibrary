@@ -45,7 +45,8 @@ public class Condition< DataType > {
 		return Condition.chance( ()->chance );
 	}
 
-	public static < DataType extends ILevelEvent & IPositionEvent > Condition< DataType > chanceCRD( Supplier< Float > chance, Supplier< Boolean > scaledByCRD ) {
+	public static < DataType extends ILevelEvent & IPositionEvent > Condition< DataType > chanceCRD( Supplier< Float > chance, Supplier< Boolean > scaledByCRD
+	) {
 		return new Condition<>( data->{
 			float totalChance = chance.get();
 			if( scaledByCRD.get() && data.getLevel() != null ) {
