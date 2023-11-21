@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnItemCrafted;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnItemCrafted;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -18,6 +18,6 @@ public abstract class MixinItem {
 		method = "onCraftedBy (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;)V"
 	)
 	private void onCraftedBy( ItemStack itemStack, Level level, Player player, CallbackInfo callback ) {
-		Contexts.dispatch( new OnItemCrafted( player, itemStack ) );
+		Events.dispatch( new OnItemCrafted( player, itemStack ) );
 	}
 }

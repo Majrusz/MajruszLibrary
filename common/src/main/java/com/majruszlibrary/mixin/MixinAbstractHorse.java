@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnAnimalTamed;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnAnimalTamed;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +16,6 @@ public abstract class MixinAbstractHorse {
 		method = "tameWithName (Lnet/minecraft/world/entity/player/Player;)Z"
 	)
 	private void tameWithName( Player player, CallbackInfoReturnable< Boolean > callback ) {
-		Contexts.dispatch( new OnAnimalTamed( ( AbstractHorse )( Object )this, player ) );
+		Events.dispatch( new OnAnimalTamed( ( AbstractHorse )( Object )this, player ) );
 	}
 }

@@ -1,7 +1,5 @@
 package com.majruszlibrary.modhelper;
 
-import com.majruszlibrary.contexts.OnResourcesReloaded;
-
 import java.util.function.Supplier;
 
 public class LazyResource< Type > implements Supplier< Type > {

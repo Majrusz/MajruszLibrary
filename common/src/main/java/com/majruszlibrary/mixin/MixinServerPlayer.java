@@ -1,8 +1,8 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnDimensionChanged;
-import com.majruszlibrary.contexts.OnEntityDied;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnDimensionChanged;
+import com.majruszlibrary.events.OnEntityDied;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
@@ -19,7 +19,7 @@ public abstract class MixinServerPlayer {
 		method = "die (Lnet/minecraft/world/damagesource/DamageSource;)V"
 	)
 	private void die( DamageSource source, CallbackInfo callback ) {
-		if( Contexts.dispatch( new OnEntityDied( source, ( ServerPlayer )( Object )this ) ).isDeathCancelled() ) {
+		if( Events.dispatch( new OnEntityDied( source, ( ServerPlayer )( Object )this ) ).isDeathCancelled() ) {
 			callback.cancel();
 		}
 	}
@@ -31,6 +31,6 @@ public abstract class MixinServerPlayer {
 	private void triggerDimensionChangeTriggers( ServerLevel level, CallbackInfo callback ) {
 		ServerPlayer player = ( ServerPlayer )( Object )this;
 
-		Contexts.dispatch( new OnDimensionChanged( player, level, player.serverLevel() ) );
+		Events.dispatch( new OnDimensionChanged( player, level, player.serverLevel() ) );
 	}
 }

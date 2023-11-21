@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnInsomniaPhantomsCountGet;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnInsomniaPhantomsCountGet;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -25,7 +25,7 @@ public abstract class MixinPhantomSpawner {
 		name = { "l", "$$15" } // for some magic reason ordinal = 3 does not work on fabric
 	)
 	private int getPhantomsCount( int count ) {
-		return Contexts.dispatch( new OnInsomniaPhantomsCountGet( this.majruszlibrary$lastPlayer, count ) ).getCount();
+		return Events.dispatch( new OnInsomniaPhantomsCountGet( this.majruszlibrary$lastPlayer, count ) ).getCount();
 	}
 
 	@Inject(

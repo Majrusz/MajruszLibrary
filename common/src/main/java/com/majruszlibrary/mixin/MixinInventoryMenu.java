@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnItemCrafted;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnItemCrafted;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
@@ -26,6 +26,6 @@ public abstract class MixinInventoryMenu {
 	)
 	private void quickMoveStack( Player player, int type, CallbackInfoReturnable< ItemStack > callback, ItemStack $$0, Slot $$1, ItemStack itemStack ) {
 		// seems like a bug in vanilla minecraft code (for instance CraftingMenu class before changing the slot calls onCraftedBy())
-		Contexts.dispatch( new OnItemCrafted( player, itemStack ) );
+		Events.dispatch( new OnItemCrafted( player, itemStack ) );
 	}
 }

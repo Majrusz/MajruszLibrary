@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnKeyStateChanged;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnKeyStateChanged;
+import com.majruszlibrary.events.base.Events;
 import com.majruszlibrary.platform.Side;
 import net.minecraft.client.KeyboardHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ public abstract class MixinKeyboardHandler {
 	)
 	private void keyPress( long windowId, int key, int scanCode, int action, int modifiers, CallbackInfo callback ) {
 		if( Side.getMinecraft().getWindow().getWindow() == windowId ) {
-			Contexts.dispatch( new OnKeyStateChanged( key, scanCode, action, modifiers ) );
+			Events.dispatch( new OnKeyStateChanged( key, scanCode, action, modifiers ) );
 		}
 	}
 }

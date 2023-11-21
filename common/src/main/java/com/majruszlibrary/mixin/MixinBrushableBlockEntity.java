@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnItemBrushed;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnItemBrushed;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +32,7 @@ public abstract class MixinBrushableBlockEntity {
 			return;
 		}
 
-		Contexts.dispatch( new OnItemBrushed( player, this.majruszlibrary$location, this.item, this.hitDirection, ( BrushableBlockEntity )( Object )this ) );
+		Events.dispatch( new OnItemBrushed( player, this.majruszlibrary$location, this.item, this.hitDirection, ( BrushableBlockEntity )( Object )this ) );
 	}
 
 	@Inject(

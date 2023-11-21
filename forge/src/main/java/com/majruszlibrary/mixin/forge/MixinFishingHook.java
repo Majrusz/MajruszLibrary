@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin.forge;
 
-import com.majruszlibrary.contexts.OnItemFished;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnItemFished;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
@@ -30,6 +30,6 @@ public abstract class MixinFishingHook {
 	private void retrieve( ItemStack itemStack, CallbackInfoReturnable< Integer > callback, Player player, int damage, ItemFishedEvent event,
 		LootParams lootParams, LootTable lootTable, List< ItemStack > items
 	) {
-		Contexts.dispatch( new OnItemFished( player, ( FishingHook )( Object )this, itemStack, items ) );
+		Events.dispatch( new OnItemFished( player, ( FishingHook )( Object )this, itemStack, items ) );
 	}
 }

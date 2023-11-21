@@ -1,10 +1,10 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnEntityDamaged;
-import com.majruszlibrary.contexts.OnPlayerInteracted;
-import com.majruszlibrary.contexts.OnPlayerTicked;
-import com.majruszlibrary.contexts.OnPlayerWakedUp;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnEntityDamaged;
+import com.majruszlibrary.events.OnPlayerInteracted;
+import com.majruszlibrary.events.OnPlayerTicked;
+import com.majruszlibrary.events.OnPlayerWakedUp;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,7 +26,7 @@ public abstract class MixinPlayer {
 		method = "actuallyHurt (Lnet/minecraft/world/damagesource/DamageSource;F)V"
 	)
 	private void actuallyHurt( DamageSource source, float damage, CallbackInfo callback ) {
-		Contexts.dispatch( new OnEntityDamaged( source, ( Player )( Object )this, damage ) );
+		Events.dispatch( new OnEntityDamaged( source, ( Player )( Object )this, damage ) );
 	}
 
 	@Inject(
@@ -34,7 +34,7 @@ public abstract class MixinPlayer {
 		method = "tick ()V"
 	)
 	private void tick( CallbackInfo callback ) {
-		Contexts.dispatch( new OnPlayerTicked( ( Player )( Object )this ) );
+		Events.dispatch( new OnPlayerTicked( ( Player )( Object )this ) );
 	}
 
 	@Inject(
@@ -46,7 +46,7 @@ public abstract class MixinPlayer {
 		method = "interactOn (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;"
 	)
 	private void interactOn( Entity entity, InteractionHand hand, CallbackInfoReturnable< InteractionResult > callback ) {
-		OnPlayerInteracted data = Contexts.dispatch( new OnPlayerInteracted( ( Player )( Object )this, hand, entity ) );
+		OnPlayerInteracted data = Events.dispatch( new OnPlayerInteracted( ( Player )( Object )this, hand, entity ) );
 		if( data.hasResult() ) {
 			callback.setReturnValue( data.getResult() );
 		}
@@ -57,6 +57,6 @@ public abstract class MixinPlayer {
 		method = "stopSleepInBed (ZZ)V"
 	)
 	public void stopSleepInBed( boolean $$0, boolean wasSleepStoppedManually, CallbackInfo callback ) {
-		Contexts.dispatch( new OnPlayerWakedUp( ( Player )( Object )this, wasSleepStoppedManually ) );
+		Events.dispatch( new OnPlayerWakedUp( ( Player )( Object )this, wasSleepStoppedManually ) );
 	}
 }

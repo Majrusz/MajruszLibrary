@@ -1,6 +1,6 @@
 package com.majruszlibrary.data;
 
-import com.majruszlibrary.contexts.OnLevelsLoaded;
+import com.majruszlibrary.events.OnLevelsLoaded;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.saveddata.SavedData;
 

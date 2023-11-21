@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin.fabric;
 
-import com.majruszlibrary.contexts.OnGuiOverlaysRegistered;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnGuiOverlaysRegistered;
+import com.majruszlibrary.events.base.Events;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
@@ -25,7 +25,7 @@ public abstract class MixinGui {
 		method = "<init> (Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/renderer/entity/ItemRenderer;)V"
 	)
 	private void constructor( Minecraft minecraft, ItemRenderer itemRenderer, CallbackInfo callback ) {
-		this.majruszlibrary$renderers.addAll( Contexts.dispatch( new OnGuiOverlaysRegistered() ).getRenderers().stream().map( Pair::getSecond ).toList() );
+		this.majruszlibrary$renderers.addAll( Events.dispatch( new OnGuiOverlaysRegistered() ).getRenderers().stream().map( Pair::getSecond ).toList() );
 	}
 
 	@Inject(

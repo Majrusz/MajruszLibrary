@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin.fabric;
 
-import com.majruszlibrary.contexts.OnEnderManAngered;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnEnderManAngered;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -35,6 +35,6 @@ public abstract class MixinEnderMan {
 		EnderMan enderMan = ( EnderMan )( Object )this;
 
 		return itemStack.is( item )
-			|| Contexts.dispatch( new OnEnderManAngered( enderMan, this.majruszlibrary$lastPlayer ) ).isAngerCancelled();
+			|| Events.dispatch( new OnEnderManAngered( enderMan, this.majruszlibrary$lastPlayer ) ).isAngerCancelled();
 	}
 }

@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnGameInitialized;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnGameInitialized;
+import com.majruszlibrary.events.base.Events;
 import com.mojang.datafixers.DataFixer;
 import net.minecraft.server.Services;
 import net.minecraft.server.WorldStem;
@@ -24,6 +24,6 @@ public abstract class MixinDedicatedServer {
 	private void constructor( Thread $$0, LevelStorageSource.LevelStorageAccess $$1, PackRepository $$2, WorldStem $$3, DedicatedServerSettings $$4,
 		DataFixer $$5, Services $$6, ChunkProgressListenerFactory $$7, CallbackInfo callback
 	) {
-		Contexts.dispatch( new OnGameInitialized() );
+		Events.dispatch( new OnGameInitialized() );
 	}
 }

@@ -1,9 +1,9 @@
 package com.majruszlibrary.mixin;
 
 import com.majruszlibrary.animations.IAnimableEntity;
-import com.majruszlibrary.contexts.OnEntityNoiseCheck;
-import com.majruszlibrary.contexts.OnEntityNoiseReceived;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnEntityNoiseCheck;
+import com.majruszlibrary.events.OnEntityNoiseReceived;
+import com.majruszlibrary.events.base.Events;
 import com.majruszlibrary.entity.EntityNoiseListener;
 import com.majruszlibrary.mixininterfaces.IMixinEntity;
 import net.minecraft.core.BlockPos;
@@ -137,12 +137,12 @@ public abstract class MixinEntity implements IMixinEntity {
 
 		@Override
 		public boolean canReceiveVibration( ServerLevel level, BlockPos position, GameEvent event, GameEvent.Context context ) {
-			return Contexts.dispatch( new OnEntityNoiseCheck( level, position, this.entity ) ).isAudible();
+			return Events.dispatch( new OnEntityNoiseCheck( level, position, this.entity ) ).isAudible();
 		}
 
 		@Override
 		public void onReceiveVibration( ServerLevel level, BlockPos position, GameEvent event, Entity owner, Entity ownersProjectile, float distance ) {
-			Contexts.dispatch( new OnEntityNoiseReceived( level, position, this.entity, owner, ownersProjectile, distance ) );
+			Events.dispatch( new OnEntityNoiseReceived( level, position, this.entity, owner, ownersProjectile, distance ) );
 		}
 
 		@Override

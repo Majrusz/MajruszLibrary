@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnBlockPlaced;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnBlockPlaced;
+import com.majruszlibrary.events.base.Events;
 import com.majruszlibrary.mixininterfaces.IMixinExplosion;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +25,7 @@ public abstract class MixinServerLevel {
 		method = "sendBlockUpdated (Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/BlockState;I)V"
 	)
 	private void sendBlockUpdated( BlockPos position, BlockState previousState, BlockState newState, int p_46615_, CallbackInfo callback ) {
-		Contexts.dispatch( new OnBlockPlaced( ( ServerLevel )( Object )this, position, newState ) );
+		Events.dispatch( new OnBlockPlaced( ( ServerLevel )( Object )this, position, newState ) );
 	}
 
 	@Inject(

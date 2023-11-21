@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnResourcesReloaded;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnResourcesReloaded;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.ReloadableServerResources;
@@ -25,7 +25,7 @@ public abstract class MixinReloadableServerResources {
 		Executor $$6, CallbackInfoReturnable< CompletableFuture< ReloadableServerResources > > callback
 	) {
 		callback.getReturnValue().whenComplete( ( resources, exception )->{
-			Contexts.dispatch( new OnResourcesReloaded() );
+			Events.dispatch( new OnResourcesReloaded() );
 		} );
 	}
 }

@@ -2,9 +2,9 @@ package com.majruszlibrary.time;
 
 import com.majruszlibrary.annotation.AutoInstance;
 import com.majruszlibrary.collection.CollectionHelper;
-import com.majruszlibrary.contexts.OnClientTicked;
-import com.majruszlibrary.contexts.OnServerTicked;
-import com.majruszlibrary.contexts.base.Priority;
+import com.majruszlibrary.events.OnClientTicked;
+import com.majruszlibrary.events.OnServerTicked;
+import com.majruszlibrary.events.base.Priority;
 import com.majruszlibrary.platform.LogicalSafe;
 import com.majruszlibrary.platform.Side;
 import com.majruszlibrary.time.delays.Delay;

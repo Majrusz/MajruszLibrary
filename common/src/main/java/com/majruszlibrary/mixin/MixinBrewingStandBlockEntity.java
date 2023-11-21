@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnItemBrewed;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnItemBrewed;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +22,6 @@ public abstract class MixinBrewingStandBlockEntity {
 		method = "doBrew (Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/NonNullList;)V"
 	)
 	private static void doBrew( Level level, BlockPos blockPos, NonNullList< ItemStack > items, CallbackInfo callback ) {
-		Contexts.dispatch( new OnItemBrewed( level, blockPos, items ) );
+		Events.dispatch( new OnItemBrewed( level, blockPos, items ) );
 	}
 }

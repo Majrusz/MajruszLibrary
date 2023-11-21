@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnCreativeModeTabIconGet;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnCreativeModeTabIconGet;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +22,7 @@ public abstract class MixinCreativeModeTab {
 		method = "getIconItem ()Lnet/minecraft/world/item/ItemStack;"
 	)
 	private void getIconItem( CallbackInfoReturnable< ItemStack > callback ) {
-		OnCreativeModeTabIconGet data = Contexts.dispatch( new OnCreativeModeTabIconGet( ( CreativeModeTab )( Object )this, this.displayName, callback.getReturnValue() ) );
+		OnCreativeModeTabIconGet data = Events.dispatch( new OnCreativeModeTabIconGet( ( CreativeModeTab )( Object )this, this.displayName, callback.getReturnValue() ) );
 		if( !data.icon.isEmpty() ) {
 			callback.setReturnValue( data.icon );
 		}

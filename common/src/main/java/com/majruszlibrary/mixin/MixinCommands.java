@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnCommandsInitialized;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnCommandsInitialized;
+import com.majruszlibrary.events.base.Events;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
@@ -21,6 +21,6 @@ public abstract class MixinCommands {
 		method = "<init> (Lnet/minecraft/commands/Commands$CommandSelection;Lnet/minecraft/commands/CommandBuildContext;)V"
 	)
 	private void constructor( Commands.CommandSelection commandSelection, CommandBuildContext context, CallbackInfo callback ) {
-		Contexts.dispatch( new OnCommandsInitialized( this.dispatcher ) );
+		Events.dispatch( new OnCommandsInitialized( this.dispatcher ) );
 	}
 }

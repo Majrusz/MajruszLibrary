@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnEntitySpawned;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnEntitySpawned;
+import com.majruszlibrary.events.base.Events;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Mixin( PersistentEntitySectionManager.class )
 public abstract class MixinPersistentEntitySectionManager< Type extends EntityAccess > {
-	private final Long2ObjectMap< Pair< Entity, Boolean > > majruszlibrary$pendingContexts = new Long2ObjectOpenHashMap<>();
+	private final Long2ObjectMap< Pair< Entity, Boolean > > majruszlibrary$pendingEvents = new Long2ObjectOpenHashMap<>();
 
 	@Inject(
 		at = @At( "RETURN" ),
@@ -27,7 +27,7 @@ public abstract class MixinPersistentEntitySectionManager< Type extends EntityAc
 	)
 	private void addEntity( Type entityAccess, boolean isLoadedFromDisk, CallbackInfoReturnable< Boolean > callback ) {
 		if( callback.getReturnValue() && entityAccess instanceof Entity entity ) {
-			this.majruszlibrary$pendingContexts.put( entity.getId(), Pair.of( entity, isLoadedFromDisk ) );
+			this.majruszlibrary$pendingEvents.put( entity.getId(), Pair.of( entity, isLoadedFromDisk ) );
 		}
 	}
 
@@ -37,12 +37,12 @@ public abstract class MixinPersistentEntitySectionManager< Type extends EntityAc
 	)
 	private void tick( CallbackInfo callback ) {
 		List< Long > ids = new ArrayList<>();
-		this.majruszlibrary$pendingContexts.forEach( ( id, context )->{
-			if( Contexts.dispatch( new OnEntitySpawned( context.getFirst(), context.getSecond() ) ).isSpawnCancelled() ) {
+		this.majruszlibrary$pendingEvents.forEach( ( id, context )->{
+			if( Events.dispatch( new OnEntitySpawned( context.getFirst(), context.getSecond() ) ).isSpawnCancelled() ) {
 				context.getFirst().remove( Entity.RemovalReason.DISCARDED );
 			}
 			ids.add( id );
 		} );
-		ids.forEach( this.majruszlibrary$pendingContexts::remove );
+		ids.forEach( this.majruszlibrary$pendingEvents::remove );
 	}
 }

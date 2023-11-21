@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnBabySpawned;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnBabySpawned;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.animal.Animal;
@@ -26,6 +26,6 @@ public abstract class MixinAnimal {
 		Animal parentA = ( Animal )( Object )this;
 		Player player = parentA.getLoveCause() != null ? parentA.getLoveCause() : parentB.getLoveCause();
 
-		Contexts.dispatch( new OnBabySpawned( parentA, parentB, child, player ) );
+		Events.dispatch( new OnBabySpawned( parentA, parentB, child, player ) );
 	}
 }

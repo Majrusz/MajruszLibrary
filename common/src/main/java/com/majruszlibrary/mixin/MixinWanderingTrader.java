@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnWanderingTradesUpdated;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnWanderingTradesUpdated;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +15,6 @@ public abstract class MixinWanderingTrader {
 		method = "updateTrades ()V"
 	)
 	private void updateTrades( CallbackInfo callback ) {
-		Contexts.dispatch( new OnWanderingTradesUpdated( ( ( WanderingTrader )( Object )this ) ) );
+		Events.dispatch( new OnWanderingTradesUpdated( ( ( WanderingTrader )( Object )this ) ) );
 	}
 }
