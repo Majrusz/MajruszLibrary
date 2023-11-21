@@ -1,7 +1,9 @@
 package com.majruszlibrary.text;
 
+import com.majruszlibrary.time.TimeHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.*;
+import net.minecraft.util.StringUtil;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,6 +30,14 @@ public class TextHelper {
 		int nearestKey = ROMAN_LETTERS.floorKey( number );
 
 		return number == nearestKey ? ROMAN_LETTERS.get( number ) : ROMAN_LETTERS.get( nearestKey ) + toRoman( number - nearestKey );
+	}
+
+	public static String toEffectDuration( int ticks ) {
+		return StringUtil.formatTickDuration( ticks );
+	}
+
+	public static String toEffectDuration( double seconds ) {
+		return TextHelper.toEffectDuration( TimeHelper.toTicks( seconds ) );
 	}
 
 	public static String minPrecision( double number, int scale ) {
