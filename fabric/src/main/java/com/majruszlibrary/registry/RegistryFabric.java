@@ -2,7 +2,7 @@ package com.majruszlibrary.registry;
 
 import com.majruszlibrary.annotation.Dist;
 import com.majruszlibrary.annotation.OnlyIn;
-import com.majruszlibrary.contexts.OnParticlesRegisteredFabric;
+import com.majruszlibrary.events.OnParticlesRegisteredFabric;
 import com.majruszlibrary.mixin.IMixinCriteriaTriggers;
 import com.majruszlibrary.mixin.IMixinSpawnPlacements;
 import com.majruszlibrary.platform.Side;
@@ -171,12 +171,6 @@ public class RegistryFabric implements IRegistryPlatform {
 		FabricDefaultAttributeRegistry.register( type, attributes );
 	}
 
-	private < Type extends Mob > void registerSpawnPlacement( EntityType< Type > entityType, SpawnPlacements.Type type, Heightmap.Types heightmap,
-		SpawnPlacements.SpawnPredicate< Type > predicate
-	) {
-		IMixinSpawnPlacements.register( entityType, type, heightmap, predicate );
-	}
-
 	@OnlyIn( Dist.CLIENT )
 	private void registerModelLayer( ModelLayerLocation id, Supplier< LayerDefinition > definition ) {
 		EntityModelLayerRegistry.registerModelLayer( id, definition::get );
@@ -190,5 +184,11 @@ public class RegistryFabric implements IRegistryPlatform {
 	@OnlyIn( Dist.CLIENT )
 	private < Type extends Entity > void registerRenderer( EntityType< Type > type, EntityRendererProvider< Type > factory ) {
 		EntityRendererRegistry.register( type, factory );
+	}
+
+	private < Type extends Mob > void registerSpawnPlacement( EntityType< Type > entityType, SpawnPlacements.Type type, Heightmap.Types heightmap,
+		SpawnPlacements.SpawnPredicate< Type > predicate
+	) {
+		IMixinSpawnPlacements.register( entityType, type, heightmap, predicate );
 	}
 }

@@ -29,12 +29,6 @@ public class Custom {
 		< Type extends LivingEntity > void register( EntityType< Type > type, AttributeSupplier attributes );
 	}
 
-	public interface SpawnPlacements {
-		< Type extends Mob > void register( EntityType< Type > entityType, net.minecraft.world.entity.SpawnPlacements.Type type, Heightmap.Types heightmap,
-			net.minecraft.world.entity.SpawnPlacements.SpawnPredicate< Type > predicate
-		);
-	}
-
 	@OnlyIn( Dist.CLIENT )
 	public interface ModelLayers {
 		void register( ModelLayerLocation id, Supplier< LayerDefinition > definition );
@@ -48,5 +42,11 @@ public class Custom {
 	@OnlyIn( Dist.CLIENT )
 	public interface Renderers {
 		< Type extends Entity > void register( EntityType< Type > type, EntityRendererProvider< Type > factory );
+	}
+
+	public interface SpawnPlacements {
+		< Type extends Mob > void register( EntityType< Type > entityType, net.minecraft.world.entity.SpawnPlacements.Type type, Heightmap.Types heightmap,
+			net.minecraft.world.entity.SpawnPlacements.SpawnPredicate< Type > predicate
+		);
 	}
 }
