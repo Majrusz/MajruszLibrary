@@ -26,13 +26,17 @@ public class AnimationsDef {
 		Serializables.get( BoneDef.class )
 			.define( "rotation", Reader.map( Reader.custom( RotationDef::new ) ), BoneDef::getRotations, BoneDef::setRotations )
 			.define( "position", Reader.map( Reader.custom( VectorDef::new ) ), BoneDef::getPositions, BoneDef::setPositions )
-			.define( "scale", Reader.map( Reader.custom( VectorDef::new ) ), BoneDef::getScales, BoneDef::setScales );
+			.define( "scale", Reader.map( Reader.custom( ScaleDef::new ) ), BoneDef::getScales, BoneDef::setScales );
 
 		Serializables.get( RotationDef.class )
 			.define( "vector", Reader.list( Reader.number() ), s->Animation.toRadians3d( s.vector ), ( s, v )->s.vector = Animation.toRadians3d( v ) )
 			.define( "easing", Reader.enumeration( Easing::values ), s->s.easing, ( s, v )->s.easing = v );
 
 		Serializables.get( VectorDef.class )
+			.define( "vector", Reader.list( Reader.number() ), s->Animation.to3d( s.vector ), ( s, v )->s.vector = Animation.to3d( v ) )
+			.define( "easing", Reader.enumeration( Easing::values ), s->s.easing, ( s, v )->s.easing = v );
+
+		Serializables.get( ScaleDef.class )
 			.define( "vector", Reader.list( Reader.number() ), s->Animation.to3d( s.vector ), ( s, v )->s.vector = Animation.to3d( v ) )
 			.define( "easing", Reader.enumeration( Easing::values ), s->s.easing, ( s, v )->s.easing = v );
 	}
@@ -46,7 +50,7 @@ public class AnimationsDef {
 	public static class BoneDef {
 		public TreeMap< Float, RotationDef > rotations = new TreeMap<>();
 		public TreeMap< Float, VectorDef > positions = new TreeMap<>();
-		public TreeMap< Float, VectorDef > scales = new TreeMap<>();
+		public TreeMap< Float, ScaleDef > scales = new TreeMap<>();
 
 		void setRotations( Map< String, RotationDef > rotations ) {
 			this.rotations = CollectionHelper.mapKey( rotations, Float::parseFloat, TreeMap::new );
@@ -56,7 +60,7 @@ public class AnimationsDef {
 			this.positions = CollectionHelper.mapKey( rotations, Float::parseFloat, TreeMap::new );
 		}
 
-		void setScales( Map< String, VectorDef > rotations ) {
+		void setScales( Map< String, ScaleDef > rotations ) {
 			this.scales = CollectionHelper.mapKey( rotations, Float::parseFloat, TreeMap::new );
 		}
 
@@ -68,7 +72,7 @@ public class AnimationsDef {
 			return CollectionHelper.mapKey( this.positions, Object::toString, HashMap::new );
 		}
 
-		Map< String, VectorDef > getScales() {
+		Map< String, ScaleDef > getScales() {
 			return CollectionHelper.mapKey( this.scales, Object::toString, HashMap::new );
 		}
 	}
@@ -78,6 +82,12 @@ public class AnimationsDef {
 	public static class VectorDef {
 		public Vector3f vector = new Vector3f( 0.0f, 0.0f, 0.0f );
 		public Easing easing = Easing.LINEAR;
+	}
+
+	public static class ScaleDef extends VectorDef {
+		public ScaleDef() {
+			this.vector = new Vector3f( 1.0f, 1.0f, 1.0f );
+		}
 	}
 
 	public enum Easing {

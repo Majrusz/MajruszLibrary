@@ -2,6 +2,7 @@ package com.majruszlibrary.registry;
 
 import com.majruszlibrary.annotation.Dist;
 import com.majruszlibrary.annotation.OnlyIn;
+import com.majruszlibrary.events.OnParticlesRegisteredFabric;
 import com.majruszlibrary.mixin.IMixinCriteriaTriggers;
 import com.majruszlibrary.mixin.IMixinSpawnPlacements;
 import com.majruszlibrary.platform.Side;
@@ -12,8 +13,12 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -25,6 +30,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.nio.file.Path;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class RegistryFabric implements IRegistryPlatform {
@@ -47,6 +53,7 @@ public class RegistryFabric implements IRegistryPlatform {
 
 		Side.runOnClient( ()->()->{
 			callbacks.execute( Custom.ModelLayers.class, this::registerModelLayer );
+			callbacks.execute( Custom.Particles.class, this::registerParticles );
 			callbacks.execute( Custom.Renderers.class, this::registerRenderer );
 		} );
 	}
@@ -164,19 +171,24 @@ public class RegistryFabric implements IRegistryPlatform {
 		FabricDefaultAttributeRegistry.register( type, attributes );
 	}
 
-	private < Type extends Mob > void registerSpawnPlacement( EntityType< Type > entityType, SpawnPlacements.Type type, Heightmap.Types heightmap,
-		SpawnPlacements.SpawnPredicate< Type > predicate
-	) {
-		IMixinSpawnPlacements.register( entityType, type, heightmap, predicate );
-	}
-
 	@OnlyIn( Dist.CLIENT )
 	private void registerModelLayer( ModelLayerLocation id, Supplier< LayerDefinition > definition ) {
 		EntityModelLayerRegistry.registerModelLayer( id, definition::get );
 	}
 
 	@OnlyIn( Dist.CLIENT )
+	private < Type extends ParticleOptions > void registerParticles( ParticleType< Type > type, Function< SpriteSet, ParticleProvider< Type > > factory ) {
+		OnParticlesRegisteredFabric.listen( data->data.engine.register( type, factory::apply ) );
+	}
+
+	@OnlyIn( Dist.CLIENT )
 	private < Type extends Entity > void registerRenderer( EntityType< Type > type, EntityRendererProvider< Type > factory ) {
 		EntityRendererRegistry.register( type, factory );
+	}
+
+	private < Type extends Mob > void registerSpawnPlacement( EntityType< Type > entityType, SpawnPlacements.Type type, Heightmap.Types heightmap,
+		SpawnPlacements.SpawnPredicate< Type > predicate
+	) {
+		IMixinSpawnPlacements.register( entityType, type, heightmap, predicate );
 	}
 }

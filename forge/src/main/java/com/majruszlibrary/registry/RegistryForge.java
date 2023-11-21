@@ -3,7 +3,11 @@ package com.majruszlibrary.registry;
 import com.majruszlibrary.mixin.IMixinCriteriaTriggers;
 import com.majruszlibrary.modhelper.DataForge;
 import com.majruszlibrary.platform.Side;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
@@ -14,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,6 +30,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.file.Path;
+import java.util.function.Function;
 
 public class RegistryForge implements IRegistryPlatform {
 	@Override
@@ -65,6 +71,16 @@ public class RegistryForge implements IRegistryPlatform {
 			eventBus.addListener( ( final FMLClientSetupEvent event )->{
 				callbacks.execute( Custom.ModelLayers.class, ForgeHooksClient::registerLayerDefinition );
 				callbacks.execute( Custom.Renderers.class, EntityRenderers::register );
+			} );
+			eventBus.addListener( ( final RegisterParticleProvidersEvent event )->{
+				callbacks.execute( Custom.Particles.class, new Custom.Particles() {
+					@Override
+					public < Type extends ParticleOptions > void register( ParticleType< Type > type,
+						Function< SpriteSet, ParticleProvider< Type > > factory
+					) {
+						event.registerSpriteSet( type, factory::apply );
+					}
+				} );
 			} );
 		} );
 	}

@@ -1,6 +1,6 @@
-package com.majruszlibrary.mixin;
+package com.majruszlibrary.mixin.fabric;
 
-import com.majruszlibrary.events.OnParticlesRegistered;
+import com.majruszlibrary.events.OnParticlesRegisteredFabric;
 import com.majruszlibrary.events.base.Events;
 import net.minecraft.client.particle.ParticleEngine;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,6 +15,6 @@ public abstract class MixinParticleEngine {
 		method = "registerProviders ()V"
 	)
 	private void registerProviders( CallbackInfo callback ) {
-		Events.dispatch( new OnParticlesRegistered( ( ParticleEngine )( Object )this ) );
+		Events.dispatch( new OnParticlesRegisteredFabric( ( ParticleEngine )( Object )this ) );
 	}
 }

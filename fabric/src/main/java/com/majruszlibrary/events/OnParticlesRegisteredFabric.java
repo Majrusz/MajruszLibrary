@@ -1,18 +1,19 @@
 package com.majruszlibrary.events;
 
+import com.majruszlibrary.events.base.Event;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.client.particle.ParticleEngine;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
 
-import java.util.function.Function;
+import java.util.function.Consumer;
 
-public class OnParticlesRegisteredFabric implements OnParticlesRegistered.IPlatform {
-	@Override
-	public < Type extends ParticleOptions > void register( ParticleEngine engine, ParticleType< Type > type,
-		Function< SpriteSet, ParticleProvider< Type > > factory
-	) {
-		engine.register( type, factory::apply );
+public class OnParticlesRegisteredFabric {
+	public final ParticleEngine engine;
+
+	public static Event< OnParticlesRegisteredFabric > listen( Consumer< OnParticlesRegisteredFabric > consumer ) {
+		return Events.get( OnParticlesRegisteredFabric.class ).add( consumer );
+	}
+
+	public OnParticlesRegisteredFabric( ParticleEngine engine ) {
+		this.engine = engine;
 	}
 }
