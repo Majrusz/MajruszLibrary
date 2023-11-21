@@ -1,6 +1,6 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnLootingLevelGet;
+import com.majruszlibrary.events.OnLootingLevelGet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;

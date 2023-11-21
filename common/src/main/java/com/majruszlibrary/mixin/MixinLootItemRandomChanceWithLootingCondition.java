@@ -1,6 +1,6 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnLootingLevelGet;
+import com.majruszlibrary.events.OnLootingLevelGet;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithLootingCondition;

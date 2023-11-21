@@ -1,8 +1,8 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnClientTicked;
-import com.majruszlibrary.contexts.OnGameInitialized;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnClientTicked;
+import com.majruszlibrary.events.OnGameInitialized;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +16,7 @@ public abstract class MixinMinecraft {
 		method = "onGameLoadFinished ()V"
 	)
 	private void onGameLoadFinished( CallbackInfo callback ) {
-		Contexts.dispatch( new OnGameInitialized() );
+		Events.dispatch( new OnGameInitialized() );
 	}
 
 	@Inject(
@@ -24,6 +24,6 @@ public abstract class MixinMinecraft {
 		method = "tick ()V"
 	)
 	private void tick( CallbackInfo callback ) {
-		Contexts.dispatch( new OnClientTicked() );
+		Events.dispatch( new OnClientTicked() );
 	}
 }

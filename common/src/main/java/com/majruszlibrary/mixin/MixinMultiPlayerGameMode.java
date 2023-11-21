@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnPlayerInteracted;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnPlayerInteracted;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +24,7 @@ public abstract class MixinMultiPlayerGameMode {
 		method = "performUseItemOn (Lnet/minecraft/client/player/LocalPlayer;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;"
 	)
 	private void performUseItemOn( LocalPlayer player, InteractionHand hand, BlockHitResult result, CallbackInfoReturnable< InteractionResult > callback ) {
-		OnPlayerInteracted data = Contexts.dispatch( new OnPlayerInteracted( player, hand, result ) );
+		OnPlayerInteracted data = Events.dispatch( new OnPlayerInteracted( player, hand, result ) );
 		if( data.isInteractionCancelled() ) {
 			callback.setReturnValue( data.getResult() );
 		}
@@ -36,7 +36,7 @@ public abstract class MixinMultiPlayerGameMode {
 		method = "useItem (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;"
 	)
 	private void useItem( Player player, InteractionHand hand, CallbackInfoReturnable< InteractionResult > callback ) {
-		OnPlayerInteracted data = Contexts.dispatch( new OnPlayerInteracted( player, hand ) );
+		OnPlayerInteracted data = Events.dispatch( new OnPlayerInteracted( player, hand ) );
 		if( data.isInteractionCancelled() ) {
 			callback.setReturnValue( data.getResult() );
 		}

@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnParticlesRegistered;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnParticlesRegistered;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.client.particle.ParticleEngine;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,6 +15,6 @@ public abstract class MixinParticleEngine {
 		method = "registerProviders ()V"
 	)
 	private void registerProviders( CallbackInfo callback ) {
-		Contexts.dispatch( new OnParticlesRegistered( ( ParticleEngine )( Object )this ) );
+		Events.dispatch( new OnParticlesRegistered( ( ParticleEngine )( Object )this ) );
 	}
 }

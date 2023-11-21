@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin.fabric;
 
-import com.majruszlibrary.contexts.OnLootGenerated;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnLootGenerated;
+import com.majruszlibrary.events.base.Events;
 import com.majruszlibrary.mixininterfaces.fabric.IMixinLootTable;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +32,7 @@ public abstract class MixinLootTable implements IMixinLootTable {
 		method = "getRandomItemsRaw (Lnet/minecraft/world/level/storage/loot/LootContext;Ljava/util/function/Consumer;)V"
 	)
 	private void getRandomItemsRaw( LootContext context, Consumer< ItemStack > consumer, CallbackInfo callback ) {
-		Contexts.dispatch( new OnLootGenerated( this.majruszlibrary$items, this.majruszlibrary$id, context ) ).generatedLoot.forEach( this.majruszlibrary$consumer );
+		Events.dispatch( new OnLootGenerated( this.majruszlibrary$items, this.majruszlibrary$id, context ) ).generatedLoot.forEach( this.majruszlibrary$consumer );
 	}
 
 	@ModifyVariable(

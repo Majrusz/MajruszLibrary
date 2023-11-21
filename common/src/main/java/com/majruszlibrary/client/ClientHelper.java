@@ -3,7 +3,7 @@ package com.majruszlibrary.client;
 import com.majruszlibrary.annotation.AutoInstance;
 import com.majruszlibrary.annotation.Dist;
 import com.majruszlibrary.annotation.OnlyIn;
-import com.majruszlibrary.contexts.OnKeyStateChanged;
+import com.majruszlibrary.events.OnKeyStateChanged;
 
 @OnlyIn( Dist.CLIENT )
 public class ClientHelper {

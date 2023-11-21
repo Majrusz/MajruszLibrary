@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnExpOrbPickedUp;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnExpOrbPickedUp;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,6 +22,6 @@ public abstract class MixinExperienceOrb {
 		method = "playerTouch (Lnet/minecraft/world/entity/player/Player;)V"
 	)
 	private void playerTouch( Player player, CallbackInfo callback ) {
-		this.value = Contexts.dispatch( new OnExpOrbPickedUp( player, ( ExperienceOrb )( Object )this, this.value ) ).getExperience();
+		this.value = Events.dispatch( new OnExpOrbPickedUp( player, ( ExperienceOrb )( Object )this, this.value ) ).getExperience();
 	}
 }

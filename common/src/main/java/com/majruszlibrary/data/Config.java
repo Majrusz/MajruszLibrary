@@ -2,8 +2,8 @@ package com.majruszlibrary.data;
 
 import com.google.gson.*;
 import com.majruszlibrary.MajruszLibrary;
-import com.majruszlibrary.contexts.OnPlayerLoggedIn;
-import com.majruszlibrary.contexts.OnResourcesReloaded;
+import com.majruszlibrary.events.OnPlayerLoggedIn;
+import com.majruszlibrary.events.OnResourcesReloaded;
 import com.majruszlibrary.modhelper.ModHelper;
 import com.majruszlibrary.network.NetworkObject;
 import com.majruszlibrary.platform.Side;

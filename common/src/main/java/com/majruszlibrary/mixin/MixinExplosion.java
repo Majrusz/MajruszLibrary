@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnExploded;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnExploded;
+import com.majruszlibrary.events.base.Events;
 import com.majruszlibrary.mixininterfaces.IMixinExplosion;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
@@ -28,7 +28,7 @@ public abstract class MixinExplosion implements IMixinExplosion {
 	private @Shadow double x;
 	private @Shadow double y;
 	private @Shadow double z;
-	private OnExploded majruszlibrary$context = null;
+	private OnExploded majruszlibrary$event = null;
 
 	@Override
 	public float majruszlibrary$getRadius() {
@@ -42,8 +42,8 @@ public abstract class MixinExplosion implements IMixinExplosion {
 
 	@Override
 	public boolean majruszlibrary$isExplosionCancelled() {
-		return this.majruszlibrary$context != null
-			&& this.majruszlibrary$context.isExplosionCancelled();
+		return this.majruszlibrary$event != null
+			&& this.majruszlibrary$event.isExplosionCancelled();
 	}
 
 	@Inject(
@@ -52,12 +52,12 @@ public abstract class MixinExplosion implements IMixinExplosion {
 		method = "explode ()V"
 	)
 	private void explode( CallbackInfo callback ) {
-		this.majruszlibrary$context = Contexts.dispatch( new OnExploded( ( Explosion )( Object )this, this.level, new Vec3( this.x, this.y, this.z ), this.radius, this.fire ) );
-		if( this.majruszlibrary$context.isExplosionCancelled() ) {
+		this.majruszlibrary$event = Events.dispatch( new OnExploded( ( Explosion )( Object )this, this.level, new Vec3( this.x, this.y, this.z ), this.radius, this.fire ) );
+		if( this.majruszlibrary$event.isExplosionCancelled() ) {
 			callback.cancel();
 		} else {
-			this.radius = this.majruszlibrary$context.radius;
-			this.fire = this.majruszlibrary$context.spawnsFire;
+			this.radius = this.majruszlibrary$event.radius;
+			this.fire = this.majruszlibrary$event.spawnsFire;
 		}
 	}
 
@@ -77,7 +77,7 @@ public abstract class MixinExplosion implements IMixinExplosion {
 		method = "explode ()V"
 	)
 	private List< Entity > getEntities( List< Entity > entities ) {
-		this.majruszlibrary$context.filter( this.toBlow, entities );
+		this.majruszlibrary$event.filter( this.toBlow, entities );
 
 		return entities;
 	}

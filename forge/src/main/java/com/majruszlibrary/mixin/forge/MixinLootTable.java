@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin.forge;
 
-import com.majruszlibrary.contexts.OnLootGenerated;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnLootGenerated;
+import com.majruszlibrary.events.base.Events;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -19,6 +19,6 @@ public abstract class MixinLootTable {
 		method = "getRandomItems (Lnet/minecraft/world/level/storage/loot/LootContext;)Lit/unimi/dsi/fastutil/objects/ObjectArrayList;"
 	)
 	private void getRandomItems( LootContext context, CallbackInfoReturnable< ObjectArrayList< ItemStack > > callback ) {
-		callback.setReturnValue( Contexts.dispatch( new OnLootGenerated( callback.getReturnValue(), ( ( LootTable )( Object )this ).getLootTableId(), context ) ).generatedLoot );
+		callback.setReturnValue( Events.dispatch( new OnLootGenerated( callback.getReturnValue(), ( ( LootTable )( Object )this ).getLootTableId(), context ) ).generatedLoot );
 	}
 }

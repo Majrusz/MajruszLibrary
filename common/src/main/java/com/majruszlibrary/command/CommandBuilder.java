@@ -1,6 +1,6 @@
 package com.majruszlibrary.command;
 
-import com.majruszlibrary.contexts.OnCommandsInitialized;
+import com.majruszlibrary.events.OnCommandsInitialized;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;

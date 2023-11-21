@@ -1,6 +1,6 @@
 package com.majruszlibrary.item;
 
-import com.majruszlibrary.contexts.OnCreativeModeTabIconGet;
+import com.majruszlibrary.events.OnCreativeModeTabIconGet;
 import com.majruszlibrary.time.TimeHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;

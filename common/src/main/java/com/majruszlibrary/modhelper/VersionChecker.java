@@ -2,7 +2,7 @@ package com.majruszlibrary.modhelper;
 
 import com.google.gson.*;
 import com.majruszlibrary.MajruszLibrary;
-import com.majruszlibrary.contexts.OnPlayerLoggedIn;
+import com.majruszlibrary.events.OnPlayerLoggedIn;
 import com.majruszlibrary.data.Reader;
 import com.majruszlibrary.data.Serializables;
 import com.majruszlibrary.platform.Integration;

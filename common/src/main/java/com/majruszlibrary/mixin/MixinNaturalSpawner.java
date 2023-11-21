@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnMobSpawnRateGet;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnMobSpawnRateGet;
+import com.majruszlibrary.events.base.Events;
 import com.majruszlibrary.math.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +25,7 @@ public abstract class MixinNaturalSpawner {
 	private static void spawnCategoryForChunk( MobCategory category, ServerLevel level, LevelChunk chunk, NaturalSpawner.SpawnPredicate predicate,
 		NaturalSpawner.AfterSpawnCallback spawnCallback, CallbackInfo callbackInfo
 	) {
-		int mobsCount = Random.round( Contexts.dispatch( new OnMobSpawnRateGet( category, level, chunk ) ).getSpawnRate() );
+		int mobsCount = Random.round( Events.dispatch( new OnMobSpawnRateGet( category, level, chunk ) ).getSpawnRate() );
 		if( mobsCount == 0 ) {
 			callbackInfo.cancel();
 		}

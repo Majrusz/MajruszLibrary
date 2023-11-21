@@ -1,8 +1,8 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnPlayerLoggedIn;
-import com.majruszlibrary.contexts.OnPlayerLoggedOut;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnPlayerLoggedIn;
+import com.majruszlibrary.events.OnPlayerLoggedOut;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.network.Connection;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
@@ -18,7 +18,7 @@ public abstract class MixinPlayerList {
 		method = "placeNewPlayer (Lnet/minecraft/network/Connection;Lnet/minecraft/server/level/ServerPlayer;)V"
 	)
 	private void placeNewPlayer( Connection connection, ServerPlayer player, CallbackInfo callback ) {
-		Contexts.dispatch( new OnPlayerLoggedIn( player ) );
+		Events.dispatch( new OnPlayerLoggedIn( player ) );
 	}
 
 	@Inject(
@@ -26,6 +26,6 @@ public abstract class MixinPlayerList {
 		method = "remove (Lnet/minecraft/server/level/ServerPlayer;)V"
 	)
 	private void remove( ServerPlayer player, CallbackInfo callback ) {
-		Contexts.dispatch( new OnPlayerLoggedOut( player ) );
+		Events.dispatch( new OnPlayerLoggedOut( player ) );
 	}
 }

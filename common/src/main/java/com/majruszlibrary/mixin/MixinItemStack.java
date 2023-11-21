@@ -1,9 +1,9 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnItemAttributeTooltip;
-import com.majruszlibrary.contexts.OnItemDamaged;
-import com.majruszlibrary.contexts.OnItemTooltip;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnItemAttributeTooltip;
+import com.majruszlibrary.events.OnItemDamaged;
+import com.majruszlibrary.events.OnItemTooltip;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -31,7 +31,7 @@ public abstract class MixinItemStack {
 	)
 	private void hurt( int damage, RandomSource source, ServerPlayer player, CallbackInfoReturnable< Boolean > callback ) {
 		ItemStack itemStack = ( ItemStack )( Object )this;
-		itemStack.setDamageValue( itemStack.getDamageValue() + Contexts.dispatch( new OnItemDamaged( player, itemStack, damage ) ).getExtraDamage() );
+		itemStack.setDamageValue( itemStack.getDamageValue() + Events.dispatch( new OnItemDamaged( player, itemStack, damage ) ).getExtraDamage() );
 
 		callback.setReturnValue( itemStack.getDamageValue() >= itemStack.getMaxDamage() );
 	}
@@ -47,7 +47,7 @@ public abstract class MixinItemStack {
 		method = "getTooltipLines (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;"
 	)
 	private void getTooltipLines( Player player, TooltipFlag flag, CallbackInfoReturnable< List< Component > > callback, List< Component > components ) {
-		Contexts.dispatch( new OnItemTooltip( ( ItemStack )( Object )this, components, flag, player ) );
+		Events.dispatch( new OnItemTooltip( ( ItemStack )( Object )this, components, flag, player ) );
 	}
 
 	@ModifyVariable(
@@ -59,7 +59,7 @@ public abstract class MixinItemStack {
 		method = "getTooltipLines(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;"
 	)
 	private List< Component > getTooltipLines( List< Component > components ) {
-		OnItemAttributeTooltip data = Contexts.dispatch( new OnItemAttributeTooltip( ( ItemStack )( Object )this ) );
+		OnItemAttributeTooltip data = Events.dispatch( new OnItemAttributeTooltip( ( ItemStack )( Object )this ) );
 		for( EquipmentSlot slot : EquipmentSlot.values() ) {
 			List< Component > slotComponents = data.components.get( slot );
 			if( slotComponents.isEmpty() ) {

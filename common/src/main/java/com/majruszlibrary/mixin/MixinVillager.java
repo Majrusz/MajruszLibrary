@@ -1,8 +1,8 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnItemTraded;
-import com.majruszlibrary.contexts.OnTradesUpdated;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnItemTraded;
+import com.majruszlibrary.events.OnTradesUpdated;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -18,7 +18,7 @@ public abstract class MixinVillager {
 		method = "updateSpecialPrices (Lnet/minecraft/world/entity/player/Player;)V"
 	)
 	private void updateSpecialPrices( Player player, CallbackInfo callback ) {
-		Contexts.dispatch( new OnTradesUpdated( ( ( Villager )( Object )this ), player ) );
+		Events.dispatch( new OnTradesUpdated( ( ( Villager )( Object )this ), player ) );
 	}
 
 	@Inject(
@@ -28,6 +28,6 @@ public abstract class MixinVillager {
 	private void rewardTradeXp( MerchantOffer offer, CallbackInfo callback ) {
 		Villager villager = ( ( Villager )( Object )this );
 
-		Contexts.dispatch( new OnItemTraded( villager, offer ) );
+		Events.dispatch( new OnItemTraded( villager, offer ) );
 	}
 }

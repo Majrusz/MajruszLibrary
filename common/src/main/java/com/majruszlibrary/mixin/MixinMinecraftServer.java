@@ -1,9 +1,9 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnLevelsLoaded;
-import com.majruszlibrary.contexts.OnServerTicked;
-import com.majruszlibrary.contexts.OnTradesInitialized;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnLevelsLoaded;
+import com.majruszlibrary.events.OnServerTicked;
+import com.majruszlibrary.events.OnTradesInitialized;
+import com.majruszlibrary.events.base.Events;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.server.MinecraftServer;
@@ -30,7 +30,7 @@ public abstract class MixinMinecraftServer {
 		method = "tickServer (Ljava/util/function/BooleanSupplier;)V"
 	)
 	private void tickServer( BooleanSupplier haveTime, CallbackInfo callback ) {
-		Contexts.dispatch( new OnServerTicked() );
+		Events.dispatch( new OnServerTicked() );
 	}
 
 	@Inject(
@@ -41,7 +41,7 @@ public abstract class MixinMinecraftServer {
 		for( VillagerProfession profession : VillagerTrades.TRADES.keySet() ) {
 			Int2ObjectMap< List< VillagerTrades.ItemListing > > currentTrades = new Int2ObjectOpenHashMap<>();
 			VillagerTrades.TRADES.get( profession ).forEach( ( tier, trades )->currentTrades.put( tier, new ArrayList<>( List.of( trades ) ) ) );
-			Contexts.dispatch( new OnTradesInitialized( currentTrades, profession ) );
+			Events.dispatch( new OnTradesInitialized( currentTrades, profession ) );
 			Int2ObjectMap< VillagerTrades.ItemListing[] > newTrades = new Int2ObjectOpenHashMap<>();
 			currentTrades.forEach( ( tier, trades )->newTrades.put( tier, trades.toArray( VillagerTrades.ItemListing[]::new ) ) );
 			VillagerTrades.TRADES.put( profession, newTrades );
@@ -53,6 +53,6 @@ public abstract class MixinMinecraftServer {
 		method = "createLevels (Lnet/minecraft/server/level/progress/ChunkProgressListener;)V"
 	)
 	private void createLevels( ChunkProgressListener listener, CallbackInfo callback ) {
-		Contexts.dispatch( new OnLevelsLoaded( ( MinecraftServer )( Object )this ) );
+		Events.dispatch( new OnLevelsLoaded( ( MinecraftServer )( Object )this ) );
 	}
 }

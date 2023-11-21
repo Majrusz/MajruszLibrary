@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.*;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.*;
+import com.majruszlibrary.events.base.Events;
 import com.majruszlibrary.mixininterfaces.IMixinLivingEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -48,11 +48,11 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 			return;
 		}
 		if( damage == 0.0f || entity.isDamageSourceBlocked( source ) ) {
-			Contexts.dispatch( new OnEntityDamageBlocked( source, entity ) );
+			Events.dispatch( new OnEntityDamageBlocked( source, entity ) );
 			return;
 		}
 
-		OnEntityPreDamaged data = Contexts.dispatch( new OnEntityPreDamaged( source, entity, damage ) );
+		OnEntityPreDamaged data = Events.dispatch( new OnEntityPreDamaged( source, entity, damage ) );
 		if( data.isDamageCancelled() ) {
 			data.target.invulnerableTime = 20;
 			callback.setReturnValue( false );
@@ -83,7 +83,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		method = "actuallyHurt (Lnet/minecraft/world/damagesource/DamageSource;F)V"
 	)
 	private void actuallyHurt( DamageSource source, float damage, CallbackInfo callback ) {
-		Contexts.dispatch( new OnEntityDamaged( source, ( LivingEntity )( Object )this, damage ) );
+		Events.dispatch( new OnEntityDamaged( source, ( LivingEntity )( Object )this, damage ) );
 	}
 
 	@Inject(
@@ -92,7 +92,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		method = "die (Lnet/minecraft/world/damagesource/DamageSource;)V"
 	)
 	private void die( DamageSource source, CallbackInfo callback ) {
-		if( Contexts.dispatch( new OnEntityDied( source, ( LivingEntity )( Object )this ) ).isDeathCancelled() ) {
+		if( Events.dispatch( new OnEntityDied( source, ( LivingEntity )( Object )this ) ).isDeathCancelled() ) {
 			callback.cancel();
 		}
 	}
@@ -103,7 +103,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		method = "canBeAffected (Lnet/minecraft/world/effect/MobEffectInstance;)Z"
 	)
 	private void canBeAffected( MobEffectInstance effect, CallbackInfoReturnable< Boolean > callback ) {
-		if( Contexts.dispatch( new OnEntityEffectCheck( effect, ( LivingEntity )( Object )this ) ).isEffectCancelled() ) {
+		if( Events.dispatch( new OnEntityEffectCheck( effect, ( LivingEntity )( Object )this ) ).isEffectCancelled() ) {
 			callback.setReturnValue( false );
 		}
 	}
@@ -113,9 +113,9 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		method = "tick ()V"
 	)
 	private void tick( CallbackInfo callback ) {
-		Contexts.dispatch( new OnEntityTicked( ( LivingEntity )( Object )this ) );
+		Events.dispatch( new OnEntityTicked( ( LivingEntity )( Object )this ) );
 
-		this.majruszlibrary$swimSpeedMultiplier = Contexts.dispatch( new OnEntitySwimSpeedMultiplierGet( ( LivingEntity )( Object )this, 1.0f ) ).getMultiplier();
+		this.majruszlibrary$swimSpeedMultiplier = Events.dispatch( new OnEntitySwimSpeedMultiplierGet( ( LivingEntity )( Object )this, 1.0f ) ).getMultiplier();
 	}
 
 	@Inject(
@@ -130,7 +130,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		EquipmentSlot[] slots, int slotsCount, int idx, EquipmentSlot slot, ItemStack from, ItemStack to
 	) {
 		if( !ItemStack.matches( from, to ) ) {
-			Contexts.dispatch( new OnItemEquipped( ( LivingEntity )( Object )this, slot, from, to ) );
+			Events.dispatch( new OnItemEquipped( ( LivingEntity )( Object )this, slot, from, to ) );
 		}
 	}
 
@@ -140,7 +140,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		method = "getCurrentSwingDuration ()I"
 	)
 	private void getCurrentSwingDuration( CallbackInfoReturnable< Integer > callback ) {
-		callback.setReturnValue( Contexts.dispatch( new OnItemSwingDurationGet( ( LivingEntity )( Object )this, callback.getReturnValue() ) )
+		callback.setReturnValue( Events.dispatch( new OnItemSwingDurationGet( ( LivingEntity )( Object )this, callback.getReturnValue() ) )
 			.getSwingDuration() );
 	}
 
@@ -149,7 +149,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		method = "updateUsingItem (Lnet/minecraft/world/item/ItemStack;)V"
 	)
 	private void updateUsingItem( ItemStack itemStack, CallbackInfo callback ) {
-		OnItemUseTicked data = Contexts.dispatch( new OnItemUseTicked( ( LivingEntity )( Object )this, itemStack, itemStack.getUseDuration(), this.useItemRemaining ) );
+		OnItemUseTicked data = Events.dispatch( new OnItemUseTicked( ( LivingEntity )( Object )this, itemStack, itemStack.getUseDuration(), this.useItemRemaining ) );
 
 		this.useItemRemaining = data.getDuration();
 	}

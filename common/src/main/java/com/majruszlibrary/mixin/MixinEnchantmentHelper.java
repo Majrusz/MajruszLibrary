@@ -1,7 +1,7 @@
 package com.majruszlibrary.mixin;
 
-import com.majruszlibrary.contexts.OnLootingLevelGet;
-import com.majruszlibrary.contexts.base.Contexts;
+import com.majruszlibrary.events.OnLootingLevelGet;
+import com.majruszlibrary.events.base.Events;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,6 +17,6 @@ public abstract class MixinEnchantmentHelper {
 		method = "getMobLooting (Lnet/minecraft/world/entity/LivingEntity;)I"
 	)
 	private static void getMobLooting( LivingEntity entity, CallbackInfoReturnable< Integer > callback ) {
-		callback.setReturnValue( Contexts.dispatch( new OnLootingLevelGet( entity, callback.getReturnValue() ) ).getLootingLevel() );
+		callback.setReturnValue( Events.dispatch( new OnLootingLevelGet( entity, callback.getReturnValue() ) ).getLootingLevel() );
 	}
 }
