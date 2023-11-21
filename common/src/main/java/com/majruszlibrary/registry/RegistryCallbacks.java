@@ -14,7 +14,7 @@ public class RegistryCallbacks {
 	}
 
 	public < Type > void execute( Class< Type > clazz, Type object ) {
-		this.get( clazz ).forEach( consumer -> consumer.accept( object ) );
+		this.get( clazz ).forEach( consumer->consumer.accept( object ) );
 	}
 
 	public < Type > List< Consumer< Type > > get( Class< Type > clazz ) {

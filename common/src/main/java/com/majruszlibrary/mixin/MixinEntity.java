@@ -1,10 +1,10 @@
 package com.majruszlibrary.mixin;
 
 import com.majruszlibrary.animations.IAnimableEntity;
+import com.majruszlibrary.entity.EntityNoiseListener;
 import com.majruszlibrary.events.OnEntityNoiseCheck;
 import com.majruszlibrary.events.OnEntityNoiseReceived;
 import com.majruszlibrary.events.base.Events;
-import com.majruszlibrary.entity.EntityNoiseListener;
 import com.majruszlibrary.mixininterfaces.IMixinEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
