@@ -50,6 +50,7 @@
     "MixinPhantomSpawner",
     "MixinPlayer",
     "MixinPlayerList",
+    "MixinPowderSnowBlock",
     "MixinProjectile",
     "MixinReloadableServerResources",
     "MixinServerLevel",
