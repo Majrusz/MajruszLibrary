@@ -12,10 +12,10 @@ import net.minecraft.world.level.storage.loot.Deserializers;
 
 import java.io.Reader;
 import java.io.*;
-import java.util.List;
 import java.util.function.Supplier;
 
 public final class Config {
+	private final String name;
 	private final File file;
 	private final Gson gson;
 	private final Class< ? > clazz;
@@ -30,7 +30,7 @@ public final class Config {
 				stream.close();
 			}
 		} catch( Exception exception ) {
-			MajruszLibrary.HELPER.logError( exception.toString() );
+			MajruszLibrary.HELPER.logError( "[%s] %s".formatted( this.name, exception.toString() ) );
 		}
 	}
 
@@ -41,18 +41,27 @@ public final class Config {
 				this.gson.fromJson( reader, this.clazz );
 			}
 		} catch( Exception exception ) {
-			MajruszLibrary.HELPER.logError( exception.toString() );
+			MajruszLibrary.HELPER.logError( "[%s] %s".formatted( this.name, exception.toString() ) );
 		}
 	}
 
 	private Config( String name, Class< ? > clazz, Object instance ) {
-		this.file = Registries.getConfigPath().resolve( "%s.json".formatted( name ) ).toFile();
+		this.name = "%s.json".formatted( name );
+		this.file = Registries.getConfigPath().resolve( this.name ).toFile();
 		this.gson = Deserializers.createFunctionSerializer()
 			.registerTypeAdapter( clazz, new TypeAdapter<>( ()->instance ) )
 			.setPrettyPrinting()
 			.create();
 		this.clazz = clazz;
 		this.instance = instance;
+	}
+
+	private void reload() {
+		long start = System.currentTimeMillis();
+		this.load();
+		this.save();
+		long end = System.currentTimeMillis();
+		MajruszLibrary.HELPER.log( "[%s] Reloading configuration file took %d milliseconds".formatted( this.name, end - start ) );
 	}
 
 	public static class Builder< Type > {
@@ -89,31 +98,18 @@ public final class Config {
 			Config config = new Config( name, this.clazz, instance );
 			NetworkObject< Type > network = this.isAutoSyncEnabled ? this.helper.create( name.replace( "-", "_" ), this.clazz ) : null;
 
-			this.helper.onRegister( ()->{
-				config.load();
-				config.save();
-			} );
+			this.helper.onRegister( config::reload );
 
 			OnResourcesReloaded.listen( data->{
-				if( Side.isLogicalServer() ) {
-					long start = System.currentTimeMillis();
-					config.load();
-					config.save();
-					long end = System.currentTimeMillis();
-					MajruszLibrary.HELPER.log( "Reloading %s.json took %dms".formatted( name, end - start ) );
-				}
+				config.reload();
 				if( Side.isDedicatedServer() && network != null ) {
 					network.sendToClients();
 				}
 			} );
 
 			OnPlayerLoggedIn.listen( data->{
-				if( Side.isLogicalServer() ) {
-					config.load();
-					config.save();
-				}
 				if( Side.isDedicatedServer() && network != null ) {
-					network.sendToClients( List.of( data.player ) );
+					network.sendToClient( data.player );
 				}
 			} );
 		}
