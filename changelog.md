@@ -1,0 +1,2 @@
+- fixed game crash `java.lang.NullPointerException: Registry Object not present`
+- fixed bug when right-clicking custom items on server

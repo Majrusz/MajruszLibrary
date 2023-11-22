@@ -9,8 +9,7 @@
     "MixinKeyboardHandler",
     "MixinLivingEntityRenderer",
     "MixinMinecraft",
-    "MixinMultiPlayerGameMode",
-    "MixinParticleEngine"
+    "MixinMultiPlayerGameMode"
   ],
   "mixins": [
     "IMixinArgumentTypeInfos",

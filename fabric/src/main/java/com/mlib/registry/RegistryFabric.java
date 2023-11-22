@@ -1,7 +1,15 @@
 package com.mlib.registry;
 
+import com.mlib.annotation.Dist;
+import com.mlib.annotation.OnlyIn;
+import com.mlib.contexts.OnParticlesRegisteredFabric;
+import com.mlib.platform.Side;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -10,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.nio.file.Path;
+import java.util.function.Function;
 
 public class RegistryFabric implements IRegistryPlatform {
 	@Override
@@ -21,6 +30,13 @@ public class RegistryFabric implements IRegistryPlatform {
 
 		Registry.register( ( Registry< ? super Type > )object.group.registry, object.group.helper.getLocation( object.id ), value );
 		object.set( ()->value, ()->true );
+	}
+
+	@Override
+	public void register( RegistryCallbacks callbacks ) {
+		Side.runOnClient( ()->()->{
+			callbacks.execute( Custom.Particles.class, this::registerParticles );
+		} );
 	}
 
 	@Override
@@ -106,5 +122,10 @@ public class RegistryFabric implements IRegistryPlatform {
 	@Override
 	public Path getConfigPath() {
 		return FabricLoader.getInstance().getConfigDir();
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	private < Type extends ParticleOptions > void registerParticles( ParticleType< Type > type, Function< SpriteSet, ParticleProvider< Type > > factory ) {
+		OnParticlesRegisteredFabric.listen( data->data.engine.register( type, factory::apply ) );
 	}
 }
