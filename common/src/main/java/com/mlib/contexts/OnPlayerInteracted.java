@@ -27,32 +27,20 @@ public class OnPlayerInteracted implements ICancellableData, IEntityData {
 	}
 
 	public OnPlayerInteracted( Player player, InteractionHand hand ) {
-		this.player = player;
-		this.itemStack = player.getItemInHand( hand );
-		this.hand = hand;
-		this.entity = null;
-		this.blockResult = null;
+		this( player, hand, null, null );
 	}
 
 	public OnPlayerInteracted( Player player, InteractionHand hand, Entity entity ) {
-		this.player = player;
-		this.itemStack = player.getItemInHand( hand );
-		this.hand = hand;
-		this.entity = entity;
-		this.blockResult = null;
+		this( player, hand, entity, null );
 	}
 
 	public OnPlayerInteracted( Player player, InteractionHand hand, BlockHitResult blockResult ) {
-		this.player = player;
-		this.itemStack = player.getItemInHand( hand );
-		this.hand = hand;
-		this.entity = null;
-		this.blockResult = blockResult;
+		this( player, hand, null, blockResult );
 	}
 
 	@Override
 	public boolean isExecutionStopped() {
-		return this.isInteractionCancelled();
+		return this.hasResult();
 	}
 
 	@Override
@@ -60,19 +48,27 @@ public class OnPlayerInteracted implements ICancellableData, IEntityData {
 		return this.player;
 	}
 
-	public void cancelInteraction( InteractionResult result ) {
+	public void setResult( InteractionResult result ) {
 		this.result = result;
 	}
 
-	public void cancelInteraction() {
-		this.cancelInteraction( InteractionResult.CONSUME );
+	public void finish() {
+		this.setResult( InteractionResult.sidedSuccess( this.getLevel().isClientSide ) );
 	}
 
-	public boolean isInteractionCancelled() {
+	public boolean hasResult() {
 		return this.result != null;
 	}
 
 	public InteractionResult getResult() {
 		return this.result;
+	}
+
+	private OnPlayerInteracted( Player player, InteractionHand hand, @Nullable Entity entity, @Nullable BlockHitResult blockResult ) {
+		this.player = player;
+		this.itemStack = player.getItemInHand( hand );
+		this.hand = hand;
+		this.entity = entity;
+		this.blockResult = blockResult;
 	}
 }

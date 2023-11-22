@@ -4,10 +4,14 @@ import com.mlib.contexts.OnPlayerInteracted;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ServerGamePacketListener;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.BlockHitResult;
+import org.apache.commons.lang3.mutable.MutableObject;
+import org.spongepowered.asm.mixin.Dynamic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,20 +29,22 @@ public abstract class MixinMultiPlayerGameMode {
 	)
 	private void performUseItemOn( LocalPlayer player, InteractionHand hand, BlockHitResult result, CallbackInfoReturnable< InteractionResult > callback ) {
 		OnPlayerInteracted data = Contexts.dispatch( new OnPlayerInteracted( player, hand, result ) );
-		if( data.isInteractionCancelled() ) {
+		if( data.hasResult() ) {
 			callback.setReturnValue( data.getResult() );
 		}
 	}
 
+	@Dynamic
 	@Inject(
-		at = @At( "HEAD" ),
-		cancellable = true,
-		method = "useItem (Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;"
+		at = @At( "RETURN" ),
+		method = "*(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/entity/player/Player;Lorg/apache/commons/lang3/mutable/MutableObject;I)Lnet/minecraft/network/protocol/Packet;"
 	)
-	private void useItem( Player player, InteractionHand hand, CallbackInfoReturnable< InteractionResult > callback ) {
+	private void useItem( InteractionHand hand, Player player, MutableObject< InteractionResult > result, int $$1,
+		CallbackInfoReturnable< Packet< ServerGamePacketListener > > callback
+	) {
 		OnPlayerInteracted data = Contexts.dispatch( new OnPlayerInteracted( player, hand ) );
-		if( data.isInteractionCancelled() ) {
-			callback.setReturnValue( data.getResult() );
+		if( data.hasResult() ) {
+			result.setValue( data.getResult() );
 		}
 	}
 }

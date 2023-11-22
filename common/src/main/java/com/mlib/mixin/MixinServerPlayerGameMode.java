@@ -27,7 +27,7 @@ public abstract class MixinServerPlayerGameMode {
 	)
 	private void useItem( ServerPlayer player, Level level, ItemStack itemStack, InteractionHand hand, CallbackInfoReturnable< InteractionResult > callback ) {
 		OnPlayerInteracted data = Contexts.dispatch( new OnPlayerInteracted( player, hand ) );
-		if( data.isInteractionCancelled() ) {
+		if( data.hasResult() ) {
 			callback.setReturnValue( data.getResult() );
 		}
 	}
@@ -41,7 +41,7 @@ public abstract class MixinServerPlayerGameMode {
 		CallbackInfoReturnable< InteractionResult > callback
 	) {
 		OnPlayerInteracted data = Contexts.dispatch( new OnPlayerInteracted( player, hand, result ) );
-		if( data.isInteractionCancelled() ) {
+		if( data.hasResult() ) {
 			callback.setReturnValue( data.getResult() );
 		}
 	}

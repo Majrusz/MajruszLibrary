@@ -47,7 +47,7 @@ public abstract class MixinPlayer {
 	)
 	private void interactOn( Entity entity, InteractionHand hand, CallbackInfoReturnable< InteractionResult > callback ) {
 		OnPlayerInteracted data = Contexts.dispatch( new OnPlayerInteracted( ( Player )( Object )this, hand, entity ) );
-		if( data.isInteractionCancelled() ) {
+		if( data.hasResult() ) {
 			callback.setReturnValue( data.getResult() );
 		}
 	}
