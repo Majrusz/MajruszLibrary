@@ -5,6 +5,7 @@ import com.mlib.contexts.base.Contexts;
 import com.mlib.contexts.data.IEntityData;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +24,7 @@ public class OnLootGenerated implements IEntityData {
 	public final ObjectArrayList< ItemStack > generatedLoot;
 	public final ResourceLocation lootId;
 	public final LootContext context;
+	public final ServerLevel level;
 	public final @Nullable BlockState blockState;
 	public final @Nullable DamageSource damageSource;
 	public final @Nullable Entity killer;
@@ -39,6 +41,7 @@ public class OnLootGenerated implements IEntityData {
 		this.generatedLoot = generatedLoot;
 		this.lootId = lootId != null ? lootId : new ResourceLocation( "empty" );
 		this.context = context;
+		this.level = context.getLevel();
 		this.blockState = this.getParameter( LootContextParams.BLOCK_STATE );
 		this.damageSource = this.getParameter( LootContextParams.DAMAGE_SOURCE );
 		this.killer = this.getParameter( LootContextParams.KILLER_ENTITY );
@@ -55,7 +58,7 @@ public class OnLootGenerated implements IEntityData {
 
 	@Override
 	public Level getLevel() {
-		return this.entity != null ? this.entity.level() : null;
+		return this.level;
 	}
 
 	@Override
