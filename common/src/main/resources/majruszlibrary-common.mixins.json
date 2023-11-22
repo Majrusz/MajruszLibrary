@@ -7,6 +7,8 @@
   "client": [
     "MixinClientLevel",
     "MixinGuiGraphics",
+    "MixinHumanoidModel",
+    "MixinItemInHandRenderer",
     "MixinKeyboardHandler",
     "MixinLivingEntityRenderer",
     "MixinMinecraft",
