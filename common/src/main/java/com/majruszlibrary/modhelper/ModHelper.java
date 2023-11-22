@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class ModHelper {
 	final List< Runnable > registerCallbacks = new ArrayList<>();
@@ -62,16 +61,12 @@ public class ModHelper {
 		this.registryHandler.create( clazz, consumer );
 	}
 
+	public WorldData.Builder worldData( Class< ? > clazz ) {
+		return new WorldData.Builder( this, clazz );
+	}
+
 	public Config.Builder< ? > config( Class< ? > clazz ) {
 		return new Config.Builder<>( this, clazz );
-	}
-
-	public < Type extends WorldData > Type saved( Supplier< Type > instance, String id ) {
-		return ( Type )instance.get().named( id );
-	}
-
-	public < Type extends WorldData > Type saved( Supplier< Type > instance ) {
-		return this.saved( instance, this.getModId() );
 	}
 
 	public void triggerAchievement( ServerPlayer player, String id ) {
