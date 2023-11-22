@@ -1,6 +1,7 @@
 package com.majruszlibrary.registry;
 
 import com.majruszlibrary.mixin.IMixinCriteriaTriggers;
+import com.majruszlibrary.modhelper.DataNeoForge;
 import com.majruszlibrary.platform.Side;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
@@ -32,17 +33,17 @@ import java.nio.file.Path;
 import java.util.function.Function;
 
 public class RegistryNeoForge implements IRegistryPlatform {
-	DeferredRegister< ? > lastDeferredRegister = null;
-
 	@Override
 	public < Type > void register( RegistryGroup< Type > group ) {
-		this.lastDeferredRegister = DeferredRegister.create( group.registry.key(), group.helper.getModId() );
-		this.lastDeferredRegister.register( FMLJavaModLoadingContext.get().getModEventBus() );
+		DataNeoForge data = group.helper.getData( DataNeoForge.class );
+		data.lastDeferredRegister = DeferredRegister.create( group.registry.key(), group.helper.getModId() );
+		data.lastDeferredRegister.register( FMLJavaModLoadingContext.get().getModEventBus() );
 	}
 
 	@Override
 	public < Type > void register( RegistryObject< Type > object ) {
-		net.minecraftforge.registries.RegistryObject< Type > forgeObject = ( ( DeferredRegister< Type > )this.lastDeferredRegister ).register( object.id, object.newInstance );
+		DataNeoForge data = object.group.helper.getData( DataNeoForge.class );
+		net.minecraftforge.registries.RegistryObject< Type > forgeObject = ( ( DeferredRegister< Type > )data.lastDeferredRegister ).register( object.id, object.newInstance );
 		object.set( forgeObject, forgeObject::isPresent );
 	}
 
