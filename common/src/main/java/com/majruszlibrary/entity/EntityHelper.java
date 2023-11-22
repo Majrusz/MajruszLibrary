@@ -19,6 +19,7 @@ import com.majruszlibrary.platform.Side;
 import com.majruszlibrary.time.TimeHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -120,6 +121,14 @@ public class EntityHelper {
 
 	public static GoalSelector getTargetSelector( Mob mob ) {
 		return ( ( IMixinMob )mob ).getTargetSelector();
+	}
+
+	public static @Nullable CompoundTag getExtraTag( Entity entity ) {
+		return ( ( IMixinEntity )entity ).majruszlibrary$getExtraTag();
+	}
+
+	public static CompoundTag getOrCreateExtraTag( Entity entity ) {
+		return ( ( IMixinEntity )entity ).majruszlibrary$getOrCreateExtraTag();
 	}
 
 	public static void disableCurrentItem( Player player, double seconds ) {

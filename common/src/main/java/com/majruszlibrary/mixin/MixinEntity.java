@@ -7,6 +7,7 @@ import com.majruszlibrary.events.OnEntityNoiseReceived;
 import com.majruszlibrary.events.base.Events;
 import com.majruszlibrary.mixininterfaces.IMixinEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.GameEventTags;
 import net.minecraft.tags.TagKey;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.PositionSource;
 import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,12 +31,14 @@ import java.util.function.BiConsumer;
 
 @Mixin( Entity.class )
 public abstract class MixinEntity implements IMixinEntity {
+	private static final String majruszlibrary$TAG_ID = "MajruszLibrary";
 	private @Shadow Level level;
 	private VibrationSystem.User majruszlibrary$vibrationUser = null;
 	private VibrationSystem.Data majruszlibrary$vibrationData = null;
 	private DynamicGameEventListener< VibrationSystem.Listener > majruszlibrary$vibrationListener = null;
 	private int majruszlibrary$glowTicks = 0;
 	private int majruszlibrary$invisibleTicks = 0;
+	private CompoundTag majruszlibrary$extraTag = null;
 
 	@Inject(
 		at = @At( "TAIL" ),
@@ -101,6 +105,26 @@ public abstract class MixinEntity implements IMixinEntity {
 		callback.setReturnValue( callback.getReturnValue() || this.majruszlibrary$invisibleTicks > 0 );
 	}
 
+	@Inject(
+		at = @At( "RETURN" ),
+		method = "saveWithoutId (Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;"
+	)
+	private void saveWithoutId( CompoundTag tag, CallbackInfoReturnable< CompoundTag > callback ) {
+		if( this.majruszlibrary$extraTag != null ) {
+			tag.put( majruszlibrary$TAG_ID, this.majruszlibrary$extraTag );
+		}
+	}
+
+	@Inject(
+		at = @At( "RETURN" ),
+		method = "load (Lnet/minecraft/nbt/CompoundTag;)V"
+	)
+	private void load( CompoundTag tag, CallbackInfo callback ) {
+		if( tag.contains( majruszlibrary$TAG_ID ) ) {
+			this.majruszlibrary$extraTag = tag.getCompound( majruszlibrary$TAG_ID );
+		}
+	}
+
 	@Override
 	public void majruszlibrary$addGlowTicks( int ticks ) {
 		this.majruszlibrary$glowTicks += ticks;
@@ -114,6 +138,18 @@ public abstract class MixinEntity implements IMixinEntity {
 	@Override
 	public int majruszlibrary$getInvisibleTicks() {
 		return this.majruszlibrary$invisibleTicks;
+	}
+
+	public @Nullable CompoundTag majruszlibrary$getExtraTag() {
+		return this.majruszlibrary$extraTag;
+	}
+
+	public CompoundTag majruszlibrary$getOrCreateExtraTag() {
+		if( this.majruszlibrary$extraTag == null ) {
+			this.majruszlibrary$extraTag = new CompoundTag();
+		}
+
+		return this.majruszlibrary$extraTag;
 	}
 
 	public static class Config implements VibrationSystem.User {
