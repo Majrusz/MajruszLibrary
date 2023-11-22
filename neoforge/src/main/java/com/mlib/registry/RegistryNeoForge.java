@@ -1,16 +1,24 @@
 package com.mlib.registry;
 
+import com.mlib.platform.Side;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.file.Path;
+import java.util.function.Function;
 
 public class RegistryNeoForge implements IRegistryPlatform {
 	DeferredRegister< ? > lastDeferredRegister = null;
@@ -25,6 +33,24 @@ public class RegistryNeoForge implements IRegistryPlatform {
 	public < Type > void register( RegistryObject< Type > object ) {
 		net.minecraftforge.registries.RegistryObject< Type > forgeObject = ( ( DeferredRegister< Type > )this.lastDeferredRegister ).register( object.id, object.newInstance );
 		object.set( forgeObject, forgeObject::isPresent );
+	}
+
+	@Override
+	public void register( RegistryCallbacks callbacks ) {
+		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+		Side.runOnClient( ()->()->{
+			eventBus.addListener( ( final RegisterParticleProvidersEvent event )->{
+				callbacks.execute( Custom.Particles.class, new Custom.Particles() {
+					@Override
+					public < Type extends ParticleOptions > void register( ParticleType< Type > type,
+						Function< SpriteSet, ParticleProvider< Type > > factory
+					) {
+						event.registerSpriteSet( type, factory::apply );
+					}
+				} );
+			} );
+		} );
 	}
 
 	@Override

@@ -1,6 +1,6 @@
-package com.mlib.mixin;
+package com.mlib.mixin.fabric;
 
-import com.mlib.contexts.OnParticlesRegistered;
+import com.mlib.contexts.OnParticlesRegisteredFabric;
 import com.mlib.contexts.base.Contexts;
 import net.minecraft.client.particle.ParticleEngine;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,6 +15,6 @@ public abstract class MixinParticleEngine {
 		method = "registerProviders ()V"
 	)
 	private void registerProviders( CallbackInfo callback ) {
-		Contexts.dispatch( new OnParticlesRegistered( ( ParticleEngine )( Object )this ) );
+		Contexts.dispatch( new OnParticlesRegisteredFabric( ( ParticleEngine )( Object )this ) );
 	}
 }
