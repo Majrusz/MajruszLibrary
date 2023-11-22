@@ -184,6 +184,10 @@ public class EntityHelper {
 			.rotZ( Math.toRadians( -entity.getXRot() ) );
 	}
 
+	public static AnyPos getLookDirection( Entity entity ) {
+		return AnyPos.from( 1.0, 0.0, 0.0 ).rot( EntityHelper.getLookRotation( entity ) );
+	}
+
 	public static AnyPos getDirection2d( Entity entity ) {
 		return AnyPos.from( 1.0, 0.0, 0.0 ).rot( AnyRot.y( Math.toRadians( -entity.getYRot() ) - Math.PI / 2.0 ) );
 	}
