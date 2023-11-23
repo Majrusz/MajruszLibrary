@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 public class EnchantmentHelper {
 	public static int getLevel( Supplier< ? extends Enchantment > enchantment, ItemStack itemStack ) {
-		ResourceLocation enchantmentId = Registries.get( enchantment.get() );
+		ResourceLocation enchantmentId = Registries.ENCHANTMENTS.getId( enchantment.get() );
 		for( EnchantmentDef enchantmentDef : EnchantmentHelper.read( itemStack ).enchantments ) {
 			if( enchantmentId.equals( enchantmentDef.id ) ) {
 				return enchantmentDef.level;
@@ -66,7 +66,7 @@ public class EnchantmentHelper {
 	}
 
 	public static boolean increaseLevel( Supplier< ? extends Enchantment > enchantment, ItemStack itemStack ) {
-		ResourceLocation id = Registries.get( enchantment.get() );
+		ResourceLocation id = Registries.ENCHANTMENTS.getId( enchantment.get() );
 		EnchantmentsDef enchantmentsDef = EnchantmentHelper.read( itemStack );
 		for( EnchantmentDef enchantmentDef : enchantmentsDef.enchantments ) {
 			if( id.equals( enchantmentDef.id ) ) {
@@ -86,7 +86,7 @@ public class EnchantmentHelper {
 	}
 
 	public static boolean remove( Supplier< ? extends Enchantment > enchantment, ItemStack itemStack ) {
-		ResourceLocation id = Registries.get( enchantment.get() );
+		ResourceLocation id = Registries.ENCHANTMENTS.getId( enchantment.get() );
 		EnchantmentsDef enchantmentsDef = EnchantmentHelper.read( itemStack );
 		for( int idx = 0; idx < enchantmentsDef.enchantments.size(); ++idx ) {
 			if( id.equals( enchantmentsDef.enchantments.get( idx ).id ) ) {

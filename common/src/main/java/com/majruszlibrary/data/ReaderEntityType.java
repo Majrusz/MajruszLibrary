@@ -7,11 +7,11 @@ import net.minecraft.world.entity.EntityType;
 class ReaderEntityType extends ReaderStringCustom< EntityType< ? > > {
 	@Override
 	public EntityType< ? > convert( String id ) {
-		return Registries.getEntityType( new ResourceLocation( id ) );
+		return Registries.ENTITY_TYPES.get( new ResourceLocation( id ) );
 	}
 
 	@Override
 	public String convert( EntityType< ? > entityType ) {
-		return Registries.get( entityType ).toString();
+		return Registries.ENTITY_TYPES.getId( entityType ).toString();
 	}
 }

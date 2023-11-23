@@ -30,7 +30,7 @@ public interface IRegistryPlatform {
 	Path getConfigPath();
 
 	interface IAccessor< Type > {
-		ResourceLocation get( Type value );
+		ResourceLocation getId( Type value );
 
 		Type get( ResourceLocation id );
 

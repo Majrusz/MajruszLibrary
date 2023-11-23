@@ -7,11 +7,11 @@ import net.minecraft.world.effect.MobEffect;
 class ReaderMobEffect extends ReaderStringCustom< MobEffect > {
 	@Override
 	public MobEffect convert( String id ) {
-		return Registries.getEffect( new ResourceLocation( id ) );
+		return Registries.EFFECTS.get( new ResourceLocation( id ) );
 	}
 
 	@Override
 	public String convert( MobEffect effect ) {
-		return Registries.get( effect ).toString();
+		return Registries.EFFECTS.getId( effect ).toString();
 	}
 }

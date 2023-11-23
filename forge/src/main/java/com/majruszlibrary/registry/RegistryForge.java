@@ -125,7 +125,7 @@ public class RegistryForge implements IRegistryPlatform {
 		}
 
 		@Override
-		public ResourceLocation get( Type value ) {
+		public ResourceLocation getId( Type value ) {
 			return this.registry.getKey( value );
 		}
 
