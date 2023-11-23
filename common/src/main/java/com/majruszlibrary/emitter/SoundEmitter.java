@@ -1,6 +1,9 @@
 package com.majruszlibrary.emitter;
 
 import com.majruszlibrary.math.Random;
+import com.majruszlibrary.registry.Registries;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -53,6 +56,11 @@ public class SoundEmitter {
 	public void emit( Level level ) {
 		Vec3 position = this.position.get();
 		level.playSound( null, position.x, position.y, position.z, this.event, this.source, this.volume.get(), this.pitch.get() );
+	}
+
+	public void send( ServerPlayer player ) {
+		Vec3 position = this.position.get();
+		player.connection.send( new ClientboundSoundPacket( Registries.SOUND_EVENTS.getHolder( this.event ), this.source, position.x, position.y, position.z, this.volume.get(), this.pitch.get(), Random.nextInt() ) );
 	}
 
 	public SoundEmitter source( SoundSource source ) {
