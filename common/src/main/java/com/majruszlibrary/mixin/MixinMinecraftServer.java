@@ -1,6 +1,7 @@
 package com.majruszlibrary.mixin;
 
 import com.majruszlibrary.events.OnLevelsLoaded;
+import com.majruszlibrary.events.OnLevelsSaved;
 import com.majruszlibrary.events.OnServerTicked;
 import com.majruszlibrary.events.OnTradesInitialized;
 import com.majruszlibrary.events.base.Events;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,17 @@ public abstract class MixinMinecraftServer {
 			currentTrades.forEach( ( tier, trades )->newTrades.put( tier, trades.toArray( VillagerTrades.ItemListing[]::new ) ) );
 			VillagerTrades.TRADES.put( profession, newTrades );
 		}
+	}
+
+	@Inject(
+		at = @At(
+			target = "overworld ()Lnet/minecraft/server/level/ServerLevel;",
+			value = "INVOKE"
+		),
+		method = "saveAllChunks (ZZZ)Z"
+	)
+	private void saveAllChunks( boolean $$0, boolean $$1, boolean $$2, CallbackInfoReturnable< Boolean > callback ) {
+		Events.dispatch( new OnLevelsSaved( ( MinecraftServer )( Object )this ) );
 	}
 
 	@Inject(
