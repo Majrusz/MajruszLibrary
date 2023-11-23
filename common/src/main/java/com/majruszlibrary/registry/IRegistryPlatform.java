@@ -1,5 +1,6 @@
 package com.majruszlibrary.registry;
 
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
@@ -34,5 +35,7 @@ public interface IRegistryPlatform {
 		Type get( ResourceLocation id );
 
 		Iterable< Type > get();
+
+		Holder< Type > getHolder( Type value );
 	}
 }

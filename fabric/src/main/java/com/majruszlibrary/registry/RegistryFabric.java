@@ -16,6 +16,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -60,102 +61,27 @@ public class RegistryFabric implements IRegistryPlatform {
 
 	@Override
 	public IAccessor< Item > getItems() {
-		return new IAccessor<>() {
-			@Override
-			public ResourceLocation get( Item value ) {
-				return BuiltInRegistries.ITEM.getKey( value );
-			}
-
-			@Override
-			public Item get( ResourceLocation id ) {
-				return BuiltInRegistries.ITEM.get( id );
-			}
-
-			@Override
-			public Iterable< Item > get() {
-				return BuiltInRegistries.ITEM;
-			}
-		};
+		return new Accessor<>( BuiltInRegistries.ITEM );
 	}
 
 	@Override
 	public IAccessor< MobEffect > getEffects() {
-		return new IAccessor<>() {
-			@Override
-			public ResourceLocation get( MobEffect value ) {
-				return BuiltInRegistries.MOB_EFFECT.getKey( value );
-			}
-
-			@Override
-			public MobEffect get( ResourceLocation id ) {
-				return BuiltInRegistries.MOB_EFFECT.get( id );
-			}
-
-			@Override
-			public Iterable< MobEffect > get() {
-				return BuiltInRegistries.MOB_EFFECT;
-			}
-		};
+		return new Accessor<>( BuiltInRegistries.MOB_EFFECT );
 	}
 
 	@Override
 	public IAccessor< Enchantment > getEnchantments() {
-		return new IAccessor<>() {
-			@Override
-			public ResourceLocation get( Enchantment value ) {
-				return BuiltInRegistries.ENCHANTMENT.getKey( value );
-			}
-
-			@Override
-			public Enchantment get( ResourceLocation id ) {
-				return BuiltInRegistries.ENCHANTMENT.get( id );
-			}
-
-			@Override
-			public Iterable< Enchantment > get() {
-				return BuiltInRegistries.ENCHANTMENT;
-			}
-		};
+		return new Accessor<>( BuiltInRegistries.ENCHANTMENT );
 	}
 
 	@Override
 	public IAccessor< EntityType< ? > > getEntityTypes() {
-		return new IAccessor<>() {
-			@Override
-			public ResourceLocation get( EntityType< ? > value ) {
-				return BuiltInRegistries.ENTITY_TYPE.getKey( value );
-			}
-
-			@Override
-			public EntityType< ? > get( ResourceLocation id ) {
-				return BuiltInRegistries.ENTITY_TYPE.get( id );
-			}
-
-			@Override
-			public Iterable< EntityType< ? > > get() {
-				return BuiltInRegistries.ENTITY_TYPE;
-			}
-		};
+		return new Accessor<>( BuiltInRegistries.ENTITY_TYPE );
 	}
 
 	@Override
 	public IAccessor< SoundEvent > getSoundEvents() {
-		return new IAccessor<>() {
-			@Override
-			public ResourceLocation get( SoundEvent value ) {
-				return BuiltInRegistries.SOUND_EVENT.getKey( value );
-			}
-
-			@Override
-			public SoundEvent get( ResourceLocation id ) {
-				return BuiltInRegistries.SOUND_EVENT.get( id );
-			}
-
-			@Override
-			public Iterable< SoundEvent > get() {
-				return BuiltInRegistries.SOUND_EVENT;
-			}
-		};
+		return new Accessor<>( BuiltInRegistries.SOUND_EVENT );
 	}
 
 	@Override
@@ -190,5 +116,33 @@ public class RegistryFabric implements IRegistryPlatform {
 		SpawnPlacements.SpawnPredicate< Type > predicate
 	) {
 		IMixinSpawnPlacements.register( entityType, type, heightmap, predicate );
+	}
+
+	private static class Accessor< Type > implements IAccessor< Type > {
+		private final Registry< Type > registry;
+
+		public Accessor( Registry< Type > registry ) {
+			this.registry = registry;
+		}
+
+		@Override
+		public ResourceLocation get( Type value ) {
+			return this.registry.getKey( value );
+		}
+
+		@Override
+		public Type get( ResourceLocation id ) {
+			return this.registry.get( id );
+		}
+
+		@Override
+		public Iterable< Type > get() {
+			return this.registry;
+		}
+
+		@Override
+		public Holder< Type > getHolder( Type value ) {
+			return this.registry.wrapAsHolder( value );
+		}
 	}
 }

@@ -6,6 +6,7 @@ import com.majruszlibrary.platform.Side;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
@@ -28,6 +29,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.nio.file.Path;
 import java.util.function.Function;
@@ -87,106 +89,59 @@ public class RegistryNeoForge implements IRegistryPlatform {
 
 	@Override
 	public IAccessor< Item > getItems() {
-		return new IAccessor<>() {
-			@Override
-			public ResourceLocation get( Item value ) {
-				return ForgeRegistries.ITEMS.getKey( value );
-			}
-
-			@Override
-			public Item get( ResourceLocation id ) {
-				return ForgeRegistries.ITEMS.getValue( id );
-			}
-
-			@Override
-			public Iterable< Item > get() {
-				return ForgeRegistries.ITEMS;
-			}
-		};
+		return new Accessor<>( ForgeRegistries.ITEMS );
 	}
 
 	@Override
 	public IAccessor< MobEffect > getEffects() {
-		return new IAccessor<>() {
-			@Override
-			public ResourceLocation get( MobEffect value ) {
-				return ForgeRegistries.MOB_EFFECTS.getKey( value );
-			}
-
-			@Override
-			public MobEffect get( ResourceLocation id ) {
-				return ForgeRegistries.MOB_EFFECTS.getValue( id );
-			}
-
-			@Override
-			public Iterable< MobEffect > get() {
-				return ForgeRegistries.MOB_EFFECTS;
-			}
-		};
+		return new Accessor<>( ForgeRegistries.MOB_EFFECTS );
 	}
 
 	@Override
 	public IAccessor< Enchantment > getEnchantments() {
-		return new IAccessor<>() {
-			@Override
-			public ResourceLocation get( Enchantment value ) {
-				return ForgeRegistries.ENCHANTMENTS.getKey( value );
-			}
-
-			@Override
-			public Enchantment get( ResourceLocation id ) {
-				return ForgeRegistries.ENCHANTMENTS.getValue( id );
-			}
-
-			@Override
-			public Iterable< Enchantment > get() {
-				return ForgeRegistries.ENCHANTMENTS;
-			}
-		};
+		return new Accessor<>( ForgeRegistries.ENCHANTMENTS );
 	}
 
 	@Override
 	public IAccessor< EntityType< ? > > getEntityTypes() {
-		return new IAccessor<>() {
-			@Override
-			public ResourceLocation get( EntityType< ? > value ) {
-				return ForgeRegistries.ENTITY_TYPES.getKey( value );
-			}
-
-			@Override
-			public EntityType< ? > get( ResourceLocation id ) {
-				return ForgeRegistries.ENTITY_TYPES.getValue( id );
-			}
-
-			@Override
-			public Iterable< EntityType< ? > > get() {
-				return ForgeRegistries.ENTITY_TYPES;
-			}
-		};
+		return new Accessor<>( ForgeRegistries.ENTITY_TYPES );
 	}
 
 	@Override
 	public IAccessor< SoundEvent > getSoundEvents() {
-		return new IAccessor<>() {
-			@Override
-			public ResourceLocation get( SoundEvent value ) {
-				return ForgeRegistries.SOUND_EVENTS.getKey( value );
-			}
-
-			@Override
-			public SoundEvent get( ResourceLocation id ) {
-				return ForgeRegistries.SOUND_EVENTS.getValue( id );
-			}
-
-			@Override
-			public Iterable< SoundEvent > get() {
-				return ForgeRegistries.SOUND_EVENTS;
-			}
-		};
+		return new Accessor<>( ForgeRegistries.SOUND_EVENTS );
 	}
 
 	@Override
 	public Path getConfigPath() {
 		return FMLPaths.CONFIGDIR.get();
+	}
+
+	private static class Accessor< Type > implements IAccessor< Type > {
+		private final IForgeRegistry< Type > registry;
+
+		public Accessor( IForgeRegistry< Type > registry ) {
+			this.registry = registry;
+		}
+
+		@Override
+		public ResourceLocation get( Type value ) {
+			return this.registry.getKey( value );
+		}
+
+		@Override
+		public Type get( ResourceLocation id ) {
+			return this.registry.getValue( id );
+		}
+
+		@Override
+		public Iterable< Type > get() {
+			return this.registry;
+		}
+
+		@Override
+		public Holder< Type > getHolder( Type value ) {
+			return this.registry.getHolder( value ).orElseThrow();
+		}
 	}
 }
