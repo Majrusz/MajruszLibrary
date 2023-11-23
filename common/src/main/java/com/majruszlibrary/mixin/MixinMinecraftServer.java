@@ -52,7 +52,7 @@ public abstract class MixinMinecraftServer {
 
 	@Inject(
 		at = @At(
-			target = "overworld ()Lnet/minecraft/server/level/ServerLevel;",
+			target = "Lnet/minecraft/server/MinecraftServer;overworld ()Lnet/minecraft/server/level/ServerLevel;",
 			value = "INVOKE"
 		),
 		method = "saveAllChunks (ZZZ)Z"
