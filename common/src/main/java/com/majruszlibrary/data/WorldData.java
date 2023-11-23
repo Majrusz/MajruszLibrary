@@ -3,6 +3,7 @@ package com.majruszlibrary.data;
 import com.majruszlibrary.events.OnLevelsLoaded;
 import com.majruszlibrary.events.OnLevelsSaved;
 import com.majruszlibrary.events.OnPlayerLoggedIn;
+import com.majruszlibrary.events.base.Priority;
 import com.majruszlibrary.modhelper.ModHelper;
 import com.majruszlibrary.network.NetworkObject;
 import com.majruszlibrary.platform.Side;
@@ -29,9 +30,11 @@ public class WorldData {
 		this.setupDefaultValues = setupDefaultValues;
 		this.name = helper.getModId();
 
-		OnLevelsLoaded.listen( this::setup );
+		OnLevelsLoaded.listen( this::setup )
+			.priority( Priority.LOW );
 
-		OnLevelsSaved.listen( this::save );
+		OnLevelsSaved.listen( this::save )
+			.priority( Priority.LOW );
 
 		OnPlayerLoggedIn.listen( this::sendToClient )
 			.addCondition( data->Side.isDedicatedServer() );
