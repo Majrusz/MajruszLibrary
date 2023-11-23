@@ -16,10 +16,10 @@ import java.util.function.Consumer;
 @OnlyIn( Dist.CLIENT )
 public class OnItemInventoryClicked implements ICancellableEvent {
 	public final @Nullable Slot slot;
-	public final int slotIdx;
 	public final ItemStack itemStack;
 	public final LocalPlayer player;
 	public final int action;
+	public final int containerIdx;
 	private boolean isCancelled = false;
 
 	public static Event< OnItemInventoryClicked > listen( Consumer< OnItemInventoryClicked > consumer ) {
@@ -28,10 +28,14 @@ public class OnItemInventoryClicked implements ICancellableEvent {
 
 	public OnItemInventoryClicked( Slot slot, int action ) {
 		this.slot = slot;
-		this.slotIdx = slot != null ? slot.getContainerSlot() : -1;
 		this.itemStack = slot != null ? slot.getItem() : ItemStack.EMPTY;
 		this.player = Side.getLocalPlayer();
 		this.action = action;
+		if( slot != null ) {
+			this.containerIdx = this.itemStack.equals( this.player.containerMenu.getSlot( slot.index ).getItem() ) ? slot.index : slot.getContainerSlot();
+		} else {
+			this.containerIdx = -1;
+		}
 	}
 
 	@Override
