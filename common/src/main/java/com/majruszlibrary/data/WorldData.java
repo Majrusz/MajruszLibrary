@@ -1,6 +1,7 @@
 package com.majruszlibrary.data;
 
 import com.majruszlibrary.events.OnLevelsLoaded;
+import com.majruszlibrary.events.OnLevelsSaved;
 import com.majruszlibrary.events.OnPlayerLoggedIn;
 import com.majruszlibrary.modhelper.ModHelper;
 import com.majruszlibrary.network.NetworkObject;
@@ -30,6 +31,8 @@ public class WorldData {
 
 		OnLevelsLoaded.listen( this::setup );
 
+		OnLevelsSaved.listen( this::save );
+
 		OnPlayerLoggedIn.listen( this::sendToClient )
 			.addCondition( data->Side.isDedicatedServer() );
 	}
@@ -40,6 +43,10 @@ public class WorldData {
 		data.server.overworld()
 			.getDataStorage()
 			.computeIfAbsent( this.savedData::load, ()->this.savedData, this.name );
+	}
+
+	private void save( OnLevelsSaved data ) {
+		this.savedData.setDirty();
 	}
 
 	private void sendToClient( OnPlayerLoggedIn data ) {
