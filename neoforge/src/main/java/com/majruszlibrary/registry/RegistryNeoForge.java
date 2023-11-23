@@ -30,8 +30,10 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.function.Function;
 
 public class RegistryNeoForge implements IRegistryPlatform {
@@ -142,6 +144,11 @@ public class RegistryNeoForge implements IRegistryPlatform {
 		@Override
 		public Holder< Type > getHolder( Type value ) {
 			return this.registry.getHolder( value ).orElseThrow();
+		}
+
+		@Override
+		public @NotNull Iterator< Type > iterator() {
+			return this.registry.iterator();
 		}
 	}
 }

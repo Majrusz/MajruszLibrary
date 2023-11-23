@@ -29,7 +29,7 @@ public interface IRegistryPlatform {
 
 	Path getConfigPath();
 
-	interface IAccessor< Type > {
+	interface IAccessor< Type > extends Iterable< Type > {
 		ResourceLocation getId( Type value );
 
 		Type get( ResourceLocation id );

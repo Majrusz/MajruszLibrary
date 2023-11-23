@@ -29,8 +29,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.levelgen.Heightmap;
+import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
+import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -143,6 +145,11 @@ public class RegistryFabric implements IRegistryPlatform {
 		@Override
 		public Holder< Type > getHolder( Type value ) {
 			return this.registry.wrapAsHolder( value );
+		}
+
+		@Override
+		public @NotNull Iterator< Type > iterator() {
+			return this.registry.iterator();
 		}
 	}
 }
