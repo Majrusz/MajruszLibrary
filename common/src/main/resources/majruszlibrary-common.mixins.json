@@ -55,6 +55,7 @@
     "MixinPlayerList",
     "MixinPowderSnowBlock",
     "MixinProjectile",
+    "MixinRaid",
     "MixinReloadableServerResources",
     "MixinServerLevel",
     "MixinServerPlayer",
