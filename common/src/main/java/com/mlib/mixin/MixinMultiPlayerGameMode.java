@@ -37,7 +37,10 @@ public abstract class MixinMultiPlayerGameMode {
 	@Dynamic
 	@Inject(
 		at = @At( "RETURN" ),
-		method = "*(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/entity/player/Player;Lorg/apache/commons/lang3/mutable/MutableObject;I)Lnet/minecraft/network/protocol/Packet;"
+		method = {
+			"*(Lnet/minecraft/class_1268;Lnet/minecraft/class_1657;Lorg/apache/commons/lang3/mutable/MutableObject;I)Lnet/minecraft/class_2596;",
+			"*(Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/entity/player/Player;Lorg/apache/commons/lang3/mutable/MutableObject;I)Lnet/minecraft/network/protocol/Packet;"
+		}
 	)
 	private void useItem( InteractionHand hand, Player player, MutableObject< InteractionResult > result, int $$1,
 		CallbackInfoReturnable< Packet< ServerGamePacketListener > > callback

@@ -1,0 +1,1 @@
+- fixed game crash (reported by @bons66, @3dEADto2, @Poopooracoocoo)
