@@ -14,6 +14,7 @@ import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -160,6 +161,14 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 	)
 	private void dropAllDeathLoot( DamageSource source, CallbackInfo callback ) {
 		OnLootingLevelGet.Cache.SOURCE = source;
+	}
+
+	@Inject(
+		at = @At( "HEAD" ),
+		method = "eat (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;"
+	)
+	private void eat( Level level, ItemStack itemStack, CallbackInfoReturnable< ItemStack > callback ) {
+		Events.dispatch( new OnItemEaten( ( LivingEntity )( Object )this, itemStack ) );
 	}
 
 	private static void majruszlibrary$tryToAddMagicParticles( OnEntityPreDamaged data ) {
