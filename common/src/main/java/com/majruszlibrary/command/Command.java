@@ -18,7 +18,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class Command {
 	public static CommandBuilder create() {
@@ -97,12 +99,23 @@ public class Command {
 		return parameter;
 	}
 
-	public static < EnumType extends Enum< EnumType > > IParameter.Named< EnumType > enumeration( Class< EnumType > clazz ) {
+	public static < EnumType extends Enum< EnumType > > IParameter.Named< EnumType > enumeration( Supplier< EnumType[] > values ) {
 		IParameter.Named< EnumType > parameter = new IParameter.Named<>();
 
-		return parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, EnumArgument.enumArgument( clazz ) ) ) )
-			.getter( context->context.getArgument( parameter.name, clazz ) )
-			.named( clazz.getSimpleName().toLowerCase() );
+		return parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, StringArgumentType.string() )
+				.suggests( ( context, subbuilder )->SharedSuggestionProvider.suggest( Arrays.stream( values.get() ).map( Enum::name ).toList(), subbuilder ) ) )
+			)
+			.getter( context->{
+				String name = context.getArgument( parameter.name, String.class );
+				for( EnumType value : values.get() ) {
+					if( name.equals( value.name() ) ) {
+						return value;
+					}
+				}
+
+				throw new IllegalStateException();
+			} )
+			.named( DefaultKeys.VALUE );
 	}
 
 	public static IParameter.Named< Vec3 > position() {
