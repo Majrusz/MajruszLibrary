@@ -1,4 +1,4 @@
-package com.majruszlibrary.mixin;
+package com.majruszlibrary.mixin.fabric;
 
 import com.majruszlibrary.events.OnItemInventoryClicked;
 import com.majruszlibrary.events.base.Events;

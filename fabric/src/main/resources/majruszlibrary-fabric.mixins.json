@@ -5,6 +5,7 @@
   "minVersion": "0.8",
   "refmap": "majruszlibrary.refmap.json",
   "client": [
+    "MixinAbstractContainerScreen",
     "MixinGui",
     "MixinParticleEngine"
   ],
