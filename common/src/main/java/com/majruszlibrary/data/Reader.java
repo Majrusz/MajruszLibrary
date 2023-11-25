@@ -57,6 +57,10 @@ public class Reader {
 		return new ReaderMobEffect();
 	}
 
+	public static < Type > IReader< Type > optional( IReader< Type > reader ) {
+		return new ReaderOptional<>( reader );
+	}
+
 	public static < Type extends Number & Comparable< Type > > IReader< Range< Type > > range( IReader< Type > reader ) {
 		return new ReaderRange<>( reader );
 	}

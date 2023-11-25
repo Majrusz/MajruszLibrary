@@ -21,48 +21,26 @@ class ReaderKey< ObjectType, ValueType > {
 	}
 
 	public JsonElement writeJson( ObjectType object ) {
-		ValueType value = this.getter.apply( object );
-		if( value != null || this.reader instanceof ReaderClass ) {
-			return this.reader.writeJson( value );
-		}
-
-		return null;
+		return this.reader.writeJson( this.getter.apply( object ) );
 	}
 
 	public void writeBuffer( FriendlyByteBuf buffer, ObjectType object ) {
-		ValueType value = this.getter.apply( object );
-		if( value != null || this.reader instanceof ReaderClass ) {
-			this.reader.writeBuffer( buffer, this.getter.apply( object ) );
-		}
+		this.reader.writeBuffer( buffer, this.getter.apply( object ) );
 	}
 
 	public Tag writeTag( ObjectType object ) {
-		ValueType value = this.getter.apply( object );
-		if( value != null || this.reader instanceof ReaderClass ) {
-			return this.reader.writeTag( value );
-		}
-
-		return null;
+		return this.reader.writeTag( this.getter.apply( object ) );
 	}
 
 	public void readJson( ObjectType object, JsonElement json ) {
-		ValueType value = this.reader.readJson( json );
-		if( value != null || this.reader instanceof ReaderClass ) {
-			this.setter.accept( object, value );
-		}
+		this.setter.accept( object, this.reader.readJson( json ) );
 	}
 
 	public void readBuffer( ObjectType object, FriendlyByteBuf buffer ) {
-		ValueType value = this.reader.readBuffer( buffer );
-		if( value != null || this.reader instanceof ReaderClass ) {
-			this.setter.accept( object, value );
-		}
+		this.setter.accept( object, this.reader.readBuffer( buffer ) );
 	}
 
 	public void readTag( ObjectType object, Tag tag ) {
-		ValueType value = this.reader.readTag( tag );
-		if( value != null || this.reader instanceof ReaderClass ) {
-			this.setter.accept( object, value );
-		}
+		this.setter.accept( object, this.reader.readTag( tag ) );
 	}
 }

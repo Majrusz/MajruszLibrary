@@ -98,8 +98,6 @@ public final class Config {
 			Config config = new Config( name, this.clazz, instance );
 			NetworkObject< Type > network = this.isAutoSyncEnabled ? this.helper.create( name.replace( "-", "_" ), this.clazz ) : null;
 
-			this.helper.onRegister( config::reload );
-
 			OnResourcesReloaded.listen( data->{
 				config.reload();
 				if( Side.isDedicatedServer() && network != null ) {
