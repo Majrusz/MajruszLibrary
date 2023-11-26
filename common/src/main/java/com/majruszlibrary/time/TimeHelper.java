@@ -1,11 +1,11 @@
 package com.majruszlibrary.time;
 
-import com.majruszlibrary.annotation.AutoInstance;
+import com.majruszlibrary.annotation.Dist;
+import com.majruszlibrary.annotation.OnlyIn;
 import com.majruszlibrary.collection.CollectionHelper;
 import com.majruszlibrary.events.OnClientTicked;
 import com.majruszlibrary.events.OnServerTicked;
 import com.majruszlibrary.events.base.Priority;
-import com.majruszlibrary.platform.LogicalSafe;
 import com.majruszlibrary.platform.Side;
 import com.majruszlibrary.time.delays.Delay;
 import com.majruszlibrary.time.delays.IDelayedExecution;
@@ -21,9 +21,14 @@ import java.util.function.Predicate;
 public class TimeHelper {
 	private static final int TICKS_IN_SECOND = 20;
 	private static final int TICKS_IN_MINUTE = TICKS_IN_SECOND * 60;
-	private static final LogicalSafe< Long > COUNTER = LogicalSafe.of( ()->-1L );
-	private static final LogicalSafe< List< IDelayedExecution > > PENDING_EXECUTIONS = LogicalSafe.of( ArrayList::new );
-	private static final LogicalSafe< List< IDelayedExecution > > EXECUTIONS = LogicalSafe.of( ArrayList::new );
+	private static final List< IDelayedExecution > PENDING_EXECUTIONS = new ArrayList<>();
+	private static final List< IDelayedExecution > EXECUTIONS = new ArrayList<>();
+	private static long TICKS_COUNTER = -1L;
+
+	static {
+		OnServerTicked.listen( TimeHelper::update )
+			.priority( Priority.HIGHEST );
+	}
 
 	public static Delay delay( int ticks, Consumer< Delay > callback ) {
 		return TimeHelper.run( new Delay( callback, ticks ) );
@@ -50,7 +55,7 @@ public class TimeHelper {
 	}
 
 	public static < Type extends IDelayedExecution > Type run( Type exec ) {
-		PENDING_EXECUTIONS.run( list->list.add( exec ) );
+		PENDING_EXECUTIONS.add( exec );
 
 		return exec;
 	}
@@ -64,7 +69,7 @@ public class TimeHelper {
 	}
 
 	public static boolean haveTicksPassed( int ticks ) {
-		return COUNTER.get() % ticks == 0;
+		return TICKS_COUNTER % ticks == 0;
 	}
 
 	public static boolean haveSecondsPassed( double seconds ) {
@@ -72,39 +77,46 @@ public class TimeHelper {
 	}
 
 	public static long getTicks() {
-		return COUNTER.get();
+		return TICKS_COUNTER;
 	}
 
+	@OnlyIn( Dist.CLIENT )
+	public static double getClientTime() {
+		return Client.TIME_COUNTER;
+	}
+
+	@OnlyIn( Dist.CLIENT )
 	public static float getPartialTicks() {
-		return Side.get( ()->()->Side.getMinecraft().getFrameTime(), ()->()->0.0f );
+		return Side.getMinecraft().getFrameTime();
 	}
 
-	@AutoInstance
-	public static class Updater {
-		public Updater() {
-			OnClientTicked.listen( data->this.update() )
-				.priority( Priority.HIGHEST );
+	private static void update( OnServerTicked data ) {
+		TICKS_COUNTER++;
 
-			OnServerTicked.listen( data->this.update() )
+		List< IDelayedExecution > copy = CollectionHelper.pop( PENDING_EXECUTIONS, ArrayList::new );
+		copy.forEach( IDelayedExecution::start );
+		EXECUTIONS.addAll( copy );
+		for( Iterator< IDelayedExecution > iterator = EXECUTIONS.iterator(); iterator.hasNext(); ) {
+			IDelayedExecution exec = iterator.next();
+			exec.tick();
+			if( exec.isFinished() ) {
+				exec.finish();
+				iterator.remove();
+			}
+		}
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	public static class Client {
+		private static double TIME_COUNTER = 0.0f;
+
+		static {
+			OnClientTicked.listen( Client::update )
 				.priority( Priority.HIGHEST );
 		}
 
-		private void update() {
-			COUNTER.set( x->x + 1 );
-
-			PENDING_EXECUTIONS.run( pending->{
-				List< IDelayedExecution > copy = CollectionHelper.pop( pending, ArrayList::new );
-				copy.forEach( IDelayedExecution::start );
-				EXECUTIONS.run( executions->executions.addAll( copy ) );
-			} );
-			for( Iterator< IDelayedExecution > iterator = EXECUTIONS.get().iterator(); iterator.hasNext(); ) {
-				IDelayedExecution exec = iterator.next();
-				exec.tick();
-				if( exec.isFinished() ) {
-					exec.finish();
-					iterator.remove();
-				}
-			}
+		private static void update( OnClientTicked data ) {
+			TIME_COUNTER += Side.getMinecraft().getDeltaFrameTime();
 		}
 	}
 }
