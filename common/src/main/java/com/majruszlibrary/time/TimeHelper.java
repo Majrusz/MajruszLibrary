@@ -3,7 +3,6 @@ package com.majruszlibrary.time;
 import com.majruszlibrary.annotation.Dist;
 import com.majruszlibrary.annotation.OnlyIn;
 import com.majruszlibrary.collection.CollectionHelper;
-import com.majruszlibrary.events.OnClientTicked;
 import com.majruszlibrary.events.OnServerTicked;
 import com.majruszlibrary.events.base.Priority;
 import com.majruszlibrary.platform.Side;
@@ -11,6 +10,7 @@ import com.majruszlibrary.time.delays.Delay;
 import com.majruszlibrary.time.delays.IDelayedExecution;
 import com.majruszlibrary.time.delays.Slider;
 import com.majruszlibrary.time.delays.Until;
+import net.minecraft.Util;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -81,8 +81,8 @@ public class TimeHelper {
 	}
 
 	@OnlyIn( Dist.CLIENT )
-	public static double getClientTime() {
-		return Client.TIME_COUNTER;
+	public static float getClientTime() {
+		return Util.getMillis() / 1000.0f;
 	}
 
 	@OnlyIn( Dist.CLIENT )
@@ -103,20 +103,6 @@ public class TimeHelper {
 				exec.finish();
 				iterator.remove();
 			}
-		}
-	}
-
-	@OnlyIn( Dist.CLIENT )
-	public static class Client {
-		private static double TIME_COUNTER = 0.0f;
-
-		static {
-			OnClientTicked.listen( Client::update )
-				.priority( Priority.HIGHEST );
-		}
-
-		private static void update( OnClientTicked data ) {
-			TIME_COUNTER += Side.getMinecraft().getDeltaFrameTime();
 		}
 	}
 }
