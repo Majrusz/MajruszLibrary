@@ -9,6 +9,7 @@
     "MixinClientLevel",
     "MixinGuiGraphics",
     "MixinHumanoidModel",
+    "MixinItemColors",
     "MixinItemInHandRenderer",
     "MixinKeyboardHandler",
     "MixinLivingEntityRenderer",
