@@ -1,5 +1,4 @@
 {
-  "commands.majruszlibrary.arguments.enum.invalid": "Typ wyliczyniowy musi być jednym z %1$s, a był %2$s",
   "majruszlibrary.advanced_hint": "Wciśnij SHIFT po więcej informacji...",
   "majruszlibrary.update_available": "Nowe aktualizacje są dostępne:",
   "majruszlibrary.update_versions": "%1$s (aktualnie: %2$s)"
