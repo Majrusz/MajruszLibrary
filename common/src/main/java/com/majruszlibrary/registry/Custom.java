@@ -8,13 +8,16 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.function.Function;
@@ -27,6 +30,11 @@ public class Custom {
 
 	public interface Attributes {
 		< Type extends LivingEntity > void register( EntityType< Type > type, AttributeSupplier attributes );
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	public interface ItemProperties {
+		void register( Item item, ResourceLocation id, ClampedItemPropertyFunction property );
 	}
 
 	@OnlyIn( Dist.CLIENT )

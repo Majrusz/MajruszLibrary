@@ -16,6 +16,8 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
@@ -51,12 +53,13 @@ public class RegistryFabric implements IRegistryPlatform {
 	@Override
 	public void register( RegistryCallbacks callbacks ) {
 		callbacks.execute( Custom.Advancements.class, this::registerAdvancement );
-		callbacks.execute( Custom.Attributes.class, this::registerAttributes );
+		callbacks.execute( Custom.Attributes.class, this::registerAttribute );
 		callbacks.execute( Custom.SpawnPlacements.class, this::registerSpawnPlacement );
 
 		Side.runOnClient( ()->()->{
+			callbacks.execute( Custom.ItemProperties.class, this::registerItemProperty );
 			callbacks.execute( Custom.ModelLayers.class, this::registerModelLayer );
-			callbacks.execute( Custom.Particles.class, this::registerParticles );
+			callbacks.execute( Custom.Particles.class, this::registerParticle );
 			callbacks.execute( Custom.Renderers.class, this::registerRenderer );
 		} );
 	}
@@ -95,8 +98,13 @@ public class RegistryFabric implements IRegistryPlatform {
 		IMixinCriteriaTriggers.register( trigger );
 	}
 
-	private < Type extends LivingEntity > void registerAttributes( EntityType< Type > type, AttributeSupplier attributes ) {
+	private < Type extends LivingEntity > void registerAttribute( EntityType< Type > type, AttributeSupplier attributes ) {
 		FabricDefaultAttributeRegistry.register( type, attributes );
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	private void registerItemProperty( Item item, ResourceLocation id, ClampedItemPropertyFunction property ) {
+		ItemProperties.register( item, id, property );
 	}
 
 	@OnlyIn( Dist.CLIENT )
@@ -105,7 +113,7 @@ public class RegistryFabric implements IRegistryPlatform {
 	}
 
 	@OnlyIn( Dist.CLIENT )
-	private < Type extends ParticleOptions > void registerParticles( ParticleType< Type > type, Function< SpriteSet, ParticleProvider< Type > > factory ) {
+	private < Type extends ParticleOptions > void registerParticle( ParticleType< Type > type, Function< SpriteSet, ParticleProvider< Type > > factory ) {
 		OnParticlesRegisteredFabric.listen( data->data.engine.register( type, factory::apply ) );
 	}
 

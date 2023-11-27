@@ -6,6 +6,7 @@ import com.majruszlibrary.platform.Side;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -73,6 +74,7 @@ public class RegistryForge implements IRegistryPlatform {
 
 		Side.runOnClient( ()->()->{
 			eventBus.addListener( ( final FMLClientSetupEvent event )->{
+				callbacks.execute( Custom.ItemProperties.class, ItemProperties::register );
 				callbacks.execute( Custom.ModelLayers.class, ForgeHooksClient::registerLayerDefinition );
 				callbacks.execute( Custom.Renderers.class, EntityRenderers::register );
 			} );
