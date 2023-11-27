@@ -48,6 +48,7 @@
     "MixinLootingEnchantFunction",
     "MixinLootItemRandomChanceWithLootingCondition",
     "MixinMinecraftServer",
+    "MixinMob",
     "MixinMobCategory",
     "MixinNaturalSpawner",
     "MixinPersistentEntitySectionManager",

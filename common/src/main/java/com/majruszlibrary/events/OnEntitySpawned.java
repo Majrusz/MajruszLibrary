@@ -4,10 +4,13 @@ import com.majruszlibrary.events.base.Event;
 import com.majruszlibrary.events.base.Events;
 import com.majruszlibrary.events.type.ICancellableEvent;
 import com.majruszlibrary.events.type.IEntityEvent;
+import com.majruszlibrary.mixininterfaces.IMixinMob;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -16,6 +19,7 @@ public class OnEntitySpawned implements ICancellableEvent, IEntityEvent {
 	public final boolean isLoadedFromDisk;
 	public final BlockPos position;
 	public final DifficultyInstance difficulty;
+	public final @Nullable MobSpawnType mobSpawnType;
 	private boolean isSpawnCancelled = false;
 
 	public static Event< OnEntitySpawned > listen( Consumer< OnEntitySpawned > consumer ) {
@@ -27,6 +31,7 @@ public class OnEntitySpawned implements ICancellableEvent, IEntityEvent {
 		this.isLoadedFromDisk = isLoadedFromDisk;
 		this.position = entity.blockPosition();
 		this.difficulty = entity.level().getCurrentDifficultyAt( this.position );
+		this.mobSpawnType = entity instanceof IMixinMob mob ? mob.getMobSpawnType() : null;
 	}
 
 	@Override
