@@ -23,7 +23,7 @@
   "accessWidener" : "${mod_id}.accesswidener",
   "depends": {
     "fabric": "*",
-    "minecraft": ">=${minecraft_version}"
+    "minecraft": "${fabric_minecraft_version_range}"
   },
   "custom": {
     "update": "${mod_update}"
