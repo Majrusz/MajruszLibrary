@@ -9,75 +9,50 @@ import net.minecraft.network.FriendlyByteBuf;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SerializableObject< Type > implements ISerializable< Type > {
-	protected final List< ReaderKey< Type, ? > > readers = new ArrayList<>();
+	protected final List< ISerializable< Type > > serializables = new ArrayList<>();
 
 	@Override
 	public < JsonType extends JsonElement > JsonType writeJson( Type value, JsonType json ) {
-		JsonObject jsonObject = json.getAsJsonObject();
-		for( ReaderKey< Type, ? > reader : this.readers ) {
-			JsonElement subjson = reader.writeJson( value );
-			if( subjson != null ) {
-				jsonObject.add( reader.id, subjson );
-			}
-		}
+		this.serializables.forEach( serializable->serializable.writeJson( value, json ) );
 
 		return json;
 	}
 
 	@Override
 	public FriendlyByteBuf writeBuffer( Type value, FriendlyByteBuf buffer ) {
-		for( ReaderKey< Type, ? > reader : this.readers ) {
-			reader.writeBuffer( buffer, value );
-		}
+		this.serializables.forEach( serializable->serializable.writeBuffer( value, buffer ) );
 
 		return buffer;
 	}
 
 	@Override
 	public < TagType extends Tag > TagType writeTag( Type value, TagType tag ) {
-		CompoundTag compoundTag = ( CompoundTag )tag;
-		for( ReaderKey< Type, ? > reader : this.readers ) {
-			Tag subtag = reader.writeTag( value );
-			if( subtag != null ) {
-				compoundTag.put( reader.id, subtag );
-			}
-		}
+		this.serializables.forEach( serializable->serializable.writeTag( value, tag ) );
 
 		return tag;
 	}
 
 	@Override
 	public Type readJson( Type value, JsonElement json ) {
-		JsonObject jsonObject = json.getAsJsonObject();
-		for( ReaderKey< Type, ? > reader : this.readers ) {
-			if( jsonObject.has( reader.id ) ) {
-				reader.readJson( value, jsonObject.get( reader.id ) );
-			}
-		}
+		this.serializables.forEach( serializable->serializable.readJson( value, json ) );
 
 		return value;
 	}
 
 	@Override
 	public Type readBuffer( Type value, FriendlyByteBuf buffer ) {
-		for( ReaderKey< Type, ? > reader : this.readers ) {
-			reader.readBuffer( value, buffer );
-		}
+		this.serializables.forEach( serializable->serializable.readBuffer( value, buffer ) );
 
 		return value;
 	}
 
 	@Override
 	public Type readTag( Type value, Tag tag ) {
-		CompoundTag compoundTag = ( CompoundTag )tag;
-		for( ReaderKey< Type, ? > reader : this.readers ) {
-			if( compoundTag.contains( reader.id ) ) {
-				reader.readTag( value, compoundTag.get( reader.id ) );
-			}
-		}
+		this.serializables.forEach( serializable->serializable.readTag( value, tag ) );
 
 		return value;
 	}
@@ -85,7 +60,72 @@ public class SerializableObject< Type > implements ISerializable< Type > {
 	public < ValueType > SerializableObject< Type > define( String id, IReader< ValueType > reader, Function< Type, ValueType > getter,
 		BiConsumer< Type, ValueType > setter
 	) {
-		this.readers.add( new ReaderKey<>( id, reader, getter, setter ) );
+		this.serializables.add( new ReaderKey<>( id, reader, getter, setter ) );
+
+		return this;
+	}
+
+	public SerializableObject< Type > define( String id, Consumer< SerializableObject< Type > > consumer ) {
+		SerializableObject< Type > subobject = new SerializableObject<>();
+		consumer.accept( subobject );
+
+		this.serializables.add( new ISerializable<>() {
+			@Override
+			public < JsonType extends JsonElement > JsonType writeJson( Type value, JsonType json ) {
+				JsonObject jsonObject = json.getAsJsonObject();
+				JsonElement subjson = subobject.writeJson( value, new JsonObject() );
+				if( subjson != null ) {
+					jsonObject.add( id, subjson );
+				}
+
+				return json;
+			}
+
+			@Override
+			public FriendlyByteBuf writeBuffer( Type value, FriendlyByteBuf buffer ) {
+				subobject.writeBuffer( value, buffer );
+
+				return buffer;
+			}
+
+			@Override
+			public < TagType extends Tag > TagType writeTag( Type value, TagType tag ) {
+				CompoundTag compoundTag = new CompoundTag();
+				Tag subtag = subobject.writeTag( value, tag );
+				if( subtag != null ) {
+					compoundTag.put( id, subtag );
+				}
+
+				return tag;
+			}
+
+			@Override
+			public Type readJson( Type value, JsonElement json ) {
+				JsonObject jsonObject = json.getAsJsonObject();
+				if( jsonObject.has( id ) ) {
+					subobject.readJson( value, jsonObject.get( id ) );
+				}
+
+				return value;
+			}
+
+			@Override
+			public Type readBuffer( Type value, FriendlyByteBuf buffer ) {
+				subobject.readBuffer( value, buffer );
+
+				return value;
+			}
+
+			@Override
+			public Type readTag( Type value, Tag tag ) {
+				CompoundTag compoundTag = ( CompoundTag )tag;
+				if( compoundTag.contains( id ) ) {
+					subobject.readTag( value, compoundTag.get( id ) );
+				}
+
+				return value;
+			}
+		} );
 
 		return this;
 	}

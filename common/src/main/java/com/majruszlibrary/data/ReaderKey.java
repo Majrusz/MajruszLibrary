@@ -1,13 +1,15 @@
 package com.majruszlibrary.data;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-class ReaderKey< ObjectType, ValueType > {
+class ReaderKey< ObjectType, ValueType > implements ISerializable< ObjectType > {
 	final String id;
 	final IReader< ValueType > reader;
 	final Function< ObjectType, ValueType > getter;
@@ -20,27 +22,59 @@ class ReaderKey< ObjectType, ValueType > {
 		this.setter = setter;
 	}
 
-	public JsonElement writeJson( ObjectType object ) {
-		return this.reader.writeJson( this.getter.apply( object ) );
+	@Override
+	public < JsonType extends JsonElement > JsonType writeJson( ObjectType object, JsonType json ) {
+		JsonObject jsonObject = json.getAsJsonObject();
+		JsonElement subjson = this.reader.writeJson( this.getter.apply( object ) );
+		if( subjson != null ) {
+			jsonObject.add( this.id, subjson );
+		}
+
+		return json;
 	}
 
-	public void writeBuffer( FriendlyByteBuf buffer, ObjectType object ) {
+	@Override
+	public FriendlyByteBuf writeBuffer( ObjectType object, FriendlyByteBuf buffer ) {
 		this.reader.writeBuffer( buffer, this.getter.apply( object ) );
+
+		return buffer;
 	}
 
-	public Tag writeTag( ObjectType object ) {
-		return this.reader.writeTag( this.getter.apply( object ) );
+	@Override
+	public < TagType extends Tag > TagType writeTag( ObjectType object, TagType tag ) {
+		CompoundTag compoundTag = ( CompoundTag )tag;
+		Tag subtag = this.reader.writeTag( this.getter.apply( object ) );
+		if( subtag != null ) {
+			compoundTag.put( this.id, subtag );
+		}
+
+		return tag;
 	}
 
-	public void readJson( ObjectType object, JsonElement json ) {
-		this.setter.accept( object, this.reader.readJson( json ) );
+	@Override
+	public ObjectType readJson( ObjectType object, JsonElement json ) {
+		JsonObject jsonObject = json.getAsJsonObject();
+		if( jsonObject.has( this.id ) ) {
+			this.setter.accept( object, this.reader.readJson( jsonObject.get( this.id ) ) );
+		}
+
+		return object;
 	}
 
-	public void readBuffer( ObjectType object, FriendlyByteBuf buffer ) {
+	@Override
+	public ObjectType readBuffer( ObjectType object, FriendlyByteBuf buffer ) {
 		this.setter.accept( object, this.reader.readBuffer( buffer ) );
+
+		return object;
 	}
 
-	public void readTag( ObjectType object, Tag tag ) {
-		this.setter.accept( object, this.reader.readTag( tag ) );
+	@Override
+	public ObjectType readTag( ObjectType object, Tag tag ) {
+		CompoundTag compoundTag = ( CompoundTag )tag;
+		if( compoundTag.contains( this.id ) ) {
+			this.setter.accept( object, this.reader.readTag( compoundTag.get( this.id ) ) );
+		}
+
+		return object;
 	}
 }
