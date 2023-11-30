@@ -116,10 +116,6 @@ public class TextHelper {
 		return Component.empty();
 	}
 
-	public static MutableComponent moreDetailsComponent() {
-		return Component.translatable( "majruszlibrary.advanced_hint" ).withStyle( ChatFormatting.GRAY );
-	}
-
 	public static UnaryOperator< Style > createURL( String url ) {
 		return style->style.withClickEvent( new ClickEvent( ClickEvent.Action.OPEN_URL, url ) )
 			.withHoverEvent( new HoverEvent( HoverEvent.Action.SHOW_TEXT, TextHelper.literal( url ).withStyle( ChatFormatting.GRAY ) ) );
