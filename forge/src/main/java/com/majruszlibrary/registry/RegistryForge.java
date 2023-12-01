@@ -17,10 +17,15 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.common.brewing.IBrewingRecipe;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -36,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class RegistryForge implements IRegistryPlatform {
 	@Override
@@ -57,6 +63,27 @@ public class RegistryForge implements IRegistryPlatform {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		eventBus.addListener( ( FMLCommonSetupEvent event )->{
 			callbacks.execute( Custom.Advancements.class, IMixinCriteriaTriggers::register );
+			callbacks.execute( Custom.PotionRecipe.class, new Custom.PotionRecipe() {
+				@Override
+				public void register( Supplier< ? extends Potion > input, Supplier< ? extends Item > item, Supplier< ? extends Potion > output ) {
+					BrewingRecipeRegistry.addRecipe( new IBrewingRecipe() {
+						@Override
+						public boolean isInput( ItemStack itemStack ) {
+							return PotionUtils.getPotion( itemStack ).equals( input.get() );
+						}
+
+						@Override
+						public boolean isIngredient( ItemStack itemStack ) {
+							return itemStack.getItem().equals( item.get() );
+						}
+
+						@Override
+						public ItemStack getOutput( ItemStack input, ItemStack ingredient ) {
+							return this.isInput( input ) && this.isIngredient( ingredient ) ? PotionUtils.setPotion( new ItemStack( input.getItem() ), output.get() ) : ItemStack.EMPTY;
+						}
+					} );
+				}
+			} );
 		} );
 		eventBus.addListener( ( EntityAttributeCreationEvent event )->{
 			callbacks.execute( Custom.Attributes.class, event::put );

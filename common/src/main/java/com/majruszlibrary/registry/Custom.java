@@ -18,6 +18,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.function.Function;
@@ -45,6 +46,10 @@ public class Custom {
 	@OnlyIn( Dist.CLIENT )
 	public interface Particles {
 		< Type extends ParticleOptions > void register( ParticleType< Type > type, Function< SpriteSet, ParticleProvider< Type > > factory );
+	}
+
+	public interface PotionRecipe {
+		void register( Supplier< ? extends Potion > input, Supplier< ? extends Item > item, Supplier< ? extends Potion > output );
 	}
 
 	@OnlyIn( Dist.CLIENT )

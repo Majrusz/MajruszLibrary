@@ -9,6 +9,7 @@ import com.majruszlibrary.platform.Side;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -29,6 +30,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +57,7 @@ public class RegistryFabric implements IRegistryPlatform {
 	public void register( RegistryCallbacks callbacks ) {
 		callbacks.execute( Custom.Advancements.class, this::registerAdvancement );
 		callbacks.execute( Custom.Attributes.class, this::registerAttribute );
+		callbacks.execute( Custom.PotionRecipe.class, this::registerPotionRecipe );
 		callbacks.execute( Custom.SpawnPlacements.class, this::registerSpawnPlacement );
 
 		Side.runOnClient( ()->()->{
@@ -115,6 +119,10 @@ public class RegistryFabric implements IRegistryPlatform {
 	@OnlyIn( Dist.CLIENT )
 	private < Type extends ParticleOptions > void registerParticle( ParticleType< Type > type, Function< SpriteSet, ParticleProvider< Type > > factory ) {
 		OnParticlesRegisteredFabric.listen( data->data.engine.register( type, factory::apply ) );
+	}
+
+	private void registerPotionRecipe( Supplier< ? extends Potion > input, Supplier< ? extends Item > item, Supplier< ? extends Potion > output ) {
+		FabricBrewingRecipeRegistry.registerPotionRecipe( input.get(), Ingredient.of( item.get() ), output.get() );
 	}
 
 	@OnlyIn( Dist.CLIENT )
