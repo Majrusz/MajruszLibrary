@@ -1,1 +1,3 @@
-- fixed game crash (reported by @bons66, @3dEADto2, @Poopooracoocoo)
+- changed mod id from `mlib` to `majruszlibrary` (suggested by @ChiefArug)
+- optimized and reworked multiple features
+- fixed game crash `java.lang.NullPointerException: Registry Object not present`

@@ -36,8 +36,8 @@ project(':common') {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         filter {
-            String line ->  line.replaceAll('com.mlib.annotation.Dist', 'net.minecraftforge.api.distmarker.Dist')
-                    .replaceAll('com.mlib.annotation.OnlyIn', 'net.minecraftforge.api.distmarker.OnlyIn')
+            String line ->  line.replaceAll('com.majruszlibrary.annotation.Dist', 'net.minecraftforge.api.distmarker.Dist')
+                    .replaceAll('com.majruszlibrary.annotation.OnlyIn', 'net.minecraftforge.api.distmarker.OnlyIn')
         }
     }
 
