@@ -126,20 +126,6 @@ public class Command {
 			.named( DefaultKeys.POSITION );
 	}
 
-	public static IParameter.Named< Entity > entity() {
-		IParameter.Named< Entity > parameter = new IParameter.Named<>();
-
-		return parameter.applier( builder->builder.addArgument( ()->Commands.argument( parameter.name, EntityArgument.entity() ) ) )
-			.getter( context->{
-				try {
-					return context.getArgument( parameter.name, EntitySelector.class ).findSingleEntity( context.getSource() );
-				} catch( Throwable exception ) {
-					return null;
-				}
-			} )
-			.named( DefaultKeys.ENTITY );
-	}
-
 	public static IParameter.Named< List< ? extends Entity > > entities() {
 		IParameter.Named< List< ? extends Entity > > parameter = new IParameter.Named<>();
 
@@ -160,7 +146,6 @@ public class Command {
 		return parameter.applier( builder->{
 				builder.add( List.of(
 					subbuilder->subbuilder.addArgument( Commands.argument( DefaultKeys.POSITION, Vec3Argument.vec3() ) ),
-					subbuilder->subbuilder.addArgument( Commands.argument( DefaultKeys.ENTITY, EntityArgument.entity() ) ),
 					subbuilder->subbuilder.addArgument( Commands.argument( DefaultKeys.ENTITIES, EntityArgument.entities() ) )
 				) );
 			} )
@@ -168,9 +153,6 @@ public class Command {
 				List< Vec3 > positions = new ArrayList<>();
 				try {
 					positions.add( context.getArgument( DefaultKeys.POSITION, Coordinates.class ).getPosition( context.getSource() ) );
-				} catch( Throwable ignored ) {}
-				try {
-					positions.add( context.getArgument( DefaultKeys.ENTITY, EntitySelector.class ).findSingleEntity( context.getSource() ).position() );
 				} catch( Throwable ignored ) {}
 				try {
 					context.getArgument( DefaultKeys.ENTITIES, EntitySelector.class )
@@ -194,7 +176,6 @@ public class Command {
 
 	public static class DefaultKeys {
 		public static final String ENTITIES = "entities";
-		public static final String ENTITY = "entity";
 		public static final String VALUE = "value";
 		public static final String POSITION = "position";
 	}
