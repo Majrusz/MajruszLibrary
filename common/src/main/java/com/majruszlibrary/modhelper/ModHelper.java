@@ -81,8 +81,13 @@ public class ModHelper {
 		this.logger.error( format.formatted( args ) );
 	}
 
-	public < Type > LazyResource< Type > load( String id, Class< Type > clazz, PackType packType ) {
-		return LazyResource.of( ()->this.resourceLoader.load( this.getLocation( "custom/%s.json".formatted( id ) ), clazz, packType ) );
+	public < Type > Resource< Type > load( String id, Class< Type > clazz ) {
+		return this.resourceLoader.load( this.getLocation( id ), clazz );
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	public < Type > Resource< Type > loadClient( String id, Class< Type > clazz ) {
+		return this.resourceLoader.loadClient( this.getLocation( "custom/%s.json".formatted( id ) ), clazz );
 	}
 
 	public < Type extends IDataPlatform > Type getData( Class< Type > clazz ) {

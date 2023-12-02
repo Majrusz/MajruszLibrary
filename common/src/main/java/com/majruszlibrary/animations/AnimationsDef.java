@@ -29,7 +29,7 @@ public class AnimationsDef {
 			.define( "scale", Reader.map( Reader.custom( ScaleDef::new ) ), BoneDef::getScales, BoneDef::setScales );
 
 		Serializables.get( RotationDef.class )
-			.define( "vector", Reader.list( Reader.number() ), s->Animation.toRadians3d( s.vector ), ( s, v )->s.vector = Animation.toRadians3d( v ) )
+			.define( "vector", Reader.list( Reader.number() ), s->Animation.to3d( s.vector ), ( s, v )->s.vector = Animation.to3d( v ) )
 			.define( "easing", Reader.enumeration( Easing::values ), s->s.easing, ( s, v )->s.easing = v );
 
 		Serializables.get( VectorDef.class )

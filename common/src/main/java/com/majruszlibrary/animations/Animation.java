@@ -24,16 +24,6 @@ public class Animation {
 		return List.of( vector.x, vector.y, vector.z );
 	}
 
-	public static Vector3f toRadians3d( List< Float > values ) {
-		float scale = ( float )Math.PI / 180.0f;
-		return new Vector3f( scale * values.get( 0 ), scale * values.get( 1 ), scale * values.get( 2 ) );
-	}
-
-	public static List< Float > toRadians3d( Vector3f vector ) {
-		float scale = 180.0f * ( float )Math.PI;
-		return List.of( scale * vector.x, scale * vector.y, scale * vector.z );
-	}
-
 	public static Vector2i to2d( List< Integer > values ) {
 		return new Vector2i( values.get( 0 ), values.get( 1 ) );
 	}
@@ -49,10 +39,11 @@ public class Animation {
 		this.def.bones.forEach( ( name, bone )->{
 			ModelPart modelPart = modelParts.get( name );
 
+			float toRadiansScale = ( float )Math.PI / 180.0f;
 			Vector3f rotation = this.lerp( bone.rotations, duration, ageInTicks ).orElseGet( ()->new Vector3f( 0.0f, 0.0f, 0.0f ) );
-			modelPart.xRot += rotation.x;
-			modelPart.yRot += rotation.y;
-			modelPart.zRot += rotation.z;
+			modelPart.xRot += rotation.x * toRadiansScale;
+			modelPart.yRot += rotation.y * toRadiansScale;
+			modelPart.zRot += rotation.z * toRadiansScale;
 
 			Vector3f position = this.lerp( bone.positions, duration, ageInTicks ).orElseGet( ()->new Vector3f( 0.0f, 0.0f, 0.0f ) );
 			modelPart.x += position.x;

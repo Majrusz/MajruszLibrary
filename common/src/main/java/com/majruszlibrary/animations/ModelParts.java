@@ -26,7 +26,8 @@ public class ModelParts {
 			ModelPart modelPart = this.get( bone.name );
 			modelPart.setPos( bone.pivot.x, bone.pivot.y, bone.pivot.z );
 			if( bone.rotation != null ) {
-				modelPart.setRotation( bone.rotation.x, bone.rotation.y, bone.rotation.z );
+				float toRadiansScale = ( float )Math.PI / 180.0f;
+				modelPart.setRotation( bone.rotation.x * toRadiansScale, bone.rotation.y * toRadiansScale, bone.rotation.z * toRadiansScale );
 			} else {
 				modelPart.setRotation( 0.0f, 0.0f, 0.0f );
 			}

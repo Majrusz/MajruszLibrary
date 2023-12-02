@@ -34,7 +34,7 @@ public class ModelDef {
 			.define( "name", Reader.string(), s->s.name, ( s, v )->s.name = v )
 			.define( "parent", Reader.string(), s->s.parent, ( s, v )->s.parent = v )
 			.define( "pivot", Reader.list( Reader.number() ), s->Animation.to3d( s.globalPivot ), ( s, v )->s.globalPivot = Animation.to3d( v ) )
-			.define( "rotation", Reader.list( Reader.number() ), s->Animation.toRadians3d( s.rotation ), ( s, v )->s.rotation = Animation.toRadians3d( v ) )
+			.define( "rotation", Reader.list( Reader.number() ), s->Animation.to3d( s.rotation ), ( s, v )->s.rotation = Animation.to3d( v ) )
 			.define( "cubes", Reader.list( Reader.custom( CubeDef::new ) ), s->s.cubes, ( s, v )->s.cubes = v );
 
 		Serializables.get( CubeDef.class )
@@ -66,7 +66,8 @@ public class ModelDef {
 
 			PartPose pose;
 			if( bone.rotation != null ) {
-				pose = PartPose.offsetAndRotation( bone.pivot.x, bone.pivot.y, bone.pivot.z, bone.rotation.x, bone.rotation.y, bone.rotation.z );
+				float toRadiansScale = ( float )Math.PI / 180.0f;
+				pose = PartPose.offsetAndRotation( bone.pivot.x, bone.pivot.y, bone.pivot.z, bone.rotation.x * toRadiansScale, bone.rotation.y * toRadiansScale, bone.rotation.z * toRadiansScale );
 			} else {
 				pose = PartPose.offset( bone.pivot.x, bone.pivot.y, bone.pivot.z );
 			}

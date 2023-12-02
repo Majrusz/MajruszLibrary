@@ -2,6 +2,7 @@ package com.majruszlibrary.data;
 
 import com.google.gson.*;
 import com.majruszlibrary.MajruszLibrary;
+import com.majruszlibrary.events.OnGameInitialized;
 import com.majruszlibrary.events.OnPlayerLoggedIn;
 import com.majruszlibrary.events.OnResourcesReloaded;
 import com.majruszlibrary.modhelper.ModHelper;
@@ -20,6 +21,7 @@ public final class Config {
 	private final Gson gson;
 	private final Class< ? > clazz;
 	private final Object instance;
+	boolean isLoaded = false;
 
 	public void save() {
 		try {
@@ -39,6 +41,7 @@ public final class Config {
 			if( this.file.exists() ) {
 				Reader reader = new InputStreamReader( new FileInputStream( this.file ) );
 				this.gson.fromJson( reader, this.clazz );
+				this.isLoaded = true;
 			}
 		} catch( Exception exception ) {
 			MajruszLibrary.HELPER.logError( "[%s] %s".formatted( this.name, exception.toString() ) );
@@ -102,6 +105,12 @@ public final class Config {
 				config.reload();
 				if( Side.isDedicatedServer() && network != null ) {
 					network.sendToClients();
+				}
+			} );
+
+			OnGameInitialized.listen( data->{
+				if( !config.isLoaded ) {
+					config.reload();
 				}
 			} );
 

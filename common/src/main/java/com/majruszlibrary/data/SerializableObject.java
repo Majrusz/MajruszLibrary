@@ -90,8 +90,8 @@ public class SerializableObject< Type > implements ISerializable< Type > {
 
 			@Override
 			public < TagType extends Tag > TagType writeTag( Type value, TagType tag ) {
-				CompoundTag compoundTag = new CompoundTag();
-				Tag subtag = subobject.writeTag( value, tag );
+				CompoundTag compoundTag = ( CompoundTag )tag;
+				Tag subtag = subobject.writeTag( value, new CompoundTag() );
 				if( subtag != null ) {
 					compoundTag.put( id, subtag );
 				}

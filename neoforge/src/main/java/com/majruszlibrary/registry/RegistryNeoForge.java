@@ -1,5 +1,7 @@
 package com.majruszlibrary.registry;
 
+import com.majruszlibrary.annotation.Dist;
+import com.majruszlibrary.annotation.OnlyIn;
 import com.majruszlibrary.mixin.IMixinCriteriaTriggers;
 import com.majruszlibrary.modhelper.DataNeoForge;
 import com.majruszlibrary.platform.Side;
@@ -106,14 +108,7 @@ public class RegistryNeoForge implements IRegistryPlatform {
 				callbacks.execute( Custom.Renderers.class, EntityRenderers::register );
 			} );
 			eventBus.addListener( ( final RegisterParticleProvidersEvent event )->{
-				callbacks.execute( Custom.Particles.class, new Custom.Particles() {
-					@Override
-					public < Type extends ParticleOptions > void register( ParticleType< Type > type,
-						Function< SpriteSet, ParticleProvider< Type > > factory
-					) {
-						event.registerSpriteSet( type, factory::apply );
-					}
-				} );
+				callbacks.execute( Custom.Particles.class, new CustomParticles( event ) );
 			} );
 		} );
 	}
@@ -178,6 +173,20 @@ public class RegistryNeoForge implements IRegistryPlatform {
 		@Override
 		public @NotNull Iterator< Type > iterator() {
 			return this.registry.iterator();
+		}
+	}
+
+	@OnlyIn( Dist.CLIENT )
+	private static class CustomParticles implements Custom.Particles {
+		final RegisterParticleProvidersEvent event;
+
+		public CustomParticles( final RegisterParticleProvidersEvent event ) {
+			this.event = event;
+		}
+
+		@Override
+		public < Type extends ParticleOptions > void register( ParticleType< Type > type, Function< SpriteSet, ParticleProvider< Type > > factory ) {
+			this.event.registerSpriteSet( type, factory::apply );
 		}
 	}
 }
