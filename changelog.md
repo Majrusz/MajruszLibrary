@@ -1,3 +1,6 @@
-- changed mod id from `mlib` to `majruszlibrary` (suggested by @ChiefArug)
-- optimized and reworked multiple features
-- fixed game crash `java.lang.NullPointerException: Registry Object not present`
+- fixed game crash `java.lang.NullPointerException: Registry Object not present` (reported by @reboundrefice)
+- fixed bug with trying to load folders instead of mods (reported by @SettingDust)
+- fixed bug with weather changes not working properly
+- fixed compatibility issue with Sodium (reported by @LonelyFear)
+- fixed compatibility issue with Epic Fight (reported by @Orphion_)
+- fixed compatibility issue with Marium's Soulslike Weaponry (reported by @mariumbacchus)

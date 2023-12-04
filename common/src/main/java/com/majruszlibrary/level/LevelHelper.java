@@ -139,15 +139,14 @@ public class LevelHelper {
 	}
 
 	public static void startRaining( Level level, int ticks, boolean withThunder ) {
-		if( !( level.getLevelData() instanceof ServerLevelData data ) ) {
-			return;
-		}
-
-		data.setRaining( true );
-		data.setRainTime( ticks );
-		if( withThunder ) {
-			data.setThundering( true );
-			data.setThunderTime( ticks );
+		if( level.getLevelData() instanceof ServerLevelData data ) {
+			data.setRaining( true );
+			data.setRainTime( ticks );
+			if( withThunder ) {
+				data.setThundering( true );
+				data.setThunderTime( ticks );
+			}
+			data.setClearWeatherTime( 0 );
 		}
 	}
 
@@ -156,14 +155,13 @@ public class LevelHelper {
 	}
 
 	public static void setClearWeather( Level level, int ticks ) {
-		if( !( level.getLevelData() instanceof ServerLevelData data ) ) {
-			return;
+		if( level.getLevelData() instanceof ServerLevelData data ) {
+			data.setRaining( false );
+			data.setRainTime( 0 );
+			data.setThundering( false );
+			data.setThunderTime( 0 );
+			data.setClearWeatherTime( ticks );
 		}
-
-		data.setRaining( false );
-		data.setRainTime( ticks );
-		data.setThundering( false );
-		data.setThunderTime( ticks );
 	}
 
 	public static < Type extends Number & Comparable< Type > > Optional< BlockPos > findBlockPosOnGround( Level level, Vec3 position, Type yOffset ) {

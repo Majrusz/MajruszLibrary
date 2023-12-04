@@ -89,6 +89,10 @@ class ClassFinder {
 
 		for( File mod : mods.listFiles() ) {
 			try {
+				if( mod.isDirectory() ) {
+					continue;
+				}
+
 				JarFile modJar = new JarFile( mod );
 				if( modJar.getJarEntry( "com/%s".formatted( this.helper.getModId() ) ) == null ) {
 					continue;

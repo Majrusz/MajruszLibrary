@@ -6,6 +6,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Consumer;
 
+@Deprecated( since = "7.0.1 use OnItemRenderColorsGet" )
 public class OnItemRenderColorGet {
 	public final ItemStack itemStack;
 	public final int layerIdx;
