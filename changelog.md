@@ -3,3 +3,4 @@
 - fixed bug with weather changes not working properly
 - fixed compatibility issue with Sodium (reported by @LonelyFear)
 - fixed compatibility issue with Epic Fight (reported by @Orphion_)
+- fixed compatibility issue with Marium's Soulslike Weaponry (reported by @mariumbacchus)
