@@ -1,1 +1,2 @@
 - fixed game crash `java.lang.NullPointerException: Registry Object not present` (reported by @reboundrefice)
+- fixed bug with weather changes not working properly
