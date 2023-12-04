@@ -7,6 +7,7 @@
   "client": [
     "MixinAbstractContainerScreen",
     "MixinGui",
+    "MixinMinecraft",
     "MixinParticleEngine"
   ],
   "mixins": [
