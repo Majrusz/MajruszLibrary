@@ -24,7 +24,7 @@ public class OnItemUseTicked implements IEntityEvent {
 	public OnItemUseTicked( LivingEntity entity, ItemStack itemStack, int maxDuration, int duration ) {
 		this.entity = entity;
 		this.itemStack = itemStack;
-		this.maxDuration = maxDuration;
+		this.maxDuration = maxDuration != 0 ? maxDuration : duration;
 		this.original = duration;
 		this.duration = duration;
 	}
