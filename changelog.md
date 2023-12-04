@@ -1,3 +1,4 @@
 - fixed game crash `java.lang.NullPointerException: Registry Object not present` (reported by @reboundrefice)
+- fixed bug with trying to load folders instead of mods (reported by @SettingDust)
 - fixed bug with weather changes not working properly
 - fixed compatibility issue with Epic Fight (reported by @Orphion_)
