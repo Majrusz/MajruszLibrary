@@ -364,6 +364,6 @@ public class AnyPos {
 	}
 
 	public BlockPos block() {
-		return new BlockPos( ( int )this.x, ( int )this.y, ( int )this.z );
+		return new BlockPos( ( int )Math.floor( this.x ), ( int )Math.floor( this.y ), ( int )Math.floor( this.z ) );
 	}
 }
