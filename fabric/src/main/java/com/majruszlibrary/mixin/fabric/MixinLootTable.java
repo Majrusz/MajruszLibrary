@@ -10,13 +10,11 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Consumer;
 
-@Mixin( LootTable.class )
+@Mixin( value = LootTable.class, priority = 990 )
 public abstract class MixinLootTable implements IMixinLootTable {
 	ResourceLocation majruszlibrary$id = null;
 	Consumer< ItemStack > majruszlibrary$consumer = itemStack->{};
@@ -27,11 +25,8 @@ public abstract class MixinLootTable implements IMixinLootTable {
 		this.majruszlibrary$id = id;
 	}
 
-	@Inject(
-		at = @At( "RETURN" ),
-		method = "getRandomItemsRaw (Lnet/minecraft/world/level/storage/loot/LootContext;Ljava/util/function/Consumer;)V"
-	)
-	private void getRandomItemsRaw( LootContext context, Consumer< ItemStack > consumer, CallbackInfo callback ) {
+	@Override
+	public void majruszlibrary$modify( LootContext context ) {
 		Events.dispatch( new OnLootGenerated( this.majruszlibrary$items, this.majruszlibrary$id, context ) ).generatedLoot.forEach( this.majruszlibrary$consumer );
 	}
 
