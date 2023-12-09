@@ -17,6 +17,7 @@
     "MixinLivingEntity",
     "MixinLootDataType",
     "MixinLootTable",
+    "MixinLootTable2",
     "MixinLootTableBuilder",
     "MixinPlayer"
   ],
