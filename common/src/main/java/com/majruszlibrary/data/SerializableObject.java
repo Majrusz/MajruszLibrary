@@ -2,6 +2,7 @@ package com.majruszlibrary.data;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.majruszlibrary.MajruszLibrary;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,6 +44,7 @@ public class SerializableObject< Type > implements ISerializable< Type > {
 			try {
 				serializable.readJson( value, json );
 			} catch( Exception exception ) {
+				MajruszLibrary.HELPER.logDebug( "Failed to serialize %s: %s\n%s", exception, this.clazz.getName() );
 			}
 		} );
 
@@ -55,6 +57,7 @@ public class SerializableObject< Type > implements ISerializable< Type > {
 			try {
 				serializable.readBuffer( value, buffer );
 			} catch( Exception exception ) {
+				MajruszLibrary.HELPER.logDebug( "Failed to serialize %s: %s\n%s", exception, this.clazz.getName() );
 			}
 		} );
 
@@ -67,6 +70,7 @@ public class SerializableObject< Type > implements ISerializable< Type > {
 			try {
 				serializable.readTag( value, tag );
 			} catch( Exception exception ) {
+				MajruszLibrary.HELPER.logDebug( "Failed to serialize %s: %s\n%s", exception, this.clazz.getName() );
 			}
 		} );
 
