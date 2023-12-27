@@ -1,9 +1,12 @@
 package com.majruszlibrary.modhelper;
 
+import com.majruszlibrary.MajruszLibrary;
 import com.majruszlibrary.annotation.AutoInstance;
 import com.majruszlibrary.annotation.Dist;
 import com.majruszlibrary.annotation.OnlyIn;
 import com.majruszlibrary.data.Config;
+import com.majruszlibrary.data.Reader;
+import com.majruszlibrary.data.Serializables;
 import com.majruszlibrary.data.WorldData;
 import com.majruszlibrary.network.NetworkHandler;
 import com.majruszlibrary.network.NetworkObject;
@@ -14,15 +17,16 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.packs.PackType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class ModHelper {
+	static boolean ARE_DEBUG_LOGS_ENABLED = false;
 	final List< Runnable > registerCallbacks = new ArrayList<>();
 	final List< Object > instances = new ArrayList<>();
 	final String modId;
@@ -34,6 +38,11 @@ public class ModHelper {
 	final VersionChecker versionChecker;
 	final ResourceLoader resourceLoader;
 	final IDataPlatform data = Services.loadOptional( IDataPlatform.class ).orElse( null );
+
+	static {
+		Serializables.getStatic( MajruszLibrary.Config.class )
+			.define( "debug_logs_enabled", Reader.bool(), ()->ARE_DEBUG_LOGS_ENABLED, v->ARE_DEBUG_LOGS_ENABLED = v );
+	}
 
 	public static ModHelper create( String modId ) {
 		return new ModHelper( modId );
@@ -79,6 +88,16 @@ public class ModHelper {
 
 	public void logError( String format, Object... args ) {
 		this.logger.error( format.formatted( args ) );
+	}
+
+	public void logDebug( String format, Object... args ) {
+		if( ARE_DEBUG_LOGS_ENABLED ) {
+			this.logger.warn( format.formatted( args ) );
+		}
+	}
+
+	public void logDebug( String format, Exception exception, Object... args ) {
+		this.logDebug( format, args, exception.toString(), Arrays.toString( exception.getStackTrace() ).replace( ',', '\n' ) );
 	}
 
 	public < Type > Resource< Type > load( String id, Class< Type > clazz ) {

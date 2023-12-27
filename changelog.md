@@ -1,1 +1,3 @@
-- fixed compatibility bug with items not dropping at all when Porting Lib is used (reported by @Cornell)
+- added extra debug logs disabled by default that can be enabled via configuration file
+- made configuration files continue loading after encountering invalid data 
+- fixed game crash when items had unsupported NBT format (reported by @bons66)

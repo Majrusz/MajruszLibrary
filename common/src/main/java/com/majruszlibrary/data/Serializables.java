@@ -17,13 +17,13 @@ public final class Serializables {
 
 	public static < Type > SerializableObject< Type > get( Class< Type > clazz ) {
 		synchronized( SERIALIZABLES ) {
-			return ( SerializableObject< Type > )SERIALIZABLES.computeIfAbsent( clazz, key->new SerializableObject< Type >() );
+			return ( SerializableObject< Type > )SERIALIZABLES.computeIfAbsent( clazz, SerializableObject::new );
 		}
 	}
 
 	public static < Type > SerializableClass< Type > getStatic( Class< Type > clazz ) {
 		synchronized( SERIALIZABLES ) {
-			return ( SerializableClass< Type > )SERIALIZABLES.computeIfAbsent( clazz, key->new SerializableClass() );
+			return ( SerializableClass< Type > )SERIALIZABLES.computeIfAbsent( clazz, SerializableClass::new );
 		}
 	}
 
