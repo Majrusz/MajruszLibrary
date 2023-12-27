@@ -1,1 +1,0 @@
-- fixed compatibility bug with items not dropping at all when Porting Lib is used (reported by @Cornell)
