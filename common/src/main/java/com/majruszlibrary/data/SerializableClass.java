@@ -17,4 +17,8 @@ public class SerializableClass< Type > extends SerializableObject< Type > {
 
 		return this;
 	}
+
+	SerializableClass( Class< Type > clazz ) {
+		super( clazz );
+	}
 }

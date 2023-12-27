@@ -14,6 +14,7 @@ import java.util.function.Function;
 
 public class SerializableObject< Type > implements ISerializable< Type > {
 	protected final List< ISerializable< Type > > serializables = new ArrayList<>();
+	protected final Class< Type > clazz;
 
 	@Override
 	public < JsonType extends JsonElement > JsonType writeJson( Type value, JsonType json ) {
@@ -38,21 +39,36 @@ public class SerializableObject< Type > implements ISerializable< Type > {
 
 	@Override
 	public Type readJson( Type value, JsonElement json ) {
-		this.serializables.forEach( serializable->serializable.readJson( value, json ) );
+		this.serializables.forEach( serializable->{
+			try {
+				serializable.readJson( value, json );
+			} catch( Exception exception ) {
+			}
+		} );
 
 		return value;
 	}
 
 	@Override
 	public Type readBuffer( Type value, FriendlyByteBuf buffer ) {
-		this.serializables.forEach( serializable->serializable.readBuffer( value, buffer ) );
+		this.serializables.forEach( serializable->{
+			try {
+				serializable.readBuffer( value, buffer );
+			} catch( Exception exception ) {
+			}
+		} );
 
 		return value;
 	}
 
 	@Override
 	public Type readTag( Type value, Tag tag ) {
-		this.serializables.forEach( serializable->serializable.readTag( value, tag ) );
+		this.serializables.forEach( serializable->{
+			try {
+				serializable.readTag( value, tag );
+			} catch( Exception exception ) {
+			}
+		} );
 
 		return value;
 	}
@@ -65,8 +81,12 @@ public class SerializableObject< Type > implements ISerializable< Type > {
 		return this;
 	}
 
+	SerializableObject( Class< Type > clazz ) {
+		this.clazz = clazz;
+	}
+
 	public SerializableObject< Type > define( String id, Consumer< SerializableObject< Type > > consumer ) {
-		SerializableObject< Type > subobject = new SerializableObject<>();
+		SerializableObject< Type > subobject = new SerializableObject<>( this.clazz );
 		consumer.accept( subobject );
 
 		this.serializables.add( new ISerializable<>() {

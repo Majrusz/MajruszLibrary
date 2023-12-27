@@ -1,0 +1,2 @@
+- made configuration files continue loading after encountering invalid data 
+- fixed game crash when items had unsupported NBT format (reported by @bons66)
