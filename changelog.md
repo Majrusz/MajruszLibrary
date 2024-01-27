@@ -1,3 +1,1 @@
-- added extra debug logs disabled by default that can be enabled via configuration file
-- made configuration files continue loading after encountering invalid data 
-- fixed game crash when items had unsupported NBT format (reported by @bons66)
+- fixed compatibility crash with Chrysalis (reported by @Paxx3, @ZacGames)
