@@ -29,7 +29,7 @@ public class OnItemDamaged implements ILevelEvent {
 
 	@Override
 	public Level getLevel() {
-		return this.player != null ? this.player.level() : null;
+		return this.player != null ? this.player.getLevel() : null;
 	}
 
 	public int getExtraDamage() {

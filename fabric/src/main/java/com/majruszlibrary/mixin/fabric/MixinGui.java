@@ -2,11 +2,13 @@ package com.majruszlibrary.mixin.fabric;
 
 import com.majruszlibrary.events.OnGuiOverlaysRegistered;
 import com.majruszlibrary.events.base.Events;
+import com.majruszlibrary.platform.Side;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,10 +32,10 @@ public abstract class MixinGui {
 
 	@Inject(
 		at = @At( "HEAD" ),
-		method = "render (Lnet/minecraft/client/gui/GuiGraphics;F)V"
+		method = "render (Lcom/mojang/blaze3d/vertex/PoseStack;F)V"
 	)
-	private void render( GuiGraphics graphics, float partialTicks, CallbackInfo callback ) {
-		this.majruszlibrary$renderers.forEach( renderer->renderer.render( graphics, partialTicks, graphics.guiWidth(), graphics.guiHeight() ) );
+	private void render( PoseStack poseStack, float partialTicks, CallbackInfo callback ) {
+		this.majruszlibrary$renderers.forEach( renderer->renderer.render( Side.getMinecraft().getItemRenderer(), poseStack, partialTicks, Side.getMinecraft().getWindow().getGuiScaledWidth(), Side.getMinecraft().getWindow().getGuiScaledHeight() ) );
 
 		RenderSystem.setShaderColor( 1.0f, 1.0f, 1.0f, 1.0f );
 	}

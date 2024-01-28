@@ -15,7 +15,7 @@ public abstract class MixinFishingHook {
 	@Redirect(
 		at = @At(
 			opcode = 181, // putfield
-			ordinal = 3,
+			ordinal = 2,
 			target = "Lnet/minecraft/world/entity/projectile/FishingHook;timeUntilLured:I",
 			value = "FIELD"
 		),

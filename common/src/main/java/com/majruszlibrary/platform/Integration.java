@@ -23,6 +23,6 @@ public class Integration {
 	}
 
 	public static String getMinecraftVersion() {
-		return "1.20.1";
+		return "1.19.4";
 	}
 }

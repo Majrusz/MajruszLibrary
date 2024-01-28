@@ -74,7 +74,7 @@ public class Condition< DataType > {
 	}
 
 	public static < DataType > Condition< DataType > isOnGround( Function< DataType, Entity > entity ) {
-		return new Condition<>( data->entity.apply( data ) != null && entity.apply( data ).onGround() );
+		return new Condition<>( data->entity.apply( data ) != null && entity.apply( data ).isOnGround() );
 	}
 
 	public static < DataType > Condition< DataType > isCooldownOver( Function< DataType, Player > player, Supplier< ? extends Item > item ) {

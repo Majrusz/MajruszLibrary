@@ -8,7 +8,7 @@ public interface IEntityEvent extends ILevelEvent, IPositionEvent {
 	Entity getEntity();
 
 	default Level getLevel() {
-		return this.getEntity().level();
+		return this.getEntity().getLevel();
 	}
 
 	default Vec3 getPosition() {

@@ -31,6 +31,6 @@ public abstract class MixinServerPlayer {
 	private void triggerDimensionChangeTriggers( ServerLevel level, CallbackInfo callback ) {
 		ServerPlayer player = ( ServerPlayer )( Object )this;
 
-		Events.dispatch( new OnDimensionChanged( player, level, player.serverLevel() ) );
+		Events.dispatch( new OnDimensionChanged( player, level, player.getLevel() ) );
 	}
 }

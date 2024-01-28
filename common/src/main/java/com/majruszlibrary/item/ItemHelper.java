@@ -50,7 +50,7 @@ public class ItemHelper {
 
 	public static void giveToPlayer( ItemStack itemStack, Player player ) {
 		if( !player.getInventory().add( itemStack ) ) {
-			player.level().addFreshEntity( new ItemEntity( player.level(), player.getX(), player.getY() + 1.0, player.getZ(), itemStack ) );
+			player.getLevel().addFreshEntity( new ItemEntity( player.getLevel(), player.getX(), player.getY() + 1.0, player.getZ(), itemStack ) );
 		}
 	}
 

@@ -54,7 +54,7 @@ public class EntityHelper {
 		entity.addEffect( new MobEffectInstance( MobEffects.REGENERATION, 900, 1 ) );
 		entity.addEffect( new MobEffectInstance( MobEffects.ABSORPTION, 100, 1 ) );
 		entity.addEffect( new MobEffectInstance( MobEffects.FIRE_RESISTANCE, 800, 0 ) );
-		if( entity.level() instanceof ServerLevel level ) {
+		if( entity.getLevel() instanceof ServerLevel level ) {
 			ParticleEmitter.of( ParticleTypes.TOTEM_OF_UNDYING )
 				.sizeBased( entity )
 				.count( 32 )
@@ -92,11 +92,11 @@ public class EntityHelper {
 	}
 
 	public static boolean isOutside( Entity entity ) {
-		return entity.level().canSeeSky( entity.blockPosition() );
+		return entity.getLevel().canSeeSky( entity.blockPosition() );
 	}
 
 	public static boolean isIn( Entity entity, ResourceKey< Level > level ) {
-		return entity.level().dimension().equals( level );
+		return entity.getLevel().dimension().equals( level );
 	}
 
 	public static String getPlayerUUID( Player player ) {
@@ -134,7 +134,7 @@ public class EntityHelper {
 	public static void disableCurrentItem( Player player, double seconds ) {
 		player.getCooldowns().addCooldown( player.getUseItem().getItem(), TimeHelper.toTicks( seconds ) );
 		player.stopUsingItem();
-		player.level().broadcastEntityEvent( player, ( byte )30 );
+		player.getLevel().broadcastEntityEvent( player, ( byte )30 );
 	}
 
 	public static boolean spawnExperience( Level level, Vec3 position, int experience ) {
@@ -154,14 +154,14 @@ public class EntityHelper {
 	}
 
 	public static boolean destroyBlocks( Entity entity, AABB aabb, BiPredicate< BlockPos, BlockState > predicate ) {
-		if( !LevelHelper.isMobGriefingEnabled( entity.level() ) ) {
+		if( !LevelHelper.isMobGriefingEnabled( entity.getLevel() ) ) {
 			return false;
 		}
 
 		boolean destroyedAnyBlock = false;
 		for( BlockPos blockPos : BlockPos.betweenClosed( Mth.floor( aabb.minX ), Mth.floor( aabb.minY ), Mth.floor( aabb.minZ ), Mth.floor( aabb.maxX ), Mth.floor( aabb.maxY ), Mth.floor( aabb.maxZ ) ) ) {
-			if( predicate.test( blockPos, entity.level().getBlockState( blockPos ) ) ) {
-				destroyedAnyBlock |= entity.level().destroyBlock( blockPos, true, entity );
+			if( predicate.test( blockPos, entity.getLevel().getBlockState( blockPos ) ) ) {
+				destroyedAnyBlock |= entity.getLevel().destroyBlock( blockPos, true, entity );
 			}
 		}
 

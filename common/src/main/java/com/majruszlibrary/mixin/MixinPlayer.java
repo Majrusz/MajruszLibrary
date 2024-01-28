@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class MixinPlayer {
 	@Inject(
 		at = @At(
-			target = "Lnet/minecraft/world/damagesource/CombatTracker;recordDamage (Lnet/minecraft/world/damagesource/DamageSource;F)V",
+			target = "Lnet/minecraft/world/damagesource/CombatTracker;recordDamage (Lnet/minecraft/world/damagesource/DamageSource;FF)V",
 			value = "INVOKE"
 		),
 		method = "actuallyHurt (Lnet/minecraft/world/damagesource/DamageSource;F)V"

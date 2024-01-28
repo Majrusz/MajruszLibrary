@@ -77,7 +77,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 
 	@Inject(
 		at = @At(
-			target = "Lnet/minecraft/world/damagesource/CombatTracker;recordDamage (Lnet/minecraft/world/damagesource/DamageSource;F)V",
+			target = "Lnet/minecraft/world/damagesource/CombatTracker;recordDamage (Lnet/minecraft/world/damagesource/DamageSource;FF)V",
 			shift = At.Shift.BEFORE,
 			value = "INVOKE"
 		),
@@ -189,7 +189,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 
 	private static boolean majruszlibrary$willBeCancelled( DamageSource source, LivingEntity target ) {
 		boolean isInvulnerable = target.isInvulnerableTo( source );
-		boolean isClientSide = !( target.level() instanceof ServerLevel );
+		boolean isClientSide = !( target.getLevel() instanceof ServerLevel );
 		boolean isDeadOrDying = target.isDeadOrDying();
 		boolean isFireResistant = source.is( DamageTypeTags.IS_FIRE ) && target.hasEffect( MobEffects.FIRE_RESISTANCE );
 

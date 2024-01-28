@@ -4,8 +4,10 @@ import com.majruszlibrary.annotation.Dist;
 import com.majruszlibrary.annotation.OnlyIn;
 import com.majruszlibrary.events.base.Event;
 import com.majruszlibrary.events.base.Events;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,6 @@ public class OnGuiOverlaysRegistered {
 	@FunctionalInterface
 	@OnlyIn( Dist.CLIENT )
 	public interface Renderer {
-		void render( GuiGraphics graphics, float partialTick, int screenWidth, int screenHeight );
+		void render( ItemRenderer graphics, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight );
 	}
 }

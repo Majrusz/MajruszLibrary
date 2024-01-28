@@ -7,18 +7,18 @@
   "client": [
     "MixinAbstractContainerScreen",
     "MixinGui",
-    "MixinMinecraft",
-    "MixinParticleEngine"
+    "MixinParticleEngine",
+    "MixinResourceLoadStateTracker"
   ],
   "mixins": [
     "MixinEnchantmentHelper",
     "MixinEnderMan",
     "MixinFishingHook",
     "MixinLivingEntity",
-    "MixinLootDataType",
     "MixinLootTable",
     "MixinLootTable2",
     "MixinLootTableBuilder",
+    "MixinLootTables",
     "MixinPlayer"
   ],
   "injectors": {

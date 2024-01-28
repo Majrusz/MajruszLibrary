@@ -30,7 +30,7 @@ public class OnEntitySpawned implements ICancellableEvent, IEntityEvent {
 		this.entity = entity;
 		this.isLoadedFromDisk = isLoadedFromDisk;
 		this.position = entity.blockPosition();
-		this.difficulty = entity.level().getCurrentDifficultyAt( this.position );
+		this.difficulty = entity.getLevel().getCurrentDifficultyAt( this.position );
 		this.mobSpawnType = entity instanceof IMixinMob mob ? mob.getMobSpawnType() : null;
 	}
 

@@ -21,7 +21,7 @@ class AdvancementCaller extends SimpleCriterionTrigger< AdvancementCaller.Instan
 	}
 
 	@Override
-	public Instance createInstance( JsonObject json, ContextAwarePredicate predicate, DeserializationContext context ) {
+	public Instance createInstance( JsonObject json, EntityPredicate.Composite predicate, DeserializationContext context ) {
 		return new Instance( this.id, predicate, json.get( "type" ).getAsString() );
 	}
 
@@ -32,7 +32,7 @@ class AdvancementCaller extends SimpleCriterionTrigger< AdvancementCaller.Instan
 	static class Instance extends AbstractCriterionTriggerInstance {
 		final String achievementId;
 
-		public Instance( ResourceLocation id, ContextAwarePredicate predicate, String achievementId ) {
+		public Instance( ResourceLocation id, EntityPredicate.Composite predicate, String achievementId ) {
 			super( id, predicate );
 
 			this.achievementId = achievementId;

@@ -20,7 +20,7 @@ public interface IAnimableEntity {
 			return Animation.INVALID;
 		}
 
-		if( entity.level() instanceof ServerLevel ) {
+		if( entity.getLevel() instanceof ServerLevel ) {
 			MajruszLibrary.ENTITY_ANIMATION.sendToClients( new EntityHelper.EntityAnimation( entity.getId(), name, trackIdx ) );
 		}
 

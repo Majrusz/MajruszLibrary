@@ -1,1 +1,1 @@
-- fixed compatibility crash with Chrysalis (reported by @Paxx3, @ZacGames)
+- backported mod to 1.19.4

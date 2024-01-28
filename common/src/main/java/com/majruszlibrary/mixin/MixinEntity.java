@@ -14,11 +14,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.gameevent.DynamicGameEventListener;
-import net.minecraft.world.level.gameevent.EntityPositionSource;
-import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.gameevent.PositionSource;
-import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
+import net.minecraft.world.level.gameevent.*;
+import net.minecraft.world.level.gameevent.vibrations.VibrationListener;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,9 +30,8 @@ import java.util.function.BiConsumer;
 public abstract class MixinEntity implements IMixinEntity {
 	private static final String majruszlibrary$TAG_ID = "MajruszLibrary";
 	private @Shadow Level level;
-	private VibrationSystem.User majruszlibrary$vibrationUser = null;
-	private VibrationSystem.Data majruszlibrary$vibrationData = null;
-	private DynamicGameEventListener< VibrationSystem.Listener > majruszlibrary$vibrationListener = null;
+	private VibrationListener.VibrationListenerConfig majruszlibrary$vibrationConfig = null;
+	private DynamicGameEventListener< VibrationListener > majruszlibrary$vibrationListener = null;
 	private int majruszlibrary$glowTicks = 0;
 	private int majruszlibrary$invisibleTicks = 0;
 	private CompoundTag majruszlibrary$extraTag = null;
@@ -45,20 +41,10 @@ public abstract class MixinEntity implements IMixinEntity {
 		method = "<init> (Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;)V"
 	)
 	private void constructor( EntityType< ? > type, Level level, CallbackInfo callback ) {
-		if( EntityNoiseListener.isSupported( ( ( Entity )( Object )this ).getClass() ) ) {
-			this.majruszlibrary$vibrationUser = new Config( ( Entity )( Object )this );
-			this.majruszlibrary$vibrationData = new VibrationSystem.Data();
-			this.majruszlibrary$vibrationListener = new DynamicGameEventListener<>( new VibrationSystem.Listener( new VibrationSystem() {
-				@Override
-				public Data getVibrationData() {
-					return MixinEntity.this.majruszlibrary$vibrationData;
-				}
-
-				@Override
-				public User getVibrationUser() {
-					return MixinEntity.this.majruszlibrary$vibrationUser;
-				}
-			} ) );
+		Entity entity = ( Entity )( Object )this;
+		if( EntityNoiseListener.isSupported( entity.getClass() ) ) {
+			this.majruszlibrary$vibrationConfig = new Config( entity );
+			this.majruszlibrary$vibrationListener = new DynamicGameEventListener<>( new VibrationListener( new EntityPositionSource( entity, entity.getEyeHeight() ), 16, this.majruszlibrary$vibrationConfig ) );
 		}
 	}
 
@@ -69,8 +55,8 @@ public abstract class MixinEntity implements IMixinEntity {
 	private void tick( CallbackInfo callback ) {
 		this.majruszlibrary$glowTicks = Math.max( this.majruszlibrary$glowTicks - 1, 0 );
 		this.majruszlibrary$invisibleTicks = Math.max( this.majruszlibrary$invisibleTicks - 1, 0 );
-		if( this.majruszlibrary$vibrationData != null ) {
-			VibrationSystem.Ticker.tick( this.level, this.majruszlibrary$vibrationData, this.majruszlibrary$vibrationUser );
+		if( this.majruszlibrary$vibrationConfig != null && !this.level.isClientSide ) {
+			this.majruszlibrary$vibrationListener.getListener().tick( this.level );
 		}
 		if( this instanceof IAnimableEntity animable ) {
 			animable.getAnimations().tick();
@@ -152,32 +138,22 @@ public abstract class MixinEntity implements IMixinEntity {
 		return this.majruszlibrary$extraTag;
 	}
 
-	public static class Config implements VibrationSystem.User {
+	public static class Config implements VibrationListener.VibrationListenerConfig {
 		final Entity entity;
-		final PositionSource positionSource;
 
 		Config( Entity entity ) {
 			this.entity = entity;
-			this.positionSource = new EntityPositionSource( entity, entity.getEyeHeight() );
 		}
 
 		@Override
-		public int getListenerRadius() {
-			return 16;
-		}
-
-		@Override
-		public PositionSource getPositionSource() {
-			return this.positionSource;
-		}
-
-		@Override
-		public boolean canReceiveVibration( ServerLevel level, BlockPos position, GameEvent event, GameEvent.Context context ) {
+		public boolean shouldListen( ServerLevel level, GameEventListener listener, BlockPos position, GameEvent event, GameEvent.Context context ) {
 			return Events.dispatch( new OnEntityNoiseCheck( level, position, this.entity ) ).isAudible();
 		}
 
 		@Override
-		public void onReceiveVibration( ServerLevel level, BlockPos position, GameEvent event, Entity owner, Entity ownersProjectile, float distance ) {
+		public void onSignalReceive( ServerLevel level, GameEventListener listener, BlockPos position, GameEvent event, @Nullable Entity owner,
+			@Nullable Entity ownersProjectile, float distance
+		) {
 			Events.dispatch( new OnEntityNoiseReceived( level, position, this.entity, owner, ownersProjectile, distance ) );
 		}
 
