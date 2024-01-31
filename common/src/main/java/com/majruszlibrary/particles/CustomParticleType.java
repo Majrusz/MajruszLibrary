@@ -32,12 +32,12 @@ public class CustomParticleType< Type extends ParticleOptions > extends Particle
 		this.codec = new Codec<>() {
 			@Override
 			public < T > DataResult< Pair< Type, T > > decode( DynamicOps< T > ops, T input ) {
-				return DataResult.error( ()->"" );
+				return DataResult.error( "" );
 			}
 
 			@Override
 			public < T > DataResult< T > encode( Type input, DynamicOps< T > ops, T prefix ) {
-				return DataResult.error( ()->"" );
+				return DataResult.error( "" );
 			}
 		};
 	}

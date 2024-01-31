@@ -30,15 +30,16 @@ public abstract class MixinServerLevel {
 
 	@Inject(
 		at = @At(
-			target = "Lnet/minecraft/world/level/Explosion;interactsWithBlocks ()Z",
+			target = "Lnet/minecraft/world/level/Explosion;finalizeExplosion (Z)V",
+			shift = At.Shift.AFTER,
 			value = "INVOKE"
 		),
 		cancellable = true,
 		locals = LocalCapture.CAPTURE_FAILHARD,
-		method = "explode (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;Lnet/minecraft/world/level/ExplosionDamageCalculator;DDDFZLnet/minecraft/world/level/Level$ExplosionInteraction;)Lnet/minecraft/world/level/Explosion;"
+		method = "explode (Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;Lnet/minecraft/world/level/ExplosionDamageCalculator;DDDFZLnet/minecraft/world/level/Explosion$BlockInteraction;)Lnet/minecraft/world/level/Explosion;"
 	)
 	private void explode( Entity entity, DamageSource source, ExplosionDamageCalculator calculator, double x, double y, double z, float radius,
-		boolean spawnsFire, Level.ExplosionInteraction interaction, CallbackInfoReturnable< Explosion > callback, Explosion explosion
+		boolean spawnsFire, Explosion.BlockInteraction interaction, CallbackInfoReturnable< Explosion > callback, Explosion explosion
 	) {
 		IMixinExplosion mixinExplosion = ( IMixinExplosion )explosion;
 		radius = mixinExplosion.majruszlibrary$getRadius();

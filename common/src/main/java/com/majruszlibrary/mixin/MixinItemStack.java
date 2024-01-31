@@ -38,7 +38,7 @@ public abstract class MixinItemStack {
 
 	@Inject(
 		at = @At(
-			ordinal = 4,
+			ordinal = 3,
 			shift = At.Shift.BEFORE,
 			target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip (ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z",
 			value = "INVOKE"

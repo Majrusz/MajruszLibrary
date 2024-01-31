@@ -11,7 +11,6 @@ import java.util.function.Consumer;
 
 public class OnItemDecorationsRendered {
 	public final ItemRenderer gui;
-	public final PoseStack poseStack;
 	public final Font font;
 	public final ItemStack itemStack;
 	public final int x;
@@ -21,9 +20,8 @@ public class OnItemDecorationsRendered {
 		return Events.get( OnItemDecorationsRendered.class ).add( consumer );
 	}
 
-	public OnItemDecorationsRendered( ItemRenderer gui, PoseStack poseStack, Font font, ItemStack itemStack, int x, int y ) {
+	public OnItemDecorationsRendered( ItemRenderer gui, Font font, ItemStack itemStack, int x, int y ) {
 		this.gui = gui;
-		this.poseStack = poseStack;
 		this.font = font;
 		this.itemStack = itemStack;
 		this.x = x;

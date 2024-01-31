@@ -53,7 +53,7 @@ public class OnEntityPreDamaged implements ICancellableEvent, IEntityEvent {
 	}
 
 	public boolean isDirect() {
-		return !this.source.isIndirect();
+		return this.source.getDirectEntity() == this.source.getEntity();
 	}
 
 	public boolean willTakeFullDamage() {

@@ -5,7 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
+import com.mojang.math.Vector3f;
 
 /**
  This class is an adapter for most position-related operations in the game. It has been
@@ -24,7 +24,7 @@ public class AnyPos {
 	}
 
 	public static AnyPos from( Vector3f vec3f ) {
-		return new AnyPos( vec3f.x, vec3f.y, vec3f.z );
+		return new AnyPos( vec3f.x(), vec3f.y(), vec3f.z() );
 	}
 
 	public static AnyPos from( Vec3i vec3i ) {
@@ -318,7 +318,10 @@ public class AnyPos {
 	}
 
 	public AnyPos rot( AnyRot anyRot ) {
-		return from( anyRot.quaternion.transform( this.vec3f() ) );
+		Vector3f vec3f = this.vec3f();
+		vec3f.transform( anyRot.quaternion );
+
+		return from( vec3f );
 	}
 
 	public Number len() {

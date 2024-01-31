@@ -4,7 +4,6 @@ import com.majruszlibrary.events.*;
 import com.majruszlibrary.events.base.Events;
 import com.majruszlibrary.mixininterfaces.IMixinLivingEntity;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -121,7 +120,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 
 	@Inject(
 		at = @At(
-			target = "Lnet/minecraft/world/entity/LivingEntity;equipmentHasChanged (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z",
+			target = "Lnet/minecraft/world/item/ItemStack;matches (Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Z",
 			value = "INVOKE"
 		),
 		locals = LocalCapture.CAPTURE_FAILHARD,
@@ -191,7 +190,7 @@ public abstract class MixinLivingEntity implements IMixinLivingEntity {
 		boolean isInvulnerable = target.isInvulnerableTo( source );
 		boolean isClientSide = !( target.getLevel() instanceof ServerLevel );
 		boolean isDeadOrDying = target.isDeadOrDying();
-		boolean isFireResistant = source.is( DamageTypeTags.IS_FIRE ) && target.hasEffect( MobEffects.FIRE_RESISTANCE );
+		boolean isFireResistant = source.isFire() && target.hasEffect( MobEffects.FIRE_RESISTANCE );
 
 		return isInvulnerable || isClientSide || isDeadOrDying || isFireResistant;
 	}

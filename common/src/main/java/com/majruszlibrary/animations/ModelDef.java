@@ -7,8 +7,8 @@ import com.majruszlibrary.data.Serializables;
 import com.majruszlibrary.math.AnyPos;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import org.joml.Vector2i;
-import org.joml.Vector3f;
+import net.minecraft.world.phys.Vec2;
+import com.mojang.math.Vector3f;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,9 +53,9 @@ public class ModelDef {
 		for( BoneDef bone : geometry.bones ) {
 			CubeListBuilder cubes = CubeListBuilder.create();
 			for( CubeDef cube : bone.cubes ) {
-				Vector3f position = AnyPos.from( cube.origin ).sub( bone.globalPivot ).add( 0.0f, cube.size.y, 0.0f ).mul( 1.0f, -1.0f, 1.0f ).vec3f();
-				cubes.texOffs( cube.uv.x, cube.uv.y )
-					.addBox( position.x, position.y, position.z, cube.size.x, cube.size.y, cube.size.z, new CubeDeformation( cube.inflate ) );
+				Vector3f position = AnyPos.from( cube.origin ).sub( bone.globalPivot ).add( 0.0f, cube.size.y(), 0.0f ).mul( 1.0f, -1.0f, 1.0f ).vec3f();
+				cubes.texOffs( ( int )cube.uv.x, ( int )cube.uv.y )
+					.addBox( position.x(), position.y(), position.z(), cube.size.x(), cube.size.y(), cube.size.z(), new CubeDeformation( cube.inflate ) );
 			}
 
 			if( bone.parent != null ) {
@@ -67,9 +67,9 @@ public class ModelDef {
 			PartPose pose;
 			if( bone.rotation != null ) {
 				float toRadiansScale = ( float )Math.PI / 180.0f;
-				pose = PartPose.offsetAndRotation( bone.pivot.x, bone.pivot.y, bone.pivot.z, bone.rotation.x * toRadiansScale, bone.rotation.y * toRadiansScale, bone.rotation.z * toRadiansScale );
+				pose = PartPose.offsetAndRotation( bone.pivot.x(), bone.pivot.y(), bone.pivot.z(), bone.rotation.x() * toRadiansScale, bone.rotation.y() * toRadiansScale, bone.rotation.z() * toRadiansScale );
 			} else {
-				pose = PartPose.offset( bone.pivot.x, bone.pivot.y, bone.pivot.z );
+				pose = PartPose.offset( bone.pivot.x(), bone.pivot.y(), bone.pivot.z() );
 			}
 
 			offsets.put( bone.name, bone.globalPivot );
@@ -102,6 +102,6 @@ public class ModelDef {
 		public Vector3f origin = new Vector3f( 0.0f, 0.0f, 0.0f );
 		public Vector3f size = new Vector3f( 0.0f, 0.0f, 0.0f );
 		public Float inflate = 0.0f;
-		public Vector2i uv = new Vector2i( 0, 0 );
+		public Vec2 uv = new Vec2( 0, 0 );
 	}
 }

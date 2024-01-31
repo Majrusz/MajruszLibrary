@@ -5,8 +5,8 @@ import com.majruszlibrary.annotation.OnlyIn;
 import com.majruszlibrary.time.TimeHelper;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.util.Mth;
-import org.joml.Vector2i;
-import org.joml.Vector3f;
+import net.minecraft.world.phys.Vec2;
+import com.mojang.math.Vector3f;
 
 import java.util.*;
 
@@ -21,15 +21,15 @@ public class Animation {
 	}
 
 	public static List< Float > to3d( Vector3f vector ) {
-		return List.of( vector.x, vector.y, vector.z );
+		return List.of( vector.x(), vector.y(), vector.z() );
 	}
 
-	public static Vector2i to2d( List< Integer > values ) {
-		return new Vector2i( values.get( 0 ), values.get( 1 ) );
+	public static Vec2 to2d( List< Integer > values ) {
+		return new Vec2( values.get( 0 ), values.get( 1 ) );
 	}
 
-	public static List< Integer > to2d( Vector2i vector ) {
-		return List.of( vector.x, vector.y );
+	public static List< Integer > to2d( Vec2 vector ) {
+		return List.of( ( int )vector.x, ( int )vector.y );
 	}
 
 	@OnlyIn( Dist.CLIENT )
@@ -41,19 +41,19 @@ public class Animation {
 
 			float toRadiansScale = ( float )Math.PI / 180.0f;
 			Vector3f rotation = this.lerp( bone.rotations, duration, ageInTicks ).orElseGet( ()->new Vector3f( 0.0f, 0.0f, 0.0f ) );
-			modelPart.xRot += rotation.x * toRadiansScale;
-			modelPart.yRot += rotation.y * toRadiansScale;
-			modelPart.zRot += rotation.z * toRadiansScale;
+			modelPart.xRot += rotation.x() * toRadiansScale;
+			modelPart.yRot += rotation.y() * toRadiansScale;
+			modelPart.zRot += rotation.z() * toRadiansScale;
 
 			Vector3f position = this.lerp( bone.positions, duration, ageInTicks ).orElseGet( ()->new Vector3f( 0.0f, 0.0f, 0.0f ) );
-			modelPart.x += position.x;
-			modelPart.y -= position.y;
-			modelPart.z += position.z;
+			modelPart.x += position.x();
+			modelPart.y -= position.y();
+			modelPart.z += position.z();
 
 			Vector3f scale = this.lerp( bone.scales, duration, ageInTicks ).orElseGet( ()->new Vector3f( 1.0f, 1.0f, 1.0f ) );
-			modelPart.xScale *= scale.x;
-			modelPart.yScale *= scale.y;
-			modelPart.zScale *= scale.z;
+			modelPart.xScale *= scale.x();
+			modelPart.yScale *= scale.y();
+			modelPart.zScale *= scale.z();
 		} );
 	}
 
@@ -99,15 +99,15 @@ public class Animation {
 			ratio = next.getValue().easing.apply( ratio );
 
 			return Optional.of( new Vector3f(
-				Mth.lerp( ratio, current.getValue().vector.x, next.getValue().vector.x ),
-				Mth.lerp( ratio, current.getValue().vector.y, next.getValue().vector.y ),
-				Mth.lerp( ratio, current.getValue().vector.z, next.getValue().vector.z )
+				Mth.lerp( ratio, current.getValue().vector.x(), next.getValue().vector.x() ),
+				Mth.lerp( ratio, current.getValue().vector.y(), next.getValue().vector.y() ),
+				Mth.lerp( ratio, current.getValue().vector.z(), next.getValue().vector.z() )
 			) );
 		} else {
 			return Optional.of( new Vector3f(
-				current.getValue().vector.x,
-				current.getValue().vector.y,
-				current.getValue().vector.z
+				current.getValue().vector.x(),
+				current.getValue().vector.y(),
+				current.getValue().vector.z()
 			) );
 		}
 	}

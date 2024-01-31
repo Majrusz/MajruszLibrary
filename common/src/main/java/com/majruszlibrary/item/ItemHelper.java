@@ -39,7 +39,7 @@ public class ItemHelper {
 		Optional< SmeltingRecipe > recipe = level.getRecipeManager().getRecipeFor( RecipeType.SMELTING, new SimpleContainer( itemStack ), level );
 		if( recipe.isPresent() ) {
 			float experience = recipe.get().getExperience() * itemStack.getCount();
-			ItemStack result = recipe.get().getResultItem( level.registryAccess() ).copy();
+			ItemStack result = recipe.get().getResultItem().copy();
 			result.setCount( result.getCount() * itemStack.getCount() );
 
 			return Optional.of( new SmeltResult( result, experience ) );
@@ -69,7 +69,7 @@ public class ItemHelper {
 		}
 
 		EquipmentSlot equipmentSlot = Mob.getEquipmentSlotForItem( itemStack );
-		equipmentSlot = equipmentSlot.isArmor() ? equipmentSlot : EquipmentSlot.MAINHAND;
+		equipmentSlot = equipmentSlot.getType() == EquipmentSlot.Type.ARMOR ? equipmentSlot : EquipmentSlot.MAINHAND;
 		mob.setItemSlot( equipmentSlot, itemStack );
 
 		return equipmentSlot;

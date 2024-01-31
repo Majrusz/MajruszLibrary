@@ -37,7 +37,7 @@ public class OnExploded implements ICancellableEvent, ILevelEvent, IPositionEven
 		this.explosion = explosion;
 		this.level = level;
 		this.position = position;
-		this.entity = explosion.getIndirectSourceEntity();
+		this.entity = explosion.getSourceMob();
 		this.originalRadius = radius;
 		this.radius = radius;
 		this.spawnsFire = spawnsFire;

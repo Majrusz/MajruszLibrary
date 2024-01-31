@@ -24,10 +24,10 @@ public class ModelParts {
 	public void reset() {
 		this.model.geometries.get( 0 ).bones.forEach( bone->{
 			ModelPart modelPart = this.get( bone.name );
-			modelPart.setPos( bone.pivot.x, bone.pivot.y, bone.pivot.z );
+			modelPart.setPos( bone.pivot.x(), bone.pivot.y(), bone.pivot.z() );
 			if( bone.rotation != null ) {
 				float toRadiansScale = ( float )Math.PI / 180.0f;
-				modelPart.setRotation( bone.rotation.x * toRadiansScale, bone.rotation.y * toRadiansScale, bone.rotation.z * toRadiansScale );
+				modelPart.setRotation( bone.rotation.x() * toRadiansScale, bone.rotation.y() * toRadiansScale, bone.rotation.z() * toRadiansScale );
 			} else {
 				modelPart.setRotation( 0.0f, 0.0f, 0.0f );
 			}

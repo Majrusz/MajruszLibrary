@@ -44,7 +44,7 @@ public abstract class MixinEntity implements IMixinEntity {
 		Entity entity = ( Entity )( Object )this;
 		if( EntityNoiseListener.isSupported( entity.getClass() ) ) {
 			this.majruszlibrary$vibrationConfig = new Config( entity );
-			this.majruszlibrary$vibrationListener = new DynamicGameEventListener<>( new VibrationListener( new EntityPositionSource( entity, entity.getEyeHeight() ), 16, this.majruszlibrary$vibrationConfig ) );
+			this.majruszlibrary$vibrationListener = new DynamicGameEventListener<>( new VibrationListener( new EntityPositionSource( entity, entity.getEyeHeight() ), 16, this.majruszlibrary$vibrationConfig, null, 0.0f, 0 ) );
 		}
 	}
 

@@ -4,7 +4,7 @@ import com.majruszlibrary.collection.CollectionHelper;
 import com.majruszlibrary.data.Reader;
 import com.majruszlibrary.data.Serializables;
 import com.majruszlibrary.time.TimeHelper;
-import org.joml.Vector3f;
+import com.mojang.math.Vector3f;
 
 import java.util.HashMap;
 import java.util.Map;

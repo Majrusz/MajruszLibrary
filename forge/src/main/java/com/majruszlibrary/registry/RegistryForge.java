@@ -186,7 +186,7 @@ public class RegistryForge implements IRegistryPlatform {
 
 		@Override
 		public < Type extends ParticleOptions > void register( ParticleType< Type > type, Function< SpriteSet, ParticleProvider< Type > > factory ) {
-			this.event.registerSpriteSet( type, factory::apply );
+			this.event.register( type, factory::apply );
 		}
 	}
 }

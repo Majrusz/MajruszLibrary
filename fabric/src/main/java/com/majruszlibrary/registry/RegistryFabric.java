@@ -23,7 +23,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
@@ -70,27 +69,27 @@ public class RegistryFabric implements IRegistryPlatform {
 
 	@Override
 	public IAccessor< Item > getItems() {
-		return new Accessor<>( BuiltInRegistries.ITEM );
+		return new Accessor<>( Registry.ITEM );
 	}
 
 	@Override
 	public IAccessor< MobEffect > getEffects() {
-		return new Accessor<>( BuiltInRegistries.MOB_EFFECT );
+		return new Accessor<>( Registry.MOB_EFFECT );
 	}
 
 	@Override
 	public IAccessor< Enchantment > getEnchantments() {
-		return new Accessor<>( BuiltInRegistries.ENCHANTMENT );
+		return new Accessor<>( Registry.ENCHANTMENT );
 	}
 
 	@Override
 	public IAccessor< EntityType< ? > > getEntityTypes() {
-		return new Accessor<>( BuiltInRegistries.ENTITY_TYPE );
+		return new Accessor<>( Registry.ENTITY_TYPE );
 	}
 
 	@Override
 	public IAccessor< SoundEvent > getSoundEvents() {
-		return new Accessor<>( BuiltInRegistries.SOUND_EVENT );
+		return new Accessor<>( Registry.SOUND_EVENT );
 	}
 
 	@Override
@@ -160,7 +159,7 @@ public class RegistryFabric implements IRegistryPlatform {
 
 		@Override
 		public Holder< Type > getHolder( Type value ) {
-			return this.registry.wrapAsHolder( value );
+			return this.registry.createIntrusiveHolder( value );
 		}
 
 		@Override

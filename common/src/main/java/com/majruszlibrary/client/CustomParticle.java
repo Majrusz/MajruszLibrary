@@ -3,6 +3,7 @@ package com.majruszlibrary.client;
 import com.majruszlibrary.annotation.Dist;
 import com.majruszlibrary.annotation.OnlyIn;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Quaternion;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
@@ -10,8 +11,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
+import com.mojang.math.Vector3f;
 
 @OnlyIn( Dist.CLIENT )
 public abstract class CustomParticle extends TextureSheetParticle {
@@ -51,12 +51,12 @@ public abstract class CustomParticle extends TextureSheetParticle {
 		float x = ( float )( Mth.lerp( partialTick, this.xo, this.x ) - vec3.x() );
 		float y = this.getY( ( float )( Mth.lerp( partialTick, this.yo, this.y ) - vec3.y() ) );
 		float z = ( float )( Mth.lerp( partialTick, this.zo, this.z ) - vec3.z() );
-		Quaternionf quaternion;
+		Quaternion quaternion;
 		if( this.roll == 0.0F ) {
 			quaternion = camera.rotation();
 		} else {
-			quaternion = new Quaternionf( camera.rotation() );
-			quaternion.rotateZ( Mth.lerp( partialTick, this.oRoll, this.roll ) );
+			quaternion = new Quaternion( camera.rotation() );
+			quaternion.mul(Vector3f.ZP.rotation( Mth.lerp( partialTick, this.oRoll, this.roll ) ));
 		}
 		quaternion = this.getQuaternion( quaternion );
 
@@ -70,7 +70,7 @@ public abstract class CustomParticle extends TextureSheetParticle {
 
 		for( int i = 0; i < 4; ++i ) {
 			Vector3f vector3f = avector3f[ i ];
-			vector3f.rotate( quaternion );
+			vector3f.transform( quaternion );
 			vector3f.mul( size );
 			vector3f.add( x, y, z );
 		}
@@ -116,7 +116,7 @@ public abstract class CustomParticle extends TextureSheetParticle {
 		return y;
 	}
 
-	public Quaternionf getQuaternion( Quaternionf quaternion ) {
+	public Quaternion getQuaternion( Quaternion quaternion ) {
 		return quaternion;
 	}
 

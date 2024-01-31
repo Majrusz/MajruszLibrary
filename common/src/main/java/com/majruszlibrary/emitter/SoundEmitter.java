@@ -60,7 +60,7 @@ public class SoundEmitter {
 
 	public void send( ServerPlayer player ) {
 		Vec3 position = this.position.get();
-		player.connection.send( new ClientboundSoundPacket( Registries.SOUND_EVENTS.getHolder( this.event ), this.source, position.x, position.y, position.z, this.volume.get(), this.pitch.get(), Random.nextInt() ) );
+		player.connection.send( new ClientboundSoundPacket( this.event, this.source, position.x, position.y, position.z, this.volume.get(), this.pitch.get(), Random.nextInt() ) );
 	}
 
 	public SoundEmitter source( SoundSource source ) {

@@ -30,6 +30,6 @@ public class OnEntityDamageBlocked implements IEntityEvent {
 	}
 
 	public boolean isDirect() {
-		return !this.source.isIndirect();
+		return this.source.getDirectEntity() == this.source.getEntity();
 	}
 }
