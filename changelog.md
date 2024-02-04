@@ -1,1 +1,0 @@
-- fixed compatibility crash with Chrysalis (reported by @Paxx3, @ZacGames)
