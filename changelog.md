@@ -1,0 +1,2 @@
+- fixed bug with spawn point features not working properly with Respawn Anchors
+- optimized spawn point features

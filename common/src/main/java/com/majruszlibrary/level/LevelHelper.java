@@ -62,20 +62,14 @@ public class LevelHelper {
 	public static Optional< SpawnPoint > getSpawnPoint( ServerPlayer player ) {
 		BlockPos respawnPosition = player.getRespawnPosition();
 		ServerLevel level = player.server.getLevel( player.getRespawnDimension() );
-		Vec3 position = null;
 		if( level == null ) {
 			return Optional.empty();
 		}
 
+		Vec3 position;
 		if( respawnPosition != null ) {
-			float angle = player.getRespawnAngle();
-			Optional< Vec3 > spawnPosition = Player.findRespawnPositionAndUseSpawnBlock( level, respawnPosition, angle, true, true );
-			if( spawnPosition.isPresent() ) {
-				position = spawnPosition.get();
-			}
-		}
-
-		if( position == null ) {
+			position = AnyPos.from( respawnPosition ).vec3();
+		} else {
 			level = player.server.getLevel( Level.OVERWORLD );
 			position = AnyPos.from( level.getSharedSpawnPos() ).vec3();
 		}
@@ -219,7 +213,11 @@ public class LevelHelper {
 		}
 
 		public void teleport( ServerPlayer player ) {
-			player.teleportTo( this.level, this.position.x, this.position.y, this.position.z, player.getYRot(), player.getXRot() );
+			float angle = player.getRespawnAngle();
+			Optional< Vec3 > spawnPosition = Player.findRespawnPositionAndUseSpawnBlock( this.level, AnyPos.from( this.position ).block(), angle, true, true );
+			Vec3 position = spawnPosition.orElse( this.position );
+
+			player.teleportTo( this.level, position.x, position.y, position.z, player.getYRot(), player.getXRot() );
 		}
 	}
 }
