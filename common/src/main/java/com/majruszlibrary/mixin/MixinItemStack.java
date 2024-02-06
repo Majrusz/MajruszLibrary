@@ -31,9 +31,15 @@ public abstract class MixinItemStack {
 	)
 	private void hurt( int damage, RandomSource source, ServerPlayer player, CallbackInfoReturnable< Boolean > callback ) {
 		ItemStack itemStack = ( ItemStack )( Object )this;
-		itemStack.setDamageValue( itemStack.getDamageValue() + Events.dispatch( new OnItemDamaged( player, itemStack, damage ) ).getExtraDamage() );
+		if( !itemStack.isDamageableItem() ) {
+			return;
+		}
 
-		callback.setReturnValue( itemStack.getDamageValue() >= itemStack.getMaxDamage() );
+		int extraDamage = Events.dispatch( new OnItemDamaged( player, itemStack, damage ) ).getExtraDamage();
+		if( extraDamage != 0 ) {
+			itemStack.setDamageValue( itemStack.getDamageValue() + extraDamage );
+			callback.setReturnValue( itemStack.getDamageValue() >= itemStack.getMaxDamage() );
+		}
 	}
 
 	@Inject(
