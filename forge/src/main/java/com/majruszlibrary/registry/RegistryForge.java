@@ -63,7 +63,7 @@ public class RegistryForge implements IRegistryPlatform {
 	@Override
 	public void register( RegistryCallbacks callbacks ) {
 		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		eventBus.addListener( ( FMLCommonSetupEvent event )->{
+		eventBus.addListener( ( FMLCommonSetupEvent event )->event.enqueueWork( ()->{
 			callbacks.execute( Custom.Advancements.class, IMixinCriteriaTriggers::register );
 			callbacks.execute( Custom.PotionRecipe.class, new Custom.PotionRecipe() {
 				@Override
@@ -86,7 +86,7 @@ public class RegistryForge implements IRegistryPlatform {
 					} );
 				}
 			} );
-		} );
+		} ) );
 		eventBus.addListener( ( EntityAttributeCreationEvent event )->{
 			callbacks.execute( Custom.Attributes.class, event::put );
 		} );
@@ -102,11 +102,11 @@ public class RegistryForge implements IRegistryPlatform {
 		} );
 
 		Side.runOnClient( ()->()->{
-			eventBus.addListener( ( final FMLClientSetupEvent event )->{
+			eventBus.addListener( ( final FMLClientSetupEvent event )->event.enqueueWork( ()->{
 				callbacks.execute( Custom.ItemProperties.class, ItemProperties::register );
 				callbacks.execute( Custom.ModelLayers.class, ForgeHooksClient::registerLayerDefinition );
 				callbacks.execute( Custom.Renderers.class, EntityRenderers::register );
-			} );
+			} ) );
 			eventBus.addListener( ( final RegisterParticleProvidersEvent event )->{
 				callbacks.execute( Custom.Particles.class, new CustomParticles( event ) );
 			} );
