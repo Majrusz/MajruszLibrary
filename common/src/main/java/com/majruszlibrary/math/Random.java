@@ -19,7 +19,7 @@ public class Random {
 	 thread safe and can be accessed on both server and client at the same time.
 	 */
 	public static RandomSource getThreadSafe() {
-		return Side.isLogicalClient() ? CLIENT : SERVER;
+		return Side.isClient() ? CLIENT : SERVER;
 	}
 
 	public static float nextFloat() {

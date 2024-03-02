@@ -1,0 +1,1 @@
+- fixed crash `Accessing LegacyRandomSource from multiple threads` (reported by @Luigi delle Bicocche, @davey)
