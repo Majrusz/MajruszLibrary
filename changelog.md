@@ -1,5 +1,0 @@
-- fixed random crashes when starting the game (reported by @Kazuya)
-- fixed bug with spawn point features not working properly with Respawn Anchors
-- fixed bug with item damage modifications not working properly (reported by @Camawama)
-- fixed compatibility issue that caused 1 item to be taken from the stack when hitting mobs (reported by @Camawama)
-- optimized spawn point features
