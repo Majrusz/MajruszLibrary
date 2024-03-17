@@ -25,7 +25,7 @@ public class TimeHelper {
 	private static final int TICKS_IN_MINUTE = TICKS_IN_SECOND * 60;
 	private static final LogicalSafe< List< IDelayedExecution > > PENDING_EXECUTIONS = LogicalSafe.of( ArrayList::new );
 	private static final LogicalSafe< List< IDelayedExecution > > EXECUTIONS = LogicalSafe.of( ArrayList::new );
-	private static LogicalSafe< Long > TICKS_COUNTER = LogicalSafe.of( ()->-1L );
+	private static LogicalSafe< Long > TICKS_COUNTER = LogicalSafe.of( ()->1L );
 
 	static {
 		OnServerTicked.listen( data->TimeHelper.update() )

@@ -1,1 +1,2 @@
 - fixed crash `Accessing LegacyRandomSource from multiple threads` (reported by @Luigi delle Bicocche, @davey)
+- fixed compatibility crash `java.lang.IndexOutOfBoundsException` (reported by @GermanArtur, @memphismc)
